@@ -78,6 +78,7 @@ class AgProductionTechnology;
 class PassThroughTechnology;
 class UnmanagedLandTechnology;
 class ResourceReserveTechnology;
+class CapacityTechnology;
 class EmptyTechnology;
 
 /*!
@@ -210,7 +211,11 @@ public:
     
     virtual bool isOperating( const int aPeriod ) const = 0;
     
+    virtual bool isNewInvestment( const int aPeriod ) const = 0;
+    
     virtual double calcFuelPrefElasticity( const int aPeriod ) const = 0;
+    
+    virtual double getCapacityFactor() const = 0;
     
     virtual void doInterpolations( const Technology* aPrevTech, const Technology* aNextTech ) = 0;
     
@@ -229,7 +234,7 @@ public:
         DEFINE_SUBCLASS_FAMILY( ITechnology, Technology, DefaultTechnology, IntermittentTechnology,
                                 WindTechnology, SolarTechnology, NukeFuelTechnology, TranTechnology,
                                 AgProductionTechnology, PassThroughTechnology, UnmanagedLandTechnology,
-                                ResourceReserveTechnology, EmptyTechnology )
+                                ResourceReserveTechnology, CapacityTechnology, EmptyTechnology )
     )
 };
 

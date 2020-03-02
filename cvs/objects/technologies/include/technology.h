@@ -225,7 +225,7 @@ public:
 
     double getShareWeight() const;
 
-    double getCapacityFactor() const;
+    virtual double getCapacityFactor() const;
 
     virtual Value getParsedShareWeight() const;
 
@@ -267,6 +267,8 @@ public:
     virtual bool isAvailable( const int aPeriod ) const;
     
     virtual bool isOperating( const int aPeriod ) const;
+
+    virtual bool isNewInvestment( const int aPeriod ) const;
 
     virtual void accept( IVisitor* aVisitor, const int aPeriod ) const;
     
@@ -345,7 +347,10 @@ protected:
         DEFINE_VARIABLE( SIMPLE, "year", mYear, int ),
 
         //! Number of years for which the vintage exists.
-        DEFINE_VARIABLE( SIMPLE, "lifetime", mLifetimeYears, int )
+        DEFINE_VARIABLE( SIMPLE, "lifetime", mLifetimeYears, int ),
+
+        //! Total hack for capacity investment
+        DEFINE_VARIABLE( SIMPLE, "total-hack", mTotalHack, bool )
     )
 
     //! The technology's information store.

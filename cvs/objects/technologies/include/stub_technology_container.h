@@ -141,6 +141,10 @@ private:
     //! The cloned global technology to delegate to
     ITechnologyContainer* mTechnology;
     
+    //! An alternative sector name to use when looking up from the global technology
+    //! database
+    std::string mFromSector;
+    
     //! The vector of XML modifications to make to the global technology
     std::vector<const xercesc::DOMNode*> mXMLAdjustments;
     

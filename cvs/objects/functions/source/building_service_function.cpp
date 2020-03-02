@@ -72,12 +72,18 @@ double BuildingServiceFunction::calcCoefficient( InputSet& input, double consump
         assert( floorSpace != 0 || period == 0 );
         if( floorSpace != 0 ) {
             BuildingServiceInput* buildingServiceInput = static_cast<BuildingServiceInput*>( *inputIter );
-            double thermalLoad = buildingServiceInput->calcThermalLoad( buildingParentInput, internalGainsPerSqMeter, period );
+            double thermalLoad = std::max(buildingServiceInput->calcThermalLoad( buildingParentInput, internalGainsPerSqMeter, period ), 0.0);
             double servicePerFloorspace = buildingServiceInput->getPhysicalDemand( period ) / floorSpace;
             double servicePrice = max( buildingServiceInput->getPricePaid( regionName, period ), SectorUtils::getDemandPriceThreshold() );
-            buildingServiceInput->getSatiationDemandFunction()->calibrateSatiationImpedance( servicePerFloorspace, income / servicePrice, period );
+            buildingServiceInput->getSatiationDemandFunction()->calibrateSatiationImpedance( buildingServiceInput->getSatiationCalDemandValue( servicePerFloorspace ), income / servicePrice, period );
             double serviceDensity = calcServiceDensity( buildingServiceInput, income, regionName, period );
-            coefficient =  servicePerFloorspace / ( serviceDensity * thermalLoad );
+            if(thermalLoad == 0.0 ) {
+                // use the default coefficient
+                coefficient = (*inputIter)->getCoefficient( period );
+            }
+            else {
+                coefficient = servicePerFloorspace / ( serviceDensity * thermalLoad );
+            }
         }
         (*inputIter)->setCoefficient( coefficient, period );
     }
@@ -104,12 +110,13 @@ double BuildingServiceFunction::calcDemand( InputSet& input, double consumption,
         if( floorSpace != 0 ) {
             // calculations for energy service
             BuildingServiceInput* buildingServiceInput = static_cast<BuildingServiceInput*>( *inputIter );
-            double thermalLoad = buildingServiceInput->calcThermalLoad( buildingParentInput, internalGainsPerSqMeter, period );
+            double thermalLoad = std::max( buildingServiceInput->calcThermalLoad( buildingParentInput, internalGainsPerSqMeter, period ), 0.0);
             double serviceDensity = calcServiceDensity( buildingServiceInput, income, regionName, period );
             double adjustedServiceDensity = buildingServiceInput->getCoefficient( period ) * thermalLoad * serviceDensity;
             // Set the thermal load adjusted service density back into the input for reporting.
             buildingServiceInput->setServiceDensity( adjustedServiceDensity, period );
-            demand = floorSpace * adjustedServiceDensity;
+            // TODO: is this sanity check still necessary:
+            demand = min(floorSpace * adjustedServiceDensity, 100.0);
         }
         totalDemand += demand;
         (*inputIter)->setPhysicalDemand( demand, regionName, period );

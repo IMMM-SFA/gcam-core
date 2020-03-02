@@ -93,6 +93,11 @@ public:
                         const std::string& aDependencyName,
                         const std::string& aDependencyRegion,
                         const bool aCanBeBroken = true );
+    
+    void copyDependencies( const std::string& aDependentName,
+                           const std::string& aDependentRegion,
+                           const std::string& aDependencyName,
+                           const std::string& aDependencyRegion );
 
     const std::vector<IActivity*> getOrdering( const int aMarketNumber = -1 ) const;
 

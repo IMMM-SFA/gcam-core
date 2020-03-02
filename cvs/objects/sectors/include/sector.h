@@ -76,6 +76,7 @@ class SupplySector;
 class AgSupplySector;
 class ExportSector;
 class PassThroughSector;
+class DispatchSector;
 
 /*! 
 * \ingroup Objects
@@ -103,7 +104,7 @@ protected:
          * hierarchy under introspection.
          */
         DEFINE_SUBCLASS_FAMILY( Sector, SupplySector, AgSupplySector, ExportSector,
-                                PassThroughSector ),
+                                PassThroughSector, DispatchSector ),
 
         //! Sector name
         DEFINE_VARIABLE( SIMPLE, "name", mName, std::string ),

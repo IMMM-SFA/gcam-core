@@ -107,6 +107,9 @@ void BuildingServiceInput::XMLParse( const DOMNode* aNode ) {
         if ( nodeName == "base-service" ) {
             XMLHelper<Value>::insertValueIntoVector( curr, mServiceDemand, scenario->getModeltime() );
         }
+        else if( nodeName == "cal-satiation-value" ) {
+            mCalSatiationValue = XMLHelper<Value>::getValue( curr );
+        }
         else if( nodeName == SatiationDemandFunction::getXMLNameStatic() ) {
             parseSingleNode( curr, mSatiationDemandFunction, new SatiationDemandFunction );
         }

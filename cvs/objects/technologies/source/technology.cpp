@@ -141,6 +141,7 @@ void Technology::copy( const Technology& techIn ) {
     mFixedOutput = techIn.mFixedOutput;
     mAlphaZero = techIn.mAlphaZero;
     mCapacityFactor = techIn.mCapacityFactor;
+    mTotalHack = techIn.mTotalHack;
 
     // Copy the input vector.
     for( vector<IInput*>::const_iterator iter = techIn.mInputs.begin(); iter != techIn.mInputs.end(); ++iter ) {
@@ -217,6 +218,7 @@ void Technology::init()
     mFixedOutput = -1;
     mAlphaZero = 1;
     mCapacityFactor = 1;
+    mTotalHack = false;
 }
 
 bool Technology::isSameType( const string& aType ) const {
@@ -257,6 +259,9 @@ bool Technology::XMLParse( const DOMNode* node )
         }
         else if( nodeName == "capacity-factor" ) {
             mCapacityFactor = XMLHelper<double>::getValue( curr );
+        }
+        else if( nodeName == "total-hack" ) {
+            mTotalHack = XMLHelper<bool>::getValue( curr );
         }
         else if( InputFactory::isOfType( nodeName ) ) {
             parseContainerNode( curr, mInputs, InputFactory::create( nodeName ).release() );
@@ -944,12 +949,17 @@ void Technology::production( const string& aRegionName,
                                                      aFixedOutputScaleFactor,
                                                      mShutdownDeciders,
                                                      aPeriod );
+    if(mTotalHack) {
+        mOutputs[0]->setPhysicalOutput( primaryOutput, aRegionName, mCaptureComponent, aPeriod );
+    }
+    else {
 
     // Calculate input demand.
     mProductionFunction->calcDemand( mInputs, primaryOutput, aRegionName, aSectorName,
                                      1, aPeriod, 0, mAlphaZero );
 
     calcEmissionsAndOutputs( aRegionName, primaryOutput, aGDP, aPeriod );
+    }
 }
 
 /*!
@@ -1147,6 +1157,16 @@ bool Technology::isAvailable( const int aPeriod ) const
  */
 bool Technology::isOperating( const int aPeriod ) const {
     return mProductionState[ aPeriod ] && mProductionState[ aPeriod ]->isOperating();
+}
+
+/*!
+ * \brief Returns whether this technology is new investment in the given period.
+ * \details This method simply checks the production state.
+ * \param aPeriod Model period.
+ * \return True if this technology is new investment in aPeriod false otherwise.
+ */
+bool Technology::isNewInvestment( const int aPeriod ) const {
+    return mProductionState[ aPeriod ] && mProductionState[ aPeriod ]->isNewInvestment();
 }
 
 /*! \brief Returns whether a technology uses a specific input.

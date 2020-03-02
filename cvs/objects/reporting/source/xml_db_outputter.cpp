@@ -86,6 +86,7 @@
 #include "technologies/include/ioutput.h"
 #include "technologies/include/base_technology.h"
 #include "technologies/include/ag_production_technology.h"
+#include "technologies/include/capacity_technology.h"
 #include "technologies/include/expenditure.h"
 #include "technologies/include/production_technology.h"
 #include "functions/include/sgm_input.h"
@@ -114,6 +115,7 @@
 #include "functions/include/building_service_input.h"
 #include "functions/include/satiation_demand_function.h"
 #include <typeinfo>
+#include "sectors/include/dispatch_sector.h"
 
 // Whether to write a text file with the contents that are to be inserted
 // into the XML database.
@@ -701,6 +703,26 @@ void XMLDBOutputter::startVisitSector( const Sector* aSector, const int aPeriod 
     if( !aSector->mKeywordMap.empty() ) {
         XMLWriteElementWithAttributes( "", "keyword", mBuffer, mTabs.get(), aSector->mKeywordMap );
     }
+    
+    if( mCurrentRegion.find("grid") != string::npos && mCurrentSector == "electricity" ) {
+        const DispatchSector* disp = static_cast<const DispatchSector*>( aSector );
+        for( int i = 0; i < modeltime->getmaxper(); ++i ){
+            const int year = modeltime->getper_to_yr( i );
+            XMLWriteOpeningTag( "dispatch", mBuffer, mTabs.get(), "", year );
+            for(auto techSegIt : disp->mSaveTechCurve[ i ] ) {
+                if(techSegIt.second > 0) {
+                map<string, string> attrs;
+                attrs["segment"] = get<1>(techSegIt.first);
+                attrs["tech-name"] = get<0>(techSegIt.first)->getName();
+                attrs["tech-year"] = util::toString(get<0>(techSegIt.first)->getYear());
+                attrs["state"] = get<2>(techSegIt.first);
+                attrs["unit"] = "EJ";
+                XMLWriteElementWithAttributes( techSegIt.second, "segment-production", mBuffer, mTabs.get(), attrs );
+                }
+            }
+            XMLWriteClosingTag( "dispatch", mBuffer, mTabs.get() );
+        }
+    }
 }
 
 void XMLDBOutputter::endVisitSector( const Sector* aSector, const int aPeriod ){
@@ -908,6 +930,35 @@ void XMLDBOutputter::startVisitTranTechnology( const TranTechnology* aTranTechno
 
 void XMLDBOutputter::endVisitTranTechnology( const TranTechnology* aTranTechnology, const int aPeriod ) {
     // do nothing
+}
+
+void XMLDBOutputter::startVisitCapacityTechnology( const CapacityTechnology* aTechnology, const int aPeriod ) {
+    // startVisitCapacityTechnology gets visited after startVisitTechnology which implies
+    // mBufferStack.top() is the child buffer for technology
+    writeItemToBuffer( aTechnology->mCapacity, "capacity",
+                      *mBufferStack.top(), mTabs.get(), -1, "EJ-capacity" );
+    
+    const Modeltime* modeltime = scenario->getModeltime();
+    map<string, string> attrs;
+    double maxPer = aPeriod == -1 ? modeltime->getmaxper() -1 : aPeriod;
+    for( int i = 0; i <= maxPer; ++i ) {
+        // isTechnologyOperating will crash for sgm so avoid calling it
+        if( aPeriod != -1 && !isTechnologyOperating( i ) ){
+            continue;
+        }
+        
+        int currYear = modeltime->getper_to_yr( i );
+        attrs[ "vintage" ] = util::toString( currYear );
+        // Avoid writing zeros to save space.
+        // Write price paid for input.
+        double currValue;
+        currValue = aTechnology->mCosts[ i ];
+        if( !objects::isEqual<double>( currValue, 0.0 ) ) {
+            attrs[ "unit" ] = "1975$/GJ";
+            XMLWriteElementWithAttributes( currValue, "operating-cost", *mBufferStack.top(),
+                                          mTabs.get(), attrs );
+        }
+    }
 }
 
 void XMLDBOutputter::startVisitMiniCAMInput( const MiniCAMInput* aInput, const int aPeriod ) {

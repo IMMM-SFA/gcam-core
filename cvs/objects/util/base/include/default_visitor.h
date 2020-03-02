@@ -141,6 +141,9 @@ public:
 
     virtual void startVisitAgProductionTechnology( const AgProductionTechnology* aTechnology, const int aPeriod ){}
     virtual void endVisitAgProductionTechnology( const AgProductionTechnology* aTechnology, const int aPeriod ){}
+    
+    virtual void startVisitCapacityTechnology( const CapacityTechnology* aTechnology, const int aPeriod ){}
+    virtual void endVisitCapacityTechnology( const CapacityTechnology* aTechnology, const int aPeriod ){}
 
     virtual void startVisitBaseTechnology( const BaseTechnology* aBaseTechnology, const int aPeriod ){}
     virtual void endVisitBaseTechnology( const BaseTechnology* aBaseTechnology, const int aPeriod ){}

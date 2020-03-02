@@ -101,6 +101,7 @@ class IClimateModel;
 class IInput;
 class TranSubsector;
 class TranTechnology;
+class CapacityTechnology;
 class LandUseHistory;
 class AgProductionTechnology;
 class NodeInput;
@@ -215,6 +216,9 @@ public:
 
     virtual void startVisitAgProductionTechnology( const AgProductionTechnology* aTechnology, const int aPeriod ) = 0;
     virtual void endVisitAgProductionTechnology( const AgProductionTechnology* aTechnology, const int aPeriod ) = 0;
+    
+    virtual void startVisitCapacityTechnology( const CapacityTechnology* aTechnology, const int aPeriod ) = 0;
+    virtual void endVisitCapacityTechnology( const CapacityTechnology* aTechnology, const int aPeriod ) = 0;
 
     virtual void startVisitBaseTechnology( const BaseTechnology* aBaseTechnology, const int aPeriod ) = 0;
     virtual void endVisitBaseTechnology( const BaseTechnology* aBaseTechnology, const int aPeriod ) = 0;

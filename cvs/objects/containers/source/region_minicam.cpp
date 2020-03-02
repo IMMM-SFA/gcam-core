@@ -67,6 +67,7 @@
 #include "sectors/include/negative_emissions_final_demand.h"
 #include "sectors/include/export_sector.h"
 #include "sectors/include/pass_through_sector.h"
+#include "sectors/include/dispatch_sector.h"
 
 #include "consumers/include/gcam_consumer.h"
 #include "containers/include/national_account.h"
@@ -175,6 +176,9 @@ bool RegionMiniCAM::XMLDerivedClassParse( const std::string& nodeName, const xer
     }
     else if( nodeName == PassThroughSector::getXMLNameStatic() ) {
         parseContainerNode( curr, mSupplySector, new PassThroughSector( mName ) );
+    }
+    else if( nodeName == DispatchSector::getXMLNameStatic() ) {
+        parseContainerNode( curr, mSupplySector, new DispatchSector( mName ) );
     }
     else if( nodeName == EnergyFinalDemand::getXMLNameStatic() ){
         parseContainerNode( curr, mFinalDemands, new EnergyFinalDemand );

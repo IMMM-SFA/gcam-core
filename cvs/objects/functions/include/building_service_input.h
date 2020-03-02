@@ -94,6 +94,10 @@ public:
     virtual double calcThermalLoad( const BuildingNodeInput* aBuildingInput,
                                     const double aInternalGainsPerSqMeter,
                                     const int aPeriod ) const;
+    
+    double getSatiationCalDemandValue( const double aServicePerFloorspace ) const {
+        return mCalSatiationValue.isInited() ? mCalSatiationValue : aServicePerFloorspace;
+    }
 
     // INestedInput methods
     // define them to do nothing since a BuildingServiceInput is a leaf in the nesting structure
@@ -319,6 +323,9 @@ protected:
 
         //! Energy service density for reporting.
         DEFINE_VARIABLE( ARRAY | STATE, "service-density", mServiceDensity, objects::PeriodVector<Value> ),
+                            
+        //! Value to use (if parsed) instead of the base service to calibrate satiation demand function
+        DEFINE_VARIABLE( SIMPLE, "cal-satiation-value", mCalSatiationValue, Value ),
 
         //! Satiation demand function.
         DEFINE_VARIABLE( CONTAINER, "satiation-demand-function", mSatiationDemandFunction, SatiationDemandFunction* )

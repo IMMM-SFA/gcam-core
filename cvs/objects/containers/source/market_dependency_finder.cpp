@@ -151,6 +151,53 @@ bool MarketDependencyFinder::addDependency( const string& aDependentName,
 }
 
 /*!
+ * \brief Copies all dependencies on one item to anther.
+ * \details Dependency relationships are given in terms of price dependence.  So
+ *          that if aDependencyName changes it's price then aDependentName must
+ *          be recalculated.  Note that region names must be specified as well to
+ *          allow direct trading between regions.
+ * \param aDependentName The name of the item which will have it's existing
+ *                       dependencies copied from.
+ * \param aDependentRegion The region name of the item which will have it's existing
+ *                         dependencies copied from.
+ * \param aDependencyName The name of the item which will reieve the new dependencies.
+ * \param aDependencyRegion The region name in which aDependencyName is contained.
+ */
+void MarketDependencyFinder::copyDependencies( const string& aDependentName,
+                                               const string& aDependentRegion,
+                                               const string& aDependencyName,
+                                               const string& aDependencyRegion )
+{
+    // Find/create a DependencyItem entry for the dependent item
+    auto_ptr<DependencyItem> item( new DependencyItem( aDependentName, aDependentRegion ) );
+    ItemIterator dependentIter = mDependencyItems.find( item.get() );
+    if( dependentIter == mDependencyItems.end() ) {
+        dependentIter = mDependencyItems.insert( item.release() ).first;
+    }
+    
+    // Check for self dependence
+    if( aDependentName == aDependencyName && aDependentRegion == aDependencyRegion ) {
+        (*dependentIter)->mHasSelfDependence = true;
+        return;
+    }
+    
+    // Find/create a DependencyItem entry for the dependency
+    item.reset( new DependencyItem( aDependencyName, aDependencyRegion ) );
+    ItemIterator dependencyIter = mDependencyItems.find( item.get() );
+    if( dependencyIter == mDependencyItems.end() ) {
+        dependencyIter = mDependencyItems.insert( item.release() ).first;
+    }
+    
+    // These are kept track of by adding to the list of dependents for the
+    // dependency item.
+    for( auto currDep : mDependencyItems ) {
+        if( currDep != *dependencyIter && currDep->mDependentList.find( *dependentIter ) != currDep->mDependentList.end() ) {
+            currDep->mDependentList.insert( *dependencyIter );
+        }
+    }
+}
+
+/*!
  * \brief Bind a dependency name to the actual activity which can be used to calculate
  *        it.
  * \details Note that it is possible for the same name to refer to multiple activities
@@ -668,7 +715,7 @@ void MarketDependencyFinder::createOrdering() {
             if( !maxVertex ) {
                 depLog.setLevel( ILogger::SEVERE );
                 depLog << "Could not find an unbreakable item to break the cycle." << endl;
-                exit( 1 );
+                abort();
             }
             
             depLog << "The following activity has been chosen to break the cycle: "

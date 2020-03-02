@@ -169,6 +169,10 @@ void SatiationDemandFunction::calibrateSatiationImpedance( const double aDemand,
         mSatiationLevel = aDemand * mBaseYearSatiationMultiplier;
     }
     mSatiationAdder = mParsedSatiationAdder;
+    if( aDemand == 0 ) {
+        mSatiationImpedance = 1.0;
+        return;
+    }
     
     // Do some errors checking
     if( aDemand >= mSatiationLevel ) {
@@ -195,7 +199,7 @@ void SatiationDemandFunction::calibrateSatiationImpedance( const double aDemand,
             exit( 1 );
         }
     }
-    else if( aDemand <= mSatiationAdder ) {
+    else if( aDemand <= mSatiationAdder && aDemand > 0) {
         if( aPeriod < scenario->getModeltime()->getFinalCalibrationPeriod() ) {
             // We are just calibrating this temporarily so that calcDemand returns
             // the calibrated demand.  Only the final calibration period will matter.

@@ -177,6 +177,11 @@ bool EmptyTechnology::isOperating( const int aPeriod ) const
     return false;
 }
 
+bool EmptyTechnology::isNewInvestment( const int aPeriod ) const
+{
+    return false;
+}
+
 double EmptyTechnology::getOutput( const int aPeriod ) const
 {
     return 0;
@@ -254,6 +259,10 @@ bool EmptyTechnology::isAllCalibrated( const int aPeriod,
                                  const bool aPrintWarnings ) const
 {
     return true;
+}
+
+double EmptyTechnology::getCapacityFactor() const {
+    return 0.0;
 }
 
 void EmptyTechnology::setYear( const int aYear )

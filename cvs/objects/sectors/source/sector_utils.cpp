@@ -217,7 +217,9 @@ double SectorUtils::calcFixedOutputScaleFactor( const double aMarketDemand,
  */
 pair<double, double> SectorUtils::normalizeLogShares( vector<double>& alogShares ){
     // find the log of the largest unnormalized share
-    double lfac = *max_element(alogShares.begin(), alogShares.end());
+    double lfac = alogShares.empty() ?
+        -numeric_limits<double>::infinity() :
+        *max_element(alogShares.begin(), alogShares.end());
     double sum = 0.0;
     
     // check for all zero prices

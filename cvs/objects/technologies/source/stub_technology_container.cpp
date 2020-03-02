@@ -89,6 +89,11 @@ bool StubTechnologyContainer::XMLParse( const DOMNode* aNode ) {
     // get the name attribute.
     mName = XMLHelper<string>::getAttr( aNode, XMLHelper<void>::name() );
     
+    string fromSector = XMLHelper<string>::getAttr( aNode, "from-sector");
+    if( fromSector != "" ) {
+        mFromSector = fromSector;
+    }
+    
     // store the XML for later processing
     /*!
      * \warning This may shift some parsing errors to completeInit.
@@ -114,7 +119,7 @@ void StubTechnologyContainer::completeInit( const string& aRegionName,
 {
     // get the technology from the global technology database
     const ITechnologyContainer* temp =
-        scenario->getWorld()->getGlobalTechnologyDatabase()->getTechnology( aSectorName, aSubsectorName, mName );
+    scenario->getWorld()->getGlobalTechnologyDatabase()->getTechnology( mFromSector == "" ? aSectorName : mFromSector, aSubsectorName, mName );
     if( temp ) {
         mTechnology = temp->clone();
     }

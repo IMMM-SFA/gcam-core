@@ -126,6 +126,8 @@ public:
 	
     virtual void startVisitTranTechnology( const TranTechnology* aTranTechnology, const int aPeriod );
     virtual void endVisitTranTechnology( const TranTechnology* aTranTechnology, const int aPeriod );
+    
+    virtual void startVisitCapacityTechnology( const CapacityTechnology* aTechnology, const int aPeriod );
 
     virtual void startVisitMiniCAMInput( const MiniCAMInput* aInput, const int aPeriod );
     virtual void endVisitMiniCAMInput( const MiniCAMInput* aInput, const int aPeriod );

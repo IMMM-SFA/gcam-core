@@ -102,11 +102,17 @@ void ThermalBuildingServiceInput::XMLParse( const DOMNode* aNode ) {
         if ( nodeName == "base-service" ) {
             XMLHelper<Value>::insertValueIntoVector( curr, mServiceDemand, scenario->getModeltime() );
         }
+        else if( nodeName == "cal-satiation-value" ) {
+            mCalSatiationValue = XMLHelper<Value>::getValue( curr );
+        }
         else if( nodeName == "internal-gains-scalar" ) {
             mInternalGainsScalar = XMLHelper<Value>::getValue( curr );
         }
         else if( nodeName == "degree-days" ) {
             XMLHelper<Value>::insertValueIntoVector( curr, mDegreeDays, scenario->getModeltime() );
+        }
+        else if( nodeName == "coefficient" ) {
+            mCoefficient = XMLHelper<Value>::getValue( curr );
         }
         else if( nodeName == SatiationDemandFunction::getXMLNameStatic() ) {
             parseSingleNode( curr, mSatiationDemandFunction, new SatiationDemandFunction );

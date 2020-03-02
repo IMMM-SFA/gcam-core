@@ -169,7 +169,11 @@ public:
     
     virtual bool isOperating( const int aPeriod ) const;
     
+    virtual bool isNewInvestment( const int aPeriod ) const;
+    
     virtual double calcFuelPrefElasticity( const int aPeriod ) const;
+    
+    virtual double getCapacityFactor() const;
     
     virtual void doInterpolations( const Technology* aPrevTech, const Technology* aNextTech );
     
