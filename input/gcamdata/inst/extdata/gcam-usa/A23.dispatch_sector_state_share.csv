@@ -1,0 +1,11 @@
+# File: A23.dispatch_sector_state_share.csv
+# Title: Electricity sector supplysector characteristics for share investment from the grid region level to states
+# Units: Unitless
+# Source: GCAM assumptions
+# Column types: ccccic
+# ----------
+supplysector,output.unit,input.unit,price.unit,logit.exponent,logit.type
+peak electricity,EJ,EJ,1975$/GJ,-6,
+subpeak electricity,EJ,EJ,1975$/GJ,-6,
+intermediate electricity,EJ,EJ,1975$/GJ,-6,
+baseload electricity,EJ,EJ,1975$/GJ,-6,

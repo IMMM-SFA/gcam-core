@@ -13,7 +13,7 @@
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
 #' @author MTB September 2018
-module_gcamusa_L2242.elec_hydro_USA <- function(command, ...) {
+disabled_module_gcamusa_L2242.elec_hydro_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = 'gcam-usa/EIA_elec_gen_hydro',
              FILE = 'gcam-usa/AEO_2018_elec_gen_hydro',

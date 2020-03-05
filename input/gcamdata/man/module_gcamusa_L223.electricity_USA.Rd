@@ -14,21 +14,27 @@ module_gcamusa_L223.electricity_USA(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L223.DeleteSubsector_USAelec},
-\code{L223.Supplysector_USAelec}, \code{L223.SubsectorShrwtFllt_USAelec}, \code{L223.SubsectorInterp_USAelec},
-\code{L223.SubsectorLogit_USAelec}, \code{L223.TechShrwt_USAelec}, \code{L223.TechCoef_USAelec},
-\code{L223.Production_USAelec},\code{L223.PassthroughSector_elec_USA}, \code{L223.PassthroughTech_elec_FERC},
-\code{L223.Supplysector_elec_FERC}, \code{L223.SubsectorShrwtFllt_elec_FERC}, \code{L223.SubsectorInterp_elec_FERC},
-\code{L223.SubsectorLogit_elec_FERC}, \code{L223.TechShrwt_elec_FERC}, \code{L223.TechCoef_elec_FERC},
-\code{L223.Production_elec_FERC}, \code{L223.InterestRate_FERC}, \code{L223.Pop_FERC}, \code{L223.BaseGDP_FERC},
-\code{L223.LaborForceFillout_FERC},\code{L223.Supplysector_elec_USA}, \code{L223.ElecReserve_USA},
-\code{L223.SubsectorLogit_elec_USA}, \code{L223.SubsectorShrwtFllt_elec_USA}, \code{L223.SubsectorShrwt_nuc_USA},
-\code{L223.SubsectorShrwt_renew_USA}, \code{L223.SubsectorInterp_elec_USA}, \code{L223.SubsectorInterpTo_elec_USA},
-\code{L223.StubTech_elec_USA}, \code{L223.StubTechEff_elec_USA}, \code{L223.StubTechCapFactor_elec_USA},
-\code{L223.StubTechFixOut_elec_USA}, \code{L223.StubTechFixOut_hydro_USA}, \code{L223.StubTechProd_elec_USA},
-\code{L223.StubTechMarket_elec_USA}, \code{L223.StubTechMarket_backup_USA}, \code{L223.StubTechElecMarket_backup_USA},
-\code{L223.StubTechCapFactor_elec_wind_USA}, \code{L223.StubTechCapFactor_elec_solar_USA}. The corresponding file in the
-original data system was \code{L223.electricity_USA.R} (gcam-usa level2).
+the generated outputs: \code{L223.Sector_Investment},
+\code{L223.SubsectorLogit_Investment}, \code{L223.SubsectorInterp_Investment}, \code{L223.SubsectorInterpTo_Investment},
+\code{L223.StubTech_Investment}, \code{L223.GlobalTechEff_Investment}, \code{L223.StubTechMarket_Investment},
+\code{L223.GlobalTechOMfixed_Investment},\code{L223.GlobalTechOMvar_Investment}, \code{L223.GlobalTechCapital_Investment},
+\code{L223.GlobalTechShrwt_Investment}, \code{L223.GlobalTechCapFac_Investment}, \code{L223.TechCapFac_Investment},
+\code{L223.GlobalTechCapture_Investment}, \code{L223.GlobalTechCost_Investment}, \code{L223.GlobalTechHack_Investment},
+\code{L223.Sector_Investment_StateShare}, \code{L223.Subsector_Investment_StateShare}, \code{L223.CapacityTech},
+\code{L223.SubsectorShrwtFllt_Investment_StateShare}, \code{L223.TechCoef_Investment_StateShare},
+\code{L223.TechShrwt_Investment_StateShare},\code{L223.Sector_Investment_LoadCurve}, \code{L223.TechShrwt_Dispatch},
+\code{L223.SectorUseTrialMarket_Investment_LoadCurve}, \code{L223.SubsectorLogit_Investment_LoadCurve},
+\code{L223.SubsectorShrwtFllt_Investment_LoadCurve}, \code{L223.TechShrwt_Investment_LoadCurve},
+\code{L223.TechCoef_Investment_LoadCurve}, \code{L223.TechPMult_Investment_LoadCurve}, \code{L223.TechEff_Dispatch},
+\code{L223.TechCost_Investment_LoadCurve}, \code{L223.DispatchSector}, \code{L223.Sector_Dispatch},
+\code{L223.SubsectorLogit_Dispatch}, \code{L223.SubsectorShrwtFllt_Dispatch}, \code{L223.CapacityTech_FutureTechs},
+\code{L223.TechOMvar_Dispatch}, \code{L223.TechLifetime_Dispatch}, \code{L223.TechSCurve_Dispatch},
+\code{L223.TechCapFac_Dispatch}, \code{L223.TechCarbonCapture_Dispatch}, \code{L223.TechCapFac_Cal},
+\code{L223.TechEff_Cal}, \code{L223.Sector_Dispatch_Grid}, \code{L223.DispatchSectorCalProd},
+\code{L223.DispatchSectorDemandSegments}, \code{L223.InterestRate_FERC}, \code{L223.Pop_FERC}, \code{L223.BaseGDP_FERC},
+\code{L223.LaborForceFillout_FERC}.
+The corresponding file in the
+original data system was \code{L223.electricity_USA.R} (gcam-usa level2 - dispatch branch).
 }
 \description{
 Generates GCAM-USA model inputs for electrcity sector by grid regions and states.
@@ -38,5 +44,5 @@ This chunk generates input files to create an annualized electricity generation 
 and creates the demand for the state-level electricity sectors in the grid regions.
 }
 \author{
-RC Oct 2017
+YO Feb 2020
 }

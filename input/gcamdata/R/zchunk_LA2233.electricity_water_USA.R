@@ -11,7 +11,7 @@
 #' original data system was \code{LA2233.electricity_water_USA} (gcam-usa level2)
 #' @details Weighted water coefficient for reference scenario and load segment classification
 #' @author Zarrar Khan September 2018
-module_gcamusa_LA2233.electricity_water_USA <- function(command, ...) {
+disabled_module_gcamusa_LA2233.electricity_water_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",
              FILE = "energy/calibrated_techs",

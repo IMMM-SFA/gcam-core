@@ -27,7 +27,7 @@
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
 #' @author MTB Aug 2018
-module_gcamusa_L2234.elec_segments_USA <- function(command, ...) {
+disabled_module_gcamusa_L2234.elec_segments_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",
              FILE = "gcam-usa/A23.elecS_sector",

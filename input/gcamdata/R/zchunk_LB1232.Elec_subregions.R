@@ -16,7 +16,7 @@
 module_gcamusa_LB1232.Elec_subregions <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",
-             "L1231.out_EJ_state_elec_F_tech"))
+             "L123.out_EJ_state_elec_F_tech"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L1232.out_EJ_sR_elec"))
   } else if(command == driver.MAKE) {
@@ -29,11 +29,11 @@ module_gcamusa_LB1232.Elec_subregions <- function(command, ...) {
     # Load required inputs
     states_subregions <- get_data(all_data, "gcam-usa/states_subregions") %>%
       select(state, grid_region)
-    L1231.out_EJ_state_elec_F_tech <- get_data(all_data, "L1231.out_EJ_state_elec_F_tech")
+    L123.out_EJ_state_elec_F_tech <- get_data(all_data, "L123.out_EJ_state_elec_F_tech")
 
     # ===================================================
     # Aggregating states to electricity subregions
-    L1232.out_EJ_sR_elec <- L1231.out_EJ_state_elec_F_tech %>%
+    L1232.out_EJ_sR_elec <- L123.out_EJ_state_elec_F_tech %>%
       left_join_error_no_match(states_subregions, by = "state") %>%
       group_by(grid_region, sector, year) %>%
       summarise(value = sum(value)) %>%
@@ -42,10 +42,10 @@ module_gcamusa_LB1232.Elec_subregions <- function(command, ...) {
     # Produce outputs
     add_title("Electricity generation by FERC region/fuel/technology") %>%
       add_units("EJ") %>%
-      add_comments("L1231.out_EJ_state_elec_F_tech aggregated to FERC region") %>%
+      add_comments("L123.out_EJ_state_elec_F_tech aggregated to FERC region") %>%
       add_legacy_name("L1232.out_EJ_sR_elec") %>%
       add_precursors("gcam-usa/states_subregions",
-                     "L1231.out_EJ_state_elec_F_tech")
+                     "L123.out_EJ_state_elec_F_tech")
 
     return_data(L1232.out_EJ_sR_elec)
   } else {

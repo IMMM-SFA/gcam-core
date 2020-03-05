@@ -14,15 +14,17 @@ module_gcamusa_LA119.solar(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L119.CapFacScaler_PV_state}, \code{L119.CapFacScaler_CSP_state}. The corresponding file in the
-original data system was \code{LA119.Solar.R} (gcam-usa level1).
+the generated outputs: \code{L119.CapFacScaler_PV_state}, \code{L119.CapFacScaler_CSP_state},
+\code{L119.CapacityFactor_CSP_state}, \code{L119.CapacityFactor_CSP_state_segment},
+\code{L119.CapacityFactor_PV_state}, \code{L119.CapacityFactor_PV_state_segment},
+The corresponding file in the original data system was \code{LA119.Solar.R} (gcam-usa level1).
 }
 \description{
 Compute scalars by state to vary capacity factors by state.
 }
 \details{
-This chunk computes scalars by state to vary capacity factors for central station PV and CSP technologies by state.
+This chunk computes capacity factors for central station PV and CSP technologies by state.
 }
 \author{
-GI, FF, AS Apr 2017
+YO Feb 2020
 }

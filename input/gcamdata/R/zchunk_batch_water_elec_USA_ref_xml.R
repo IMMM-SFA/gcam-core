@@ -8,7 +8,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{water_elec_USA_ref.xml}. The corresponding file in the
 #' original data system was \code{batch_water_elec_USA_ref_xml.R} (water XML).
-module_gcamusa_batch_water_elec_USA_ref_xml <- function(command, ...) {
+disabled_module_gcamusa_batch_water_elec_USA_ref_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2233.StubTech_WaterCoef_ref"))
   } else if(command == driver.DECLARE_OUTPUTS) {

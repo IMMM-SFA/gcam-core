@@ -25,7 +25,7 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
              FILE = "gcam-usa/NREL_us_re_technical_potential",
              FILE = "gcam-usa/us_state_wind",
              "L115.rsrc_state_rooftopPV",
-             "L1231.out_EJ_state_elec_F_tech",
+             "L123.out_EJ_state_elec_F_tech",
              "L1321.out_Mt_state_cement_Yh",
              "L210.RenewRsrc",
              "L210.UnlimitRsrc",
@@ -67,7 +67,7 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
     NREL_us_re_technical_potential <- get_data(all_data, "gcam-usa/NREL_us_re_technical_potential")
     us_state_wind <- get_data(all_data, "gcam-usa/us_state_wind")
     L115.rsrc_state_rooftopPV <- get_data(all_data, "L115.rsrc_state_rooftopPV")
-    L1231.out_EJ_state_elec_F_tech <- get_data(all_data, "L1231.out_EJ_state_elec_F_tech")
+    L123.out_EJ_state_elec_F_tech <- get_data(all_data, "L123.out_EJ_state_elec_F_tech")
     L1321.out_Mt_state_cement_Yh <- get_data(all_data, "L1321.out_Mt_state_cement_Yh")
     L210.RenewRsrc <- get_data(all_data, "L210.RenewRsrc")
     L210.UnlimitRsrc <- get_data(all_data, "L210.UnlimitRsrc")
@@ -82,7 +82,7 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
     cement_states <- unique(L1321.out_Mt_state_cement_Yh$state)
 
     # NOTE: geothermal resource is not created in the states considered to have zero hydrothermal production available
-    NREL_us_re_technical_potential <- NREL_us_re_technical_potential %>%
+    NREL_us_re_technical_potential %>%
       # remove TOTAL row
       filter(State != "TOTAL") %>%
       # Add state abbreviation
@@ -90,7 +90,7 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
       # Convert geothermal to EJ
       mutate(geothermal = Geothermal_Hydrothermal_GWh * CONV_GWH_EJ / gcamusa.GEOTHERMAL_DEFAULT_EFFICIENCY,
              renewresource = "geothermal") %>%
-      select(region = state, renewresource, geothermal)
+      select(region = state, renewresource, geothermal) -> NREL_us_re_technical_potential
 
     # States that do not use geothermal
     geo_states_noresource <- NREL_us_re_technical_potential %>%
@@ -193,10 +193,14 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
       mutate(grade_share = available / sum(available)) %>%
       select(-region) %>%
       repeat_add_columns(tibble(region = geo_states)) %>%
+      mutate(change_cost = ifelse(is.na(change_cost), 0, change_cost)) %>%
       left_join_error_no_match(NREL_us_re_technical_potential, by = c("region", "renewresource")) %>%
       mutate(available = round(grade_share * geothermal, energy.DIGITS_CALOUTPUT)) %>%
-      left_join_error_no_match(L1231.out_EJ_state_elec_F_tech %>%
+      left_join(L123.out_EJ_state_elec_F_tech %>%
                                  filter(year == max(HISTORICAL_YEARS)), by = c("region" = "state", "renewresource" = "fuel")) %>%
+      # YO Feb 2020 some states do not historical geotherm data, but we still need to have them there based on NREL future potential
+      # just left_joint first, then mannually put 0s
+      replace_na(list(sector = "electricity generation", elec_tech = "geothermal_conv", year = 2010, value = 0 )) %>%
       # Each state is assigned the same cost points, even though costs are obviously different by state
       # We don't have any data indicating the cost of the next geothermal power station by state, so we'll use the historical generation
       # to modify the floor of the cost curve in each state. This is ad-hoc and can be improved at some point.
@@ -325,7 +329,7 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
       add_units("available: EJ; extractioncost: 1975$/GJ") %>%
       add_comments("USA data from L210.GrdRenewRsrcCurves_geo shared out with NREL_us_re_technical_potential") %>%
       add_legacy_name("L210.GrdRenewRsrcCurves_geo_USA") %>%
-      add_precursors("L210.GrdRenewRsrcCurves_geo", "gcam-usa/NREL_us_re_technical_potential", "L1231.out_EJ_state_elec_F_tech") ->
+      add_precursors("L210.GrdRenewRsrcCurves_geo", "gcam-usa/NREL_us_re_technical_potential", "L123.out_EJ_state_elec_F_tech") ->
       L210.GrdRenewRsrcCurves_geo_USA
 
     L210.GrdRenewRsrcMax_geo_USA %>%

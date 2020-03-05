@@ -1,0 +1,11 @@
+# File: A23.dispatch_globaltech_shrwt_additional.csv
+# Title: Electricity technology shareweights
+# Units: Unitless share-weights
+# Source: None (GCAM assumptions)
+# Column types: ccciiiinnii
+# ----------
+supplysector,subsector,technology,1971,2010,2015,2024,2025,2035,2050,2100
+electricity,gas,gas (CT),1,1,1,1,1,1,1,1
+electricity,refined liquids,refined liquids (CT),1,1,1,1,1,1,1,1
+electricity,gas,gas (steam),0,0,0,0,0,0,0,0
+electricity,refined liquids,refined liquids (steam),0,0,0,0,0,0,0,0

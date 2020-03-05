@@ -8,7 +8,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{elec_segments_USA.xml}. The corresponding file in the
 #' original data system was \code{batch_elec_segments_USA.xml} (gcamusa xml-batch).
-module_gcamusa_batch_elec_segments_USA_xml <- function(command, ...) {
+disabled_module_gcamusa_batch_elec_segments_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2234.Supplysector_elecS_USA",
              "L2234.ElecReserve_elecS_USA",

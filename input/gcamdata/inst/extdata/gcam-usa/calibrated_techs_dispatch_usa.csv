@@ -1,0 +1,76 @@
+# File: calibrated_techs_dispatch_usa.csv
+# Title: Mapping from calibrated intermediate sectors and fuels to supplysector / subsector / technology / input in GCAM
+# Units: NA
+# Source: TODO
+# Column types: cccccccccn
+# ----------
+sector,fuel,elec_tech,supplysector,subsector,technology,minicam.energy.input,calibration,secondary.output,capacity.factor
+electricity generation,coal,coal_conv,electricity,coal,coal (conv pul),regional coal,output,,0.85
+electricity generation,coal,coal_IGCC,electricity,coal,coal (IGCC),regional coal,output,,0.8
+electricity generation,gas,gas_steam,electricity,gas,gas (steam),wholesale gas,output,,0.6
+electricity generation,gas,gas_turbine,electricity,gas,gas (CT),wholesale gas,output,,0.6
+electricity generation,gas,gas_CC,electricity,gas,gas (CC),wholesale gas,output,,0.8
+electricity generation,refined liquids,refined liquids_steam,electricity,refined liquids,refined liquids (steam),refined liquids industrial,output,,0.6
+electricity generation,refined liquids,refined liquids_turbine,electricity,refined liquids,refined liquids (CT),refined liquids industrial,output,,0.6
+electricity generation,refined liquids,refined liquids_CC,electricity,refined liquids,refined liquids (CC),refined liquids industrial,output,,0.8
+electricity generation,biomass,biomass_conv,electricity,biomass,biomass (conv),regional biomass,output,,0.85
+electricity generation,nuclear,nuclear_conv,electricity,nuclear,Gen_II_LWR,nuclearFuelGenII,output,,0.95
+electricity generation,hydro,hyrdo,electricity,hydro,hydro,,fixed output,,0.8
+electricity generation,wind,wind_onshore,electricity,wind,wind,onshore wind resource,output,,0.5
+electricity generation,solar PV,solar_PV,electricity,solar,PV,global solar resource,output,,0.4
+electricity generation,solar CSP,solar_CSP,electricity,solar,CSP,global solar resource,output,,0.4
+electricity generation,geothermal,geothermal_conv,electricity,geothermal,geothermal,geothermal,output,,0.8
+electricity generation,coal,,electricity,coal,coal (conv pul CCS),regional coal,output,,0.8
+electricity generation,coal,,electricity,coal,coal (IGCC CCS),regional coal,output,,0.8
+electricity generation,gas,,electricity,gas,gas (CC CCS),wholesale gas,output,,0.8
+electricity generation,refined liquids,,electricity,refined liquids,refined liquids (CC CCS),refined liquids industrial,output,,0.8
+electricity generation,biomass,,electricity,biomass,biomass (conv CCS),regional biomass,output,,0.8
+electricity generation,biomass,,electricity,biomass,biomass (IGCC),regional biomass,output,,0.8
+electricity generation,biomass,,electricity,biomass,biomass (IGCC CCS),regional biomass,output,,0.8
+electricity generation,nuclear,,electricity,nuclear,Gen_III,nuclearFuelGenIII,output,,0.95
+peak electricity,gas,,electricity,gas,gas (CT),wholesale gas,output,,0.05
+peak electricity,gas,,electricity,gas,gas (CC),wholesale gas,output,,0.05
+peak electricity,refined liquids,,electricity,refined liquids,refined liquids (CT),refined liquids industrial,output,,0.05
+peak electricity,refined liquids,,electricity,refined liquids,refined liquids (CC),refined liquids industrial,output,,0.05
+peak electricity,solar PV,,electricity,solar,PV,global solar resource,output,,0.05
+subpeak electricity,gas,,electricity,gas,gas (CT),wholesale gas,output,,0.1
+subpeak electricity,gas,,electricity,gas,gas (CC),wholesale gas,output,,0.1
+subpeak electricity,gas,,electricity,gas,gas (CC CCS),wholesale gas,output,,0.1
+subpeak electricity,refined liquids,,electricity,refined liquids,refined liquids (CT),refined liquids industrial,output,,0.1
+subpeak electricity,refined liquids,,electricity,refined liquids,refined liquids (CC),refined liquids industrial,output,,0.1
+subpeak electricity,refined liquids,,electricity,refined liquids,refined liquids (CC CCS),refined liquids industrial,output,,0.1
+subpeak electricity,solar PV,,electricity,solar,PV,global solar resource,output,,0.1
+intermediate electricity,coal,,electricity,coal,coal (conv pul),regional coal,output,,0.6
+intermediate electricity,coal,,electricity,coal,coal (conv pul CCS),regional coal,output,,0.6
+intermediate electricity,coal,,electricity,coal,coal (IGCC),regional coal,output,,0.6
+intermediate electricity,coal,,electricity,coal,coal (IGCC CCS),regional coal,output,,0.6
+intermediate electricity,gas,,electricity,gas,gas (CC CCS),wholesale gas,output,,0.6
+intermediate electricity,gas,,electricity,gas,gas (CC),wholesale gas,output,,0.6
+intermediate electricity,refined liquids,,electricity,refined liquids,refined liquids (CC CCS),refined liquids industrial,output,,0.6
+intermediate electricity,refined liquids,,electricity,refined liquids,refined liquids (CC),refined liquids industrial,output,,0.6
+intermediate electricity,biomass,,electricity,biomass,biomass (conv),regional biomass,output,,0.6
+intermediate electricity,biomass,,electricity,biomass,biomass (conv CCS),regional biomass,output,,0.6
+intermediate electricity,biomass,,electricity,biomass,biomass (IGCC),regional biomass,output,,0.6
+intermediate electricity,biomass,,electricity,biomass,biomass (IGCC CCS),regional biomass,output,,0.6
+intermediate electricity,nuclear,,electricity,nuclear,Gen_III,nuclearFuelGenIII,output,,0.6
+intermediate electricity,wind,,electricity,wind,wind,onshore wind resource,output,,0.5
+intermediate electricity,solar PV,,electricity,solar,PV,global solar resource,output,,0.4
+intermediate electricity,solar CSP,,electricity,solar,CSP,global solar resource,output,,0.4
+intermediate electricity,geothermal,,electricity,geothermal,geothermal,geothermal,output,,0.6
+baseload electricity,coal,,electricity,coal,coal (conv pul),regional coal,output,,0.9
+baseload electricity,coal,,electricity,coal,coal (conv pul CCS),regional coal,output,,0.9
+baseload electricity,coal,,electricity,coal,coal (IGCC),regional coal,output,,0.9
+baseload electricity,coal,,electricity,coal,coal (IGCC CCS),regional coal,output,,0.9
+baseload electricity,gas,,electricity,gas,gas (CC CCS),wholesale gas,output,,0.9
+baseload electricity,gas,,electricity,gas,gas (CC),wholesale gas,output,,0.9
+baseload electricity,refined liquids,,electricity,refined liquids,refined liquids (CC CCS),refined liquids industrial,output,,0.9
+baseload electricity,refined liquids,,electricity,refined liquids,refined liquids (CC),refined liquids industrial,output,,0.9
+baseload electricity,biomass,,electricity,biomass,biomass (conv),regional biomass,output,,0.9
+baseload electricity,biomass,,electricity,biomass,biomass (conv CCS),regional biomass,output,,0.9
+baseload electricity,biomass,,electricity,biomass,biomass (IGCC),regional biomass,output,,0.9
+baseload electricity,biomass,,electricity,biomass,biomass (IGCC CCS),regional biomass,output,,0.9
+baseload electricity,nuclear,,electricity,nuclear,Gen_III,nuclearFuelGenIII,output,,0.9
+baseload electricity,wind,,electricity,wind,wind,onshore wind resource,output,,0.5
+baseload electricity,solar PV,,electricity,solar,PV,global solar resource,output,,0.4
+baseload electricity,solar CSP,,electricity,solar,CSP,global solar resource,output,,0.4
+baseload electricity,geothermal,,electricity,geothermal,geothermal,geothermal,output,,0.9

@@ -334,13 +334,14 @@ run_xml_tests <- function(olddir, newdir = XML_DIR)
 #' data to XML can treat tags in the same class as the same when enabled, thus not
 #' requiring multiple headers for instance to read in a share-weight into a technology
 #' intermittent-technology or tranTechnology.
+#' YO Feb 2020 added dispatch sector and technology names into "sector" and "technology"
 #' @author Pralit Patel
 XML_NODE_EQUIV <- list(
-  "sector" = c("supplysector", "AgSupplySector", "pass-through-sector"),
+  "sector" = c("supplysector", "AgSupplySector", "pass-through-sector", "dispatch-sector"),
   "subsector" = c("subsector", "AgSupplySubsector", "tranSubsector"),
   "technology" = c("technology", "stub-technology", "intermittent-technology",
                    "tranTechnology", "AgProductionTechnology", "pass-through-technology",
-                   "resource.reserve.technology"),
+                   "resource.reserve.technology", "capacity-technology"),
   "discrete-choice" = c("dummy-logit-tag", "relative-cost-logit",
                         "absolute-cost-logit"),
   "LandLeaf" = c("LandLeaf", "UnmanagedLandLeaf"),

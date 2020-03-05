@@ -436,9 +436,9 @@ module_gcamusa_LA144.Commercial <- function(command, ...) {
       transmute(year,
                 pre = sum / sum[year == first_year_commext])
 
-    # One more adjustment - set 2010 comm exterior other ("comm non-building") electricity use equal to 
+    # One more adjustment - set 2010 comm exterior other ("comm non-building") electricity use equal to
     # AEO_target minus unscaled aggregated 2010 value for "comm other". Interpolate back.
-    # This separates out "comm non-building" from "comm other" to provide a better estimate of 
+    # This separates out "comm non-building" from "comm other" to provide a better estimate of
     # "comm non-building" in 2010 (which is outside the time scope of PNNL_Commext_elec) than the
     # previous method of scaling by population growth.
     comm_ext_2010 <- L144.scaler_USA_comm_F_U_2010 %>%

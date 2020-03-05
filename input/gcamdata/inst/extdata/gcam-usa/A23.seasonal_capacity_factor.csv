@@ -1,0 +1,11 @@
+# File: A23.seasonal_capacity_factor.csv
+# Title: Renewable technology capacity factors
+# Units: Unitless; ratio of generation to capacity
+# Source: TODO
+# Assumed to stay constant
+# Column types: cnnnnnnnnn
+# ----------
+technology,winter_day,winter_night,spring_day,spring_night,summer_day,summer_night,fall_day,fall_night,superpeak
+wind,0.4,0.5,0.4,0.5,0.4,0.5,0.4,0.5,0.4
+PV,0.4,0,0.4,0,0.4,0,0.4,0,0.6
+CSP,0.4,0,0.4,0,0.4,0,0.4,0,0.6

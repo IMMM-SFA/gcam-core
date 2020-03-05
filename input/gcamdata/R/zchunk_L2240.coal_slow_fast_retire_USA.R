@@ -19,7 +19,7 @@
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
 #' @author RC Aug 2018
-module_gcamusa_L2240.coal_slow_fast_retire_USA <- function(command, ...) {
+disabled_module_gcamusa_L2240.coal_slow_fast_retire_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/A23.coal_conv_pul_delete",
              FILE = "gcam-usa/A23.elec_tech_mapping_coal_retire",

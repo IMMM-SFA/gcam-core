@@ -14,8 +14,8 @@ module_gcamusa_LA114.wind(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L114.CapacityFactor_wind_state}. The corresponding file in the
-original data system was \code{LA114.Wind.R} (gcam-usa level1).
+the generated outputs: \code{L114.CapacityFactor_wind_state}, \code{L114.CapacityFactor_wind_state_segment}.
+The corresponding file in the original data system was \code{LA114.Wind.R} (gcam-usa level1).
 }
 \description{
 Compute capacity factors for wind by US state.
@@ -24,5 +24,5 @@ Compute capacity factors for wind by US state.
 Computes capacity factors for wind by US state.
 }
 \author{
-ST September 2017
+YO Janurary 2020
 }

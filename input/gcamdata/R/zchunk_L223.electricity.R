@@ -132,7 +132,7 @@ module_energy_L223.electricity <- function(command, ...) {
     GCAM_region_ID <- OM.fixed <- OM.var <- average.fossil.efficiency <- base.price <-
       calOutputValue <- calibration <- capacity.factor <- capacity.factor.OM <-
       capacity.factor.capital <- capital.overnight <- dni_avg_rel <- efficiency <-
-      fixed.charge.rate <- fuel <- `input-capital` <- input.OM.var <-
+      fixed.charge.rate <- fuel <- input.capital <- input.OM.var <-
       intermittent.technology <- irradiance_avg_rel <- iso <-
       primary.renewable <- region <- region_GCAM3 <- remove.fraction <- sector <-
       sector.name <- share.weight <- stub.technology <- subsector <- subsector.name <-
@@ -364,7 +364,7 @@ module_energy_L223.electricity <- function(command, ...) {
 
     A23.globaltech_capital %>%
       fill_exp_decay_extrapolate(MODEL_YEARS) %>%
-      rename(sector.name = supplysector, subsector.name = subsector, capital.overnight = value, input.capital = `input-capital`) %>%
+      rename(sector.name = supplysector, subsector.name = subsector, capital.overnight = value) %>%
       mutate(capital.overnight = round(capital.overnight, energy.DIGITS_CAPITAL)) ->
       L223.GlobalTechCapital_elec_all
     # reorders columns to match expected model interface input
@@ -387,7 +387,7 @@ module_energy_L223.electricity <- function(command, ...) {
     # Extrapolate capital cost assumptions to all future years and round them
     A23.globaltech_capital_adv %>%
       fill_exp_decay_extrapolate(MODEL_YEARS) %>%
-      rename(sector.name = supplysector, subsector.name = subsector, capital.overnight = value, input.capital = `input-capital`) %>%
+      rename(sector.name = supplysector, subsector.name = subsector, capital.overnight = value) %>%
       mutate(capital.overnight = round(capital.overnight, energy.DIGITS_CAPITAL)) ->
       L223.GlobalTechCapital_elec_adv_all
     # reorders columns to match expected model interface input
@@ -433,7 +433,7 @@ module_energy_L223.electricity <- function(command, ...) {
     # Extrapolate capital cost assumptions to all model years and then round to appropriate number of digits
     A23.globaltech_capital_low %>%
       fill_exp_decay_extrapolate(MODEL_YEARS) %>%
-      rename(sector.name = supplysector, subsector.name = subsector, capital.overnight = value, input.capital = `input-capital`) %>%
+      rename(sector.name = supplysector, subsector.name = subsector, capital.overnight = value) %>%
       mutate(capital.overnight = round(capital.overnight, energy.DIGITS_CAPITAL)) ->
       L223.GlobalTechCapital_elec_low_all
     # reorders columns to match expected model interface input

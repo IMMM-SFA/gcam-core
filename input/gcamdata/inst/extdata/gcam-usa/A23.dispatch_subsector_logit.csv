@@ -1,0 +1,35 @@
+# File: A23.dispatch_subsector_logit.csv
+# Title: Electric sector subsector logit exponents
+# Units: Unitless logit-exponent
+# Source: None (GCAM assumptions)
+# Column types: ccic
+# ----------
+supplysector,subsector,logit.exponent,logit.type
+peak electricity,gas,-10,
+peak electricity,refined liquids,-10,
+peak electricity,solar,-10,
+subpeak electricity,gas,-10,
+subpeak electricity,refined liquids,-10,
+subpeak electricity,solar,-10,
+intermediate electricity,coal,-10,
+intermediate electricity,gas,-10,
+intermediate electricity,refined liquids,-10,
+intermediate electricity,biomass,-10,
+intermediate electricity,nuclear,-10,
+intermediate electricity,nuclear,-10,
+intermediate electricity,nuclear,-10,
+intermediate electricity,nuclear,-10,
+intermediate electricity,wind,-10,
+intermediate electricity,solar,-10,
+intermediate electricity,geothermal,-10,
+baseload electricity,coal,-10,
+baseload electricity,gas,-10,
+baseload electricity,refined liquids,-10,
+baseload electricity,biomass,-10,
+baseload electricity,nuclear,-10,
+baseload electricity,nuclear,-10,
+baseload electricity,nuclear,-10,
+baseload electricity,nuclear,-10,
+baseload electricity,wind,-10,
+baseload electricity,solar,-10,
+baseload electricity,geothermal,-10,

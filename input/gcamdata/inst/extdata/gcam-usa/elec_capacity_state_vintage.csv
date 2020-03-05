@@ -1,0 +1,3209 @@
+# File: elec_capacity_state_vintage.csv
+# Title: Electricity technology capacity by vintage
+# Units: TODO
+# Source: TODO
+# Column types: cccin
+# ----------
+state,gcam_fuel,elec_tech,vintage,capacity
+AK,coal,coal_conv,1967,8.84E-04
+AK,gas,gas_CC,1978,0.012266439
+AK,gas,gas_turbine,1966,0.001461117
+AK,gas,gas_turbine,1972,0.005030281
+AK,gas,gas_turbine,1977,0.002420468
+AK,gas,gas_turbine,1984,0.002922234
+AK,gas,gas_turbine,1986,0.004380195
+AK,gas,gas_turbine,1990,5.46E-04
+AK,hydro,hyrdo,1915,1.26E-04
+AK,hydro,hyrdo,1928,5.05E-05
+AK,hydro,hyrdo,1948,1.33E-04
+AK,hydro,hyrdo,1952,1.70E-04
+AK,hydro,hyrdo,1954,5.05E-05
+AK,hydro,hyrdo,1955,0.001401157
+AK,hydro,hyrdo,1958,1.23E-04
+AK,hydro,hyrdo,1960,6.12E-04
+AK,hydro,hyrdo,1961,2.21E-04
+AK,hydro,hyrdo,1965,3.16E-05
+AK,hydro,hyrdo,1968,6.63E-05
+AK,hydro,hyrdo,1979,0.002467804
+AK,hydro,hyrdo,1982,9.66E-04
+AK,hydro,hyrdo,1984,0.00168202
+AK,hydro,hyrdo,1988,3.16E-05
+AK,hydro,hyrdo,1991,0.003976258
+AK,hydro,hyrdo,1995,1.42E-04
+AK,hydro,hyrdo,1997,1.26E-04
+AK,hydro,hyrdo,2001,1.89E-04
+AK,hydro,hyrdo,2005,6.31E-05
+AK,hydro,hyrdo,2008,9.47E-05
+AK,hydro,hyrdo,2009,4.51E-04
+AK,refined liquids,refined liquids_turbine,1960,2.56E-04
+AK,refined liquids,refined liquids_turbine,1967,8.84E-05
+AK,refined liquids,refined liquids_turbine,1970,3.16E-05
+AK,refined liquids,refined liquids_turbine,1971,0.00116132
+AK,refined liquids,refined liquids_turbine,1972,2.18E-04
+AK,refined liquids,refined liquids_turbine,1975,8.84E-05
+AK,refined liquids,refined liquids_turbine,1976,7.29E-04
+AK,refined liquids,refined liquids_turbine,1980,4.77E-04
+AK,refined liquids,refined liquids_turbine,1983,5.36E-05
+AK,refined liquids,refined liquids_turbine,1984,3.38E-04
+AK,refined liquids,refined liquids_turbine,1985,0.00568668
+AK,refined liquids,refined liquids_turbine,1986,1.01E-04
+AK,refined liquids,refined liquids_turbine,1988,5.43E-04
+AK,refined liquids,refined liquids_turbine,1990,1.93E-04
+AK,refined liquids,refined liquids_turbine,1991,8.84E-05
+AK,refined liquids,refined liquids_turbine,1992,1.26E-04
+AK,refined liquids,refined liquids_turbine,1993,0.002101736
+AK,refined liquids,refined liquids_turbine,1994,9.94E-04
+AK,refined liquids,refined liquids_turbine,1995,8.02E-04
+AK,refined liquids,refined liquids_turbine,1996,2.68E-04
+AK,refined liquids,refined liquids_turbine,1997,4.48E-04
+AK,refined liquids,refined liquids_turbine,1998,9.63E-04
+AK,refined liquids,refined liquids_turbine,1999,5.40E-04
+AK,refined liquids,refined liquids_turbine,2000,3.72E-04
+AK,refined liquids,refined liquids_turbine,2001,6.69E-04
+AK,refined liquids,refined liquids_turbine,2002,1.83E-04
+AK,refined liquids,refined liquids_turbine,2003,4.07E-04
+AK,refined liquids,refined liquids_turbine,2004,1.64E-04
+AK,refined liquids,refined liquids_turbine,2005,5.05E-05
+AK,refined liquids,refined liquids_turbine,2007,4.42E-05
+AK,refined liquids,refined liquids_turbine,2008,5.36E-05
+AK,refined liquids,refined liquids_turbine,2010,6.31E-05
+AK,wind,wind_onshore,2001,9.15E-05
+AK,wind,wind_onshore,2009,1.42E-04
+AL,coal,coal_conv,1949,0.004354949
+AL,coal,coal_conv,1958,0.062124291
+AL,coal,coal_conv,1959,0.04260276
+AL,coal,coal_conv,1964,0.044707652
+AL,coal,coal_conv,1965,0.073816382
+AL,coal,coal_conv,1967,0.063519137
+AL,coal,coal_conv,1977,0.016977989
+AL,coal,coal_conv,1985,0.089055547
+AL,gas,gas_CC,1998,0.02063867
+AL,gas,gas_CC,1999,0.006926893
+AL,gas,gas_CC,2000,0.04380826
+AL,gas,gas_CC,2001,0.008836128
+AL,gas,gas_CC,2002,0.052082663
+AL,gas,gas_CC,2003,0.070408161
+AL,gas,gas_CC,2004,0.062979502
+AL,gas,gas_CC,2010,0.025965593
+AL,gas,gas_steam,1949,0.002587723
+AL,gas,gas_turbine,1972,0.015021418
+AL,gas,gas_turbine,1992,1.07E-04
+AL,gas,gas_turbine,1995,0.022721472
+AL,gas,gas_turbine,1999,0.003250433
+AL,gas,gas_turbine,2003,0.048346243
+AL,gas,gas_turbine,2004,0.003111579
+AL,hydro,hyrdo,1928,0.001593659
+AL,hydro,hyrdo,1929,0.00315576
+AL,hydro,hyrdo,1931,0.002871742
+AL,hydro,hyrdo,1934,0.00681013
+AL,hydro,hyrdo,1942,0.024674887
+AL,hydro,hyrdo,1949,0.01274927
+AL,hydro,hyrdo,1961,0.007826285
+AL,hydro,hyrdo,1963,0.005462621
+AL,hydro,hyrdo,1965,0.005459465
+AL,hydro,hyrdo,1966,0.002300549
+AL,hydro,hyrdo,1967,0.012686155
+AL,hydro,hyrdo,1968,0.001262304
+AL,hydro,hyrdo,1969,0.004408597
+AL,hydro,hyrdo,1975,0.002587723
+AL,hydro,hyrdo,1980,0.005364792
+AL,hydro,hyrdo,1983,0.004260276
+AL,nuclear,nuclear_conv,1975,0.110262254
+AL,nuclear,nuclear_conv,1979,0.056058921
+AL,refined liquids,refined liquids_turbine,1970,6.69E-04
+AL,refined liquids,refined liquids_turbine,1998,2.71E-04
+AR,biomass,biomass_conv,2006,1.51E-04
+AR,biomass,biomass_conv,2010,1.26E-04
+AR,coal,coal_conv,1978,0.017609141
+AR,coal,coal_conv,1980,0.05364792
+AR,coal,coal_conv,1983,0.05364792
+AR,coal,coal_conv,2010,0.022721472
+AR,gas,gas_CC,1989,0.005838156
+AR,gas,gas_CC,2002,0.041476154
+AR,gas,gas_CC,2003,0.076621853
+AR,gas,gas_CC,2005,0.02354197
+AR,gas,gas_CC,2007,0.02142761
+AR,gas,gas_steam,1952,0.012872345
+AR,gas,gas_steam,1965,0.023731315
+AR,gas,gas_steam,1966,0.003786912
+AR,gas,gas_steam,1972,0.004291834
+AR,gas,gas_turbine,1970,0.002461493
+AR,gas,gas_turbine,1990,4.29E-04
+AR,gas,gas_turbine,2001,0.005491022
+AR,gas,gas_turbine,2002,0.00707837
+AR,gas,gas_turbine,2007,0.011013602
+AR,gas,gas_turbine,2010,0.001388534
+AR,hydro,hyrdo,1925,2.84E-04
+AR,hydro,hyrdo,1930,0.001767226
+AR,hydro,hyrdo,1946,0.002537231
+AR,hydro,hyrdo,1955,0.00236682
+AR,hydro,hyrdo,1956,8.05E-04
+AR,hydro,hyrdo,1957,0.010729584
+AR,hydro,hyrdo,1964,0.00302953
+AR,hydro,hyrdo,1965,0.008608913
+AR,hydro,hyrdo,1972,0.001262304
+AR,hydro,hyrdo,1973,0.00315576
+AR,hydro,hyrdo,1987,0.001022466
+AR,hydro,hyrdo,1988,0.001432715
+AR,hydro,hyrdo,1992,0.001022466
+AR,hydro,hyrdo,1999,0.00323781
+AR,nuclear,nuclear_conv,1977,0.058223772
+AR,refined liquids,refined liquids_turbine,1967,1.83E-04
+AZ,biomass,biomass_conv,2001,1.58E-04
+AZ,biomass,biomass_conv,2008,8.58E-04
+AZ,coal,coal_conv,1967,0.005468932
+AZ,coal,coal_conv,1974,0.076031726
+AZ,coal,coal_conv,1978,0.035622219
+AZ,coal,coal_conv,1979,0.038809536
+AZ,coal,coal_conv,1997,0.055213177
+AZ,gas,gas_CC,1963,0.002938013
+AZ,gas,gas_CC,1993,0.034732295
+AZ,gas,gas_CC,1995,0.041845378
+AZ,gas,gas_CC,2001,0.042732146
+AZ,gas,gas_CC,2002,0.088216115
+AZ,gas,gas_CC,2003,0.12178709
+AZ,gas,gas_CC,2004,0.041816976
+AZ,gas,gas_steam,1958,0.012320087
+AZ,gas,gas_steam,1959,0.002736044
+AZ,gas,gas_steam,1960,0.017621764
+AZ,gas,gas_turbine,1972,0.0138885
+AZ,gas,gas_turbine,1974,0.007034189
+AZ,gas,gas_turbine,1979,0.003401909
+AZ,gas,gas_turbine,1984,0.005036593
+AZ,gas,gas_turbine,1985,0.005822377
+AZ,gas,gas_turbine,1992,0.00683222
+AZ,gas,gas_turbine,1997,0.003294613
+AZ,gas,gas_turbine,2000,5.05E-05
+AZ,gas,gas_turbine,2001,0.002682396
+AZ,gas,gas_turbine,2002,0.01420092
+AZ,gas,gas_turbine,2008,0.00381847
+AZ,hydro,hyrdo,1925,2.90E-04
+AZ,hydro,hyrdo,1926,9.37E-04
+AZ,hydro,hyrdo,1930,4.10E-04
+AZ,hydro,hyrdo,1939,9.47E-05
+AZ,hydro,hyrdo,1944,0.032800969
+AZ,hydro,hyrdo,1951,0.008040876
+AZ,hydro,hyrdo,1964,0.041403571
+AZ,hydro,hyrdo,1973,0.001136074
+AZ,hydro,hyrdo,1980,4.42E-05
+AZ,hydro,hyrdo,1993,6.15E-04
+AZ,nuclear,nuclear_conv,1986,0.132835406
+AZ,refined liquids,refined liquids_turbine,1972,6.75E-04
+AZ,refined liquids,refined liquids_turbine,1975,0.00259719
+AZ,refined liquids,refined liquids_turbine,1989,6.94E-05
+AZ,refined liquids,refined liquids_turbine,1990,4.73E-05
+AZ,solar CSP,solar_CSP,2005,3.16E-05
+AZ,solar CSP,solar_CSP,2009,4.73E-05
+AZ,solar PV,solar_PV,1991,1.89E-05
+AZ,solar PV,solar_PV,2001,7.26E-05
+AZ,solar PV,solar_PV,2005,2.93E-04
+AZ,solar PV,solar_PV,2009,3.47E-05
+AZ,solar PV,solar_PV,2010,3.79E-05
+AZ,wind,wind_onshore,2009,0.001988129
+AZ,wind,wind_onshore,2010,0.0020544
+CA,biomass,biomass_conv,1979,1.89E-04
+CA,biomass,biomass_conv,1982,6.31E-05
+CA,biomass,biomass_conv,1983,2.93E-04
+CA,biomass,biomass_conv,1984,6.12E-04
+CA,biomass,biomass_conv,1985,0.00265715
+CA,biomass,biomass_conv,1986,0.002663461
+CA,biomass,biomass_conv,1988,0.004029906
+CA,biomass,biomass_conv,1989,0.006059059
+CA,biomass,biomass_conv,1990,0.001060335
+CA,biomass,biomass_conv,1991,0.003638591
+CA,biomass,biomass_conv,1993,3.16E-04
+CA,biomass,biomass_conv,1996,3.19E-04
+CA,biomass,biomass_conv,1997,5.05E-05
+CA,biomass,biomass_conv,1998,1.89E-04
+CA,biomass,biomass_conv,1999,7.42E-04
+CA,biomass,biomass_conv,2000,9.47E-05
+CA,biomass,biomass_conv,2001,1.23E-04
+CA,biomass,biomass_conv,2003,1.93E-04
+CA,biomass,biomass_conv,2004,6.63E-04
+CA,biomass,biomass_conv,2006,4.07E-04
+CA,biomass,biomass_conv,2008,0.001186566
+CA,biomass,biomass_conv,2009,7.42E-04
+CA,biomass,biomass_conv,2010,7.26E-04
+CA,gas,gas_CC,1975,0.018303408
+CA,gas,gas_CC,1977,0.003802691
+CA,gas,gas_CC,1980,0.007163575
+CA,gas,gas_CC,1981,0.003925765
+CA,gas,gas_CC,1991,0.003389286
+CA,gas,gas_CC,1995,0.002256368
+CA,gas,gas_CC,1996,0.007595914
+CA,gas,gas_CC,1997,0.004714705
+CA,gas,gas_CC,2001,0.039175605
+CA,gas,gas_CC,2002,0.07389212
+CA,gas,gas_CC,2003,0.09759819
+CA,gas,gas_CC,2004,0.040627254
+CA,gas,gas_CC,2005,0.122708572
+CA,gas,gas_CC,2006,0.026211743
+CA,gas,gas_CC,2007,0.005175446
+CA,gas,gas_CC,2009,0.067129327
+CA,gas,gas_CC,2010,0.022481634
+CA,gas,gas_steam,1959,0.045663847
+CA,gas,gas_steam,1960,0.033331137
+CA,gas,gas_steam,1961,0.01669397
+CA,gas,gas_steam,1962,0.060653707
+CA,gas,gas_steam,1963,0.025170342
+CA,gas,gas_steam,1964,0.121951189
+CA,gas,gas_steam,1965,0.009498838
+CA,gas,gas_steam,1966,0.044303715
+CA,gas,gas_steam,1967,0.070285087
+CA,gas,gas_steam,1969,0.030989563
+CA,gas,gas_steam,1972,0.050870851
+CA,gas,gas_steam,1995,1.83E-04
+CA,gas,gas_turbine,1968,0.001041401
+CA,gas,gas_turbine,1969,0.004702082
+CA,gas,gas_turbine,1970,0.004354949
+CA,gas,gas_turbine,1972,0.001199189
+CA,gas,gas_turbine,1973,0.001574724
+CA,gas,gas_turbine,1974,0.004746263
+CA,gas,gas_turbine,1976,0.007952515
+CA,gas,gas_turbine,1979,7.86E-04
+CA,gas,gas_turbine,1982,2.46E-04
+CA,gas,gas_turbine,1983,0.001224435
+CA,gas,gas_turbine,1985,0.001571568
+CA,gas,gas_turbine,1986,0.008987604
+CA,gas,gas_turbine,1987,3.72E-04
+CA,gas,gas_turbine,1990,0.00145165
+CA,gas,gas_turbine,1991,0.001552634
+CA,gas,gas_turbine,1994,0.005636187
+CA,gas,gas_turbine,1995,0.001814562
+CA,gas,gas_turbine,1996,0.005468932
+CA,gas,gas_turbine,2000,0.007794727
+CA,gas,gas_turbine,2001,0.022263887
+CA,gas,gas_turbine,2002,0.023516724
+CA,gas,gas_turbine,2003,0.023627175
+CA,gas,gas_turbine,2004,0.001811406
+CA,gas,gas_turbine,2005,0.004083553
+CA,gas,gas_turbine,2006,0.00697423
+CA,gas,gas_turbine,2007,0.00963138
+CA,gas,gas_turbine,2008,0.00381847
+CA,gas,gas_turbine,2009,0.018044636
+CA,gas,gas_turbine,2010,0.010041628
+CA,geothermal,geothermal_conv,1978,0.040172825
+CA,geothermal,geothermal_conv,1982,3.16E-04
+CA,geothermal,geothermal_conv,1983,0.005932829
+CA,geothermal,geothermal_conv,1984,0.005882337
+CA,geothermal,geothermal_conv,1985,0.006456685
+CA,geothermal,geothermal_conv,1986,0.00170411
+CA,geothermal,geothermal_conv,1987,0.002909611
+CA,geothermal,geothermal_conv,1988,0.009969046
+CA,geothermal,geothermal_conv,1989,0.007961982
+CA,geothermal,geothermal_conv,1990,0.002051244
+CA,geothermal,geothermal_conv,1994,8.84E-04
+CA,geothermal,geothermal_conv,1996,0.003629124
+CA,geothermal,geothermal_conv,2000,0.001937637
+CA,geothermal,geothermal_conv,2009,0.002019686
+CA,hydro,hyrdo,1899,1.01E-04
+CA,hydro,hyrdo,1900,2.02E-04
+CA,hydro,hyrdo,1902,6.31E-05
+CA,hydro,hyrdo,1903,9.47E-05
+CA,hydro,hyrdo,1904,9.47E-05
+CA,hydro,hyrdo,1906,3.06E-04
+CA,hydro,hyrdo,1907,9.31E-04
+CA,hydro,hyrdo,1908,0.000479676
+CA,hydro,hyrdo,1910,4.04E-04
+CA,hydro,hyrdo,1911,9.47E-05
+CA,hydro,hyrdo,1913,4.45E-04
+CA,hydro,hyrdo,1914,2.65E-04
+CA,hydro,hyrdo,1916,8.39E-04
+CA,hydro,hyrdo,1917,1.77E-04
+CA,hydro,hyrdo,1918,0.002474116
+CA,hydro,hyrdo,1919,0.005408973
+CA,hydro,hyrdo,1920,6.31E-04
+CA,hydro,hyrdo,1921,0.004799911
+CA,hydro,hyrdo,1922,0.002505673
+CA,hydro,hyrdo,1923,1.26E-04
+CA,hydro,hyrdo,1924,0.002452026
+CA,hydro,hyrdo,1925,0.006144265
+CA,hydro,hyrdo,1927,0.001155008
+CA,hydro,hyrdo,1928,0.006409349
+CA,hydro,hyrdo,1929,4.77E-04
+CA,hydro,hyrdo,1930,0.001754603
+CA,hydro,hyrdo,1940,0.005598318
+CA,hydro,hyrdo,1942,0.0041088
+CA,hydro,hyrdo,1943,0.005162823
+CA,hydro,hyrdo,1945,6.19E-04
+CA,hydro,hyrdo,1946,0.023857546
+CA,hydro,hyrdo,1948,0.003663837
+CA,hydro,hyrdo,1949,0.006765949
+CA,hydro,hyrdo,1950,0.003932077
+CA,hydro,hyrdo,1951,0.00315576
+CA,hydro,hyrdo,1952,0.00236682
+CA,hydro,hyrdo,1953,0.00180825
+CA,hydro,hyrdo,1954,0.006409349
+CA,hydro,hyrdo,1955,0.003685928
+CA,hydro,hyrdo,1956,3.41E-04
+CA,hydro,hyrdo,1957,0.003629124
+CA,hydro,hyrdo,1958,0.017454509
+CA,hydro,hyrdo,1959,0.004948232
+CA,hydro,hyrdo,1960,0.005995944
+CA,hydro,hyrdo,1961,0.006633408
+CA,hydro,hyrdo,1962,5.68E-04
+CA,hydro,hyrdo,1963,0.012755582
+CA,hydro,hyrdo,1964,0.013563456
+CA,hydro,hyrdo,1965,0.017943651
+CA,hydro,hyrdo,1966,0.008832972
+CA,hydro,hyrdo,1967,0.003266212
+CA,hydro,hyrdo,1968,0.020499817
+CA,hydro,hyrdo,1969,0.018290785
+CA,hydro,hyrdo,1970,0.002338418
+CA,hydro,hyrdo,1971,3.47E-04
+CA,hydro,hyrdo,1973,0.003644903
+CA,hydro,hyrdo,1974,0.005390038
+CA,hydro,hyrdo,1978,3.82E-04
+CA,hydro,hyrdo,1979,0.010240441
+CA,hydro,hyrdo,1980,8.11E-04
+CA,hydro,hyrdo,1981,6.28E-04
+CA,hydro,hyrdo,1982,0.003228342
+CA,hydro,hyrdo,1983,0.006481931
+CA,hydro,hyrdo,1984,0.014535431
+CA,hydro,hyrdo,1985,0.002224811
+CA,hydro,hyrdo,1986,0.002385755
+CA,hydro,hyrdo,1987,8.58E-04
+CA,hydro,hyrdo,1988,0.001723045
+CA,hydro,hyrdo,1989,0.009975357
+CA,hydro,hyrdo,1990,6.44E-04
+CA,hydro,hyrdo,1992,4.58E-04
+CA,hydro,hyrdo,1993,7.57E-04
+CA,hydro,hyrdo,1994,7.86E-04
+CA,hydro,hyrdo,1996,0.001031934
+CA,hydro,hyrdo,1999,9.78E-05
+CA,hydro,hyrdo,2001,9.37E-04
+CA,hydro,hyrdo,2007,1.45E-04
+CA,nuclear,nuclear_conv,1983,0.07113083
+CA,nuclear,nuclear_conv,1985,0.073308305
+CA,refined liquids,refined liquids_steam,1989,0.001293862
+CA,refined liquids,refined liquids_steam,1990,0.002792848
+CA,refined liquids,refined liquids_turbine,1971,4.73E-04
+CA,refined liquids,refined liquids_turbine,1978,0.007346609
+CA,refined liquids,refined liquids_turbine,1980,0.005279586
+CA,refined liquids,refined liquids_turbine,1984,0.001745135
+CA,solar CSP,solar_CSP,1984,4.35E-04
+CA,solar CSP,solar_CSP,1985,9.47E-04
+CA,solar CSP,solar_CSP,1986,0.00215854
+CA,solar CSP,solar_CSP,1987,0.00107927
+CA,solar CSP,solar_CSP,1988,0.002209032
+CA,solar CSP,solar_CSP,1989,0.002903299
+CA,solar CSP,solar_CSP,1990,0.002903299
+CA,solar CSP,solar_CSP,2009,3.94E-04
+CA,solar PV,solar_PV,1985,6.31E-05
+CA,solar PV,solar_PV,2006,3.16E-05
+CA,solar PV,solar_PV,2007,1.26E-04
+CA,solar PV,solar_PV,2008,2.75E-04
+CA,solar PV,solar_PV,2009,7.89E-04
+CA,solar PV,solar_PV,2010,3.94E-04
+CA,wind,wind_onshore,1975,5.21E-04
+CA,wind,wind_onshore,1981,5.55E-04
+CA,wind,wind_onshore,1982,5.05E-04
+CA,wind,wind_onshore,1983,0.010956799
+CA,wind,wind_onshore,1984,0.006254716
+CA,wind,wind_onshore,1985,0.002565633
+CA,wind,wind_onshore,1986,0.003853183
+CA,wind,wind_onshore,1987,0.003035841
+CA,wind,wind_onshore,1988,0.001139229
+CA,wind,wind_onshore,1989,0.002830717
+CA,wind,wind_onshore,1990,0.004954543
+CA,wind,wind_onshore,1991,0.002426779
+CA,wind,wind_onshore,1992,2.18E-04
+CA,wind,wind_onshore,1994,0.003187318
+CA,wind,wind_onshore,1996,0.001088737
+CA,wind,wind_onshore,1998,0.00207649
+CA,wind,wind_onshore,1999,0.001252837
+CA,wind,wind_onshore,2000,0.002149073
+CA,wind,wind_onshore,2002,0.003234654
+CA,wind,wind_onshore,2003,0.005964386
+CA,wind,wind_onshore,2004,0.002461493
+CA,wind,wind_onshore,2005,0.005071306
+CA,wind,wind_onshore,2006,0.005932829
+CA,wind,wind_onshore,2008,0.002085957
+CA,wind,wind_onshore,2009,0.00919904
+CA,wind,wind_onshore,2010,0.004402285
+CO,biomass,biomass_conv,2008,1.01E-04
+CO,coal,coal_conv,1953,0.004986101
+CO,coal,coal_conv,1957,0.001379067
+CO,coal,coal_conv,1963,0.025287105
+CO,coal,coal_conv,1964,0.006049592
+CO,coal,coal_conv,1969,0.008110303
+CO,coal,coal_conv,1971,0.014686907
+CO,coal,coal_conv,1980,0.023961686
+CO,coal,coal_conv,1981,0.048642885
+CO,coal,coal_conv,1984,0.009265311
+CO,coal,coal_conv,1987,0.001372756
+CO,coal,coal_conv,1992,0.051606143
+CO,gas,gas_CC,1987,0.003417688
+CO,gas,gas_CC,1998,0.027388841
+CO,gas,gas_CC,2000,0.006122174
+CO,gas,gas_CC,2003,0.017072662
+CO,gas,gas_CC,2004,0.022244952
+CO,gas,gas_steam,1954,0.004247653
+CO,gas,gas_steam,1966,7.10E-04
+CO,gas,gas_turbine,1950,1.42E-04
+CO,gas,gas_turbine,1966,0.000119919
+CO,gas,gas_turbine,1972,0.002474116
+CO,gas,gas_turbine,1973,0.002780225
+CO,gas,gas_turbine,1975,0.001817718
+CO,gas,gas_turbine,1999,0.002259524
+CO,gas,gas_turbine,2000,0.013954771
+CO,gas,gas_turbine,2001,0.007195133
+CO,gas,gas_turbine,2002,0.01332993
+CO,gas,gas_turbine,2003,0.014768957
+CO,gas,gas_turbine,2004,0.015993392
+CO,gas,gas_turbine,2007,0.012433694
+CO,gas,gas_turbine,2008,0.003711174
+CO,gas,gas_turbine,2009,0.008836128
+CO,hydro,hyrdo,1905,1.39E-04
+CO,hydro,hyrdo,1906,1.55E-04
+CO,hydro,hyrdo,1909,4.54E-04
+CO,hydro,hyrdo,1911,3.16E-04
+CO,hydro,hyrdo,1920,4.42E-05
+CO,hydro,hyrdo,1925,3.79E-05
+CO,hydro,hyrdo,1930,4.42E-05
+CO,hydro,hyrdo,1932,9.47E-05
+CO,hydro,hyrdo,1943,8.20E-04
+CO,hydro,hyrdo,1945,1.89E-04
+CO,hydro,hyrdo,1950,0.001420092
+CO,hydro,hyrdo,1951,2.56E-04
+CO,hydro,hyrdo,1954,0.003919454
+CO,hydro,hyrdo,1959,2.37E-04
+CO,hydro,hyrdo,1962,4.23E-04
+CO,hydro,hyrdo,1967,0.002726577
+CO,hydro,hyrdo,1970,0.005465776
+CO,hydro,hyrdo,1978,8.84E-04
+CO,hydro,hyrdo,1985,3.35E-04
+CO,hydro,hyrdo,1986,3.16E-05
+CO,hydro,hyrdo,1987,1.51E-04
+CO,hydro,hyrdo,1988,1.74E-04
+CO,hydro,hyrdo,1989,1.83E-04
+CO,hydro,hyrdo,1992,3.79E-05
+CO,hydro,hyrdo,1993,4.95E-04
+CO,hydro,hyrdo,1997,8.71E-04
+CO,hydro,hyrdo,2000,1.04E-04
+CO,hydro,hyrdo,2004,1.10E-04
+CO,hydro,hyrdo,2007,2.46E-04
+CO,refined liquids,refined liquids_turbine,1937,9.47E-06
+CO,refined liquids,refined liquids_turbine,1964,3.16E-04
+CO,refined liquids,refined liquids_turbine,1977,0.004083553
+CO,refined liquids,refined liquids_turbine,1998,4.73E-05
+CO,refined liquids,refined liquids_turbine,1999,1.70E-04
+CO,refined liquids,refined liquids_turbine,2002,9.15E-05
+CO,solar PV,solar_PV,2007,3.22E-04
+CO,solar PV,solar_PV,2008,1.10E-04
+CO,solar PV,solar_PV,2009,1.14E-04
+CO,solar PV,solar_PV,2010,6.94E-04
+CO,wind,wind_onshore,1998,1.64E-04
+CO,wind,wind_onshore,1999,8.33E-04
+CO,wind,wind_onshore,2001,9.37E-04
+CO,wind,wind_onshore,2003,0.005112331
+CO,wind,wind_onshore,2004,1.89E-04
+CO,wind,wind_onshore,2006,0.001893456
+CO,wind,wind_onshore,2007,0.024488698
+CO,wind,wind_onshore,2009,0.00550049
+CO,wind,wind_onshore,2010,0.001609438
+CT,biomass,biomass_conv,1987,5.14E-04
+CT,biomass,biomass_conv,1988,0.005301677
+CT,biomass,biomass_conv,1990,5.33E-04
+CT,biomass,biomass_conv,1995,4.61E-04
+CT,biomass,biomass_conv,1998,8.52E-05
+CT,biomass,biomass_conv,2008,7.57E-05
+CT,coal,coal_conv,1968,0.01262304
+CT,gas,gas_CC,1998,0.016409952
+CT,gas,gas_CC,2002,0.026508384
+CT,gas,gas_CC,2004,0.018240293
+CT,gas,gas_turbine,2001,0.0078894
+CT,gas,gas_turbine,2007,0.002650838
+CT,gas,gas_turbine,2009,0.00315576
+CT,hydro,hyrdo,1903,2.27E-04
+CT,hydro,hyrdo,1914,2.84E-04
+CT,hydro,hyrdo,1923,9.63E-04
+CT,hydro,hyrdo,1925,2.52E-04
+CT,hydro,hyrdo,1927,5.05E-05
+CT,hydro,hyrdo,1934,6.31E-05
+CT,hydro,hyrdo,1937,6.31E-05
+CT,hydro,hyrdo,1954,0.001173943
+CT,hydro,hyrdo,1967,4.42E-05
+CT,hydro,hyrdo,1986,1.01E-04
+CT,hydro,hyrdo,1988,9.47E-05
+CT,hydro,hyrdo,1989,2.71E-04
+CT,hydro,hyrdo,1990,7.89E-05
+CT,hydro,hyrdo,1991,7.26E-05
+CT,nuclear,nuclear_conv,1981,0.068255933
+CT,refined liquids,refined liquids_steam,1961,0.015444289
+CT,refined liquids,refined liquids_steam,1967,0.024233081
+CT,refined liquids,refined liquids_steam,1968,0.015460068
+CT,refined liquids,refined liquids_steam,1975,0.014516496
+CT,refined liquids,refined liquids_steam,1991,9.88E-04
+CT,refined liquids,refined liquids_turbine,1966,0.001959727
+CT,refined liquids,refined liquids_turbine,1967,7.57E-04
+CT,refined liquids,refined liquids_turbine,1968,6.88E-04
+CT,refined liquids,refined liquids_turbine,1969,5.84E-04
+CT,refined liquids,refined liquids_turbine,1970,0.005276431
+CT,refined liquids,refined liquids_turbine,1972,6.00E-04
+CT,refined liquids,refined liquids_turbine,1982,0.003629124
+CT,refined liquids,refined liquids_turbine,1994,0.006033813
+CT,refined liquids,refined liquids_turbine,2004,0.002196409
+CT,refined liquids,refined liquids_turbine,2005,1.70E-04
+CT,refined liquids,refined liquids_turbine,2006,2.27E-04
+CT,refined liquids,refined liquids_turbine,2010,0.00631152
+DC,refined liquids,refined liquids_steam,1970,0.018303408
+DC,refined liquids,refined liquids_turbine,1968,0.008520552
+DE,biomass,biomass_conv,2006,2.52E-04
+DE,coal,coal_conv,1973,0.024690666
+DE,gas,gas_CC,1996,0.037648217
+DE,gas,gas_steam,1971,0.004771509
+DE,gas,gas_turbine,1991,0.001423248
+DE,gas,gas_turbine,2002,0.001420092
+DE,refined liquids,refined liquids_turbine,1967,5.36E-04
+DE,refined liquids,refined liquids_turbine,1973,0.001640995
+DE,wind,wind_onshore,2010,6.31E-05
+FL,biomass,biomass_conv,1981,0.002429935
+FL,biomass,biomass_conv,1984,0.003111579
+FL,biomass,biomass_conv,1986,4.42E-04
+FL,biomass,biomass_conv,1987,4.29E-04
+FL,biomass,biomass_conv,1989,0.002250057
+FL,biomass,biomass_conv,1990,0.002622437
+FL,biomass,biomass_conv,1991,0.003067399
+FL,biomass,biomass_conv,1994,0.001435871
+FL,biomass,biomass_conv,1995,0.001483207
+FL,biomass,biomass_conv,1997,9.47E-05
+FL,biomass,biomass_conv,1998,0.001981817
+FL,biomass,biomass_conv,2006,1.51E-04
+FL,biomass,biomass_conv,2008,3.03E-04
+FL,biomass,biomass_conv,2009,1.26E-04
+FL,biomass,biomass_conv,2010,1.01E-04
+FL,coal,coal_conv,1953,0.003092645
+FL,coal,coal_conv,1966,0.010729584
+FL,coal,coal_conv,1969,0.035821032
+FL,coal,coal_conv,1976,0.134599476
+FL,coal,coal_conv,1981,0.019392145
+FL,coal,coal_conv,1984,0.045102122
+FL,coal,coal_conv,1987,0.042855221
+FL,coal,coal_conv,1991,0.02931701
+FL,coal,coal_IGCC,1996,0.010297245
+FL,gas,gas_CC,1977,0.018303408
+FL,gas,gas_CC,1978,9.91E-04
+FL,gas,gas_CC,1982,0.032895642
+FL,gas,gas_CC,1983,0.001735668
+FL,gas,gas_CC,1984,0.001827185
+FL,gas,gas_CC,1988,0.058936974
+FL,gas,gas_CC,1989,0.002209032
+FL,gas,gas_CC,1990,0.152704071
+FL,gas,gas_CC,1992,0.003203096
+FL,gas,gas_CC,1993,0.009069654
+FL,gas,gas_CC,1996,0.008776169
+FL,gas,gas_CC,1998,0.077268784
+FL,gas,gas_CC,1999,0.011676312
+FL,gas,gas_CC,2000,0.007794727
+FL,gas,gas_CC,2001,0.027414087
+FL,gas,gas_CC,2002,0.037398912
+FL,gas,gas_CC,2003,0.113449572
+FL,gas,gas_CC,2005,0.038645437
+FL,gas,gas_CC,2007,0.038626502
+FL,gas,gas_CC,2008,0.012982797
+FL,gas,gas_CC,2009,0.129228372
+FL,gas,gas_CC,2010,0.010508681
+FL,gas,gas_steam,1961,7.89E-04
+FL,gas,gas_steam,1966,0.00157788
+FL,gas,gas_steam,1967,8.36E-04
+FL,gas,gas_steam,1971,0.00236682
+FL,gas,gas_steam,1972,0.005538359
+FL,gas,gas_steam,1973,0.007242469
+FL,gas,gas_steam,1977,0.017789019
+FL,gas,gas_turbine,1962,7.07E-04
+FL,gas,gas_turbine,1963,9.47E-04
+FL,gas,gas_turbine,1968,0.002606658
+FL,gas,gas_turbine,1969,0.004834624
+FL,gas,gas_turbine,1971,0.038853717
+FL,gas,gas_turbine,1972,0.005355325
+FL,gas,gas_turbine,1973,8.39E-04
+FL,gas,gas_turbine,1980,0.00386265
+FL,gas,gas_turbine,1989,0.004585319
+FL,gas,gas_turbine,1991,0.010817945
+FL,gas,gas_turbine,1992,0.010887372
+FL,gas,gas_turbine,1994,0.002682396
+FL,gas,gas_turbine,1996,0.036310175
+FL,gas,gas_turbine,1998,4.45E-04
+FL,gas,gas_turbine,2001,0.037790226
+FL,gas,gas_turbine,2002,0.044310026
+FL,gas,gas_turbine,2004,0.046418074
+FL,gas,gas_turbine,2006,0.009782856
+FL,gas,gas_turbine,2009,0.002085957
+FL,hydro,hyrdo,1985,3.85E-04
+FL,hydro,hyrdo,2002,0.001372756
+FL,nuclear,nuclear_conv,1972,0.047967552
+FL,nuclear,nuclear_conv,1977,0.028098887
+FL,nuclear,nuclear_conv,1979,0.05364792
+FL,refined liquids,refined liquids_steam,1954,0.004638967
+FL,refined liquids,refined liquids_steam,1962,0.04102488
+FL,refined liquids,refined liquids_steam,1967,0.050744621
+FL,refined liquids,refined liquids_steam,1968,0.019218578
+FL,refined liquids,refined liquids_steam,1969,0.018776772
+FL,refined liquids,refined liquids_steam,1976,0.089592026
+FL,refined liquids,refined liquids_steam,1980,0.058981154
+FL,refined liquids,refined liquids_turbine,1968,0.001063491
+FL,refined liquids,refined liquids_turbine,1970,0.002082802
+FL,refined liquids,refined liquids_turbine,1972,0.003515517
+FL,refined liquids,refined liquids_turbine,1973,0.012862878
+FL,refined liquids,refined liquids_turbine,1974,0.031317762
+FL,refined liquids,refined liquids_turbine,1979,0.01627741
+FL,refined liquids,refined liquids_turbine,1980,0.002625592
+FL,refined liquids,refined liquids_turbine,1981,0.0159429
+FL,refined liquids,refined liquids_turbine,1991,6.06E-04
+FL,refined liquids,refined liquids_turbine,1997,0.003307236
+FL,refined liquids,refined liquids_turbine,2001,0.020345185
+FL,solar PV,solar_PV,2009,7.89E-04
+FL,solar PV,solar_PV,2010,7.89E-04
+GA,biomass,biomass_conv,1993,5.05E-05
+GA,biomass,biomass_conv,2003,1.26E-04
+GA,biomass,biomass_conv,2006,1.01E-04
+GA,biomass,biomass_conv,2009,2.02E-04
+GA,biomass,biomass_conv,2010,6.31E-04
+GA,coal,coal_conv,1957,3.94E-04
+GA,coal,coal_conv,1962,0.006560825
+GA,coal,coal_conv,1963,0.048958461
+GA,coal,coal_conv,1964,0.052085819
+GA,coal,coal_conv,1967,0.055105881
+GA,coal,coal_conv,1973,0.110407419
+GA,coal,coal_conv,1977,0.06008567
+GA,coal,coal_conv,1978,0.00560463
+GA,coal,coal_conv,1985,0.112471286
+GA,gas,gas_CC,2002,0.076716526
+GA,gas,gas_CC,2003,0.035858901
+GA,gas,gas_CC,2004,0.017924717
+GA,gas,gas_CC,2005,0.043442192
+GA,gas,gas_steam,1972,0.003976258
+GA,gas,gas_turbine,1957,1.58E-04
+GA,gas,gas_turbine,1970,0.001476896
+GA,gas,gas_turbine,1994,0.042735302
+GA,gas,gas_turbine,1999,0.03355204
+GA,gas,gas_turbine,2000,0.095247148
+GA,gas,gas_turbine,2001,0.015621012
+GA,gas,gas_turbine,2002,0.044748677
+GA,gas,gas_turbine,2003,0.025107227
+GA,hydro,hyrdo,1902,5.30E-04
+GA,hydro,hyrdo,1910,8.84E-05
+GA,hydro,hyrdo,1912,4.54E-04
+GA,hydro,hyrdo,1914,0.002272147
+GA,hydro,hyrdo,1918,5.81E-04
+GA,hydro,hyrdo,1921,3.79E-05
+GA,hydro,hyrdo,1922,1.70E-04
+GA,hydro,hyrdo,1923,0.00141378
+GA,hydro,hyrdo,1925,0.001214968
+GA,hydro,hyrdo,1926,1.51E-04
+GA,hydro,hyrdo,1927,1.89E-04
+GA,hydro,hyrdo,1930,5.43E-04
+GA,hydro,hyrdo,1935,7.42E-04
+GA,hydro,hyrdo,1945,6.63E-05
+GA,hydro,hyrdo,1950,0.002732888
+GA,hydro,hyrdo,1953,0.001420092
+GA,hydro,hyrdo,1958,5.02E-04
+GA,hydro,hyrdo,1959,0.001893456
+GA,hydro,hyrdo,1963,0.005036593
+GA,hydro,hyrdo,1966,0.013254192
+GA,hydro,hyrdo,1975,0.010202572
+GA,hydro,hyrdo,1980,0.003547074
+GA,hydro,hyrdo,1985,0.00946728
+GA,hydro,hyrdo,1986,7.26E-05
+GA,hydro,hyrdo,1988,4.42E-05
+GA,hydro,hyrdo,1991,1.33E-04
+GA,hydro,hyrdo,1994,3.16E-05
+GA,hydro,hyrdo,2003,0.004140357
+GA,nuclear,nuclear_conv,1977,0.054335876
+GA,nuclear,nuclear_conv,1988,0.073213632
+GA,refined liquids,refined liquids_steam,1956,0.004534827
+GA,refined liquids,refined liquids_turbine,1964,6.31E-05
+GA,refined liquids,refined liquids_turbine,1970,0.001319108
+GA,refined liquids,refined liquids_turbine,1972,0.025788871
+GA,refined liquids,refined liquids_turbine,1982,4.42E-05
+GA,refined liquids,refined liquids_turbine,1987,9.47E-04
+GA,refined liquids,refined liquids_turbine,1988,6.31E-05
+GA,refined liquids,refined liquids_turbine,1989,7.57E-05
+GA,refined liquids,refined liquids_turbine,1991,2.46E-04
+GA,refined liquids,refined liquids_turbine,1993,1.45E-04
+GA,refined liquids,refined liquids_turbine,1994,1.89E-04
+GA,refined liquids,refined liquids_turbine,1996,2.08E-04
+GA,refined liquids,refined liquids_turbine,1997,9.15E-05
+GA,refined liquids,refined liquids_turbine,1998,3.41E-04
+GA,refined liquids,refined liquids_turbine,2000,0.003042153
+GA,refined liquids,refined liquids_turbine,2001,0.034688114
+GA,refined liquids,refined liquids_turbine,2003,1.45E-04
+GA,refined liquids,refined liquids_turbine,2005,5.05E-05
+HI,biomass,biomass_conv,1989,0.002010219
+HI,biomass,biomass_conv,2009,0.003566009
+HI,geothermal,geothermal_conv,1992,0.001104516
+HI,hydro,hyrdo,1908,1.14E-04
+HI,hydro,hyrdo,1923,3.16E-05
+HI,hydro,hyrdo,1925,1.42E-04
+HI,hydro,hyrdo,1928,3.47E-05
+HI,hydro,hyrdo,1985,9.78E-05
+HI,hydro,hyrdo,1993,3.28E-04
+HI,refined liquids,refined liquids_CC,1974,0.001672553
+HI,refined liquids,refined liquids_CC,1996,0.004203472
+HI,refined liquids,refined liquids_steam,1955,0.003294613
+HI,refined liquids,refined liquids_steam,1956,0.001546322
+HI,refined liquids,refined liquids_steam,1959,0.011739427
+HI,refined liquids,refined liquids_steam,1970,0.001170787
+HI,refined liquids,refined liquids_steam,1971,0.019240669
+HI,refined liquids,refined liquids_steam,1988,4.89E-04
+HI,refined liquids,refined liquids_turbine,1962,3.63E-04
+HI,refined liquids,refined liquids_turbine,1970,3.00E-04
+HI,refined liquids,refined liquids_turbine,1971,2.37E-04
+HI,refined liquids,refined liquids_turbine,1973,0.00323781
+HI,refined liquids,refined liquids_turbine,1980,0.003048464
+HI,refined liquids,refined liquids_turbine,1982,7.89E-05
+HI,refined liquids,refined liquids_turbine,1984,0.001467428
+HI,refined liquids,refined liquids_turbine,1985,2.37E-04
+HI,refined liquids,refined liquids_turbine,1989,5.55E-04
+HI,refined liquids,refined liquids_turbine,1991,3.98E-04
+HI,refined liquids,refined liquids_turbine,1992,0.001072958
+HI,refined liquids,refined liquids_turbine,2000,0.00145165
+HI,refined liquids,refined liquids_turbine,2001,0.001297017
+HI,solar PV,solar_PV,2008,3.79E-05
+HI,wind,wind_onshore,2006,0.001281239
+HI,wind,wind_onshore,2007,6.63E-04
+IA,biomass,biomass_conv,1998,2.02E-04
+IA,biomass,biomass_conv,2006,1.51E-04
+IA,coal,coal_conv,1955,0.002089113
+IA,coal,coal_conv,1959,0.00375851
+IA,coal,coal_conv,1960,0.005491022
+IA,coal,coal_conv,1964,0.00197235
+IA,coal,coal_conv,1967,0.00689218
+IA,coal,coal_conv,1968,0.013686531
+IA,coal,coal_conv,1969,0.002824405
+IA,coal,coal_conv,1972,0.03300925
+IA,coal,coal_conv,1974,0.009845971
+IA,coal,coal_conv,1977,0.003433467
+IA,coal,coal_conv,1979,0.020196864
+IA,coal,coal_conv,1981,0.022910818
+IA,coal,coal_conv,1983,0.025621615
+IA,coal,coal_conv,1991,0.056137815
+IA,gas,gas_CC,1968,0.002676084
+IA,gas,gas_CC,2003,0.036698333
+IA,gas,gas_turbine,1961,4.23E-04
+IA,gas,gas_turbine,1963,1.01E-04
+IA,gas,gas_turbine,1964,3.47E-05
+IA,gas,gas_turbine,1965,6.91E-04
+IA,gas,gas_turbine,1970,0.002272147
+IA,gas,gas_turbine,1971,6.34E-04
+IA,gas,gas_turbine,1973,0.004973478
+IA,gas,gas_turbine,1977,0.008334362
+IA,gas,gas_turbine,1980,5.68E-05
+IA,gas,gas_turbine,1984,1.45E-04
+IA,gas,gas_turbine,1990,0.001407469
+IA,gas,gas_turbine,1992,0.005674056
+IA,gas,gas_turbine,1994,0.002840184
+IA,gas,gas_turbine,1996,7.10E-04
+IA,gas,gas_turbine,1999,3.16E-04
+IA,gas,gas_turbine,2004,0.003471336
+IA,gas,gas_turbine,2005,0.005727704
+IA,hydro,hyrdo,1913,0.003938388
+IA,hydro,hyrdo,1923,3.79E-05
+IA,hydro,hyrdo,1930,1.01E-04
+IA,nuclear,nuclear_conv,1975,0.021443389
+IA,refined liquids,refined liquids_turbine,1943,2.21E-05
+IA,refined liquids,refined liquids_turbine,1945,1.89E-05
+IA,refined liquids,refined liquids_turbine,1948,1.14E-04
+IA,refined liquids,refined liquids_turbine,1951,5.05E-05
+IA,refined liquids,refined liquids_turbine,1955,9.47E-06
+IA,refined liquids,refined liquids_turbine,1963,1.64E-04
+IA,refined liquids,refined liquids_turbine,1964,1.93E-04
+IA,refined liquids,refined liquids_turbine,1965,4.29E-04
+IA,refined liquids,refined liquids_turbine,1966,2.30E-04
+IA,refined liquids,refined liquids_turbine,1968,1.23E-04
+IA,refined liquids,refined liquids_turbine,1969,6.63E-05
+IA,refined liquids,refined liquids_turbine,1970,7.51E-04
+IA,refined liquids,refined liquids_turbine,1971,0.001366444
+IA,refined liquids,refined liquids_turbine,1972,5.52E-04
+IA,refined liquids,refined liquids_turbine,1974,1.99E-04
+IA,refined liquids,refined liquids_turbine,1975,4.39E-04
+IA,refined liquids,refined liquids_turbine,1976,2.71E-04
+IA,refined liquids,refined liquids_turbine,1978,0.006380947
+IA,refined liquids,refined liquids_turbine,1979,6.91E-04
+IA,refined liquids,refined liquids_turbine,1980,9.15E-05
+IA,refined liquids,refined liquids_turbine,1982,9.37E-04
+IA,refined liquids,refined liquids_turbine,1983,8.46E-04
+IA,refined liquids,refined liquids_turbine,1984,1.77E-04
+IA,refined liquids,refined liquids_turbine,1985,0.001123451
+IA,refined liquids,refined liquids_turbine,1986,3.50E-04
+IA,refined liquids,refined liquids_turbine,1987,3.47E-05
+IA,refined liquids,refined liquids_turbine,1988,3.47E-05
+IA,refined liquids,refined liquids_turbine,1989,2.05E-04
+IA,refined liquids,refined liquids_turbine,1990,0.001644151
+IA,refined liquids,refined liquids_turbine,1991,3.41E-04
+IA,refined liquids,refined liquids_turbine,1992,7.10E-04
+IA,refined liquids,refined liquids_turbine,1993,4.35E-04
+IA,refined liquids,refined liquids_turbine,1994,5.05E-04
+IA,refined liquids,refined liquids_turbine,1995,4.61E-04
+IA,refined liquids,refined liquids_turbine,1996,0.002944324
+IA,refined liquids,refined liquids_turbine,1998,4.32E-04
+IA,refined liquids,refined liquids_turbine,1999,9.15E-05
+IA,refined liquids,refined liquids_turbine,2000,4.35E-04
+IA,refined liquids,refined liquids_turbine,2001,4.54E-04
+IA,refined liquids,refined liquids_turbine,2002,0.001177098
+IA,refined liquids,refined liquids_turbine,2003,0.001202345
+IA,refined liquids,refined liquids_turbine,2004,5.43E-04
+IA,refined liquids,refined liquids_turbine,2005,1.26E-04
+IA,refined liquids,refined liquids_turbine,2006,1.26E-04
+IA,wind,wind_onshore,1999,0.007450749
+IA,wind,wind_onshore,2000,7.26E-05
+IA,wind,wind_onshore,2001,0.002524608
+IA,wind,wind_onshore,2002,0.003092645
+IA,wind,wind_onshore,2003,0.001372756
+IA,wind,wind_onshore,2004,0.005538359
+IA,wind,wind_onshore,2005,0.006399881
+IA,wind,wind_onshore,2006,0.003124202
+IA,wind,wind_onshore,2007,0.009221131
+IA,wind,wind_onshore,2008,0.045206262
+IA,wind,wind_onshore,2009,0.031472394
+IA,wind,wind_onshore,2010,6.31E-05
+ID,gas,gas_CC,2001,0.009514616
+ID,gas,gas_turbine,1995,0.005251185
+ID,gas,gas_turbine,2004,0.005453153
+ID,gas,gas_turbine,2005,0.008608913
+ID,geothermal,geothermal_conv,2008,5.68E-04
+ID,hydro,hyrdo,1917,9.47E-04
+ID,hydro,hyrdo,1918,2.78E-04
+ID,hydro,hyrdo,1919,3.94E-04
+ID,hydro,hyrdo,1921,2.15E-04
+ID,hydro,hyrdo,1923,0.001041401
+ID,hydro,hyrdo,1924,8.99E-04
+ID,hydro,hyrdo,1925,3.22E-04
+ID,hydro,hyrdo,1937,6.47E-04
+ID,hydro,hyrdo,1947,5.21E-04
+ID,hydro,hyrdo,1948,6.88E-04
+ID,hydro,hyrdo,1949,0.004260276
+ID,hydro,hyrdo,1950,0.001262304
+ID,hydro,hyrdo,1951,0.002612969
+ID,hydro,hyrdo,1952,0.008369076
+ID,hydro,hyrdo,1955,0.001325419
+ID,hydro,hyrdo,1957,0.005689835
+ID,hydro,hyrdo,1966,0.018473819
+ID,hydro,hyrdo,1974,0.01262304
+ID,hydro,hyrdo,1978,0.00313367
+ID,hydro,hyrdo,1980,8.74E-04
+ID,hydro,hyrdo,1982,7.57E-04
+ID,hydro,hyrdo,1983,5.74E-04
+ID,hydro,hyrdo,1984,3.98E-04
+ID,hydro,hyrdo,1985,0.002022842
+ID,hydro,hyrdo,1986,2.93E-04
+ID,hydro,hyrdo,1987,4.26E-04
+ID,hydro,hyrdo,1988,0.004042529
+ID,hydro,hyrdo,1989,0.001486363
+ID,hydro,hyrdo,1990,6.94E-04
+ID,hydro,hyrdo,1991,4.10E-05
+ID,hydro,hyrdo,1992,0.001877677
+ID,hydro,hyrdo,1993,9.91E-04
+ID,hydro,hyrdo,1994,8.33E-04
+ID,hydro,hyrdo,1995,2.97E-04
+ID,hydro,hyrdo,2004,1.04E-04
+ID,hydro,hyrdo,2006,5.36E-05
+ID,hydro,hyrdo,2010,4.73E-04
+ID,refined liquids,refined liquids_turbine,1967,1.58E-04
+ID,wind,wind_onshore,2005,3.31E-04
+ID,wind,wind_onshore,2006,0.002035465
+ID,wind,wind_onshore,2008,0.001325419
+ID,wind,wind_onshore,2009,9.28E-04
+ID,wind,wind_onshore,2010,0.006494554
+IL,biomass,biomass_conv,1989,1.89E-04
+IL,biomass,biomass_conv,1991,7.57E-05
+IL,biomass,biomass_conv,1992,1.26E-04
+IL,biomass,biomass_conv,1993,3.79E-04
+IL,biomass,biomass_conv,1996,2.08E-04
+IL,biomass,biomass_conv,1997,4.01E-04
+IL,biomass,biomass_conv,1999,4.17E-04
+IL,biomass,biomass_conv,2000,4.04E-04
+IL,biomass,biomass_conv,2001,1.33E-04
+IL,biomass,biomass_conv,2002,2.21E-04
+IL,biomass,biomass_conv,2003,1.51E-04
+IL,biomass,biomass_conv,2004,2.27E-04
+IL,biomass,biomass_conv,2006,1.04E-04
+IL,biomass,biomass_conv,2007,2.02E-04
+IL,biomass,biomass_conv,2008,1.01E-04
+IL,coal,coal_conv,1953,0.039440688
+IL,coal,coal_conv,1955,0.00575295
+IL,coal,coal_conv,1956,0.011180858
+IL,coal,coal_conv,1957,0.009666093
+IL,coal,coal_conv,1959,0.030225869
+IL,coal,coal_conv,1960,0.021512816
+IL,coal,coal_conv,1961,0.044108058
+IL,coal,coal_conv,1965,0.041656032
+IL,coal,coal_conv,1967,0.042318742
+IL,coal,coal_conv,1968,0.036426938
+IL,coal,coal_conv,1969,0.031728011
+IL,coal,coal_conv,1972,0.068356917
+IL,coal,coal_conv,1973,0.056349251
+IL,coal,coal_conv,1976,0.013916902
+IL,coal,coal_conv,1978,0.015400109
+IL,coal,coal_conv,1979,0.038967324
+IL,coal,coal_conv,1988,0.02107101
+IL,gas,gas_CC,1986,0.020427234
+IL,gas,gas_CC,2000,0.019288005
+IL,gas,gas_CC,2002,0.061792937
+IL,gas,gas_steam,1949,0.00473364
+IL,gas,gas_steam,1954,8.90E-04
+IL,gas,gas_turbine,1967,1.58E-04
+IL,gas,gas_turbine,1969,0.001196033
+IL,gas,gas_turbine,1971,6.25E-04
+IL,gas,gas_turbine,1975,7.76E-04
+IL,gas,gas_turbine,1983,0.009514616
+IL,gas,gas_turbine,1989,5.05E-05
+IL,gas,gas_turbine,1991,9.15E-05
+IL,gas,gas_turbine,1992,4.17E-04
+IL,gas,gas_turbine,1994,4.42E-05
+IL,gas,gas_turbine,1995,4.42E-05
+IL,gas,gas_turbine,1996,3.16E-05
+IL,gas,gas_turbine,1997,0.004373883
+IL,gas,gas_turbine,1999,0.022989712
+IL,gas,gas_turbine,2000,0.124469486
+IL,gas,gas_turbine,2001,0.095120918
+IL,gas,gas_turbine,2002,0.096897611
+IL,gas,gas_turbine,2003,0.026319038
+IL,gas,gas_turbine,2004,0.018492754
+IL,gas,gas_turbine,2005,9.31E-04
+IL,hydro,hyrdo,1925,2.08E-04
+IL,hydro,hyrdo,1928,3.47E-05
+IL,hydro,hyrdo,1942,1.14E-04
+IL,hydro,hyrdo,1988,6.94E-05
+IL,hydro,hyrdo,1991,3.79E-05
+IL,hydro,hyrdo,1996,2.84E-04
+IL,hydro,hyrdo,2000,5.05E-04
+IL,nuclear,nuclear_conv,1970,0.063702171
+IL,nuclear,nuclear_conv,1972,0.063702171
+IL,nuclear,nuclear_conv,1984,0.073844784
+IL,nuclear,nuclear_conv,1986,0.077309808
+IL,nuclear,nuclear_conv,1987,0.035922016
+IL,nuclear,nuclear_conv,1988,0.077309808
+IL,refined liquids,refined liquids_steam,1948,0.007258248
+IL,refined liquids,refined liquids_steam,1975,0.006617629
+IL,refined liquids,refined liquids_steam,2008,6.94E-04
+IL,refined liquids,refined liquids_turbine,1944,5.68E-05
+IL,refined liquids,refined liquids_turbine,1945,9.15E-05
+IL,refined liquids,refined liquids_turbine,1953,2.84E-04
+IL,refined liquids,refined liquids_turbine,1957,6.00E-05
+IL,refined liquids,refined liquids_turbine,1963,2.11E-04
+IL,refined liquids,refined liquids_turbine,1965,3.53E-04
+IL,refined liquids,refined liquids_turbine,1968,0.012648286
+IL,refined liquids,refined liquids_turbine,1970,0.001136074
+IL,refined liquids,refined liquids_turbine,1971,2.37E-04
+IL,refined liquids,refined liquids_turbine,1973,0.001596815
+IL,refined liquids,refined liquids_turbine,1976,5.55E-04
+IL,refined liquids,refined liquids_turbine,1979,5.05E-04
+IL,refined liquids,refined liquids_turbine,1980,0.001565257
+IL,refined liquids,refined liquids_turbine,1985,2.90E-04
+IL,refined liquids,refined liquids_turbine,1986,5.02E-04
+IL,refined liquids,refined liquids_turbine,1987,3.94E-04
+IL,refined liquids,refined liquids_turbine,1989,4.95E-04
+IL,refined liquids,refined liquids_turbine,1995,1.61E-04
+IL,refined liquids,refined liquids_turbine,1996,2.84E-04
+IL,refined liquids,refined liquids_turbine,1998,1.51E-04
+IL,refined liquids,refined liquids_turbine,2000,4.61E-04
+IL,refined liquids,refined liquids_turbine,2001,7.38E-04
+IL,refined liquids,refined liquids_turbine,2003,7.61E-04
+IL,refined liquids,refined liquids_turbine,2005,6.31E-05
+IL,solar PV,solar_PV,2009,2.84E-04
+IL,wind,wind_onshore,2003,0.001590503
+IL,wind,wind_onshore,2005,0.001726201
+IL,wind,wind_onshore,2006,2.65E-04
+IL,wind,wind_onshore,2007,0.019755058
+IL,wind,wind_onshore,2008,0.010508681
+IL,wind,wind_onshore,2009,0.016520404
+IL,wind,wind_onshore,2010,0.01104516
+IN,biomass,biomass_conv,2000,2.02E-04
+IN,biomass,biomass_conv,2001,3.03E-04
+IN,biomass,biomass_conv,2003,3.03E-04
+IN,biomass,biomass_conv,2005,1.01E-04
+IN,biomass,biomass_conv,2007,3.16E-04
+IN,biomass,biomass_conv,2009,1.51E-04
+IN,coal,coal_conv,1950,0.00344609
+IN,coal,coal_conv,1953,0.009517772
+IN,coal,coal_conv,1955,0.042233536
+IN,coal,coal_conv,1958,0.034716516
+IN,coal,coal_conv,1959,0.038304615
+IN,coal,coal_conv,1960,0.027145848
+IN,coal,coal_conv,1961,0.001356977
+IN,coal,coal_conv,1966,0.02200827
+IN,coal,coal_conv,1968,0.02248479
+IN,coal,coal_conv,1970,0.007359232
+IN,coal,coal_conv,1971,0.04515577
+IN,coal,coal_conv,1974,0.017041104
+IN,coal,coal_conv,1976,0.0677447
+IN,coal,coal_conv,1978,0.105386605
+IN,coal,coal_conv,1980,0.06132904
+IN,coal,coal_conv,1982,0.050820359
+IN,coal,coal_conv,1986,0.08204976
+IN,gas,gas_CC,1986,0.010350893
+IN,gas,gas_CC,2002,0.017523935
+IN,gas,gas_CC,2004,0.038878963
+IN,gas,gas_turbine,1963,7.01E-04
+IN,gas,gas_turbine,1966,5.05E-04
+IN,gas,gas_turbine,1968,0.00118341
+IN,gas,gas_turbine,1977,0.004478023
+IN,gas,gas_turbine,1979,0.008141861
+IN,gas,gas_turbine,1992,0.002612969
+IN,gas,gas_turbine,1993,0.00381847
+IN,gas,gas_turbine,1996,0.005566761
+IN,gas,gas_turbine,1998,0.016211139
+IN,gas,gas_turbine,1999,0.021560152
+IN,gas,gas_turbine,2000,0.034328357
+IN,gas,gas_turbine,2001,0.01170787
+IN,gas,gas_turbine,2005,0.012686155
+IN,hydro,hyrdo,1917,1.07E-04
+IN,hydro,hyrdo,1923,2.30E-04
+IN,hydro,hyrdo,1924,3.72E-04
+IN,hydro,hyrdo,1966,0.002044932
+IN,hydro,hyrdo,1988,1.51E-04
+IN,refined liquids,refined liquids_steam,1943,0.002764446
+IN,refined liquids,refined liquids_steam,1944,0.001104516
+IN,refined liquids,refined liquids_steam,1949,0.002903299
+IN,refined liquids,refined liquids_turbine,1966,5.11E-04
+IN,refined liquids,refined liquids_turbine,1967,8.52E-05
+IN,refined liquids,refined liquids_turbine,1968,0.003300925
+IN,refined liquids,refined liquids_turbine,1971,3.28E-04
+IN,refined liquids,refined liquids_turbine,1973,0.002025998
+IN,refined liquids,refined liquids_turbine,1986,6.88E-04
+IN,refined liquids,refined liquids_turbine,1991,1.36E-04
+IN,refined liquids,refined liquids_turbine,1992,3.79E-05
+IN,refined liquids,refined liquids_turbine,2001,1.36E-04
+IN,refined liquids,refined liquids_turbine,2002,5.68E-05
+IN,wind,wind_onshore,2008,0.004118267
+IN,wind,wind_onshore,2009,0.028591186
+IN,wind,wind_onshore,2010,0.009505149
+KS,biomass,biomass_conv,2009,1.77E-04
+KS,biomass,biomass_conv,2010,5.05E-05
+KS,coal,coal_conv,1952,0.00276129
+KS,coal,coal_conv,1960,0.007321363
+KS,coal,coal_conv,1967,0.017861602
+KS,coal,coal_conv,1968,0.007545422
+KS,coal,coal_conv,1974,0.049797893
+KS,coal,coal_conv,1980,0.068164416
+KS,coal,coal_conv,1981,0.008236534
+KS,coal,coal_conv,1983,0.011004135
+KS,gas,gas_steam,1956,0.011013602
+KS,gas,gas_steam,1961,6.00E-04
+KS,gas,gas_steam,1963,0.00415298
+KS,gas,gas_steam,1965,0.022027205
+KS,gas,gas_steam,1967,0.001852431
+KS,gas,gas_steam,1969,0.004702082
+KS,gas,gas_steam,1970,8.36E-04
+KS,gas,gas_steam,1971,0.003452401
+KS,gas,gas_steam,1972,6.31E-04
+KS,gas,gas_turbine,1951,3.16E-04
+KS,gas,gas_turbine,1962,4.42E-04
+KS,gas,gas_turbine,1963,6.12E-04
+KS,gas,gas_turbine,1964,2.46E-04
+KS,gas,gas_turbine,1965,1.26E-04
+KS,gas,gas_turbine,1966,2.18E-04
+KS,gas,gas_turbine,1967,0.001012999
+KS,gas,gas_turbine,1969,5.65E-04
+KS,gas,gas_turbine,1970,7.92E-04
+KS,gas,gas_turbine,1971,1.26E-04
+KS,gas,gas_turbine,1972,0.001830341
+KS,gas,gas_turbine,1973,0.00344609
+KS,gas,gas_turbine,1974,0.009404165
+KS,gas,gas_turbine,1975,0.004531671
+KS,gas,gas_turbine,1976,0.005349013
+KS,gas,gas_turbine,1977,3.79E-04
+KS,gas,gas_turbine,1980,6.03E-04
+KS,gas,gas_turbine,1984,3.41E-04
+KS,gas,gas_turbine,1985,7.20E-04
+KS,gas,gas_turbine,1986,3.38E-04
+KS,gas,gas_turbine,1988,6.91E-04
+KS,gas,gas_turbine,1989,0.002007063
+KS,gas,gas_turbine,1992,5.36E-05
+KS,gas,gas_turbine,1993,3.79E-05
+KS,gas,gas_turbine,1998,0.003673305
+KS,gas,gas_turbine,1999,8.20E-04
+KS,gas,gas_turbine,2000,0.011837256
+KS,gas,gas_turbine,2001,0.006314676
+KS,gas,gas_turbine,2002,0.00236682
+KS,gas,gas_turbine,2003,0.01436502
+KS,gas,gas_turbine,2006,0.002966414
+KS,gas,gas_turbine,2008,0.025429114
+KS,hydro,hyrdo,1922,8.20E-05
+KS,nuclear,nuclear_conv,1985,0.038995726
+KS,refined liquids,refined liquids_turbine,1948,1.26E-05
+KS,refined liquids,refined liquids_turbine,1958,4.73E-05
+KS,refined liquids,refined liquids_turbine,1959,2.08E-04
+KS,refined liquids,refined liquids_turbine,1963,7.01E-04
+KS,refined liquids,refined liquids_turbine,1964,1.67E-04
+KS,refined liquids,refined liquids_turbine,1965,3.79E-04
+KS,refined liquids,refined liquids_turbine,1966,7.04E-04
+KS,refined liquids,refined liquids_turbine,1967,6.09E-04
+KS,refined liquids,refined liquids_turbine,1968,2.65E-04
+KS,refined liquids,refined liquids_turbine,1970,4.83E-04
+KS,refined liquids,refined liquids_turbine,1972,6.12E-04
+KS,refined liquids,refined liquids_turbine,1973,1.67E-04
+KS,refined liquids,refined liquids_turbine,1974,4.51E-04
+KS,refined liquids,refined liquids_turbine,1975,0.006942672
+KS,refined liquids,refined liquids_turbine,1976,0.002246901
+KS,refined liquids,refined liquids_turbine,1977,7.89E-05
+KS,refined liquids,refined liquids_turbine,1979,0.001208656
+KS,refined liquids,refined liquids_turbine,1980,7.57E-05
+KS,refined liquids,refined liquids_turbine,1981,1.58E-04
+KS,refined liquids,refined liquids_turbine,1983,8.52E-05
+KS,refined liquids,refined liquids_turbine,1986,6.19E-04
+KS,refined liquids,refined liquids_turbine,1991,3.79E-04
+KS,refined liquids,refined liquids_turbine,1993,5.18E-04
+KS,refined liquids,refined liquids_turbine,1994,1.36E-04
+KS,refined liquids,refined liquids_turbine,1999,6.31E-04
+KS,refined liquids,refined liquids_turbine,2001,2.11E-04
+KS,refined liquids,refined liquids_turbine,2002,6.31E-04
+KS,refined liquids,refined liquids_turbine,2004,3.28E-04
+KS,refined liquids,refined liquids_turbine,2007,1.26E-04
+KS,wind,wind_onshore,2002,0.003534451
+KS,wind,wind_onshore,2005,0.00473364
+KS,wind,wind_onshore,2007,0.004670525
+KS,wind,wind_onshore,2008,0.014210387
+KS,wind,wind_onshore,2009,0.006279962
+KS,wind,wind_onshore,2010,3.94E-04
+KY,biomass,biomass_conv,2003,3.03E-04
+KY,biomass,biomass_conv,2006,7.57E-05
+KY,biomass,biomass_conv,2007,1.01E-04
+KY,biomass,biomass_conv,2009,6.31E-05
+KY,coal,coal_conv,1953,0.00236682
+KY,coal,coal_conv,1954,0.0552258
+KY,coal,coal_conv,1957,0.012768205
+KY,coal,coal_conv,1966,0.104102211
+KY,coal,coal_conv,1967,0.069360449
+KY,coal,coal_conv,1969,0.018997675
+KY,coal,coal_conv,1970,0.014052599
+KY,coal,coal_conv,1973,0.012780828
+KY,coal,coal_conv,1977,0.054190711
+KY,coal,coal_conv,1978,0.070244062
+KY,coal,coal_conv,1980,0.039614255
+KY,coal,coal_conv,1984,0.017864757
+KY,coal,coal_conv,1990,0.068625157
+KY,gas,gas_turbine,1968,5.14E-04
+KY,gas,gas_turbine,1969,5.68E-04
+KY,gas,gas_turbine,1970,0.001959727
+KY,gas,gas_turbine,1993,0.007150952
+KY,gas,gas_turbine,1997,0.030945383
+KY,gas,gas_turbine,2001,0.03629124
+KY,gas,gas_turbine,2002,0.074696839
+KY,gas,gas_turbine,2003,0.037679774
+KY,hydro,hyrdo,1924,8.90E-04
+KY,hydro,hyrdo,1927,5.68E-05
+KY,hydro,hyrdo,1928,0.002688708
+KY,hydro,hyrdo,1945,0.006898491
+KY,hydro,hyrdo,1951,0.008520552
+KY,hydro,hyrdo,1966,0.004102488
+KY,hydro,hyrdo,1977,0.002209032
+KY,refined liquids,refined liquids_turbine,1962,3.63E-04
+KY,refined liquids,refined liquids_turbine,1976,0.003117891
+LA,biomass,biomass_conv,1983,3.82E-04
+LA,coal,coal_conv,1981,0.078439571
+LA,coal,coal_conv,1982,0.017609141
+LA,coal,coal_conv,1986,0.022743562
+LA,gas,gas_CC,1974,0.007141485
+LA,gas,gas_CC,1986,0.029121353
+LA,gas,gas_CC,2001,0.054746124
+LA,gas,gas_CC,2002,0.043423258
+LA,gas,gas_CC,2010,0.019691942
+LA,gas,gas_steam,1956,0.008773013
+LA,gas,gas_steam,1960,0.0039447
+LA,gas,gas_steam,1964,0.03027005
+LA,gas,gas_steam,1966,0.039465935
+LA,gas,gas_steam,1967,0.024614928
+LA,gas,gas_steam,1968,0.015718841
+LA,gas,gas_steam,1970,0.073150517
+LA,gas,gas_steam,1972,0.007169887
+LA,gas,gas_steam,1973,0.014636415
+LA,gas,gas_steam,1975,0.042176732
+LA,gas,gas_steam,1977,0.0675806
+LA,gas,gas_steam,1985,7.89E-04
+LA,gas,gas_steam,2004,1.42E-04
+LA,gas,gas_turbine,1960,2.97E-04
+LA,gas,gas_turbine,1971,6.53E-04
+LA,gas,gas_turbine,1973,3.16E-04
+LA,gas,gas_turbine,1977,7.89E-05
+LA,gas,gas_turbine,2000,0.01669397
+LA,gas,gas_turbine,2001,0.008381699
+LA,gas,gas_turbine,2002,0.013885344
+LA,gas,gas_turbine,2005,0.003181006
+LA,gas,gas_turbine,2006,0.003181006
+LA,hydro,hyrdo,1990,0.006059059
+LA,nuclear,nuclear_conv,1985,0.037862808
+LA,nuclear,nuclear_conv,1986,0.032690518
+LA,refined liquids,refined liquids_steam,1959,0.007169887
+LA,refined liquids,refined liquids_steam,2010,0.022210239
+LA,refined liquids,refined liquids_turbine,1958,3.28E-04
+LA,refined liquids,refined liquids_turbine,1969,2.59E-04
+LA,refined liquids,refined liquids_turbine,2009,0.001293862
+MA,biomass,biomass_conv,1985,0.002966414
+MA,biomass,biomass_conv,1986,0.001502142
+MA,biomass,biomass_conv,1988,2.97E-04
+MA,biomass,biomass_conv,1989,0.004560073
+MA,biomass,biomass_conv,1992,5.68E-04
+MA,biomass,biomass_conv,1996,3.16E-05
+MA,biomass,biomass_conv,1997,5.68E-05
+MA,biomass,biomass_conv,2000,2.30E-04
+MA,biomass,biomass_conv,2005,2.46E-04
+MA,biomass,biomass_conv,2007,1.51E-04
+MA,coal,coal_conv,1955,0.010401385
+MA,coal,coal_conv,1960,0.039781511
+MA,gas,gas_CC,1977,0.003187318
+MA,gas,gas_CC,1988,0.00105718
+MA,gas,gas_CC,1992,0.002429935
+MA,gas,gas_CC,1993,0.005617253
+MA,gas,gas_CC,1999,0.015431666
+MA,gas,gas_CC,2001,0.029601029
+MA,gas,gas_CC,2002,0.018240293
+MA,gas,gas_CC,2003,0.082573616
+MA,gas,gas_steam,1953,6.31E-04
+MA,gas,gas_steam,1975,0.019471039
+MA,gas,gas_turbine,1971,2.68E-04
+MA,gas,gas_turbine,1983,0.002048088
+MA,gas,gas_turbine,2002,0.003786912
+MA,gas,gas_turbine,2008,7.79E-04
+MA,hydro,hyrdo,1909,1.64E-04
+MA,hydro,hyrdo,1911,3.03E-04
+MA,hydro,hyrdo,1913,1.51E-04
+MA,hydro,hyrdo,1916,0.00195026
+MA,hydro,hyrdo,1917,8.20E-05
+MA,hydro,hyrdo,1918,1.01E-04
+MA,hydro,hyrdo,1919,3.79E-05
+MA,hydro,hyrdo,1923,4.26E-04
+MA,hydro,hyrdo,1926,2.27E-04
+MA,hydro,hyrdo,1928,1.17E-04
+MA,hydro,hyrdo,1930,0.001155008
+MA,hydro,hyrdo,1935,5.05E-05
+MA,hydro,hyrdo,1943,6.94E-05
+MA,hydro,hyrdo,1951,1.10E-04
+MA,hydro,hyrdo,1966,0.001054024
+MA,hydro,hyrdo,1969,1.01E-04
+MA,hydro,hyrdo,1974,9.06E-04
+MA,hydro,hyrdo,1981,4.67E-04
+MA,hydro,hyrdo,1983,1.04E-04
+MA,hydro,hyrdo,1985,8.36E-04
+MA,nuclear,nuclear_conv,1972,0.021143592
+MA,refined liquids,refined liquids_CC,1975,0.003723797
+MA,refined liquids,refined liquids_CC,1981,0.008047188
+MA,refined liquids,refined liquids_steam,1957,0.003584943
+MA,refined liquids,refined liquids_steam,1966,8.93E-04
+MA,refined liquids,refined liquids_steam,1971,0.036764604
+MA,refined liquids,refined liquids_steam,1972,0.015005639
+MA,refined liquids,refined liquids_steam,1974,0.015005639
+MA,refined liquids,refined liquids_turbine,1951,1.17E-04
+MA,refined liquids,refined liquids_turbine,1961,5.46E-04
+MA,refined liquids,refined liquids_turbine,1963,8.52E-05
+MA,refined liquids,refined liquids_turbine,1966,5.87E-04
+MA,refined liquids,refined liquids_turbine,1967,3.41E-04
+MA,refined liquids,refined liquids_turbine,1968,5.36E-04
+MA,refined liquids,refined liquids_turbine,1969,0.003357729
+MA,refined liquids,refined liquids_turbine,1970,0.004260276
+MA,refined liquids,refined liquids_turbine,1971,7.89E-04
+MA,refined liquids,refined liquids_turbine,1974,3.41E-04
+MA,refined liquids,refined liquids_turbine,1977,2.56E-04
+MA,refined liquids,refined liquids_turbine,1979,0.002177474
+MA,refined liquids,refined liquids_turbine,1982,0.005364792
+MA,refined liquids,refined liquids_turbine,1988,2.34E-04
+MA,solar PV,solar_PV,2010,3.16E-05
+MA,wind,wind_onshore,2006,5.68E-05
+MA,wind,wind_onshore,2009,4.73E-05
+MA,wind,wind_onshore,2010,1.48E-04
+MD,biomass,biomass_conv,1986,8.52E-05
+MD,biomass,biomass_conv,1995,0.002139605
+MD,biomass,biomass_conv,2003,1.26E-04
+MD,biomass,biomass_conv,2006,9.47E-05
+MD,biomass,biomass_conv,2007,1.70E-04
+MD,biomass,biomass_conv,2008,1.39E-04
+MD,coal,coal_conv,1954,0.003455557
+MD,coal,coal_conv,1960,0.018555869
+MD,coal,coal_conv,1962,0.012616728
+MD,coal,coal_conv,1964,0.038594945
+MD,coal,coal_conv,1970,0.039510115
+MD,coal,coal_conv,1987,0.043233912
+MD,gas,gas_CC,1996,0.009113835
+MD,gas,gas_steam,1951,0.002278459
+MD,gas,gas_steam,1952,0.003266212
+MD,gas,gas_steam,1956,0.004190849
+MD,gas,gas_turbine,1969,0.008378543
+MD,gas,gas_turbine,1970,0.004260276
+MD,gas,gas_turbine,1992,0.010287778
+MD,gas,gas_turbine,1995,0.006059059
+MD,gas,gas_turbine,2003,0.024381402
+MD,hydro,hyrdo,1925,6.31E-04
+MD,hydro,hyrdo,1943,0.015993392
+MD,nuclear,nuclear_conv,1975,0.057709383
+MD,refined liquids,refined liquids_steam,1972,0.018199268
+MD,refined liquids,refined liquids_steam,1978,0.041592917
+MD,refined liquids,refined liquids_turbine,1967,0.001514765
+MD,refined liquids,refined liquids_turbine,1968,0.001028778
+MD,refined liquids,refined liquids_turbine,1969,0.001060335
+MD,refined liquids,refined liquids_turbine,1970,0.004190849
+MD,refined liquids,refined liquids_turbine,1972,0.016043884
+MD,refined liquids,refined liquids_turbine,1984,8.84E-04
+MD,refined liquids,refined liquids_turbine,1986,5.36E-05
+MD,refined liquids,refined liquids_turbine,1989,0.018966118
+MD,refined liquids,refined liquids_turbine,1991,2.84E-04
+MD,refined liquids,refined liquids_turbine,2004,3.41E-04
+MD,wind,wind_onshore,2010,0.002209032
+ME,biomass,biomass_conv,1987,0.004411752
+ME,biomass,biomass_conv,1988,9.12E-04
+ME,biomass,biomass_conv,1989,0.001442182
+ME,biomass,biomass_conv,1991,0.001249681
+ME,biomass,biomass_conv,1992,1.58E-04
+ME,biomass,biomass_conv,1993,0.001249681
+ME,biomass,biomass_conv,2009,1.01E-04
+ME,gas,gas_CC,1999,0.017362992
+ME,gas,gas_CC,2000,0.008296493
+ME,gas,gas_CC,2001,0.017795331
+ME,hydro,hyrdo,1910,2.27E-04
+ME,hydro,hyrdo,1912,9.78E-05
+ME,hydro,hyrdo,1913,2.05E-04
+ME,hydro,hyrdo,1917,5.68E-05
+ME,hydro,hyrdo,1918,1.07E-04
+ME,hydro,hyrdo,1920,2.90E-04
+ME,hydro,hyrdo,1921,3.79E-04
+ME,hydro,hyrdo,1923,1.01E-04
+ME,hydro,hyrdo,1924,1.58E-04
+ME,hydro,hyrdo,1926,6.31E-04
+ME,hydro,hyrdo,1927,2.56E-04
+ME,hydro,hyrdo,1928,1.14E-04
+ME,hydro,hyrdo,1930,5.24E-04
+ME,hydro,hyrdo,1933,0.002272147
+ME,hydro,hyrdo,1934,0.001237058
+ME,hydro,hyrdo,1935,5.68E-05
+ME,hydro,hyrdo,1937,2.08E-04
+ME,hydro,hyrdo,1940,2.43E-04
+ME,hydro,hyrdo,1941,4.73E-05
+ME,hydro,hyrdo,1944,4.10E-04
+ME,hydro,hyrdo,1946,2.02E-04
+ME,hydro,hyrdo,1948,8.08E-04
+ME,hydro,hyrdo,1951,0.004310768
+ME,hydro,hyrdo,1954,0.002411001
+ME,hydro,hyrdo,1956,1.26E-04
+ME,hydro,hyrdo,1969,3.31E-04
+ME,hydro,hyrdo,1981,2.08E-04
+ME,hydro,hyrdo,1982,6.19E-04
+ME,hydro,hyrdo,1985,3.53E-04
+ME,hydro,hyrdo,1986,5.24E-04
+ME,hydro,hyrdo,1987,4.95E-04
+ME,hydro,hyrdo,1988,6.22E-04
+ME,hydro,hyrdo,1989,0.001199189
+ME,hydro,hyrdo,1990,8.96E-04
+ME,hydro,hyrdo,2009,8.52E-05
+ME,refined liquids,refined liquids_steam,1973,0.02669773
+ME,refined liquids,refined liquids_turbine,1948,1.26E-04
+ME,refined liquids,refined liquids_turbine,1960,2.52E-04
+ME,refined liquids,refined liquids_turbine,1961,2.52E-04
+ME,refined liquids,refined liquids_turbine,1970,0.001104516
+ME,wind,wind_onshore,2007,0.001325419
+ME,wind,wind_onshore,2008,1.42E-04
+ME,wind,wind_onshore,2009,0.006106396
+ME,wind,wind_onshore,2010,8.05E-04
+MI,biomass,biomass_conv,1958,5.90E-04
+MI,biomass,biomass_conv,1987,6.31E-04
+MI,biomass,biomass_conv,1988,7.76E-04
+MI,biomass,biomass_conv,1989,0.001136074
+MI,biomass,biomass_conv,1992,0.001249681
+MI,biomass,biomass_conv,1993,0.001464273
+MI,biomass,biomass_conv,1994,3.79E-04
+MI,biomass,biomass_conv,1995,0.001442182
+MI,biomass,biomass_conv,1997,0.001284394
+MI,biomass,biomass_conv,1998,5.05E-05
+MI,biomass,biomass_conv,2003,2.78E-04
+MI,biomass,biomass_conv,2007,8.52E-05
+MI,biomass,biomass_conv,2009,2.02E-04
+MI,biomass,biomass_conv,2010,5.05E-05
+MI,coal,coal_conv,1952,0.010899995
+MI,coal,coal_conv,1954,0.001893456
+MI,coal,coal_conv,1956,0.019729812
+MI,coal,coal_conv,1957,0.020531375
+MI,coal,coal_conv,1958,7.26E-04
+MI,coal,coal_conv,1960,0.065986942
+MI,coal,coal_conv,1962,0.024472919
+MI,coal,coal_conv,1963,0.013815917
+MI,coal,coal_conv,1968,0.00381847
+MI,coal,coal_conv,1969,0.002303705
+MI,coal,coal_conv,1972,0.103496305
+MI,coal,coal_conv,1973,0.054929159
+MI,coal,coal_conv,1976,0.01420092
+MI,coal,coal_conv,1977,0.002445714
+MI,coal,coal_conv,1982,0.001735668
+MI,coal,coal_conv,1983,0.002524608
+MI,coal,coal_conv,1984,0.044022852
+MI,gas,gas_CC,1967,7.26E-04
+MI,gas,gas_CC,2001,0.018641074
+MI,gas,gas_CC,2002,0.020480882
+MI,gas,gas_CC,2003,0.037111738
+MI,gas,gas_steam,1948,0.006532423
+MI,gas,gas_steam,1956,0.008918178
+MI,gas,gas_steam,1969,0.003471336
+MI,gas,gas_steam,1976,0.044253222
+MI,gas,gas_steam,1978,0.025732067
+MI,gas,gas_turbine,1966,0.004850403
+MI,gas,gas_turbine,1967,0.005822377
+MI,gas,gas_turbine,1968,0.001136074
+MI,gas,gas_turbine,1969,9.66E-04
+MI,gas,gas_turbine,1970,0.00701841
+MI,gas,gas_turbine,1972,7.48E-04
+MI,gas,gas_turbine,1974,3.00E-04
+MI,gas,gas_turbine,1982,3.98E-04
+MI,gas,gas_turbine,1983,1.51E-04
+MI,gas,gas_turbine,1993,5.33E-04
+MI,gas,gas_turbine,1996,0.005102864
+MI,gas,gas_turbine,1998,0.005367948
+MI,gas,gas_turbine,1999,0.01845804
+MI,gas,gas_turbine,2000,0.017975209
+MI,gas,gas_turbine,2001,0.002997972
+MI,gas,gas_turbine,2002,0.043536865
+MI,gas,gas_turbine,2006,3.16E-04
+MI,hydro,hyrdo,1909,2.81E-04
+MI,hydro,hyrdo,1911,2.84E-04
+MI,hydro,hyrdo,1912,1.89E-04
+MI,hydro,hyrdo,1913,4.17E-04
+MI,hydro,hyrdo,1914,1.39E-04
+MI,hydro,hyrdo,1916,2.93E-04
+MI,hydro,hyrdo,1917,5.68E-05
+MI,hydro,hyrdo,1918,9.18E-04
+MI,hydro,hyrdo,1919,1.26E-05
+MI,hydro,hyrdo,1920,1.01E-04
+MI,hydro,hyrdo,1922,3.53E-04
+MI,hydro,hyrdo,1923,3.53E-04
+MI,hydro,hyrdo,1924,5.74E-04
+MI,hydro,hyrdo,1925,6.41E-04
+MI,hydro,hyrdo,1926,2.87E-04
+MI,hydro,hyrdo,1927,3.12E-04
+MI,hydro,hyrdo,1928,6.31E-06
+MI,hydro,hyrdo,1931,0.001678864
+MI,hydro,hyrdo,1933,3.16E-05
+MI,hydro,hyrdo,1936,1.99E-04
+MI,hydro,hyrdo,1939,8.20E-05
+MI,hydro,hyrdo,1941,5.68E-05
+MI,hydro,hyrdo,1943,4.73E-04
+MI,hydro,hyrdo,1949,0.001366444
+MI,hydro,hyrdo,1950,0.001319108
+MI,hydro,hyrdo,1953,4.89E-04
+MI,hydro,hyrdo,1956,6.94E-05
+MI,hydro,hyrdo,1984,9.15E-05
+MI,hydro,hyrdo,1986,5.05E-05
+MI,hydro,hyrdo,1988,4.10E-04
+MI,hydro,hyrdo,1989,3.79E-05
+MI,hydro,hyrdo,1990,1.26E-04
+MI,hydro,hyrdo,1991,6.31E-05
+MI,hydro,hyrdo,1996,2.27E-04
+MI,nuclear,nuclear_conv,1972,0.02561846
+MI,nuclear,nuclear_conv,1976,0.072118583
+MI,nuclear,nuclear_conv,1988,0.038405599
+MI,refined liquids,refined liquids_turbine,1942,3.16E-05
+MI,refined liquids,refined liquids_turbine,1947,2.84E-05
+MI,refined liquids,refined liquids_turbine,1950,3.53E-04
+MI,refined liquids,refined liquids_turbine,1958,2.52E-04
+MI,refined liquids,refined liquids_turbine,1959,1.89E-04
+MI,refined liquids,refined liquids_turbine,1966,0.002171163
+MI,refined liquids,refined liquids_turbine,1968,0.001173943
+MI,refined liquids,refined liquids_turbine,1970,4.26E-04
+MI,refined liquids,refined liquids_turbine,1971,0.002748667
+MI,refined liquids,refined liquids_turbine,1973,7.13E-04
+MI,refined liquids,refined liquids_turbine,1974,0.001372756
+MI,refined liquids,refined liquids_turbine,1975,1.74E-04
+MI,refined liquids,refined liquids_turbine,1976,2.97E-04
+MI,refined liquids,refined liquids_turbine,1979,7.57E-04
+MI,refined liquids,refined liquids_turbine,1980,2.11E-04
+MI,refined liquids,refined liquids_turbine,1982,3.44E-04
+MI,refined liquids,refined liquids_turbine,1988,6.94E-05
+MI,refined liquids,refined liquids_turbine,1990,3.00E-04
+MI,refined liquids,refined liquids_turbine,1992,0.000119919
+MI,refined liquids,refined liquids_turbine,2000,1.04E-04
+MI,refined liquids,refined liquids_turbine,2001,5.11E-04
+MI,refined liquids,refined liquids_turbine,2003,5.65E-04
+MI,refined liquids,refined liquids_turbine,2006,2.71E-04
+MI,wind,wind_onshore,2001,5.68E-05
+MI,wind,wind_onshore,2008,0.003843716
+MI,wind,wind_onshore,2009,0.001262304
+MN,biomass,biomass_conv,1949,0.001514765
+MN,biomass,biomass_conv,1950,0.002297393
+MN,biomass,biomass_conv,1954,0.001224435
+MN,biomass,biomass_conv,1974,8.36E-04
+MN,biomass,biomass_conv,1989,0.001246525
+MN,biomass,biomass_conv,1994,1.01E-04
+MN,biomass,biomass_conv,1995,5.24E-04
+MN,biomass,biomass_conv,2007,0.002019686
+MN,biomass,biomass_conv,2008,1.01E-04
+MN,coal,coal_conv,1953,0.003660682
+MN,coal,coal_conv,1958,0.028165158
+MN,coal,coal_conv,1960,0.007952515
+MN,coal,coal_conv,1961,0.004083553
+MN,coal,coal_conv,1963,0.003124202
+MN,coal,coal_conv,1969,9.53E-04
+MN,coal,coal_conv,1970,5.68E-04
+MN,coal,coal_conv,1971,0.001006687
+MN,coal,coal_conv,1974,0.033845526
+MN,coal,coal_conv,1980,0.076703903
+MN,coal,coal_conv,1981,0.001132918
+MN,gas,gas_CC,1981,0.010249908
+MN,gas,gas_CC,2002,0.018499065
+MN,gas,gas_CC,2005,0.010556017
+MN,gas,gas_CC,2006,0.016725528
+MN,gas,gas_CC,2008,0.020323094
+MN,gas,gas_steam,1956,2.52E-04
+MN,gas,gas_steam,1960,0.002938013
+MN,gas,gas_steam,1970,8.52E-04
+MN,gas,gas_turbine,1961,1.89E-04
+MN,gas,gas_turbine,1969,0.002272147
+MN,gas,gas_turbine,1970,0.00170411
+MN,gas,gas_turbine,1972,0.009353673
+MN,gas,gas_turbine,1974,6.31E-05
+MN,gas,gas_turbine,1982,6.00E-04
+MN,gas,gas_turbine,1990,0.00267924
+MN,gas,gas_turbine,2001,0.03300925
+MN,gas,gas_turbine,2003,0.00157788
+MN,gas,gas_turbine,2004,0.010496058
+MN,gas,gas_turbine,2007,0.005995944
+MN,gas,gas_turbine,2008,0.012559925
+MN,gas,gas_turbine,2009,0.006627096
+MN,hydro,hyrdo,1913,5.68E-05
+MN,hydro,hyrdo,1914,3.16E-05
+MN,hydro,hyrdo,1916,0.002291082
+MN,hydro,hyrdo,1917,5.05E-05
+MN,hydro,hyrdo,1921,7.57E-05
+MN,hydro,hyrdo,1923,1.86E-04
+MN,hydro,hyrdo,1924,9.47E-04
+MN,hydro,hyrdo,1927,1.58E-05
+MN,hydro,hyrdo,1929,8.20E-05
+MN,hydro,hyrdo,1932,1.45E-04
+MN,hydro,hyrdo,1941,4.48E-04
+MN,hydro,hyrdo,1943,6.00E-05
+MN,hydro,hyrdo,1946,5.68E-04
+MN,hydro,hyrdo,1954,3.94E-04
+MN,hydro,hyrdo,1967,4.10E-05
+MN,hydro,hyrdo,1984,2.97E-04
+MN,hydro,hyrdo,1988,7.89E-05
+MN,hydro,hyrdo,1992,1.39E-04
+MN,nuclear,nuclear_conv,1971,0.019919157
+MN,nuclear,nuclear_conv,1974,0.037433625
+MN,refined liquids,refined liquids_turbine,1952,5.36E-05
+MN,refined liquids,refined liquids_turbine,1961,3.16E-04
+MN,refined liquids,refined liquids_turbine,1962,4.51E-04
+MN,refined liquids,refined liquids_turbine,1964,2.90E-04
+MN,refined liquids,refined liquids_turbine,1966,2.84E-04
+MN,refined liquids,refined liquids_turbine,1967,1.10E-04
+MN,refined liquids,refined liquids_turbine,1968,3.94E-04
+MN,refined liquids,refined liquids_turbine,1969,5.68E-04
+MN,refined liquids,refined liquids_turbine,1972,3.16E-04
+MN,refined liquids,refined liquids_turbine,1974,0.007157264
+MN,refined liquids,refined liquids_turbine,1975,5.93E-04
+MN,refined liquids,refined liquids_turbine,1977,1.55E-04
+MN,refined liquids,refined liquids_turbine,1978,0.004967166
+MN,refined liquids,refined liquids_turbine,1980,1.99E-04
+MN,refined liquids,refined liquids_turbine,1981,3.88E-04
+MN,refined liquids,refined liquids_turbine,1982,0.00128755
+MN,refined liquids,refined liquids_turbine,1983,2.56E-04
+MN,refined liquids,refined liquids_turbine,1985,2.90E-04
+MN,refined liquids,refined liquids_turbine,1986,2.24E-04
+MN,refined liquids,refined liquids_turbine,1987,2.56E-04
+MN,refined liquids,refined liquids_turbine,1988,0.001625216
+MN,refined liquids,refined liquids_turbine,1989,3.16E-04
+MN,refined liquids,refined liquids_turbine,1990,2.05E-04
+MN,refined liquids,refined liquids_turbine,1992,3.53E-04
+MN,refined liquids,refined liquids_turbine,1995,1.26E-04
+MN,refined liquids,refined liquids_turbine,1996,2.78E-04
+MN,refined liquids,refined liquids_turbine,1997,8.93E-04
+MN,refined liquids,refined liquids_turbine,1999,4.42E-04
+MN,refined liquids,refined liquids_turbine,2000,3.79E-04
+MN,refined liquids,refined liquids_turbine,2001,2.34E-04
+MN,refined liquids,refined liquids_turbine,2002,0.001214968
+MN,refined liquids,refined liquids_turbine,2003,8.20E-04
+MN,refined liquids,refined liquids_turbine,2004,5.62E-04
+MN,refined liquids,refined liquids_turbine,2005,4.29E-04
+MN,refined liquids,refined liquids_turbine,2007,3.79E-04
+MN,refined liquids,refined liquids_turbine,2008,3.79E-05
+MN,wind,wind_onshore,1994,6.91E-04
+MN,wind,wind_onshore,1998,0.003382975
+MN,wind,wind_onshore,1999,0.004377039
+MN,wind,wind_onshore,2000,1.64E-04
+MN,wind,wind_onshore,2001,0.001000376
+MN,wind,wind_onshore,2002,0.001476896
+MN,wind,wind_onshore,2003,0.006371479
+MN,wind,wind_onshore,2004,7.89E-04
+MN,wind,wind_onshore,2005,0.003171539
+MN,wind,wind_onshore,2006,0.005153356
+MN,wind,wind_onshore,2007,0.00969765
+MN,wind,wind_onshore,2008,0.01025622
+MN,wind,wind_onshore,2009,0.00485987
+MN,wind,wind_onshore,2010,0.007116239
+MO,biomass,biomass_conv,2006,1.01E-04
+MO,biomass,biomass_conv,2008,6.31E-05
+MO,biomass,biomass_conv,2009,9.47E-05
+MO,coal,coal_conv,1954,0.00145165
+MO,coal,coal_conv,1958,0.030989563
+MO,coal,coal_conv,1960,0.017798486
+MO,coal,coal_conv,1961,0.004844092
+MO,coal,coal_conv,1964,0.008694119
+MO,coal,coal_conv,1966,0.002840184
+MO,coal,coal_conv,1967,0.051230608
+MO,coal,coal_conv,1969,0.018754682
+MO,coal,coal_conv,1971,0.082709314
+MO,coal,coal_conv,1974,0.03786912
+MO,coal,coal_conv,1976,0.08113459
+MO,coal,coal_conv,1981,0.008236534
+MO,coal,coal_conv,1996,0.051754464
+MO,gas,gas_CC,1998,0.009681872
+MO,gas,gas_CC,1999,0.017908938
+MO,gas,gas_CC,2000,0.019376366
+MO,gas,gas_CC,2001,0.021364495
+MO,gas,gas_steam,1948,1.26E-04
+MO,gas,gas_steam,1955,0.001909235
+MO,gas,gas_turbine,1963,3.94E-04
+MO,gas,gas_turbine,1965,0.001319108
+MO,gas,gas_turbine,1966,5.87E-04
+MO,gas,gas_turbine,1967,0.001439027
+MO,gas,gas_turbine,1968,1.51E-04
+MO,gas,gas_turbine,1969,1.01E-04
+MO,gas,gas_turbine,1972,0.000479676
+MO,gas,gas_turbine,1973,0.001356977
+MO,gas,gas_turbine,1974,0.002682396
+MO,gas,gas_turbine,1976,0.009009695
+MO,gas,gas_turbine,1981,0.002335262
+MO,gas,gas_turbine,1983,0.003439778
+MO,gas,gas_turbine,1986,0.002524608
+MO,gas,gas_turbine,1987,0.01196033
+MO,gas,gas_turbine,1990,0.006232626
+MO,gas,gas_turbine,1991,0.001694643
+MO,gas,gas_turbine,1995,0.003881585
+MO,gas,gas_turbine,1996,0.001262304
+MO,gas,gas_turbine,1999,0.010363516
+MO,gas,gas_turbine,2000,0.007132018
+MO,gas,gas_turbine,2001,0.039491181
+MO,gas,gas_turbine,2002,0.011291309
+MO,gas,gas_turbine,2003,3.16E-04
+MO,gas,gas_turbine,2005,0.011076718
+MO,hydro,hyrdo,1930,9.47E-05
+MO,hydro,hyrdo,1931,5.05E-04
+MO,hydro,hyrdo,1935,0.006563981
+MO,hydro,hyrdo,1960,0.00631152
+MO,hydro,hyrdo,1973,0.001426404
+MO,hydro,hyrdo,1984,8.52E-04
+MO,nuclear,nuclear_conv,1983,0.038998882
+MO,refined liquids,refined liquids_turbine,1946,1.86E-04
+MO,refined liquids,refined liquids_turbine,1950,2.84E-05
+MO,refined liquids,refined liquids_turbine,1968,4.83E-04
+MO,refined liquids,refined liquids_turbine,1969,0.001136074
+MO,refined liquids,refined liquids_turbine,1970,3.53E-04
+MO,refined liquids,refined liquids_turbine,1971,2.15E-04
+MO,refined liquids,refined liquids_turbine,1972,0.001429559
+MO,refined liquids,refined liquids_turbine,1973,0.00149583
+MO,refined liquids,refined liquids_turbine,1974,8.99E-04
+MO,refined liquids,refined liquids_turbine,1975,5.46E-04
+MO,refined liquids,refined liquids_turbine,1976,0.00145165
+MO,refined liquids,refined liquids_turbine,1977,1.77E-04
+MO,refined liquids,refined liquids_turbine,1978,0.002742355
+MO,refined liquids,refined liquids_turbine,1982,7.07E-04
+MO,refined liquids,refined liquids_turbine,1983,2.27E-04
+MO,refined liquids,refined liquids_turbine,1985,2.02E-04
+MO,refined liquids,refined liquids_turbine,1986,3.66E-04
+MO,refined liquids,refined liquids_turbine,1988,5.96E-04
+MO,refined liquids,refined liquids_turbine,1989,0.001192877
+MO,refined liquids,refined liquids_turbine,1992,3.09E-04
+MO,refined liquids,refined liquids_turbine,1993,5.05E-05
+MO,refined liquids,refined liquids_turbine,1998,6.31E-05
+MO,refined liquids,refined liquids_turbine,2001,5.05E-04
+MO,refined liquids,refined liquids_turbine,2003,5.43E-04
+MO,refined liquids,refined liquids_turbine,2004,5.11E-04
+MO,wind,wind_onshore,2007,0.001789316
+MO,wind,wind_onshore,2008,0.003338794
+MO,wind,wind_onshore,2009,0.00460741
+MO,wind,wind_onshore,2010,0.00473364
+MS,coal,coal_conv,1971,0.027682327
+MS,coal,coal_conv,1978,0.047229104
+MS,coal,coal_conv,2001,0.016211139
+MS,gas,gas_CC,1959,0.001076114
+MS,gas,gas_CC,2000,0.063853648
+MS,gas,gas_CC,2001,0.031620715
+MS,gas,gas_CC,2003,0.113840886
+MS,gas,gas_CC,2006,0.026839739
+MS,gas,gas_steam,1947,0.002452026
+MS,gas,gas_steam,1952,0.002997972
+MS,gas,gas_steam,1953,0.00710046
+MS,gas,gas_steam,1956,0.010704338
+MS,gas,gas_steam,1959,0.009353673
+MS,gas,gas_steam,1961,2.37E-04
+MS,gas,gas_steam,1964,0.001028778
+MS,gas,gas_steam,1969,0.04189587
+MS,gas,gas_steam,1970,0.005585695
+MS,gas,gas_steam,1975,0.024659109
+MS,gas,gas_turbine,1963,4.26E-04
+MS,gas,gas_turbine,1969,5.11E-04
+MS,gas,gas_turbine,1971,0.001322263
+MS,gas,gas_turbine,1983,0.005380571
+MS,gas,gas_turbine,1999,1.01E-04
+MS,gas,gas_turbine,2001,0.005377415
+MS,gas,gas_turbine,2002,0.021408676
+MS,gas,gas_turbine,2003,0.004449622
+MS,gas,gas_turbine,2004,0.007905179
+MS,nuclear,nuclear_conv,1985,0.043312806
+MS,refined liquids,refined liquids_turbine,1972,6.31E-04
+MS,refined liquids,refined liquids_turbine,2001,2.84E-04
+MT,coal,coal_conv,1958,0.00157788
+MT,coal,coal_conv,1968,0.005453153
+MT,coal,coal_conv,1982,0.071698867
+MT,coal,coal_conv,1990,0.001454805
+MT,coal,coal_conv,2006,0.003651214
+MT,gas,gas_steam,2007,5.05E-05
+MT,gas,gas_turbine,1971,7.35E-04
+MT,gas,gas_turbine,1991,0.002641371
+MT,gas,gas_turbine,2006,0.001732512
+MT,gas,gas_turbine,2010,0.002871742
+MT,hydro,hyrdo,1906,2.78E-04
+MT,hydro,hyrdo,1911,5.36E-04
+MT,hydro,hyrdo,1912,0.001155008
+MT,hydro,hyrdo,1915,0.004263432
+MT,hydro,hyrdo,1918,0.001211812
+MT,hydro,hyrdo,1924,1.29E-04
+MT,hydro,hyrdo,1925,3.16E-04
+MT,hydro,hyrdo,1927,5.30E-04
+MT,hydro,hyrdo,1930,0.001420092
+MT,hydro,hyrdo,1947,0.006551358
+MT,hydro,hyrdo,1952,0.013506653
+MT,hydro,hyrdo,1953,0.007419192
+MT,hydro,hyrdo,1958,0.001906079
+MT,hydro,hyrdo,1963,0.016801266
+MT,hydro,hyrdo,1966,0.0078894
+MT,hydro,hyrdo,1977,0.01656774
+MT,hydro,hyrdo,1985,6.31E-05
+MT,hydro,hyrdo,1989,3.06E-04
+MT,hydro,hyrdo,2004,2.37E-04
+MT,refined liquids,refined liquids_turbine,2005,5.68E-05
+MT,wind,wind_onshore,2005,0.004260276
+MT,wind,wind_onshore,2006,3.16E-04
+MT,wind,wind_onshore,2007,9.47E-04
+MT,wind,wind_onshore,2008,0.003360884
+MT,wind,wind_onshore,2009,0.003266212
+NC,biomass,biomass_conv,1990,0.00157788
+NC,biomass,biomass_conv,1991,1.99E-04
+NC,biomass,biomass_conv,1996,1.42E-04
+NC,biomass,biomass_conv,1998,1.67E-04
+NC,biomass,biomass_conv,2007,1.14E-04
+NC,biomass,biomass_conv,2008,1.01E-04
+NC,biomass,biomass_conv,2009,2.08E-04
+NC,biomass,biomass_conv,2010,5.05E-05
+NC,coal,coal_conv,1949,0.011676312
+NC,coal,coal_conv,1950,0.005222783
+NC,coal,coal_conv,1952,0.009151704
+NC,coal,coal_conv,1953,0.014705842
+NC,coal,coal_conv,1957,0.010366672
+NC,coal,coal_conv,1958,0.012698778
+NC,coal,coal_conv,1959,0.036449028
+NC,coal,coal_conv,1964,0.02464333
+NC,coal,coal_conv,1966,0.021194084
+NC,coal,coal_conv,1967,0.013052223
+NC,coal,coal_conv,1968,0.06298897
+NC,coal,coal_conv,1972,0.080730652
+NC,coal,coal_conv,1974,0.068170728
+NC,coal,coal_conv,1983,0.023220082
+NC,gas,gas_CC,1980,0.007756858
+NC,gas,gas_CC,1990,0.005680368
+NC,gas,gas_CC,2001,0.018489598
+NC,gas,gas_CC,2003,0.018738903
+NC,gas,gas_turbine,1995,0.055339407
+NC,gas,gas_turbine,1999,0.013364644
+NC,gas,gas_turbine,2000,0.025530098
+NC,gas,gas_turbine,2001,0.085196053
+NC,gas,gas_turbine,2007,0.019890755
+NC,hydro,hyrdo,1912,7.76E-04
+NC,hydro,hyrdo,1915,8.14E-04
+NC,hydro,hyrdo,1918,0.003433467
+NC,hydro,hyrdo,1919,0.001622061
+NC,hydro,hyrdo,1920,1.58E-04
+NC,hydro,hyrdo,1923,0.001893456
+NC,hydro,hyrdo,1925,8.05E-04
+NC,hydro,hyrdo,1927,0.004626344
+NC,hydro,hyrdo,1928,0.002556166
+NC,hydro,hyrdo,1930,0.003465024
+NC,hydro,hyrdo,1934,5.68E-05
+NC,hydro,hyrdo,1936,0.002650838
+NC,hydro,hyrdo,1940,0.002227967
+NC,hydro,hyrdo,1941,6.82E-04
+NC,hydro,hyrdo,1942,0.001363288
+NC,hydro,hyrdo,1946,5.05E-05
+NC,hydro,hyrdo,1947,0.008037721
+NC,hydro,hyrdo,1949,4.42E-05
+NC,hydro,hyrdo,1950,9.47E-05
+NC,hydro,hyrdo,1952,2.02E-04
+NC,hydro,hyrdo,1954,0.001041401
+NC,hydro,hyrdo,1955,0.00315576
+NC,hydro,hyrdo,1962,0.001325419
+NC,hydro,hyrdo,1963,0.00560463
+NC,hydro,hyrdo,1964,0.01104516
+NC,hydro,hyrdo,1981,4.73E-05
+NC,hydro,hyrdo,1985,1.58E-04
+NC,hydro,hyrdo,1988,7.57E-05
+NC,hydro,hyrdo,1996,1.70E-04
+NC,hydro,hyrdo,1998,3.79E-05
+NC,nuclear,nuclear_conv,1976,0.063216184
+NC,nuclear,nuclear_conv,1982,0.077019479
+NC,nuclear,nuclear_conv,1987,0.030008122
+NC,refined liquids,refined liquids_turbine,1968,0.002881209
+NC,refined liquids,refined liquids_turbine,1970,0.008918178
+NC,refined liquids,refined liquids_turbine,1971,0.001634684
+NC,refined liquids,refined liquids_turbine,1988,7.57E-05
+NC,refined liquids,refined liquids_turbine,1991,5.68E-04
+NC,refined liquids,refined liquids_turbine,1993,6.31E-05
+NC,refined liquids,refined liquids_turbine,1995,9.75E-04
+NC,refined liquids,refined liquids_turbine,1999,6.31E-05
+NC,refined liquids,refined liquids_turbine,2004,1.70E-04
+NC,refined liquids,refined liquids_turbine,2005,5.68E-05
+NC,refined liquids,refined liquids_turbine,2009,4.10E-05
+NC,solar PV,solar_PV,2008,6.94E-05
+NC,solar PV,solar_PV,2009,6.31E-05
+NC,solar PV,solar_PV,2010,2.02E-04
+ND,coal,coal_conv,1959,0.003629124
+ND,coal,coal_conv,1967,0.006002256
+ND,coal,coal_conv,1972,0.020701786
+ND,coal,coal_conv,1974,0.023163278
+ND,coal,coal_conv,1979,0.038184696
+ND,coal,coal_conv,1981,0.01420092
+ND,coal,coal_conv,1985,0.0274488
+ND,hydro,hyrdo,1957,0.019376366
+ND,refined liquids,refined liquids_turbine,1946,3.35E-04
+ND,refined liquids,refined liquids_turbine,1947,1.01E-04
+ND,refined liquids,refined liquids_turbine,1977,0.001521076
+ND,refined liquids,refined liquids_turbine,2000,4.73E-05
+ND,refined liquids,refined liquids_turbine,2001,6.31E-05
+ND,refined liquids,refined liquids_turbine,2002,1.26E-04
+ND,wind,wind_onshore,2003,0.001940792
+ND,wind,wind_onshore,2005,0.001937637
+ND,wind,wind_onshore,2006,0.001820874
+ND,wind,wind_onshore,2007,0.007810506
+ND,wind,wind_onshore,2008,0.013159519
+ND,wind,wind_onshore,2009,0.0152581
+ND,wind,wind_onshore,2010,0.006977385
+NE,biomass,biomass_conv,2004,2.02E-04
+NE,coal,coal_conv,1961,0.020345185
+NE,coal,coal_conv,1963,0.007217223
+NE,coal,coal_conv,1972,0.004102488
+NE,coal,coal_conv,1980,0.043000386
+NE,coal,coal_conv,1981,0.002407845
+NE,coal,coal_conv,1982,0.003465024
+NE,coal,coal_conv,1994,0.043852441
+NE,gas,gas_CC,2003,0.005207004
+NE,gas,gas_CC,2005,0.00957142
+NE,gas,gas_steam,1957,6.00E-04
+NE,gas,gas_steam,1958,0.003433467
+NE,gas,gas_turbine,1951,2.37E-04
+NE,gas,gas_turbine,1961,1.51E-04
+NE,gas,gas_turbine,1962,5.36E-04
+NE,gas,gas_turbine,1963,7.89E-05
+NE,gas,gas_turbine,1964,9.09E-04
+NE,gas,gas_turbine,1965,3.16E-04
+NE,gas,gas_turbine,1966,2.84E-04
+NE,gas,gas_turbine,1967,1.07E-04
+NE,gas,gas_turbine,1972,8.52E-04
+NE,gas,gas_turbine,1976,2.84E-05
+NE,gas,gas_turbine,1980,5.90E-04
+NE,gas,gas_turbine,1989,0.01054655
+NE,gas,gas_turbine,1992,0.00830596
+NE,gas,gas_turbine,2003,0.010887372
+NE,hydro,hyrdo,1921,4.73E-05
+NE,hydro,hyrdo,1935,8.27E-04
+NE,hydro,hyrdo,1936,0.00170411
+NE,hydro,hyrdo,1937,6.31E-06
+NE,hydro,hyrdo,1941,0.002073334
+NE,hydro,hyrdo,1943,7.57E-05
+NE,hydro,hyrdo,1956,0.00417507
+NE,hydro,hyrdo,1984,0.00157788
+NE,nuclear,nuclear_conv,1973,0.015841915
+NE,nuclear,nuclear_conv,1974,0.025277638
+NE,refined liquids,refined liquids_turbine,1931,2.52E-05
+NE,refined liquids,refined liquids_turbine,1936,1.58E-05
+NE,refined liquids,refined liquids_turbine,1939,1.26E-05
+NE,refined liquids,refined liquids_turbine,1941,4.10E-05
+NE,refined liquids,refined liquids_turbine,1947,3.16E-06
+NE,refined liquids,refined liquids_turbine,1950,3.47E-05
+NE,refined liquids,refined liquids_turbine,1953,2.52E-05
+NE,refined liquids,refined liquids_turbine,1956,2.84E-05
+NE,refined liquids,refined liquids_turbine,1960,8.84E-05
+NE,refined liquids,refined liquids_turbine,1961,7.89E-05
+NE,refined liquids,refined liquids_turbine,1962,3.16E-05
+NE,refined liquids,refined liquids_turbine,1964,2.71E-04
+NE,refined liquids,refined liquids_turbine,1965,1.23E-04
+NE,refined liquids,refined liquids_turbine,1968,7.89E-05
+NE,refined liquids,refined liquids_turbine,1969,1.83E-04
+NE,refined liquids,refined liquids_turbine,1970,2.21E-04
+NE,refined liquids,refined liquids_turbine,1971,2.18E-04
+NE,refined liquids,refined liquids_turbine,1972,4.10E-05
+NE,refined liquids,refined liquids_turbine,1973,0.004266588
+NE,refined liquids,refined liquids_turbine,1975,4.10E-05
+NE,refined liquids,refined liquids_turbine,1976,4.92E-04
+NE,refined liquids,refined liquids_turbine,1981,7.26E-05
+NE,refined liquids,refined liquids_turbine,1986,4.10E-05
+NE,refined liquids,refined liquids_turbine,1987,1.83E-04
+NE,refined liquids,refined liquids_turbine,1990,9.78E-05
+NE,refined liquids,refined liquids_turbine,1997,9.15E-05
+NE,refined liquids,refined liquids_turbine,2001,0.000119919
+NE,refined liquids,refined liquids_turbine,2004,5.68E-05
+NE,refined liquids,refined liquids_turbine,2005,1.26E-04
+NE,wind,wind_onshore,1998,3.79E-05
+NE,wind,wind_onshore,2002,3.31E-04
+NE,wind,wind_onshore,2005,0.001874521
+NE,wind,wind_onshore,2009,0.002556166
+NE,wind,wind_onshore,2010,0.001893456
+NH,biomass,biomass_conv,1955,0.00157788
+NH,biomass,biomass_conv,1986,5.52E-04
+NH,biomass,biomass_conv,1987,0.002067023
+NH,biomass,biomass_conv,1988,6.72E-04
+NH,biomass,biomass_conv,1989,4.42E-04
+NH,biomass,biomass_conv,1992,1.01E-04
+NH,biomass,biomass_conv,1996,9.47E-05
+NH,biomass,biomass_conv,1997,1.89E-04
+NH,coal,coal_conv,1954,0.00315576
+NH,coal,coal_conv,1966,0.01449125
+NH,gas,gas_CC,2002,0.019108127
+NH,gas,gas_CC,2003,0.02840184
+NH,hydro,hyrdo,1920,6.94E-05
+NH,hydro,hyrdo,1922,5.05E-04
+NH,hydro,hyrdo,1925,0.001221279
+NH,hydro,hyrdo,1926,1.01E-04
+NH,hydro,hyrdo,1927,5.05E-05
+NH,hydro,hyrdo,1930,0.004430687
+NH,hydro,hyrdo,1931,3.28E-04
+NH,hydro,hyrdo,1948,4.73E-04
+NH,hydro,hyrdo,1955,4.35E-04
+NH,hydro,hyrdo,1956,0.004430687
+NH,hydro,hyrdo,1970,2.02E-04
+NH,hydro,hyrdo,1981,5.36E-05
+NH,hydro,hyrdo,1983,3.03E-04
+NH,hydro,hyrdo,1984,3.16E-04
+NH,hydro,hyrdo,1985,1.67E-04
+NH,hydro,hyrdo,1986,5.33E-04
+NH,hydro,hyrdo,1987,1.36E-04
+NH,hydro,hyrdo,1988,8.52E-05
+NH,hydro,hyrdo,1990,2.02E-04
+NH,hydro,hyrdo,1995,3.79E-05
+NH,nuclear,nuclear_conv,1990,0.039194539
+NH,refined liquids,refined liquids_steam,1974,0.013064846
+NH,refined liquids,refined liquids_turbine,1968,0.001760914
+NH,refined liquids,refined liquids_turbine,1969,5.68E-04
+NH,refined liquids,refined liquids_turbine,1970,6.69E-04
+NH,refined liquids,refined liquids_turbine,2001,4.73E-05
+NH,wind,wind_onshore,2008,7.57E-04
+NJ,biomass,biomass_conv,1985,6.31E-05
+NJ,biomass,biomass_conv,1988,4.26E-04
+NJ,biomass,biomass_conv,1990,0.00220272
+NJ,biomass,biomass_conv,1991,0.001104516
+NJ,biomass,biomass_conv,1994,0.001420092
+NJ,biomass,biomass_conv,1996,1.51E-04
+NJ,biomass,biomass_conv,1998,4.29E-04
+NJ,biomass,biomass_conv,1999,8.52E-05
+NJ,biomass,biomass_conv,2004,8.52E-05
+NJ,biomass,biomass_conv,2008,1.51E-04
+NJ,coal,coal_conv,1954,0.002319484
+NJ,coal,coal_conv,1960,0.020600801
+NJ,coal,coal_conv,1963,0.009442034
+NJ,coal,coal_conv,1968,0.020818549
+NJ,gas,gas_CC,1975,0.011076718
+NJ,gas,gas_CC,1990,0.04239448
+NJ,gas,gas_CC,1991,0.01357608
+NJ,gas,gas_CC,1993,0.004954543
+NJ,gas,gas_CC,1994,0.007526488
+NJ,gas,gas_CC,2002,0.030484642
+NJ,gas,gas_CC,2006,0.037427314
+NJ,gas,gas_steam,1949,0.013601326
+NJ,gas,gas_steam,1958,0.0025751
+NJ,gas,gas_steam,1964,0.014349241
+NJ,gas,gas_turbine,1967,5.87E-04
+NJ,gas,gas_turbine,1970,0.015829292
+NJ,gas,gas_turbine,1971,0.005036593
+NJ,gas,gas_turbine,1972,0.005017658
+NJ,gas,gas_turbine,1973,0.02142761
+NJ,gas,gas_turbine,1974,0.002246901
+NJ,gas,gas_turbine,1983,0.017448197
+NJ,gas,gas_turbine,1986,0.008110303
+NJ,gas,gas_turbine,1988,0.002423624
+NJ,gas,gas_turbine,1991,0.003559697
+NJ,gas,gas_turbine,1996,0.012714557
+NJ,gas,gas_turbine,2000,0.014933056
+NJ,gas,gas_turbine,2003,0.012086561
+NJ,gas,gas_turbine,2004,2.52E-04
+NJ,hydro,hyrdo,1984,3.41E-04
+NJ,nuclear,nuclear_conv,1969,0.01735668
+NJ,nuclear,nuclear_conv,1979,0.073844784
+NJ,nuclear,nuclear_conv,1986,0.036922392
+NJ,refined liquids,refined liquids_steam,1970,7.89E-04
+NJ,refined liquids,refined liquids_steam,1974,0.005566761
+NJ,refined liquids,refined liquids_turbine,1961,2.52E-04
+NJ,refined liquids,refined liquids_turbine,1969,0.001760914
+NJ,refined liquids,refined liquids_turbine,1970,0.003831093
+NJ,refined liquids,refined liquids_turbine,1971,0.013257348
+NJ,refined liquids,refined liquids_turbine,1972,0.009214819
+NJ,solar PV,solar_PV,2006,4.73E-05
+NJ,solar PV,solar_PV,2008,6.31E-05
+NJ,solar PV,solar_PV,2009,3.91E-04
+NJ,solar PV,solar_PV,2010,3.66E-04
+NJ,wind,wind_onshore,2006,2.37E-04
+NM,coal,coal_conv,1967,0.071623129
+NM,coal,coal_conv,1978,0.058318445
+NM,coal,coal_conv,1984,0.008110303
+NM,gas,gas_CC,1984,7.76E-04
+NM,gas,gas_CC,1988,0.00170411
+NM,gas,gas_CC,2003,0.009057031
+NM,gas,gas_CC,2005,0.002114359
+NM,gas,gas_CC,2006,0.02051244
+NM,gas,gas_CC,2008,0.02209032
+NM,gas,gas_steam,1960,0.00485987
+NM,gas,gas_steam,1962,0.008375387
+NM,gas,gas_steam,1966,0.0084101
+NM,gas,gas_steam,1967,0.003584943
+NM,gas,gas_turbine,1974,0.003105268
+NM,gas,gas_turbine,1977,5.14E-04
+NM,gas,gas_turbine,1998,0.008009319
+NM,gas,gas_turbine,2000,0.00473364
+NM,gas,gas_turbine,2002,0.002777069
+NM,gas,gas_turbine,2003,0.006122174
+NM,gas,gas_turbine,2008,0.005033437
+NM,hydro,hyrdo,1939,8.80E-04
+NM,hydro,hyrdo,1988,6.50E-04
+NM,hydro,hyrdo,1989,9.47E-04
+NM,refined liquids,refined liquids_turbine,1973,6.31E-04
+NM,solar PV,solar_PV,2010,9.53E-04
+NM,wind,wind_onshore,2003,0.00649771
+NM,wind,wind_onshore,2004,0.002524608
+NM,wind,wind_onshore,2005,0.003786912
+NM,wind,wind_onshore,2006,0.002840184
+NM,wind,wind_onshore,2008,4.73E-05
+NM,wind,wind_onshore,2009,0.00315576
+NM,wind,wind_onshore,2010,0.003231498
+NV,coal,coal_conv,1975,0.02009588
+NV,coal,coal_conv,1983,0.017893159
+NV,coal,coal_conv,2008,0.007636939
+NV,gas,gas_CC,1984,0.018265539
+NV,gas,gas_CC,1994,0.001934481
+NV,gas,gas_CC,2000,0.016914874
+NV,gas,gas_CC,2003,0.028345036
+NV,gas,gas_CC,2004,0.042700589
+NV,gas,gas_CC,2005,0.023450453
+NV,gas,gas_CC,2006,0.046250819
+NV,gas,gas_steam,1968,0.0077253
+NV,gas,gas_steam,1969,0.007258248
+NV,gas,gas_turbine,1974,0.002682396
+NV,gas,gas_turbine,1991,0.007005787
+NV,gas,gas_turbine,1994,0.005364792
+NV,gas,gas_turbine,2000,0.005885492
+NV,gas,gas_turbine,2004,0.028906762
+NV,geothermal,geothermal_conv,1985,5.36E-04
+NV,geothermal,geothermal_conv,1987,1.51E-04
+NV,geothermal,geothermal_conv,1988,7.57E-05
+NV,geothermal,geothermal_conv,1989,8.24E-04
+NV,geothermal,geothermal_conv,1991,6.94E-05
+NV,geothermal,geothermal_conv,1992,0.001148697
+NV,geothermal,geothermal_conv,1993,0.001672553
+NV,geothermal,geothermal_conv,1998,0.001909235
+NV,geothermal,geothermal_conv,2005,9.47E-04
+NV,geothermal,geothermal_conv,2006,8.20E-04
+NV,geothermal,geothermal_conv,2007,4.26E-04
+NV,geothermal,geothermal_conv,2008,9.47E-04
+NV,geothermal,geothermal_conv,2009,0.004250809
+NV,geothermal,geothermal_conv,2010,7.42E-04
+NV,hydro,hyrdo,1904,8.20E-05
+NV,hydro,hyrdo,1911,1.33E-04
+NV,hydro,hyrdo,1914,6.31E-05
+NV,hydro,hyrdo,1940,0.032800969
+NV,hydro,hyrdo,1989,1.26E-04
+NV,solar CSP,solar_CSP,2006,0.00238891
+NV,solar PV,solar_PV,2007,4.73E-04
+NV,solar PV,solar_PV,2008,3.16E-04
+NV,solar PV,solar_PV,2010,0.001514765
+NY,biomass,biomass_conv,1984,0.001883989
+NY,biomass,biomass_conv,1987,2.90E-04
+NY,biomass,biomass_conv,1988,5.05E-05
+NY,biomass,biomass_conv,1989,0.003016907
+NY,biomass,biomass_conv,1990,3.94E-04
+NY,biomass,biomass_conv,1991,0.003105268
+NY,biomass,biomass_conv,1993,6.22E-04
+NY,biomass,biomass_conv,1994,0.0013696
+NY,biomass,biomass_conv,2000,5.55E-04
+NY,biomass,biomass_conv,2001,2.62E-04
+NY,biomass,biomass_conv,2002,3.03E-04
+NY,biomass,biomass_conv,2004,2.02E-04
+NY,biomass,biomass_conv,2006,3.53E-04
+NY,biomass,biomass_conv,2007,2.02E-04
+NY,biomass,biomass_conv,2008,5.40E-04
+NY,biomass,biomass_conv,2009,5.05E-05
+NY,biomass,biomass_conv,2010,3.03E-04
+NY,coal,coal_conv,1953,0.00355023
+NY,coal,coal_conv,1955,0.010177326
+NY,coal,coal_conv,1956,0.019792927
+NY,coal,coal_conv,1957,0.013759114
+NY,coal,coal_conv,1963,0.012197012
+NY,coal,coal_conv,1984,0.020673384
+NY,coal,coal_conv,1989,0.001751447
+NY,coal,coal_IGCC,1959,0.001546322
+NY,gas,gas_CC,1991,0.001984973
+NY,gas,gas_CC,1992,0.005494178
+NY,gas,gas_CC,1993,0.010167859
+NY,gas,gas_CC,1994,0.014535431
+NY,gas,gas_CC,1997,0.005667745
+NY,gas,gas_CC,2000,0.001492674
+NY,gas,gas_CC,2003,0.047115497
+NY,gas,gas_CC,2005,0.047434229
+NY,gas,gas_CC,2006,0.016409952
+NY,gas,gas_CC,2009,0.011010447
+NY,gas,gas_CC,2010,0.001319108
+NY,gas,gas_steam,1953,0.010350893
+NY,gas,gas_steam,1954,0.005680368
+NY,gas,gas_steam,1959,0.023731315
+NY,gas,gas_steam,1964,0.086426799
+NY,gas,gas_steam,1971,0.048851165
+NY,gas,gas_steam,1973,0.039194539
+NY,gas,gas_turbine,1967,4.73E-04
+NY,gas,gas_turbine,1968,0.017293565
+NY,gas,gas_turbine,1969,6.00E-04
+NY,gas,gas_turbine,1970,0.028988811
+NY,gas,gas_turbine,1971,0.010098432
+NY,gas,gas_turbine,1972,0.011108275
+NY,gas,gas_turbine,1998,4.42E-05
+NY,gas,gas_turbine,2000,2.21E-04
+NY,gas,gas_turbine,2001,0.016315279
+NY,gas,gas_turbine,2002,0.013648662
+NY,gas,gas_turbine,2004,0.003802691
+NY,hydro,hyrdo,1908,5.05E-04
+NY,hydro,hyrdo,1909,1.26E-04
+NY,hydro,hyrdo,1912,1.89E-04
+NY,hydro,hyrdo,1913,1.64E-04
+NY,hydro,hyrdo,1914,3.16E-04
+NY,hydro,hyrdo,1915,4.10E-04
+NY,hydro,hyrdo,1916,0.000189346
+NY,hydro,hyrdo,1917,3.47E-04
+NY,hydro,hyrdo,1918,0.00157788
+NY,hydro,hyrdo,1919,7.54E-04
+NY,hydro,hyrdo,1920,3.41E-04
+NY,hydro,hyrdo,1921,0.00145165
+NY,hydro,hyrdo,1922,1.04E-04
+NY,hydro,hyrdo,1923,8.87E-04
+NY,hydro,hyrdo,1924,0.001729356
+NY,hydro,hyrdo,1925,0.001271771
+NY,hydro,hyrdo,1926,3.35E-04
+NY,hydro,hyrdo,1927,0.000441806
+NY,hydro,hyrdo,1928,5.30E-04
+NY,hydro,hyrdo,1929,0.002019686
+NY,hydro,hyrdo,1930,9.47E-04
+NY,hydro,hyrdo,1931,2.84E-04
+NY,hydro,hyrdo,1934,5.02E-04
+NY,hydro,hyrdo,1939,2.21E-04
+NY,hydro,hyrdo,1940,9.47E-05
+NY,hydro,hyrdo,1942,0.001325419
+NY,hydro,hyrdo,1949,0.001136074
+NY,hydro,hyrdo,1950,4.73E-05
+NY,hydro,hyrdo,1952,0.00170411
+NY,hydro,hyrdo,1953,8.52E-04
+NY,hydro,hyrdo,1954,6.63E-04
+NY,hydro,hyrdo,1955,0.001148697
+NY,hydro,hyrdo,1956,0.001388534
+NY,hydro,hyrdo,1957,0.001467428
+NY,hydro,hyrdo,1958,0.029512668
+NY,hydro,hyrdo,1959,6.31E-04
+NY,hydro,hyrdo,1960,3.79E-04
+NY,hydro,hyrdo,1961,0.076656566
+NY,hydro,hyrdo,1965,3.72E-04
+NY,hydro,hyrdo,1969,1.89E-04
+NY,hydro,hyrdo,1972,1.33E-04
+NY,hydro,hyrdo,1979,2.59E-04
+NY,hydro,hyrdo,1980,4.42E-05
+NY,hydro,hyrdo,1981,6.00E-05
+NY,hydro,hyrdo,1982,1.96E-04
+NY,hydro,hyrdo,1983,0.001145541
+NY,hydro,hyrdo,1984,7.20E-04
+NY,hydro,hyrdo,1985,0.002108048
+NY,hydro,hyrdo,1986,8.02E-04
+NY,hydro,hyrdo,1987,0.001609438
+NY,hydro,hyrdo,1988,4.95E-04
+NY,hydro,hyrdo,1989,6.94E-05
+NY,hydro,hyrdo,1990,6.66E-04
+NY,hydro,hyrdo,1991,5.62E-04
+NY,hydro,hyrdo,1992,2.30E-04
+NY,hydro,hyrdo,1993,1.07E-04
+NY,hydro,hyrdo,1994,4.35E-04
+NY,hydro,hyrdo,1995,0.001388534
+NY,hydro,hyrdo,1999,0.001028778
+NY,hydro,hyrdo,2003,1.89E-04
+NY,nuclear,nuclear_conv,1970,0.019376366
+NY,nuclear,nuclear_conv,1973,0.040993322
+NY,nuclear,nuclear_conv,1976,0.059770094
+NY,nuclear,nuclear_conv,1980,0.059994153
+NY,refined liquids,refined liquids_CC,1994,0.001767226
+NY,refined liquids,refined liquids_steam,1952,0.004591631
+NY,refined liquids,refined liquids_steam,1953,0.011240817
+NY,refined liquids,refined liquids_steam,1960,0.03629124
+NY,refined liquids,refined liquids_steam,1974,0.039194539
+NY,refined liquids,refined liquids_steam,1977,0.056917287
+NY,refined liquids,refined liquids_turbine,1946,1.39E-04
+NY,refined liquids,refined liquids_turbine,1954,4.17E-04
+NY,refined liquids,refined liquids_turbine,1963,3.63E-04
+NY,refined liquids,refined liquids_turbine,1964,6.31E-04
+NY,refined liquids,refined liquids_turbine,1967,7.29E-04
+NY,refined liquids,refined liquids_turbine,1968,0.001167631
+NY,refined liquids,refined liquids_turbine,1969,0.006302053
+NY,refined liquids,refined liquids_turbine,1970,0.006504021
+NY,refined liquids,refined liquids_turbine,1971,0.01175205
+NY,refined liquids,refined liquids_turbine,1972,0.006261028
+NY,refined liquids,refined liquids_turbine,1973,5.71E-04
+NY,refined liquids,refined liquids_turbine,1974,0.017893159
+NY,refined liquids,refined liquids_turbine,1989,0.007526488
+NY,refined liquids,refined liquids_turbine,1992,6.31E-05
+NY,refined liquids,refined liquids_turbine,1993,2.21E-05
+NY,refined liquids,refined liquids_turbine,1999,1.89E-04
+NY,refined liquids,refined liquids_turbine,2002,0.00315576
+NY,refined liquids,refined liquids_turbine,2003,0.003613345
+NY,wind,wind_onshore,2000,5.71E-04
+NY,wind,wind_onshore,2001,9.47E-04
+NY,wind,wind_onshore,2005,0.010161547
+NY,wind,wind_onshore,2007,0.001719889
+NY,wind,wind_onshore,2008,0.008899243
+NY,wind,wind_onshore,2009,0.017893159
+OH,biomass,biomass_conv,2000,8.84E-05
+OH,biomass,biomass_conv,2001,9.72E-04
+OH,biomass,biomass_conv,2002,1.33E-04
+OH,biomass,biomass_conv,2008,1.89E-04
+OH,biomass,biomass_conv,2010,5.05E-05
+OH,coal,coal_conv,1950,0.016327902
+OH,coal,coal_conv,1954,0.008381699
+OH,coal,coal_conv,1955,0.03763875
+OH,coal,coal_conv,1958,0.008078746
+OH,coal,coal_conv,1960,0.048264193
+OH,coal,coal_conv,1961,0.038541297
+OH,coal,coal_conv,1962,0.008078746
+OH,coal,coal_conv,1963,0.040535737
+OH,coal,coal_conv,1964,0.016908562
+OH,coal,coal_conv,1965,0.002666617
+OH,coal,coal_conv,1966,0.077492843
+OH,coal,coal_conv,1967,0.024173122
+OH,coal,coal_conv,1970,0.059340911
+OH,coal,coal_conv,1971,0.081099876
+OH,coal,coal_conv,1973,0.05966911
+OH,coal,coal_conv,1974,0.122380373
+OH,coal,coal_conv,1981,0.020846951
+OH,coal,coal_conv,1990,0.044988515
+OH,gas,gas_CC,2001,0.022560528
+OH,gas,gas_CC,2003,0.069735984
+OH,gas,gas_steam,1958,0.001104516
+OH,gas,gas_turbine,1965,0.00367646
+OH,gas,gas_turbine,1968,0.001028778
+OH,gas,gas_turbine,1969,0.003960479
+OH,gas,gas_turbine,1970,0.001009843
+OH,gas,gas_turbine,1971,5.05E-04
+OH,gas,gas_turbine,1992,0.015450601
+OH,gas,gas_turbine,1996,0.009271623
+OH,gas,gas_turbine,1998,0.013727556
+OH,gas,gas_turbine,1999,0.021560152
+OH,gas,gas_turbine,2000,0.014153584
+OH,gas,gas_turbine,2001,0.031210466
+OH,gas,gas_turbine,2002,0.052322501
+OH,gas,gas_turbine,2003,0.030847554
+OH,hydro,hyrdo,1982,0.003711174
+OH,hydro,hyrdo,1988,1.64E-04
+OH,hydro,hyrdo,1994,6.94E-05
+OH,hydro,hyrdo,1996,1.07E-04
+OH,nuclear,nuclear_conv,1977,0.029197092
+OH,nuclear,nuclear_conv,1987,0.041390948
+OH,refined liquids,refined liquids_steam,1955,0.004436999
+OH,refined liquids,refined liquids_turbine,1948,3.79E-05
+OH,refined liquids,refined liquids_turbine,1963,9.47E-05
+OH,refined liquids,refined liquids_turbine,1966,2.08E-04
+OH,refined liquids,refined liquids_turbine,1967,3.41E-04
+OH,refined liquids,refined liquids_turbine,1968,8.52E-04
+OH,refined liquids,refined liquids_turbine,1969,5.87E-04
+OH,refined liquids,refined liquids_turbine,1972,6.31E-04
+OH,refined liquids,refined liquids_turbine,1978,0.004121423
+OH,refined liquids,refined liquids_turbine,1980,6.31E-04
+OH,refined liquids,refined liquids_turbine,1982,9.06E-04
+OH,refined liquids,refined liquids_turbine,1989,7.95E-04
+OH,refined liquids,refined liquids_turbine,1990,1.14E-04
+OH,refined liquids,refined liquids_turbine,1994,2.78E-04
+OH,refined liquids,refined liquids_turbine,1998,8.84E-05
+OH,refined liquids,refined liquids_turbine,1999,0.002022842
+OH,refined liquids,refined liquids_turbine,2000,2.27E-04
+OH,refined liquids,refined liquids_turbine,2001,3.41E-04
+OH,refined liquids,refined liquids_turbine,2004,1.89E-04
+OH,refined liquids,refined liquids_turbine,2005,8.84E-05
+OH,refined liquids,refined liquids_turbine,2008,1.67E-04
+OH,solar PV,solar_PV,2010,3.79E-04
+OH,wind,wind_onshore,2003,2.27E-04
+OK,coal,coal_conv,1979,0.11991888
+OK,coal,coal_conv,1982,0.01407469
+OK,coal,coal_conv,1983,0.031873176
+OK,gas,gas_CC,1963,0.007794727
+OK,gas,gas_CC,1973,0.009151704
+OK,gas,gas_CC,1977,0.009950111
+OK,gas,gas_CC,1987,0.002328951
+OK,gas,gas_CC,1988,0.016630855
+OK,gas,gas_CC,2000,0.016817045
+OK,gas,gas_CC,2001,0.04330965
+OK,gas,gas_CC,2002,0.038310926
+OK,gas,gas_CC,2003,0.043233912
+OK,gas,gas_CC,2004,0.045240975
+OK,gas,gas_steam,1955,0.030484642
+OK,gas,gas_steam,1956,0.002669773
+OK,gas,gas_steam,1957,7.16E-04
+OK,gas,gas_steam,1962,0.015242321
+OK,gas,gas_steam,1966,0.019123906
+OK,gas,gas_steam,1970,0.024551813
+OK,gas,gas_steam,1973,0.053679478
+OK,gas,gas_steam,1975,0.02985349
+OK,gas,gas_steam,1977,0.001514765
+OK,gas,gas_turbine,1960,2.11E-04
+OK,gas,gas_turbine,1963,2.87E-04
+OK,gas,gas_turbine,1971,0.003313548
+OK,gas,gas_turbine,1975,0.005017658
+OK,gas,gas_turbine,2001,0.017325122
+OK,gas,gas_turbine,2003,0.001909235
+OK,gas,gas_turbine,2008,0.01091893
+OK,gas,gas_turbine,2010,5.05E-05
+OK,hydro,hyrdo,1941,0.004105644
+OK,hydro,hyrdo,1953,0.002644527
+OK,hydro,hyrdo,1963,0.003919454
+OK,hydro,hyrdo,1964,0.002840184
+OK,hydro,hyrdo,1968,0.002209032
+OK,hydro,hyrdo,1970,0.00315576
+OK,hydro,hyrdo,1971,0.003471336
+OK,hydro,hyrdo,1973,0.001893456
+OK,hydro,hyrdo,1989,0.001167631
+OK,refined liquids,refined liquids_turbine,1951,5.68E-05
+OK,refined liquids,refined liquids_turbine,1959,2.84E-04
+OK,refined liquids,refined liquids_turbine,1962,1.26E-04
+OK,refined liquids,refined liquids_turbine,1963,1.26E-04
+OK,refined liquids,refined liquids_turbine,1966,6.31E-05
+OK,refined liquids,refined liquids_turbine,1967,2.59E-04
+OK,refined liquids,refined liquids_turbine,1976,8.52E-05
+OK,refined liquids,refined liquids_turbine,1980,1.42E-04
+OK,refined liquids,refined liquids_turbine,2003,6.31E-05
+OK,refined liquids,refined liquids_turbine,2004,1.89E-04
+OK,refined liquids,refined liquids_turbine,2006,1.26E-04
+OK,wind,wind_onshore,2003,0.005563605
+OK,wind,wind_onshore,2005,0.009404165
+OK,wind,wind_onshore,2006,0.003786912
+OK,wind,wind_onshore,2007,0.002982193
+OK,wind,wind_onshore,2008,0.004478023
+OK,wind,wind_onshore,2009,0.017359836
+OK,wind,wind_onshore,2010,0.003130514
+OR,biomass,biomass_conv,1992,1.01E-04
+OR,biomass,biomass_conv,2001,1.77E-04
+OR,biomass,biomass_conv,2007,1.01E-04
+OR,biomass,biomass_conv,2009,3.53E-04
+OR,coal,coal_conv,1980,0.018966118
+OR,gas,gas_CC,1974,0.012932304
+OR,gas,gas_CC,1995,0.008403789
+OR,gas,gas_CC,2001,0.021755809
+OR,gas,gas_CC,2003,0.009057031
+OR,gas,gas_CC,2007,0.015242321
+OR,gas,gas_turbine,2001,3.44E-04
+OR,gas,gas_turbine,2002,0.003711174
+OR,hydro,hyrdo,1912,0.000119919
+OR,hydro,hyrdo,1915,3.47E-05
+OR,hydro,hyrdo,1921,3.47E-05
+OR,hydro,hyrdo,1924,1.01E-04
+OR,hydro,hyrdo,1925,5.93E-04
+OR,hydro,hyrdo,1927,0.001609438
+OR,hydro,hyrdo,1928,0.001009843
+OR,hydro,hyrdo,1932,2.27E-04
+OR,hydro,hyrdo,1934,0.001155008
+OR,hydro,hyrdo,1941,4.26E-04
+OR,hydro,hyrdo,1944,3.16E-05
+OR,hydro,hyrdo,1949,0.001596815
+OR,hydro,hyrdo,1950,4.86E-04
+OR,hydro,hyrdo,1951,5.68E-04
+OR,hydro,hyrdo,1952,6.94E-04
+OR,hydro,hyrdo,1953,0.004449622
+OR,hydro,hyrdo,1954,5.68E-04
+OR,hydro,hyrdo,1955,0.036553168
+OR,hydro,hyrdo,1956,0.001041401
+OR,hydro,hyrdo,1957,0.003553386
+OR,hydro,hyrdo,1958,0.004402285
+OR,hydro,hyrdo,1960,5.43E-04
+OR,hydro,hyrdo,1961,0.040485245
+OR,hydro,hyrdo,1962,9.47E-04
+OR,hydro,hyrdo,1963,0.003607034
+OR,hydro,hyrdo,1964,0.066037434
+OR,hydro,hyrdo,1967,0.014879408
+OR,hydro,hyrdo,1968,6.31E-04
+OR,hydro,hyrdo,1969,0.068164416
+OR,hydro,hyrdo,1977,0.001546322
+OR,hydro,hyrdo,1982,0.001738824
+OR,hydro,hyrdo,1984,1.29E-04
+OR,hydro,hyrdo,1985,2.71E-04
+OR,hydro,hyrdo,1986,2.30E-04
+OR,hydro,hyrdo,1987,1.07E-04
+OR,hydro,hyrdo,1988,3.79E-05
+OR,hydro,hyrdo,1989,2.27E-04
+OR,hydro,hyrdo,1991,2.05E-04
+OR,hydro,hyrdo,1993,2.21E-04
+OR,hydro,hyrdo,1994,3.79E-04
+OR,hydro,hyrdo,2010,1.58E-04
+OR,wind,wind_onshore,1998,7.89E-04
+OR,wind,wind_onshore,2001,0.005446842
+OR,wind,wind_onshore,2002,7.73E-04
+OR,wind,wind_onshore,2003,0.001293862
+OR,wind,wind_onshore,2005,0.00236682
+OR,wind,wind_onshore,2006,0.006349389
+OR,wind,wind_onshore,2007,0.009388386
+OR,wind,wind_onshore,2008,0.017441886
+OR,wind,wind_onshore,2009,0.014210387
+OR,wind,wind_onshore,2010,0.005386882
+PA,biomass,biomass_conv,1989,0.002278459
+PA,biomass,biomass_conv,1991,0.003947856
+PA,biomass,biomass_conv,1994,0.00168202
+PA,biomass,biomass_conv,1995,1.77E-04
+PA,biomass,biomass_conv,1997,1.89E-04
+PA,biomass,biomass_conv,1998,2.84E-04
+PA,biomass,biomass_conv,2001,3.12E-04
+PA,biomass,biomass_conv,2003,4.54E-04
+PA,biomass,biomass_conv,2006,5.05E-05
+PA,biomass,biomass_conv,2007,1.01E-04
+PA,biomass,biomass_conv,2008,7.76E-04
+PA,biomass,biomass_conv,2009,6.00E-04
+PA,coal,coal_conv,1950,0.013819073
+PA,coal,coal_conv,1951,0.00710046
+PA,coal,coal_conv,1954,0.00591705
+PA,coal,coal_conv,1955,0.016094376
+PA,coal,coal_conv,1957,0.019755058
+PA,coal,coal_conv,1958,0.025069357
+PA,coal,coal_conv,1959,0.022317535
+PA,coal,coal_conv,1960,0.013475095
+PA,coal,coal_conv,1963,0.009442034
+PA,coal,coal_conv,1966,0.049188831
+PA,coal,coal_conv,1967,0.059075827
+PA,coal,coal_conv,1970,0.133709551
+PA,coal,coal_conv,1971,0.063493891
+PA,coal,coal_conv,1972,0.051808112
+PA,coal,coal_conv,1977,0.086502537
+PA,coal,coal_conv,1987,0.001136074
+PA,coal,coal_conv,1992,0.0041088
+PA,coal,coal_conv,1993,0.002988505
+PA,coal,coal_conv,1995,0.003723797
+PA,coal,coal_conv,2004,0.018461196
+PA,gas,gas_CC,1973,0.010726428
+PA,gas,gas_CC,2001,0.02453919
+PA,gas,gas_CC,2002,0.083375179
+PA,gas,gas_CC,2003,0.066211001
+PA,gas,gas_CC,2004,0.06298897
+PA,gas,gas_steam,1964,5.68E-05
+PA,gas,gas_turbine,1971,0.00357232
+PA,gas,gas_turbine,1982,2.27E-04
+PA,gas,gas_turbine,1996,0.005412128
+PA,gas,gas_turbine,1999,0.002764446
+PA,gas,gas_turbine,2000,0.006917426
+PA,gas,gas_turbine,2001,0.008993916
+PA,gas,gas_turbine,2002,0.021711629
+PA,gas,gas_turbine,2003,7.57E-04
+PA,hydro,hyrdo,1904,6.19E-04
+PA,hydro,hyrdo,1913,0.003382975
+PA,hydro,hyrdo,1925,9.47E-04
+PA,hydro,hyrdo,1926,0.002878053
+PA,hydro,hyrdo,1956,0.013175298
+PA,hydro,hyrdo,1981,3.79E-05
+PA,hydro,hyrdo,1985,8.84E-05
+PA,hydro,hyrdo,1986,1.64E-04
+PA,hydro,hyrdo,1988,0.00126546
+PA,hydro,hyrdo,1989,8.58E-04
+PA,hydro,hyrdo,1990,9.91E-04
+PA,nuclear,nuclear_conv,1974,0.103982292
+PA,nuclear,nuclear_conv,1981,0.058280576
+PA,nuclear,nuclear_conv,1984,0.08192353
+PA,nuclear,nuclear_conv,1988,0.071856655
+PA,refined liquids,refined liquids_steam,1949,0.002357353
+PA,refined liquids,refined liquids_steam,1955,0.007258248
+PA,refined liquids,refined liquids_steam,1958,0.006008567
+PA,refined liquids,refined liquids_steam,1975,0.024678043
+PA,refined liquids,refined liquids_steam,1976,0.053679478
+PA,refined liquids,refined liquids_turbine,1966,2.56E-04
+PA,refined liquids,refined liquids_turbine,1967,0.002691863
+PA,refined liquids,refined liquids_turbine,1968,0.002890676
+PA,refined liquids,refined liquids_turbine,1969,0.01417883
+PA,refined liquids,refined liquids_turbine,1970,0.005623564
+PA,refined liquids,refined liquids_turbine,1971,0.004853559
+PA,refined liquids,refined liquids_turbine,1972,0.006453529
+PA,refined liquids,refined liquids_turbine,1973,0.021396053
+PA,refined liquids,refined liquids_turbine,1991,0.006122174
+PA,solar PV,solar_PV,2008,9.47E-05
+PA,solar PV,solar_PV,2009,3.16E-05
+PA,solar PV,solar_PV,2010,2.21E-04
+PA,wind,wind_onshore,2000,3.28E-04
+PA,wind,wind_onshore,2001,7.57E-04
+PA,wind,wind_onshore,2003,0.002982193
+PA,wind,wind_onshore,2006,7.57E-04
+PA,wind,wind_onshore,2007,0.004433843
+PA,wind,wind_onshore,2008,0.002120671
+PA,wind,wind_onshore,2009,0.01222857
+RI,biomass,biomass_conv,1995,8.24E-04
+RI,gas,gas_CC,1990,0.010193105
+RI,gas,gas_CC,1991,0.008021942
+RI,gas,gas_CC,1995,0.016252164
+RI,gas,gas_CC,2000,0.008599446
+RI,gas,gas_CC,2002,0.01880833
+RI,hydro,hyrdo,1981,5.05E-05
+RI,refined liquids,refined liquids_turbine,2000,2.21E-04
+RI,wind,wind_onshore,2009,4.73E-05
+SC,biomass,biomass_conv,2001,9.78E-05
+SC,biomass,biomass_conv,2005,1.80E-04
+SC,biomass,biomass_conv,2006,1.80E-04
+SC,biomass,biomass_conv,2008,2.02E-04
+SC,biomass,biomass_conv,2009,3.47E-05
+SC,coal,coal_conv,1954,0.011202948
+SC,coal,coal_conv,1955,0.00315576
+SC,coal,coal_conv,1958,0.009265311
+SC,coal,coal_conv,1960,0.0065198
+SC,coal,coal_conv,1964,0.015450601
+SC,coal,coal_conv,1965,0.0051502
+SC,coal,coal_conv,1969,0.010906307
+SC,coal,coal_conv,1970,0.024356156
+SC,coal,coal_conv,1973,0.019966494
+SC,coal,coal_conv,1978,0.039762576
+SC,coal,coal_conv,1996,0.013168986
+SC,coal,coal_conv,1998,0.07542582
+SC,coal,coal_conv,1999,0.003130514
+SC,gas,gas_CC,1988,0.017287253
+SC,gas,gas_CC,2001,0.016409952
+SC,gas,gas_CC,2004,0.031611248
+SC,gas,gas_turbine,1966,0.001237058
+SC,gas,gas_turbine,1968,5.14E-04
+SC,gas,gas_turbine,1970,0.002335262
+SC,gas,gas_turbine,1972,0.001697799
+SC,gas,gas_turbine,1984,0.003506049
+SC,gas,gas_turbine,1986,0.018404392
+SC,gas,gas_turbine,1993,3.03E-04
+SC,gas,gas_turbine,1997,0.005869714
+SC,gas,gas_turbine,2000,0.031084236
+SC,gas,gas_turbine,2002,0.043587357
+SC,gas,gas_turbine,2007,0.002587723
+SC,hydro,hyrdo,1907,7.57E-04
+SC,hydro,hyrdo,1910,5.68E-04
+SC,hydro,hyrdo,1915,6.66E-04
+SC,hydro,hyrdo,1916,0.001334886
+SC,hydro,hyrdo,1919,0.001767226
+SC,hydro,hyrdo,1921,5.68E-04
+SC,hydro,hyrdo,1923,0.001420092
+SC,hydro,hyrdo,1925,0.001893456
+SC,hydro,hyrdo,1926,0.00145165
+SC,hydro,hyrdo,1941,8.20E-05
+SC,hydro,hyrdo,1942,0.004184538
+SC,hydro,hyrdo,1943,0.00654189
+SC,hydro,hyrdo,1950,6.31E-05
+SC,hydro,hyrdo,1953,0.011420695
+SC,hydro,hyrdo,1963,1.96E-04
+SC,hydro,hyrdo,1966,1.64E-04
+SC,hydro,hyrdo,1971,0.004973478
+SC,hydro,hyrdo,1985,0.002786536
+SC,hydro,hyrdo,1986,3.79E-05
+SC,hydro,hyrdo,1989,1.99E-04
+SC,hydro,hyrdo,1995,4.42E-05
+SC,hydro,hyrdo,1996,2.02E-04
+SC,nuclear,nuclear_conv,1971,0.024255171
+SC,nuclear,nuclear_conv,1973,0.084154652
+SC,nuclear,nuclear_conv,1984,0.032491705
+SC,nuclear,nuclear_conv,1985,0.076060128
+SC,refined liquids,refined liquids_steam,1954,0.00315576
+SC,refined liquids,refined liquids_turbine,1946,3.47E-05
+SC,refined liquids,refined liquids_turbine,1968,5.14E-04
+SC,refined liquids,refined liquids_turbine,1969,0.003518672
+SC,refined liquids,refined liquids_turbine,1974,0.014598546
+SC,refined liquids,refined liquids_turbine,1976,0.003720641
+SC,refined liquids,refined liquids_turbine,1987,4.42E-04
+SC,refined liquids,refined liquids_turbine,1998,5.05E-05
+SC,refined liquids,refined liquids_turbine,2003,5.49E-04
+SC,refined liquids,refined liquids_turbine,2004,3.16E-04
+SC,refined liquids,refined liquids_turbine,2006,1.70E-04
+SD,coal,coal_conv,1961,7.89E-04
+SD,coal,coal_conv,1975,0.014390266
+SD,gas,gas_turbine,1974,2.75E-04
+SD,gas,gas_turbine,1977,0.00315576
+SD,gas,gas_turbine,1983,0.001827185
+SD,gas,gas_turbine,1998,0.012802918
+SD,gas,gas_turbine,2002,0.001262304
+SD,gas,gas_turbine,2007,0.005948608
+SD,hydro,hyrdo,1954,0.010098432
+SD,hydro,hyrdo,1962,0.024741158
+SD,hydro,hyrdo,1964,0.01559261
+SD,refined liquids,refined liquids_turbine,1969,2.34E-04
+SD,refined liquids,refined liquids_turbine,1978,0.005929673
+SD,refined liquids,refined liquids_turbine,2001,5.36E-05
+SD,refined liquids,refined liquids_turbine,2002,1.42E-04
+SD,refined liquids,refined liquids_turbine,2004,1.89E-04
+SD,wind,wind_onshore,2001,8.20E-05
+SD,wind,wind_onshore,2003,0.001278083
+SD,wind,wind_onshore,2008,0.006324143
+SD,wind,wind_onshore,2009,0.002398378
+SD,wind,wind_onshore,2010,0.009751298
+TN,biomass,biomass_conv,1992,1.01E-04
+TN,biomass,biomass_conv,2000,8.84E-05
+TN,coal,coal_conv,1954,0.05364792
+TN,coal,coal_conv,1955,0.072115428
+TN,coal,coal_conv,1957,0.0396111
+TN,coal,coal_conv,1959,0.031242024
+TN,coal,coal_conv,1967,0.02997972
+TN,coal,coal_conv,1973,0.08204976
+TN,gas,gas_CC,2009,0.019073413
+TN,gas,gas_turbine,1980,0.045001138
+TN,gas,gas_turbine,1987,0.020929
+TN,gas,gas_turbine,1999,0.014516496
+TN,gas,gas_turbine,2000,0.017918405
+TN,gas,gas_turbine,2001,0.032213998
+TN,hydro,hyrdo,1912,6.00E-04
+TN,hydro,hyrdo,1913,7.26E-04
+TN,hydro,hyrdo,1920,0.001063491
+TN,hydro,hyrdo,1932,0.00494192
+TN,hydro,hyrdo,1936,0.004146669
+TN,hydro,hyrdo,1938,3.35E-04
+TN,hydro,hyrdo,1942,0.005509957
+TN,hydro,hyrdo,1943,0.008899243
+TN,hydro,hyrdo,1944,0.007573824
+TN,hydro,hyrdo,1946,0.00483778
+TN,hydro,hyrdo,1947,0.009019162
+TN,hydro,hyrdo,1949,0.001817718
+TN,hydro,hyrdo,1950,0.005964386
+TN,hydro,hyrdo,1951,0.001214968
+TN,hydro,hyrdo,1953,0.005216471
+TN,hydro,hyrdo,1957,0.004844092
+TN,hydro,hyrdo,1958,0.001136074
+TN,hydro,hyrdo,1964,0.002272147
+TN,hydro,hyrdo,1968,0.003278835
+TN,hydro,hyrdo,1970,8.84E-04
+TN,hydro,hyrdo,1972,0.001442182
+TN,hydro,hyrdo,1973,0.003152604
+TN,nuclear,nuclear_conv,1981,0.077032102
+TN,nuclear,nuclear_conv,1996,0.040074996
+TN,refined liquids,refined liquids_turbine,2001,0.001325419
+TN,wind,wind_onshore,2004,8.52E-04
+TX,biomass,biomass_conv,1988,1.89E-04
+TX,biomass,biomass_conv,1998,1.26E-04
+TX,biomass,biomass_conv,2001,3.35E-04
+TX,biomass,biomass_conv,2003,0.001060335
+TX,biomass,biomass_conv,2004,3.03E-04
+TX,biomass,biomass_conv,2007,4.04E-04
+TX,biomass,biomass_conv,2008,5.05E-05
+TX,biomass,biomass_conv,2009,3.53E-04
+TX,biomass,biomass_conv,2010,1.01E-04
+TX,coal,coal_conv,1971,0.03745256
+TX,coal,coal_conv,1975,0.062484048
+TX,coal,coal_conv,1977,0.029411683
+TX,coal,coal_conv,1978,0.109176673
+TX,coal,coal_conv,1979,0.139194262
+TX,coal,coal_conv,1980,0.01964145
+TX,coal,coal_conv,1981,0.071970263
+TX,coal,coal_conv,1982,0.012938616
+TX,coal,coal_conv,1983,0.050160805
+TX,coal,coal_conv,1985,0.08167738
+TX,coal,coal_conv,1986,0.022721472
+TX,coal,coal_conv,1990,0.011019914
+TX,coal,coal_conv,2002,0.045569174
+TX,coal,coal_conv,2010,0.04980736
+TX,gas,gas_CC,1972,0.013292061
+TX,gas,gas_CC,1975,0.009151704
+TX,gas,gas_CC,1984,0.002713954
+TX,gas,gas_CC,1987,0.014418667
+TX,gas,gas_CC,1988,0.002650838
+TX,gas,gas_CC,1989,0.0078894
+TX,gas,gas_CC,1991,0.02304336
+TX,gas,gas_CC,1993,0.02304336
+TX,gas,gas_CC,1995,0.008918178
+TX,gas,gas_CC,1999,0.03313548
+TX,gas,gas_CC,2000,0.189598061
+TX,gas,gas_CC,2001,0.112597517
+TX,gas,gas_CC,2002,0.125340476
+TX,gas,gas_CC,2003,0.169293901
+TX,gas,gas_CC,2004,0.054092882
+TX,gas,gas_CC,2005,0.038686462
+TX,gas,gas_CC,2006,0.020196864
+TX,gas,gas_CC,2009,0.011266063
+TX,gas,gas_steam,1954,0.002808626
+TX,gas,gas_steam,1958,0.039781511
+TX,gas,gas_steam,1961,0.002082802
+TX,gas,gas_steam,1963,0.097699174
+TX,gas,gas_steam,1964,0.014980393
+TX,gas,gas_steam,1965,0.027581342
+TX,gas,gas_steam,1967,0.052903161
+TX,gas,gas_steam,1968,0.028212494
+TX,gas,gas_steam,1969,0.051991146
+TX,gas,gas_steam,1970,0.102385477
+TX,gas,gas_steam,1971,0.121092823
+TX,gas,gas_steam,1972,0.085334906
+TX,gas,gas_steam,1973,0.042236692
+TX,gas,gas_steam,1974,0.048093782
+TX,gas,gas_steam,1978,0.003313548
+TX,gas,gas_steam,1982,6.31E-04
+TX,gas,gas_steam,1985,3.16E-04
+TX,gas,gas_turbine,1967,5.14E-04
+TX,gas,gas_turbine,1970,0.001672553
+TX,gas,gas_turbine,1974,0.01746082
+TX,gas,gas_turbine,1975,6.94E-04
+TX,gas,gas_turbine,1976,0.013632883
+TX,gas,gas_turbine,1980,0.002540387
+TX,gas,gas_turbine,1983,3.47E-05
+TX,gas,gas_turbine,1984,0.003215719
+TX,gas,gas_turbine,1986,1.33E-04
+TX,gas,gas_turbine,1988,0.037534609
+TX,gas,gas_turbine,1989,0.011284998
+TX,gas,gas_turbine,1990,6.63E-04
+TX,gas,gas_turbine,1994,0.007498086
+TX,gas,gas_turbine,1995,0.005566761
+TX,gas,gas_turbine,1997,6.31E-05
+TX,gas,gas_turbine,2000,0.009719741
+TX,gas,gas_turbine,2001,0.021108879
+TX,gas,gas_turbine,2004,0.018903002
+TX,gas,gas_turbine,2005,1.45E-04
+TX,gas,gas_turbine,2006,0.010729584
+TX,gas,gas_turbine,2007,0.003098956
+TX,gas,gas_turbine,2008,0.008318583
+TX,gas,gas_turbine,2009,0.007157264
+TX,gas,gas_turbine,2010,0.015336994
+TX,hydro,hyrdo,1927,2.78E-04
+TX,hydro,hyrdo,1931,4.54E-04
+TX,hydro,hyrdo,1932,7.57E-05
+TX,hydro,hyrdo,1938,4.73E-04
+TX,hydro,hyrdo,1940,5.68E-04
+TX,hydro,hyrdo,1941,0.005140733
+TX,hydro,hyrdo,1947,0.002209032
+TX,hydro,hyrdo,1951,0.00328199
+TX,hydro,hyrdo,1953,9.47E-04
+TX,hydro,hyrdo,1954,9.94E-04
+TX,hydro,hyrdo,1965,0.001640995
+TX,hydro,hyrdo,1969,0.002556166
+TX,hydro,hyrdo,1983,0.002082802
+TX,hydro,hyrdo,1989,4.42E-04
+TX,hydro,hyrdo,1992,8.84E-05
+TX,nuclear,nuclear_conv,1988,0.085476915
+TX,nuclear,nuclear_conv,1991,0.076684968
+TX,refined liquids,refined liquids_steam,1986,0.005806598
+TX,refined liquids,refined liquids_turbine,1976,1.89E-04
+TX,refined liquids,refined liquids_turbine,1991,1.01E-04
+TX,refined liquids,refined liquids_turbine,1998,3.41E-04
+TX,refined liquids,refined liquids_turbine,1999,2.27E-04
+TX,refined liquids,refined liquids_turbine,2001,3.28E-04
+TX,refined liquids,refined liquids_turbine,2006,4.73E-05
+TX,solar PV,solar_PV,2010,4.39E-04
+TX,wind,wind_onshore,1995,9.47E-04
+TX,wind,wind_onshore,1998,0.001082426
+TX,wind,wind_onshore,1999,0.003323015
+TX,wind,wind_onshore,2001,0.023725004
+TX,wind,wind_onshore,2002,0.005064995
+TX,wind,wind_onshore,2003,0.006327299
+TX,wind,wind_onshore,2005,0.033955978
+TX,wind,wind_onshore,2006,0.011638443
+TX,wind,wind_onshore,2007,0.064718326
+TX,wind,wind_onshore,2008,0.091949379
+TX,wind,wind_onshore,2009,0.05341755
+TX,wind,wind_onshore,2010,0.018101439
+UT,biomass,biomass_conv,2006,1.01E-04
+UT,biomass,biomass_conv,2008,1.51E-04
+UT,coal,coal_conv,1955,0.005951763
+UT,coal,coal_conv,1975,0.03143137
+UT,coal,coal_conv,1980,0.046459099
+UT,coal,coal_conv,1986,0.067517485
+UT,coal,coal_conv,1993,0.001833497
+UT,gas,gas_CC,2004,0.004418064
+UT,gas,gas_CC,2005,0.017890003
+UT,gas,gas_CC,2007,0.018660009
+UT,gas,gas_steam,1953,0.007939892
+UT,gas,gas_turbine,1971,5.05E-04
+UT,gas,gas_turbine,1972,4.39E-04
+UT,gas,gas_turbine,1980,3.16E-04
+UT,gas,gas_turbine,1991,3.06E-04
+UT,gas,gas_turbine,1992,8.20E-04
+UT,gas,gas_turbine,2001,0.001820874
+UT,gas,gas_turbine,2002,0.013068002
+UT,gas,gas_turbine,2008,0.002524608
+UT,geothermal,geothermal_conv,1991,0.001202345
+UT,geothermal,geothermal_conv,2009,4.42E-04
+UT,hydro,hyrdo,1896,6.31E-05
+UT,hydro,hyrdo,1907,7.89E-05
+UT,hydro,hyrdo,1910,3.79E-05
+UT,hydro,hyrdo,1911,0.000119919
+UT,hydro,hyrdo,1912,3.16E-05
+UT,hydro,hyrdo,1914,1.58E-04
+UT,hydro,hyrdo,1916,3.25E-04
+UT,hydro,hyrdo,1927,9.47E-04
+UT,hydro,hyrdo,1929,4.73E-05
+UT,hydro,hyrdo,1930,3.79E-05
+UT,hydro,hyrdo,1935,5.68E-05
+UT,hydro,hyrdo,1958,3.38E-04
+UT,hydro,hyrdo,1959,1.33E-04
+UT,hydro,hyrdo,1963,0.004790444
+UT,hydro,hyrdo,1969,5.05E-05
+UT,hydro,hyrdo,1980,1.14E-04
+UT,hydro,hyrdo,1981,4.73E-05
+UT,hydro,hyrdo,1983,1.51E-04
+UT,hydro,hyrdo,1984,8.84E-05
+UT,hydro,hyrdo,1986,3.47E-04
+UT,hydro,hyrdo,1988,6.94E-05
+UT,hydro,hyrdo,1991,5.68E-05
+UT,hydro,hyrdo,1993,4.73E-05
+UT,hydro,hyrdo,1998,6.63E-05
+UT,refined liquids,refined liquids_turbine,1936,3.16E-06
+UT,refined liquids,refined liquids_turbine,1987,4.42E-04
+UT,refined liquids,refined liquids_turbine,1999,3.22E-04
+UT,wind,wind_onshore,2008,5.96E-04
+UT,wind,wind_onshore,2009,0.006421972
+VA,biomass,biomass_conv,1987,9.15E-04
+VA,biomass,biomass_conv,1990,0.003913142
+VA,biomass,biomass_conv,1992,1.01E-04
+VA,biomass,biomass_conv,1993,1.96E-04
+VA,biomass,biomass_conv,1994,0.002941168
+VA,biomass,biomass_conv,1998,5.68E-05
+VA,biomass,biomass_conv,2001,7.95E-04
+VA,biomass,biomass_conv,2003,4.54E-04
+VA,biomass,biomass_conv,2004,5.18E-04
+VA,biomass,biomass_conv,2007,3.31E-04
+VA,biomass,biomass_conv,2008,4.92E-04
+VA,biomass,biomass_conv,2009,2.71E-04
+VA,biomass,biomass_conv,2010,4.26E-04
+VA,coal,coal_conv,1953,0.026871296
+VA,coal,coal_conv,1955,0.008021942
+VA,coal,coal_conv,1958,0.032330761
+VA,coal,coal_conv,1959,0.02248479
+VA,coal,coal_conv,1965,0.042694277
+VA,coal,coal_conv,1988,0.003622812
+VA,coal,coal_conv,1992,0.011142989
+VA,coal,coal_conv,1995,0.026760845
+VA,coal,coal_conv,1996,0.008151328
+VA,gas,gas_CC,1991,0.037824939
+VA,gas,gas_CC,1994,0.009479903
+VA,gas,gas_CC,1997,0.010414008
+VA,gas,gas_CC,2003,0.049201454
+VA,gas,gas_steam,1959,0.011136677
+VA,gas,gas_turbine,1989,0.011600574
+VA,gas,gas_turbine,1990,0.01162582
+VA,gas,gas_turbine,1992,0.012269595
+VA,gas,gas_turbine,2000,0.022263887
+VA,gas,gas_turbine,2001,0.014895187
+VA,gas,gas_turbine,2002,0.002777069
+VA,gas,gas_turbine,2003,0.016065974
+VA,gas,gas_turbine,2004,0.016198516
+VA,gas,gas_turbine,2005,0.028165158
+VA,hydro,hyrdo,1903,7.10E-04
+VA,hydro,hyrdo,1912,9.47E-04
+VA,hydro,hyrdo,1915,5.05E-05
+VA,hydro,hyrdo,1920,5.68E-05
+VA,hydro,hyrdo,1923,4.42E-05
+VA,hydro,hyrdo,1924,4.10E-05
+VA,hydro,hyrdo,1927,5.05E-05
+VA,hydro,hyrdo,1930,2.37E-04
+VA,hydro,hyrdo,1934,3.16E-05
+VA,hydro,hyrdo,1938,0.002710798
+VA,hydro,hyrdo,1953,0.009808102
+VA,hydro,hyrdo,1954,2.84E-04
+VA,hydro,hyrdo,1964,0.001262304
+VA,hydro,hyrdo,1965,0.009473592
+VA,hydro,hyrdo,1983,4.73E-05
+VA,hydro,hyrdo,1986,7.89E-05
+VA,hydro,hyrdo,1987,1.58E-04
+VA,hydro,hyrdo,1990,1.42E-04
+VA,hydro,hyrdo,1993,9.15E-05
+VA,nuclear,nuclear_conv,1972,0.053490132
+VA,nuclear,nuclear_conv,1979,0.061833961
+VA,refined liquids,refined liquids_steam,1974,0.027833803
+VA,refined liquids,refined liquids_steam,1975,0.027833803
+VA,refined liquids,refined liquids_turbine,1963,3.79E-04
+VA,refined liquids,refined liquids_turbine,1968,0.00302953
+VA,refined liquids,refined liquids_turbine,1969,0.005131266
+VA,refined liquids,refined liquids_turbine,1970,0.00126546
+VA,refined liquids,refined liquids_turbine,1971,0.005225939
+VA,refined liquids,refined liquids_turbine,1972,8.52E-04
+VA,refined liquids,refined liquids_turbine,1985,3.60E-04
+VA,refined liquids,refined liquids_turbine,1989,9.47E-05
+VA,refined liquids,refined liquids_turbine,1990,1.99E-04
+VA,refined liquids,refined liquids_turbine,1992,7.20E-04
+VA,refined liquids,refined liquids_turbine,1997,0.001789316
+VA,refined liquids,refined liquids_turbine,1999,4.42E-04
+VA,refined liquids,refined liquids_turbine,2000,0.012701934
+VA,refined liquids,refined liquids_turbine,2001,1.01E-04
+VA,refined liquids,refined liquids_turbine,2002,7.45E-04
+VA,refined liquids,refined liquids_turbine,2003,6.31E-05
+VA,refined liquids,refined liquids_turbine,2004,2.97E-04
+VA,refined liquids,refined liquids_turbine,2005,5.43E-04
+VA,refined liquids,refined liquids_turbine,2006,4.10E-05
+VA,refined liquids,refined liquids_turbine,2007,1.58E-04
+VT,biomass,biomass_conv,1984,0.001877677
+VT,biomass,biomass_conv,1992,6.78E-04
+VT,biomass,biomass_conv,2008,1.01E-04
+VT,hydro,hyrdo,1907,5.36E-05
+VT,hydro,hyrdo,1914,1.14E-04
+VT,hydro,hyrdo,1916,1.17E-04
+VT,hydro,hyrdo,1917,1.01E-04
+VT,hydro,hyrdo,1919,1.10E-04
+VT,hydro,hyrdo,1920,6.31E-05
+VT,hydro,hyrdo,1922,1.29E-04
+VT,hydro,hyrdo,1924,0.001192877
+VT,hydro,hyrdo,1926,2.52E-04
+VT,hydro,hyrdo,1927,1.93E-04
+VT,hydro,hyrdo,1928,0.001483207
+VT,hydro,hyrdo,1929,2.34E-04
+VT,hydro,hyrdo,1930,5.05E-05
+VT,hydro,hyrdo,1937,0.001196033
+VT,hydro,hyrdo,1939,4.42E-05
+VT,hydro,hyrdo,1941,1.26E-04
+VT,hydro,hyrdo,1943,2.18E-04
+VT,hydro,hyrdo,1948,1.99E-04
+VT,hydro,hyrdo,1951,9.47E-05
+VT,hydro,hyrdo,1953,0.001297017
+VT,hydro,hyrdo,1958,6.00E-05
+VT,hydro,hyrdo,1966,1.80E-04
+VT,hydro,hyrdo,1967,3.50E-04
+VT,hydro,hyrdo,1983,5.68E-05
+VT,hydro,hyrdo,1984,6.94E-05
+VT,hydro,hyrdo,1985,1.23E-04
+VT,hydro,hyrdo,1986,2.78E-04
+VT,hydro,hyrdo,1988,0.001012999
+VT,hydro,hyrdo,1989,9.47E-05
+VT,hydro,hyrdo,1993,2.37E-04
+VT,nuclear,nuclear_conv,1972,0.017779552
+VT,refined liquids,refined liquids_turbine,1955,8.84E-05
+VT,refined liquids,refined liquids_turbine,1960,4.17E-04
+VT,refined liquids,refined liquids_turbine,1962,4.17E-04
+VT,refined liquids,refined liquids_turbine,1963,1.26E-04
+VT,refined liquids,refined liquids_turbine,1965,5.68E-04
+VT,refined liquids,refined liquids_turbine,1971,8.05E-04
+VT,refined liquids,refined liquids_turbine,1972,0.001319108
+VT,refined liquids,refined liquids_turbine,2007,2.52E-04
+VT,wind,wind_onshore,1997,1.89E-04
+WA,biomass,biomass_conv,1983,0.00159997
+WA,biomass,biomass_conv,1991,8.20E-04
+WA,biomass,biomass_conv,1996,0.001325419
+WA,biomass,biomass_conv,1999,3.31E-04
+WA,biomass,biomass_conv,2009,1.70E-04
+WA,coal,coal_conv,1972,0.046067784
+WA,gas,gas_CC,1993,0.009527239
+WA,gas,gas_CC,1997,0.007826285
+WA,gas,gas_CC,2001,0.010044784
+WA,gas,gas_CC,2002,0.010161547
+WA,gas,gas_CC,2003,0.027568719
+WA,gas,gas_CC,2008,0.030579314
+WA,gas,gas_turbine,1978,0.00195026
+WA,gas,gas_turbine,1980,0.005339546
+WA,gas,gas_turbine,1981,0.005610941
+WA,gas,gas_turbine,1989,0.011865658
+WA,gas,gas_turbine,2001,0.001439027
+WA,gas,gas_turbine,2002,0.001003532
+WA,gas,gas_turbine,2004,6.94E-05
+WA,hydro,hyrdo,1901,3.76E-04
+WA,hydro,hyrdo,1910,0.001009843
+WA,hydro,hyrdo,1912,7.20E-04
+WA,hydro,hyrdo,1913,4.32E-04
+WA,hydro,hyrdo,1915,3.79E-05
+WA,hydro,hyrdo,1918,0.002606658
+WA,hydro,hyrdo,1922,3.16E-04
+WA,hydro,hyrdo,1925,6.31E-04
+WA,hydro,hyrdo,1926,0.001363288
+WA,hydro,hyrdo,1927,0.002382599
+WA,hydro,hyrdo,1932,0.002070179
+WA,hydro,hyrdo,1936,0.005756106
+WA,hydro,hyrdo,1937,0.009098056
+WA,hydro,hyrdo,1942,4.58E-04
+WA,hydro,hyrdo,1943,0.001076114
+WA,hydro,hyrdo,1946,0.005869714
+WA,hydro,hyrdo,1953,0.018429638
+WA,hydro,hyrdo,1955,0.001893456
+WA,hydro,hyrdo,1956,3.79E-04
+WA,hydro,hyrdo,1958,0.007980917
+WA,hydro,hyrdo,1959,0.033463679
+WA,hydro,hyrdo,1960,0.002682396
+WA,hydro,hyrdo,1963,0.032756789
+WA,hydro,hyrdo,1964,8.68E-04
+WA,hydro,hyrdo,1965,0.118524034
+WA,hydro,hyrdo,1966,0.224649087
+WA,hydro,hyrdo,1967,0.024980996
+WA,hydro,hyrdo,1968,0.014579611
+WA,hydro,hyrdo,1969,0.019029233
+WA,hydro,hyrdo,1970,7.26E-05
+WA,hydro,hyrdo,1973,8.33E-04
+WA,hydro,hyrdo,1974,0.083936904
+WA,hydro,hyrdo,1976,0.025561656
+WA,hydro,hyrdo,1982,1.93E-04
+WA,hydro,hyrdo,1983,6.94E-05
+WA,hydro,hyrdo,1984,0.00352814
+WA,hydro,hyrdo,1985,0.003323015
+WA,hydro,hyrdo,1986,5.05E-05
+WA,hydro,hyrdo,1987,9.50E-04
+WA,hydro,hyrdo,1988,6.94E-05
+WA,hydro,hyrdo,1989,7.57E-04
+WA,hydro,hyrdo,1990,7.23E-04
+WA,hydro,hyrdo,1992,4.67E-04
+WA,hydro,hyrdo,1994,5.21E-04
+WA,hydro,hyrdo,1995,5.30E-04
+WA,hydro,hyrdo,1997,3.16E-04
+WA,hydro,hyrdo,2006,4.35E-04
+WA,nuclear,nuclear_conv,1984,0.03786912
+WA,refined liquids,refined liquids_turbine,1969,8.52E-05
+WA,refined liquids,refined liquids_turbine,2005,5.68E-05
+WA,wind,wind_onshore,2002,0.003026374
+WA,wind,wind_onshore,2003,0.008703586
+WA,wind,wind_onshore,2005,0.004960855
+WA,wind,wind_onshore,2006,0.014882564
+WA,wind,wind_onshore,2007,0.013083781
+WA,wind,wind_onshore,2008,0.011240817
+WA,wind,wind_onshore,2009,0.007422348
+WA,wind,wind_onshore,2010,0.007595914
+WI,biomass,biomass_conv,1944,0.000959351
+WI,biomass,biomass_conv,1950,0.001262304
+WI,biomass,biomass_conv,1952,0.001672553
+WI,biomass,biomass_conv,1985,1.89E-04
+WI,biomass,biomass_conv,1995,3.98E-04
+WI,biomass,biomass_conv,1996,7.57E-05
+WI,biomass,biomass_conv,1998,2.78E-04
+WI,biomass,biomass_conv,2000,1.01E-04
+WI,biomass,biomass_conv,2001,1.39E-04
+WI,biomass,biomass_conv,2004,3.22E-04
+WI,biomass,biomass_conv,2005,1.26E-04
+WI,biomass,biomass_conv,2006,3.79E-04
+WI,coal,coal_conv,1954,0.005601474
+WI,coal,coal_conv,1956,0.005711926
+WI,coal,coal_conv,1957,0.011909838
+WI,coal,coal_conv,1960,0.00631152
+WI,coal,coal_conv,1963,0.037604036
+WI,coal,coal_conv,1968,0.008583667
+WI,coal,coal_conv,1969,0.010906307
+WI,coal,coal_conv,1975,0.024299352
+WI,coal,coal_conv,1976,0.032283425
+WI,coal,coal_conv,1979,0.012212791
+WI,coal,coal_conv,1982,0.038910521
+WI,coal,coal_conv,1992,0.034306267
+WI,coal,coal_conv,1996,3.47E-04
+WI,coal,coal_conv,2010,0.022131345
+WI,gas,gas_CC,2003,0.021954622
+WI,gas,gas_CC,2004,0.005342702
+WI,gas,gas_CC,2005,0.019565712
+WI,gas,gas_CC,2006,0.037301083
+WI,gas,gas_turbine,1964,5.11E-04
+WI,gas,gas_turbine,1969,0.001880833
+WI,gas,gas_turbine,1970,0.004544294
+WI,gas,gas_turbine,1971,0.003670149
+WI,gas,gas_turbine,1973,0.008634159
+WI,gas,gas_turbine,1982,0.005273275
+WI,gas,gas_turbine,1985,1.74E-04
+WI,gas,gas_turbine,1993,0.012029757
+WI,gas,gas_turbine,1994,0.010855814
+WI,gas,gas_turbine,1995,0.012411604
+WI,gas,gas_turbine,1999,0.006680744
+WI,gas,gas_turbine,2000,0.017700658
+WI,gas,gas_turbine,2001,0.019944403
+WI,gas,gas_turbine,2003,0.002871742
+WI,gas,gas_turbine,2004,0.001909235
+WI,gas,gas_turbine,2005,0.011991888
+WI,hydro,hyrdo,1901,7.57E-05
+WI,hydro,hyrdo,1907,2.56E-04
+WI,hydro,hyrdo,1908,2.84E-04
+WI,hydro,hyrdo,1909,1.77E-04
+WI,hydro,hyrdo,1910,2.21E-04
+WI,hydro,hyrdo,1911,2.78E-04
+WI,hydro,hyrdo,1912,1.89E-04
+WI,hydro,hyrdo,1916,7.32E-04
+WI,hydro,hyrdo,1917,0.001136074
+WI,hydro,hyrdo,1918,1.51E-04
+WI,hydro,hyrdo,1919,2.11E-04
+WI,hydro,hyrdo,1921,3.47E-05
+WI,hydro,hyrdo,1922,3.38E-04
+WI,hydro,hyrdo,1923,5.08E-04
+WI,hydro,hyrdo,1924,2.02E-04
+WI,hydro,hyrdo,1925,2.52E-04
+WI,hydro,hyrdo,1926,1.14E-04
+WI,hydro,hyrdo,1928,0.001735668
+WI,hydro,hyrdo,1929,3.16E-06
+WI,hydro,hyrdo,1930,4.73E-05
+WI,hydro,hyrdo,1934,2.59E-04
+WI,hydro,hyrdo,1938,6.25E-04
+WI,hydro,hyrdo,1940,3.16E-05
+WI,hydro,hyrdo,1941,1.51E-04
+WI,hydro,hyrdo,1942,2.27E-04
+WI,hydro,hyrdo,1945,2.43E-04
+WI,hydro,hyrdo,1948,1.10E-04
+WI,hydro,hyrdo,1949,0.001824029
+WI,hydro,hyrdo,1950,5.11E-04
+WI,hydro,hyrdo,1951,6.94E-04
+WI,hydro,hyrdo,1952,6.63E-05
+WI,hydro,hyrdo,1955,5.36E-05
+WI,hydro,hyrdo,1958,1.70E-04
+WI,hydro,hyrdo,1960,1.80E-04
+WI,hydro,hyrdo,1971,1.07E-04
+WI,hydro,hyrdo,1976,0.001113983
+WI,hydro,hyrdo,1986,1.07E-04
+WI,hydro,hyrdo,1988,0.001779849
+WI,nuclear,nuclear_conv,1970,0.033059742
+WI,nuclear,nuclear_conv,1974,0.017675412
+WI,refined liquids,refined liquids_steam,1982,0.004020438
+WI,refined liquids,refined liquids_turbine,1969,7.89E-04
+WI,refined liquids,refined liquids_turbine,1970,3.09E-04
+WI,refined liquids,refined liquids_turbine,1973,0.003351417
+WI,refined liquids,refined liquids_turbine,1977,2.68E-04
+WI,refined liquids,refined liquids_turbine,1978,0.0077253
+WI,refined liquids,refined liquids_turbine,1980,8.20E-05
+WI,refined liquids,refined liquids_turbine,1982,6.25E-04
+WI,refined liquids,refined liquids_turbine,1985,6.94E-04
+WI,refined liquids,refined liquids_turbine,1988,2.34E-04
+WI,refined liquids,refined liquids_turbine,1989,4.73E-05
+WI,refined liquids,refined liquids_turbine,1990,3.85E-04
+WI,refined liquids,refined liquids_turbine,1991,4.73E-04
+WI,refined liquids,refined liquids_turbine,1995,2.08E-04
+WI,refined liquids,refined liquids_turbine,2001,0.00170411
+WI,refined liquids,refined liquids_turbine,2002,5.68E-05
+WI,refined liquids,refined liquids_turbine,2003,5.05E-04
+WI,refined liquids,refined liquids_turbine,2004,1.04E-04
+WI,wind,wind_onshore,1998,7.57E-05
+WI,wind,wind_onshore,1999,6.37E-04
+WI,wind,wind_onshore,2002,9.47E-04
+WI,wind,wind_onshore,2008,0.010789543
+WI,wind,wind_onshore,2009,0.00170411
+WI,wind,wind_onshore,2010,6.31E-04
+WV,coal,coal_conv,1948,0.003461869
+WV,coal,coal_conv,1953,0.022639422
+WV,coal,coal_conv,1954,0.034886927
+WV,coal,coal_conv,1957,0.00672808
+WV,coal,coal_conv,1958,0.02248479
+WV,coal,coal_conv,1967,0.088815709
+WV,coal,coal_conv,1970,0.051520938
+WV,coal,coal_conv,1972,0.092545818
+WV,coal,coal_conv,1973,0.064756195
+WV,coal,coal_conv,1979,0.043170797
+WV,coal,coal_conv,1980,0.04102488
+WV,coal,coal_conv,1991,0.003020062
+WV,gas,gas_turbine,2001,0.027171094
+WV,gas,gas_turbine,2002,0.010855814
+WV,hydro,hyrdo,1919,3.16E-05
+WV,hydro,hyrdo,1931,8.84E-05
+WV,hydro,hyrdo,1935,8.96E-04
+WV,hydro,hyrdo,1936,0.003218875
+WV,hydro,hyrdo,1938,7.73E-04
+WV,hydro,hyrdo,1947,6.00E-05
+WV,hydro,hyrdo,1988,0.001180254
+WV,hydro,hyrdo,1999,0.001325419
+WV,hydro,hyrdo,2001,0.002524608
+WV,refined liquids,refined liquids_turbine,1967,5.84E-04
+WV,wind,wind_onshore,2002,0.002082802
+WV,wind,wind_onshore,2008,0.008331206
+WV,wind,wind_onshore,2010,0.003171539
+WY,coal,coal_conv,1949,0.001088737
+WY,coal,coal_conv,1966,0.025773092
+WY,coal,coal_conv,1968,0.023002335
+WY,coal,coal_conv,1976,0.07314105
+WY,coal,coal_conv,1978,0.011423851
+WY,coal,coal_conv,1981,0.053963496
+WY,coal,coal_conv,1995,0.002524608
+WY,coal,coal_conv,2003,0.002777069
+WY,coal,coal_conv,2008,0.002997972
+WY,coal,coal_conv,2010,0.003666993
+WY,gas,gas_turbine,2000,0.001262304
+WY,gas,gas_turbine,2002,0.002130138
+WY,hydro,hyrdo,1922,9.47E-05
+WY,hydro,hyrdo,1927,2.02E-04
+WY,hydro,hyrdo,1939,0.001628372
+WY,hydro,hyrdo,1948,1.58E-04
+WY,hydro,hyrdo,1950,0.001136074
+WY,hydro,hyrdo,1951,4.73E-05
+WY,hydro,hyrdo,1952,4.73E-04
+WY,hydro,hyrdo,1955,0.001306485
+WY,hydro,hyrdo,1958,0.001199189
+WY,hydro,hyrdo,1960,0.002108048
+WY,hydro,hyrdo,1968,3.16E-04
+WY,hydro,hyrdo,1983,9.15E-05
+WY,hydro,hyrdo,1992,5.68E-04
+WY,hydro,hyrdo,1994,1.42E-04
+WY,hydro,hyrdo,2009,5.36E-05
+WY,refined liquids,refined liquids_turbine,1967,8.52E-05
+WY,refined liquids,refined liquids_turbine,1979,6.31E-05
+WY,wind,wind_onshore,1998,0.001306485
+WY,wind,wind_onshore,1999,8.39E-04
+WY,wind,wind_onshore,2000,8.02E-04
+WY,wind,wind_onshore,2001,0.00157788
+WY,wind,wind_onshore,2003,0.004544294
+WY,wind,wind_onshore,2008,0.013632883
+WY,wind,wind_onshore,2009,0.012133897
+WY,wind,wind_onshore,2010,0.009814414

@@ -1,8 +1,15 @@
 # File: A44.demand_satiation_mult.csv
+<<<<<<< Updated upstream
 # Title: USA Demand Satiation Multipliers
 # Units: Increase in demand per unit floorspace
 # Source: None (GCAM assumptions)
 # Column types: cn 
+=======
+# Title: Assumed increase in demand of services in USA
+# Units: Increase in demand per unit floorspace
+# Source: TODO
+# Column types: cn
+>>>>>>> Stashed changes
 # ----------
 supplysector,multiplier
 resid heating,1.05
@@ -27,5 +34,19 @@ comm cooking,1.1
 comm lighting,1.1
 comm refrigeration,1.01
 comm office,1.1
+<<<<<<< Updated upstream
 comm other,1.01
 comm non-building,1.01
+=======
+comm other,2
+comm non-building,2
+resid refrigerators,1.01
+resid freezers,1.01
+resid dishwashers,1.15
+resid cooking,1.01
+resid clothes dryers,1.2
+resid clothes washers,1.2
+resid televisions,1.05
+resid computers,1.05
+resid furnace fans,1.05
+>>>>>>> Stashed changes

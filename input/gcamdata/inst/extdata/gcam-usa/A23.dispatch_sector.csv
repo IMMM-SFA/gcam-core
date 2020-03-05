@@ -1,0 +1,15 @@
+# File: A23.dispatch_sector.csv
+# Title: Electricity sector - supplysector characteristics
+# Units: Unitless
+# Source: GCAM assumptions
+# Electricity reserve margin: required excess capacity for purposes of grid reliability
+# Average grid capacity factor: exogenous assumption allowing conversion between explicitly modeled generation and capacity
+# Column types: ccccinnc
+# ----------
+supplysector,output.unit,input.unit,price.unit,logit.exponent,electricity.reserve.margin,average.grid.capacity.factor,logit.type
+electricity,EJ,EJ,1975$/GJ,-3,0.15,0.6,
+elect_td_bld,EJ,EJ,1975$/GJ,-3,0.15,0.6,
+peak electricity,EJ,EJ,1975$/GJ,-3,0.15,0.6,
+subpeak electricity,EJ,EJ,1975$/GJ,-3,0.15,0.6,
+intermediate electricity,EJ,EJ,1975$/GJ,-3,0.15,0.6,
+baseload electricity,EJ,EJ,1975$/GJ,-3,0.15,0.6,

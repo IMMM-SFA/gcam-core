@@ -15,7 +15,7 @@
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
 #' @author MTB August 2018
-module_gcamusa_LB1239.elec_state_fractions_USA <- function(command, ...) {
+disabled_module_gcamusa_LB1239.elec_state_fractions_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",
              "L123.out_EJ_state_elec_F",

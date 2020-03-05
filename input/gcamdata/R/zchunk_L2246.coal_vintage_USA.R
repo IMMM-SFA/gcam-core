@@ -19,7 +19,7 @@
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
 #' @author RC Sep 2018
-module_gcamusa_L2246.coal_vintage_USA <- function(command, ...) {
+disabled_module_gcamusa_L2246.coal_vintage_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/prime_mover_map",
              FILE = "gcam-usa/EIA_860_generators_existing_2015",

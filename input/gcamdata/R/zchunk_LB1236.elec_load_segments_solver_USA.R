@@ -15,7 +15,7 @@
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
 #' @author MTB August 2018
-module_gcamusa_LB1236.elec_load_segments_solver_USA <- function(command, ...) {
+disabled_module_gcamusa_LB1236.elec_load_segments_solver_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/elecS_horizontal_to_vertical_map",
              "L1234.out_EJ_grid_elec_F",

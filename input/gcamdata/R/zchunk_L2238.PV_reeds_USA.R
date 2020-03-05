@@ -17,7 +17,7 @@
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
 #' @author MTB September 2018
-module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
+disabled_module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = 'gcam-usa/reeds_regions_states',
              FILE = 'gcam-usa/reeds_PV_curve_capacity',

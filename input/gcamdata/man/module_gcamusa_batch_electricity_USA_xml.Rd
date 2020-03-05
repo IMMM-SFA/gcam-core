@@ -19,4 +19,5 @@ original data system was \code{batch_electricity_USA_xml.R} (gcamusa XML).
 }
 \description{
 Construct XML data structure for \code{electricity_USA.xml}.
+()
 }

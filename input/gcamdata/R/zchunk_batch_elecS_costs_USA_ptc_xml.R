@@ -8,7 +8,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{elecS_costs_USA_ptc.xml}. The corresponding file in the
 #' original data system was \code{batch_elecS_costs_USA_ptc.xml} (gcamusa xml-batch).
-module_gcamusa_batch_elecS_costs_USA_ptc_xml <- function(command, ...) {
+disabled_module_gcamusa_batch_elecS_costs_USA_ptc_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2247.GlobalTechCost_ptc_USA",
              "L2247.GlobalIntTechCost_ptc_USA"))

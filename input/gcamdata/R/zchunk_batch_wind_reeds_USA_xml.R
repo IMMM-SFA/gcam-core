@@ -8,7 +8,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{wind_reeds_USA.xml}.
 #' The corresponding file in the original data system was \code{batch_wind_USA_reeds.xml} (gcamusa XML batch).
-module_gcamusa_batch_wind_reeds_USA_xml <- function(command, ...) {
+disabled_module_gcamusa_batch_wind_reeds_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2237.SmthRenewRsrcCurves_wind_reeds_USA",
              "L2237.StubTechCapFactor_wind_reeds_USA",

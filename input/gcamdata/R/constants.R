@@ -22,6 +22,7 @@ FLAG_XML             <- "FLAG_XML"              # xml data
 HISTORICAL_YEARS        <- 1971:2010                            # historical years for data processing
 FUTURE_YEARS            <- 2011:2100                            # future years for data processing
 MODEL_BASE_YEARS        <- c(1975, 1990, 2005, 2010)            # calibrated periods in the model
+FINAL_MODEL_BASE_YEARS  <- dplyr::last(MODEL_BASE_YEARS)        # select the last model base year
 MODEL_FUTURE_YEARS      <- seq(2015, 2100, 5)                   # future (i.e., not calibrated) time periods in the model
 MODEL_YEARS             <- c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)
 
@@ -695,6 +696,11 @@ gcamusa.ELEC_SEGMENT_BASE <- "base load generation"
 gcamusa.ELEC_SEGMENT_INT <- "intermediate generation"
 gcamusa.ELEC_SEGMENT_SUBPEAK <- "subpeak generation"
 gcamusa.ELEC_SEGMENT_PEAK <- "peak generation"
+
+# Electricity dispatch module
+gcamusa.ELEC_GEN_NAMES <- "electricity"
+gcamusa.ELEC_INV_NAMES <- c("peak electricity", "subpeak electricity", "intermediate electricity", "baseload electricity")
+gcamusa.ELEC_BASELOAD_HRS <- 8760 # technically here should be 8766 considering leap years
 
 
 # Time shift conditions ======================================================================

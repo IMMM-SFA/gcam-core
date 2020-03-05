@@ -248,6 +248,8 @@ TechInterpTo, world/+{name}region, region/+{name}supplysector, supplysector/+{na
 
 TechSCurve, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+lifetime, s-curve-shutdown-decider/+steepness, s-curve-shutdown-decider/+half-life, scenario, scenario/world, period/s-curve-shutdown-decider
 
+
+
 #####, GLOBAL TECHNOLOGY
 
 
@@ -735,6 +737,20 @@ TrnInputEmissCoeff, world/+{name}region, region/+{name;nocreate=1}supplysector, 
 
 LinearCtrlInc, world/+{name}region, region/+{name;nocreate=1}supplysector, supplysector/+{name;nocreate=1}tranSubsector, tranSubsector/+{name;nocreate=1}stub-technology, stub-technology/+{year}period, period/+{name}Non-CO2, Non-CO2/+{name}linear-control, linear-control/+start-year, linear-control/+end-year, linear-control/+final-emissions-coefficient, linear-control/allow-ef-increase, scenario, scenario/world
 
+TechCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+capacity-factor, scenario, scenario/world
 
+GlobalTechHack,global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}technology, technology/+{year}period, period/+total-hack, scenario, scenario/world, world/global-technology-database
+
+DispatchSector, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}generation-sector, dispatch-sector/+{market}generation-sector, scenario, scenario/world
+
+DispatchSectorCalProd, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{year}cal-production, dispatch-sector/+cal-production, scenario, scenario/world
+
+DispatchSectorDemandSegments, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}demand-segment, dispatch-sector/+{hours}demand-segment, dispatch-sector/+{relative-generation}demand-segment, dispatch-sector/+{generation-fraction}demand-segment, scenario, scenario/world
+
+CapacityTech, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+capacity, scenario, scenario/world
+
+CapacityTechSegmentCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name}segment-capacity-factor, period/+segment-capacity-factor, scenario, scenario/world
+
+TechSCurveDistpatch, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+lifetime, s-curve-shutdown-decider/+steepness, s-curve-shutdown-decider/+half-life, scenario, scenario/world, period/{name=s-curve}s-curve-shutdown-decider 
 
 EQUIV_TABLE,NODE_EQUIVALENCE

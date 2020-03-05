@@ -22,7 +22,7 @@
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
 #' @author MTB Aug 2018
-module_gcamusa_L2261.regional_biomass_USA <- function(command, ...) {
+disabled_module_gcamusa_L2261.regional_biomass_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/A21.sector",
              FILE = "energy/A26.sector",

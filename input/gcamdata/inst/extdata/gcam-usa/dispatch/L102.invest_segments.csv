@@ -1,0 +1,67 @@
+# File: L102.invest_segments.csv
+# Title: Defines the relative shape of each invest segment by grid_region based on FERC hourly data
+# Units: %
+# Source: preprocessed FERC hourly data
+# Column types: ccinnn
+# ----------
+grid_region,invest_segment,hours,generation,area,generation-fraction
+Alaska grid,peak electricity,438,409.4859132,179354.83,0.033750952
+Alaska grid,subpeak electricity,2628,349.1702055,917619.3,0.172677397
+Alaska grid,intermediate electricity,7884,287.3524372,2265486.615,0.426318771
+Alaska grid,baseload electricity,8760,222.7861301,1951606.5,0.36725288
+Southeast grid,peak electricity,438,194631.9476,85248793.03,0.037461981
+Southeast grid,subpeak electricity,2628,160962.7345,423010066.4,0.185888793
+Southeast grid,intermediate electricity,7884,121019.7959,954120070.7,0.419281343
+Southeast grid,baseload electricity,8760,92834.39397,813229291.2,0.357367882
+Southwest grid,peak electricity,438,133150.6686,58319992.83,0.033610088
+Southwest grid,subpeak electricity,2628,111064.7346,291878122.6,0.168210746
+Southwest grid,intermediate electricity,7884,91863.78107,724254050,0.417391043
+Southwest grid,baseload electricity,8760,75427.04533,660740917.1,0.380788123
+California grid,peak electricity,438,133150.6686,58319992.83,0.033610088
+California grid,subpeak electricity,2628,111064.7346,291878122.6,0.168210746
+California grid,intermediate electricity,7884,91863.78107,724254050,0.417391043
+California grid,baseload electricity,8760,75427.04533,660740917.1,0.380788123
+New England grid,peak electricity,438,74876.59543,32795948.8,0.038683564
+New England grid,subpeak electricity,2628,58128.59315,152761942.8,0.180186169
+New England grid,intermediate electricity,7884,45924.94904,362072298.2,0.427072471
+New England grid,baseload electricity,8760,34266.02877,300170412,0.354057795
+Mid-Atlantic grid,peak electricity,438,135404.4178,59307135.01,0.037169167
+Mid-Atlantic grid,subpeak electricity,2628,109690.0146,288265358.3,0.180662636
+Mid-Atlantic grid,intermediate electricity,7884,85824.06833,676636954.7,0.424064191
+Mid-Atlantic grid,baseload electricity,8760,65227.26744,571390862.8,0.358104006
+Florida grid,peak electricity,438,42577.44952,18648922.89,0.042356359
+Florida grid,subpeak electricity,2628,34754.22368,91334099.83,0.207442541
+Florida grid,intermediate electricity,7884,23871.10142,188199763.6,0.427448645
+Florida grid,baseload electricity,8760,16221.85731,142103470,0.322752455
+Hawaii grid,peak electricity,438,1131.978562,495806.61,0.031734294
+Hawaii grid,subpeak electricity,2628,1070.996411,2814578.568,0.180148192
+Hawaii grid,intermediate electricity,7884,864.0774391,6812386.53,0.43602944
+Hawaii grid,baseload electricity,8760,627.9581164,5500913.1,0.352088074
+Central Northwest grid,peak electricity,438,106732.6008,46748879.17,0.035130603
+Central Northwest grid,subpeak electricity,2628,87986.97104,231229759.9,0.173763329
+Central Northwest grid,intermediate electricity,7884,71008.11302,559827963,0.420696587
+Central Northwest grid,baseload electricity,8760,56268.27313,492910072.6,0.370409481
+Northwest grid,peak electricity,438,133150.6686,58319992.83,0.033610088
+Northwest grid,subpeak electricity,2628,111064.7346,291878122.6,0.168210746
+Northwest grid,intermediate electricity,7884,91863.78107,724254050,0.417391043
+Northwest grid,baseload electricity,8760,75427.04533,660740917.1,0.380788123
+Central Northeast grid,peak electricity,438,106732.6008,46748879.17,0.035130603
+Central Northeast grid,subpeak electricity,2628,87986.97104,231229759.9,0.173763329
+Central Northeast grid,intermediate electricity,7884,71008.11302,559827963,0.420696587
+Central Northeast grid,baseload electricity,8760,56268.27313,492910072.6,0.370409481
+Central East grid,peak electricity,438,135404.4178,59307135.01,0.037169167
+Central East grid,subpeak electricity,2628,109690.0146,288265358.3,0.180662636
+Central East grid,intermediate electricity,7884,85824.06833,676636954.7,0.424064191
+Central East grid,baseload electricity,8760,65227.26744,571390862.8,0.358104006
+Central Southwest grid,peak electricity,438,28947.18265,12678866,0.039308163
+Central Southwest grid,subpeak electricity,2627,22396.40886,58835366.08,0.182406704
+Central Southwest grid,intermediate electricity,7884,17021.36941,134196476.4,0.41604801
+Central Southwest grid,baseload electricity,8760,13337.871,116839750,0.362237123
+New York grid,peak electricity,438,74876.59543,32795948.8,0.038683564
+New York grid,subpeak electricity,2628,58128.59315,152761942.8,0.180186169
+New York grid,intermediate electricity,7884,45924.94904,362072298.2,0.427072471
+New York grid,baseload electricity,8760,34266.02877,300170412,0.354057795
+Texas grid,peak electricity,438,58818.8379,25762651,0.041197241
+Texas grid,subpeak electricity,2628,46206.79406,121431454.8,0.194181915
+Texas grid,intermediate electricity,7884,33140.83771,261282364.5,0.417818513
+Texas grid,baseload electricity,8760,24757.13128,216872470,0.346802331

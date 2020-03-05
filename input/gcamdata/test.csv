@@ -1,0 +1,47 @@
+"sector","supplysector","subsector","technology","minicam.energy.input","1971","1990","2005","2010","2015","2100","improvement.max","improvement.rate","improvement.shadow.technology"
+"peak electricity","electricity","gas","gas (CT)","wholesale gas",0.3,0.35,0.391,0.396656458,0.396656458,NA,1.462222505,0.015,NA
+"peak electricity","electricity","gas","gas (CC)","wholesale gas",0.45,0.45,0.5,0.57608027,0.565001803,NA,1.292031275,0.015,NA
+"peak electricity","electricity","refined liquids","refined liquids (CT)","refined liquids industrial",0.3,0.35,0.391,0.396656458,0.396656458,NA,1.462222505,0.015,NA
+"peak electricity","electricity","refined liquids","refined liquids (CC)","refined liquids industrial",0.426,0.426,0.426,0.554803917,0.554803917,NA,1.315780184,0.015,NA
+"peak electricity","electricity","solar","PV","global solar resource",1,1,1,1,1,1,NA,NA,NA
+"subpeak electricity","electricity","gas","gas (CT)","wholesale gas",0.3,0.35,0.391,0.396656458,0.396656458,NA,1.462222505,0.015,NA
+"subpeak electricity","electricity","gas","gas (CC)","wholesale gas",0.45,0.45,0.5,0.57608027,0.565001803,NA,1.292031275,0.015,NA
+"subpeak electricity","electricity","gas","gas (CC CCS)","wholesale gas",0.487201482,0.487201482,0.487201482,0.465295603,0.465295603,NA,-0.10745857,0.05,"gas (CC)"
+"subpeak electricity","electricity","refined liquids","refined liquids (CT)","refined liquids industrial",0.3,0.35,0.391,0.396656458,0.396656458,NA,1.462222505,0.015,NA
+"subpeak electricity","electricity","refined liquids","refined liquids (CC)","refined liquids industrial",0.426,0.426,0.426,0.554803917,0.554803917,NA,1.315780184,0.015,NA
+"subpeak electricity","electricity","refined liquids","refined liquids (CC CCS)","refined liquids industrial",0.36,0.36,0.36,0.417573266,0.419929971,NA,-0.119067472,0.05,"refined liquids (CC)"
+"subpeak electricity","electricity","solar","PV","global solar resource",1,1,1,1,1,1,NA,NA,NA
+"intermediate electricity","electricity","coal","coal (conv pul)","regional coal",0.3,0.35,0.391,0.396656458,0.396656458,NA,1.462222505,0.015,NA
+"intermediate electricity","electricity","coal","coal (conv pul CCS)","regional coal",0.29227318,0.29227318,0.29227318,0.29227318,0.29227318,NA,-0.256609245,0.05,"coal (conv pul)"
+"intermediate electricity","electricity","coal","coal (IGCC)","regional coal",0.426,0.426,0.426,0.407094786,0.407094786,NA,1.473858228,0.02,NA
+"intermediate electricity","electricity","coal","coal (IGCC CCS)","regional coal",0.356329323,0.356329323,0.356329323,0.334026491,0.334026491,NA,-0.149688726,0.05,"coal (IGCC)"
+"intermediate electricity","electricity","gas","gas (CC CCS)","wholesale gas",0.487201482,0.487201482,0.487201482,0.465295603,0.465295603,NA,-0.10745857,0.05,"gas (CC)"
+"intermediate electricity","electricity","gas","gas (CC)","wholesale gas",0.45,0.45,0.5,0.57608027,0.565001803,NA,1.292031275,0.015,NA
+"intermediate electricity","electricity","refined liquids","refined liquids (CC CCS)","refined liquids industrial",0.36,0.36,0.36,0.417573266,0.419929971,NA,-0.119067472,0.05,"refined liquids (CC)"
+"intermediate electricity","electricity","refined liquids","refined liquids (CC)","refined liquids industrial",0.426,0.426,0.426,0.554803917,0.554803917,NA,1.315780184,0.015,NA
+"intermediate electricity","electricity","biomass","biomass (conv)","regional biomass",0.3,0.35,0.382,0.26625,0.26625,NA,1.596244131,0.015,NA
+"intermediate electricity","electricity","biomass","biomass (conv CCS)","regional biomass",0.196184211,0.196184211,0.196184211,0.196184211,0.196184211,NA,-0.382293763,0.05,"biomass (conv)"
+"intermediate electricity","electricity","biomass","biomass (IGCC)","regional biomass",0.416,0.416,0.416,0.3195,0.3195,NA,1.564945227,0.02,NA
+"intermediate electricity","electricity","biomass","biomass (IGCC CCS)","regional biomass",0.356852457,0.356852457,0.356852457,0.262153846,0.262153846,NA,-0.1907277,0.05,"biomass (IGCC)"
+"intermediate electricity","electricity","nuclear","Gen_III","nuclearFuelGenIII",0.333,0.333,0.333,0.333,0.333,0.333,NA,NA,NA
+"intermediate electricity","electricity","wind","wind","onshore wind resource",1,1,1,1,1,1,NA,NA,NA
+"intermediate electricity","electricity","solar","PV","global solar resource",1,1,1,1,1,1,NA,NA,NA
+"intermediate electricity","electricity","solar","CSP","global solar resource",1,1,1,1,1,1,NA,NA,NA
+"intermediate electricity","electricity","geothermal","geothermal","geothermal",0.1,0.1,0.1,0.1,0.1,0.1,NA,NA,NA
+"baseload electricity","electricity","coal","coal (conv pul)","regional coal",0.3,0.35,0.391,0.396656458,0.396656458,NA,1.462222505,0.015,NA
+"baseload electricity","electricity","coal","coal (conv pul CCS)","regional coal",0.29227318,0.29227318,0.29227318,0.29227318,0.29227318,NA,-0.256609245,0.05,"coal (conv pul)"
+"baseload electricity","electricity","coal","coal (IGCC)","regional coal",0.426,0.426,0.426,0.407094786,0.407094786,NA,1.473858228,0.02,NA
+"baseload electricity","electricity","coal","coal (IGCC CCS)","regional coal",0.356329323,0.356329323,0.356329323,0.334026491,0.334026491,NA,-0.149688726,0.05,"coal (IGCC)"
+"baseload electricity","electricity","gas","gas (CC CCS)","wholesale gas",0.487201482,0.487201482,0.487201482,0.465295603,0.465295603,NA,-0.10745857,0.05,"gas (CC)"
+"baseload electricity","electricity","gas","gas (CC)","wholesale gas",0.45,0.45,0.5,0.57608027,0.565001803,NA,1.292031275,0.015,NA
+"baseload electricity","electricity","refined liquids","refined liquids (CC CCS)","refined liquids industrial",0.36,0.36,0.36,0.417573266,0.419929971,NA,-0.119067472,0.05,"refined liquids (CC)"
+"baseload electricity","electricity","refined liquids","refined liquids (CC)","refined liquids industrial",0.426,0.426,0.426,0.554803917,0.554803917,NA,1.315780184,0.015,NA
+"baseload electricity","electricity","biomass","biomass (conv)","regional biomass",0.3,0.35,0.382,0.26625,0.26625,NA,1.596244131,0.015,NA
+"baseload electricity","electricity","biomass","biomass (conv CCS)","regional biomass",0.196184211,0.196184211,0.196184211,0.196184211,0.196184211,NA,-0.382293763,0.05,"biomass (conv)"
+"baseload electricity","electricity","biomass","biomass (IGCC)","regional biomass",0.416,0.416,0.416,0.3195,0.3195,NA,1.564945227,0.02,NA
+"baseload electricity","electricity","biomass","biomass (IGCC CCS)","regional biomass",0.356852457,0.356852457,0.356852457,0.262153846,0.262153846,NA,-0.1907277,0.05,"biomass (IGCC)"
+"baseload electricity","electricity","nuclear","Gen_III","nuclearFuelGenIII",0.333,0.333,0.333,0.333,0.333,0.333,NA,NA,NA
+"baseload electricity","electricity","wind","wind","onshore wind resource",1,1,1,1,1,1,NA,NA,NA
+"baseload electricity","electricity","solar","PV","global solar resource",1,1,1,1,1,1,NA,NA,NA
+"baseload electricity","electricity","solar","CSP","global solar resource",1,1,1,1,1,1,NA,NA,NA
+"baseload electricity","electricity","geothermal","geothermal","geothermal",0.1,0.1,0.1,0.1,0.1,0.1,NA,NA,NA

@@ -31,7 +31,7 @@
 #' @importFrom dplyr filter mutate select first
 #' @importFrom tidyr gather spread
 #' @author ST June 2017
-module_water_L2233.electricity_water <- function(command, ...) {
+disabled_module_water_L2233.electricity_water <- function(command, ...) {
 
   # Read in 24 L223 file names
   L223_fileNames <- c("AvgFossilEffKeyword_elec", "GlobalIntTechBackup_elec", "GlobalIntTechCapital_elec",

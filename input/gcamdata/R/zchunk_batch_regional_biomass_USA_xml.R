@@ -8,7 +8,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{regional_biomass_USA.xml}.
 #' The corresponding file in the original data system was \code{batch_regional_biomass_USA.xml} (gcamusa XML batch).
-module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...) {
+disabled_module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2261.DeleteSupplysector_bio_USA",
              "L2261.Supplysector_bio_USA",

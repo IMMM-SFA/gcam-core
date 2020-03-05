@@ -1,0 +1,18 @@
+# File: season_month_mapping.csv
+# Title: Map month into seasons
+# Units: Unitless
+# Column types: cc
+# ----------
+month,season
+Jan,winter
+Feb,winter
+Mar,winter
+Apr,spring
+May,spring
+Jun,spring
+Jul,summer
+Aug,summer
+Sep,summer
+Oct,fall
+Nov,fall
+Dec,fall

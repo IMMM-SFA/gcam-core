@@ -6,20 +6,30 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L119.CapFacScaler_PV_state}, \code{L119.CapFacScaler_CSP_state}. The corresponding file in the
-#' original data system was \code{LA119.Solar.R} (gcam-usa level1).
-#' @details This chunk computes scalars by state to vary capacity factors for central station PV and CSP technologies by state.
+#' the generated outputs: \code{L119.CapFacScaler_PV_state}, \code{L119.CapFacScaler_CSP_state},
+#' \code{L119.CapacityFactor_CSP_state}, \code{L119.CapacityFactor_CSP_state_segment},
+#' \code{L119.CapacityFactor_PV_state}, \code{L119.CapacityFactor_PV_state_segment},
+#' The corresponding file in the original data system was \code{LA119.Solar.R} (gcam-usa level1).
+#' @details This chunk computes capacity factors for central station PV and CSP technologies by state.
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
-#' @author GI, FF, AS Apr 2017
+#' @author YO Feb 2020
 module_gcamusa_LA119.solar <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",
-             FILE = "gcam-usa/NREL_us_re_capacity_factors"))
+             FILE = "gcam-usa/NREL_us_re_capacity_factors",
+             FILE = "gcam-usa/dispatch/L119.CapacityFactor_CSP_state_segment",
+             FILE = "gcam-usa/dispatch/L119.CapacityFactor_CSP_state",
+             FILE = "gcam-usa/dispatch/L119.CapacityFactor_PV_state_segment",
+             FILE = "gcam-usa/dispatch/L119.CapacityFactor_PV_state"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L119.CapFacScaler_PV_state",
-             "L119.CapFacScaler_CSP_state"))
+             "L119.CapFacScaler_CSP_state",
+             "L119.CapacityFactor_PV_state",
+             "L119.CapacityFactor_CSP_state",
+             "L119.CapacityFactor_PV_state_segment",
+             "L119.CapacityFactor_CSP_state_segment"))
   } else if(command == driver.MAKE) {
 
     fuel <- value <- State <- . <- value.x <- value.y <- sector <- scaler <-
@@ -30,6 +40,11 @@ module_gcamusa_LA119.solar <- function(command, ...) {
     # Load required inputs
     states_subregions <- get_data(all_data, "gcam-usa/states_subregions")
     NREL_us_re_capacity_factors <- get_data(all_data, "gcam-usa/NREL_us_re_capacity_factors")
+
+    CapacityFactor_PV_state_segment <- get_data(all_data, "gcam-usa/dispatch/L119.CapacityFactor_PV_state_segment")
+    CapacityFactor_PV_state <- get_data(all_data, "gcam-usa/dispatch/L119.CapacityFactor_PV_state")
+    CapacityFactor_CSP_state_segment <- get_data(all_data, "gcam-usa/dispatch/L119.CapacityFactor_CSP_state_segment")
+    CapacityFactor_CSP_state <- get_data(all_data, "gcam-usa/dispatch/L119.CapacityFactor_CSP_state")
 
     # ===================================================
     # Create scalers to scale capacity factors read in the assumptions file in the energy folder.
@@ -92,7 +107,57 @@ module_gcamusa_LA119.solar <- function(command, ...) {
       add_precursors("gcam-usa/states_subregions", "gcam-usa/NREL_us_re_capacity_factors") ->
       L119.CapFacScaler_CSP_state
 
-    return_data(L119.CapFacScaler_PV_state, L119.CapFacScaler_CSP_state)
+
+    # Add new modification for dispatch model (previous scalers may or maynot be needed)
+    # Decide later for subsequent files
+    CapacityFactor_PV_state %>%
+      mutate(sector = "electricity generation") %>%
+      mutate(fuel = "PV") %>%
+      # add attributes for output...
+      add_title("Capacity factor for solar PV by state", overwrite = T) %>%
+      add_units("Unitless") %>%
+      add_comments("Direclty read pre-processed data from ReEDS hourly cf data") %>%
+      add_legacy_name("L119.CapacityFactor_PV_state (dispatch branch)") %>%
+      add_precursors("gcam-usa/dispatch/L119.CapacityFactor_PV_state") ->
+      L119.CapacityFactor_PV_state
+
+    CapacityFactor_PV_state_segment %>%
+      mutate(sector = "electricity generation") %>%
+      mutate(fuel = "PV") %>%
+      # add attributes for output...
+      add_title("Capacity factor for solar PV by state and segment", overwrite = T) %>%
+      add_units("Unitless") %>%
+      add_comments("Direclty read pre-processed data from ReEDS hourly cf data") %>%
+      add_legacy_name("L119.CapacityFactor_PV_state_segment (dispatch branch)") %>%
+      add_precursors("gcam-usa/dispatch/L119.CapacityFactor_PV_state_segment") ->
+      L119.CapacityFactor_PV_state_segment
+
+    CapacityFactor_CSP_state %>%
+      mutate(sector = "electricity generation") %>%
+      mutate(fuel = "CSP") %>%
+      # add attributes for output...
+      add_title("Capacity factor for solar CSP by state", overwrite = T) %>%
+      add_units("Unitless") %>%
+      add_comments("Direclty read pre-processed data from ReEDS hourly cf data") %>%
+      add_legacy_name("L119.CapacityFactor_CSP_state (dispatch branch)") %>%
+      add_precursors("gcam-usa/dispatch/L119.CapacityFactor_CSP_state") ->
+      L119.CapacityFactor_CSP_state
+
+    CapacityFactor_CSP_state_segment %>%
+      mutate(sector = "electricity generation") %>%
+      mutate(fuel = "CSP") %>%
+      # add attributes for output...
+      add_title("Capacity factor for solar CSP by state and segment", overwrite = T) %>%
+      add_units("Unitless") %>%
+      add_comments("Direclty read pre-processed data from ReEDS hourly cf data") %>%
+      add_legacy_name("L119.CapacityFactor_CSP_state_segment (dispatch branch)") %>%
+      add_precursors("gcam-usa/dispatch/L119.CapacityFactor_CSP_state_segment") ->
+      L119.CapacityFactor_CSP_state_segment
+
+
+    return_data(L119.CapFacScaler_PV_state, L119.CapFacScaler_CSP_state,
+                L119.CapacityFactor_CSP_state, L119.CapacityFactor_CSP_state_segment,
+                L119.CapacityFactor_PV_state, L119.CapacityFactor_PV_state_segment)
   } else {
     stop("Unknown command")
   }

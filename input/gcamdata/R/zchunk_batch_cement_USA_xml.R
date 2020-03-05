@@ -8,7 +8,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{cement_USA.xml}. The corresponding file in the
 #' original data system was \code{batch_cement_USA_xml.R} (gcamusa XML).
-module_gcamusa_batch_cement_USA_xml <- function(command, ...) {
+disabled_module_gcamusa_batch_cement_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L210.DeleteUnlimitRsrc_USAlimestone",
              "L210.UnlimitRsrc_limestone_USA",

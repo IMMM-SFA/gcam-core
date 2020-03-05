@@ -7,29 +7,35 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L123.in_EJ_state_elec_F}, \code{L123.out_EJ_state_elec_F}, \code{L123.in_EJ_state_ownuse_elec}, \code{L123.out_EJ_state_ownuse_elec}.
+#' the generated outputs: \code{L123.in_EJ_state_elec_F_tech}, \code{L123.out_EJ_state_elec_F}, \code{L123.in_EJ_state_ownuse_elec},
+#' \code{L123.out_EJ_state_ownuse_elec}, \code{L123.out_EJ_state_elec_F_tech}, \code{L123.capacity_EJ_state_elec_F_tech},
+#' \code{L123.capacity_factor_EJ_state_elec_F_tech}
 #' The corresponding file in the original data system was \code{LB123.Electricity.R} (gcam-usa level1).
 #' @details By state, calculates electricity fuel consumption, electricity generation, and inputs and outputs of net ownuse.
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
-#' @author RLH August 2017
+#' @author RLH August 2017 YO Feb 2020
 module_gcamusa_LB123.Electricity <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "gcam-usa/states_subregions",
-             FILE = "gcam-usa/NREL_us_re_technical_potential",
-             "L123.in_EJ_R_elec_F_Yh",
+    return(c("L123.in_EJ_R_elec_F_Yh",
              "L123.out_EJ_R_elec_F_Yh",
              FILE = "gcam-usa/EIA_elect_td_ownuse_prices",
              "L126.in_EJ_R_elecownuse_F_Yh",
              "L126.out_EJ_R_elecownuse_F_Yh",
-             "L101.inEIA_EJ_state_S_F",
-             "L132.out_EJ_state_indchp_F"))
+             "L132.out_EJ_state_indchp_F",
+             FILE = "gcam-usa/elec_fuelconsumption_state_vintage",
+             FILE = "gcam-usa/elec_generation_state_vintage",
+             FILE = "gcam-usa/elec_capacity_state_vintage"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L123.in_EJ_state_elec_F",
+             "L123.in_EJ_state_elec_F_tech",
              "L123.out_EJ_state_elec_F",
              "L123.in_EJ_state_ownuse_elec",
-             "L123.out_EJ_state_ownuse_elec"))
+             "L123.out_EJ_state_ownuse_elec",
+             "L123.out_EJ_state_elec_F_tech",
+             "L123.capacity_EJ_state_elec_F_tech",
+             "L123.capacity_factor_EJ_state_elec_F_tech"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -39,13 +45,6 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       fuel <- CSP_GWh <- value.x <- value.y <- net_EJ_USA <- DirectUse_MWh <- NULL
 
     # Load required inputs
-    states_subregions <- get_data(all_data, "gcam-usa/states_subregions")
-    NREL_us_re_technical_potential <- get_data(all_data, "gcam-usa/NREL_us_re_technical_potential") %>%
-      # Remove TOTAL and add in state abbreviations
-      filter(State != "TOTAL") %>%
-      left_join_error_no_match(states_subregions %>%
-                                 select(state, state_name),
-                               by = c("State" = "state_name"))
     L123.in_EJ_R_elec_F_Yh <- get_data(all_data, "L123.in_EJ_R_elec_F_Yh") %>%
       filter(GCAM_region_ID == gcam.USA_CODE)
     L123.out_EJ_R_elec_F_Yh <- get_data(all_data, "L123.out_EJ_R_elec_F_Yh") %>%
@@ -55,66 +54,109 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       filter(GCAM_region_ID == gcam.USA_CODE)
     L126.out_EJ_R_elecownuse_F_Yh <- get_data(all_data, "L126.out_EJ_R_elecownuse_F_Yh") %>%
       filter(GCAM_region_ID == gcam.USA_CODE)
-    L101.inEIA_EJ_state_S_F <- get_data(all_data, "L101.inEIA_EJ_state_S_F")
     L132.out_EJ_state_indchp_F <- get_data(all_data, "L132.out_EJ_state_indchp_F")
 
+    elec_fuelconsumption_state_vintage <- get_data(all_data, "gcam-usa/elec_fuelconsumption_state_vintage" )
+    elec_generation_state_vintage <- get_data(all_data, "gcam-usa/elec_generation_state_vintage" )
+    elec_capacity_state_vintage <- get_data(all_data, "gcam-usa/elec_capacity_state_vintage" )
+
     # ===================================================
-    # SEDS (EIA) indicates electricity generation technologies either in terms of fuel inputs or fuel outputs (not both)
-    # ELECTRICITY_INPUT: coal, gas, oil, biomass
-    # ELECTRICITY_OUTPUT: nuclear and renewables
-    L123.pct_state_elec_F <- L101.inEIA_EJ_state_S_F %>%
-      filter(sector %in% c("electricity_input", "electricity_output")) %>%
-      # Compute each state's percentage, by fuel
-      group_by(sector, fuel, year) %>%
-      mutate(value = value / sum(value)) %>%
+    # ELECTRICITY - INPUT & OUTPUT
+    # Using the approach in dispatch branch to calcluate percentage shares of electricity generation and capacity shares
+    # Need to confirm data sources of elec_XXXX_vintages above
+
+    # Original note: drop vintage for now (by plp)
+    elec_fuelconsumption_state_vintage %>%
+      group_by(state, gcam_fuel, elec_tech) %>%
+      summarize(en_in = sum(en_in)) %>%
+      ungroup() ->
+      elec_fuelconsumption_state_vintage
+
+    elec_generation_state_vintage %>%
+      group_by(state, gcam_fuel, elec_tech) %>%
+      summarize(en_out = sum(en_out)) %>%
+      ungroup() ->
+      elec_generation_state_vintage
+
+    elec_capacity_state_vintage %>%
+      group_by(state, gcam_fuel, elec_tech) %>%
+      summarize(capacity = sum(capacity)) %>%
+      ungroup() ->
+      elec_capacity_state_vintage
+
+    # derive state shares for energy input and output
+    elec_fuelconsumption_state_vintage %>%
+      group_by(gcam_fuel) %>%
+      mutate(value = en_in / sum(en_in)) %>%
       ungroup() %>%
-      # This is just PV solar, we will add in CSP next
-      mutate(fuel = replace(fuel, fuel == "solar", "solar PV")) %>%
-      replace_na(list(value = 0))
+      rename(fuel = gcam_fuel) ->
+      L123.pct_in_state_elec_F
 
-    # NOTE: SEDS does not disaggregate PV and CSP. Using solar shares for PV, and NREL data for CSP
-    # Many states have zero CSP potential, and allocating production to these states will cause errors later on
-    state_CSP_shares <- NREL_us_re_technical_potential %>%
-      select(state, CSP_GWh) %>%
-      # value = state share of total CSP potential
-      transmute(state, value = CSP_GWh / sum(CSP_GWh))
+    elec_generation_state_vintage %>%
+      group_by(gcam_fuel) %>%
+      mutate(value = en_out / sum(en_out)) %>%
+      ungroup() %>%
+      rename(fuel = gcam_fuel) ->
+      L123.pct_out_state_elec_F
 
-    # Create L123.pct_state_elec_F values for CSP
-    L123.pct_state_elec_CSP <- L123.pct_state_elec_F %>%
-      select(-value) %>%
-      filter(fuel == "solar PV") %>%
-      mutate(fuel = "solar CSP") %>%
-      left_join_error_no_match(state_CSP_shares, by = "state")
+    # TODO: just using fixed share for all historical years
 
-    L123.pct_state_elec_F <- bind_rows(L123.pct_state_elec_F, L123.pct_state_elec_CSP)
+    L123.pct_in_state_elec_F %>%
+      repeat_add_columns(tibble::tibble(year = HISTORICAL_YEARS)) %>%
+      select(-en_in) ->
+      L123.pct_in_state_elec_F
 
-    # Electricity generation inputs by fuel and state
-    # Allocating total energy input values to states using shares
-    L123.in_EJ_state_elec_F <- L123.pct_state_elec_F %>%
-      # L123.in_EJ_R_elec_F_Yh only has certain fuels
-      filter(fuel %in% unique(L123.in_EJ_R_elec_F_Yh$fuel)) %>%
-      left_join_error_no_match(L123.in_EJ_R_elec_F_Yh %>%
-                                 select(fuel, year, value),
-                               by = c("fuel", "year")) %>%
-      # Multiplying state share by total value
-      mutate(value = value.x * value.y,
-             sector = "electricity generation") %>%
-      select(-value.x, -value.y)
+    L123.pct_out_state_elec_F %>%
+      repeat_add_columns(tibble::tibble(year = HISTORICAL_YEARS)) %>%
+      select(-en_out) ->
+      L123.pct_out_state_elec_F
 
-    # Electricity generation outputs by fuel and state
-    # Allocating total electricity generation values to states using shares
-    L123.out_EJ_state_elec_F <- L123.pct_state_elec_F %>%
-      left_join_error_no_match(L123.out_EJ_R_elec_F_Yh %>%
-                                 select(fuel, year, value),
-                               by = c("fuel", "year")) %>%
-      # Multiplying state share by total value
-      mutate(value = value.x * value.y,
-             sector = "electricity generation") %>%
-      select(-value.x, -value.y)
+    L123.pct_in_state_elec_F %>%
+      filter(fuel %in% L123.in_EJ_R_elec_F_Yh$fuel) %>%
+      left_join_error_no_match(L123.in_EJ_R_elec_F_Yh, by = c("fuel", "year")) %>%
+      mutate(value = value.x * value.y) %>%
+      select(state, sector, fuel, elec_tech, year, value) ->
+      L123.in_EJ_state_elec_F_tech
+
+    L123.in_EJ_state_elec_F_tech %>%
+      group_by(state, sector, fuel, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup() ->
+      L123.in_EJ_state_elec_F
+
+    L123.pct_out_state_elec_F %>%
+      left_join_error_no_match(L123.out_EJ_R_elec_F_Yh, by = c("fuel", "year")) %>%
+      mutate(value = value.x * value.y) %>%
+      select(state, sector, fuel, elec_tech, year, value) ->
+      L123.out_EJ_state_elec_F_tech
+
+    L123.out_EJ_state_elec_F_tech %>%
+      group_by(state, sector, fuel, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup() ->
+      L123.out_EJ_state_elec_F
+
+    # ELECTRICITY - CAPACITY
+    # rewrite from dispatch branch LB123.Electricity.R
+    # TODO: giving 2010 capacity to all historical years (capacity factors will low < 2010) (plp)
+
+    elec_capacity_state_vintage %>%
+      repeat_add_columns(tibble::tibble(year = HISTORICAL_YEARS)) ->
+      L123.capacity_EJ_state_elec_F_tech
+
+    # Note: here the capacity unit is EJ
+    # TODO: check why some capacity factor is greater than 1
+    L123.out_EJ_state_elec_F_tech %>%
+      left_join_error_no_match(elec_capacity_state_vintage %>% rename(fuel = gcam_fuel),
+                               by = c("state", "fuel", "elec_tech")) %>%
+      mutate(capacity_factor = value / capacity) %>%
+      select(-capacity) ->
+      L123.capacity_factor_EJ_state_elec_F_tech
 
     # ELECTRICITY - OWNUSE
     # NOTE: Electricity net own use energy is apportioned to states on the basis of EIA's direct use by state
     # First calculate the national own use quantity
+    # Keep the original code as it is for this portion
     L123.net_EJ_USA_ownuse <- L126.in_EJ_R_elecownuse_F_Yh %>%
       left_join_error_no_match(L126.out_EJ_R_elecownuse_F_Yh, by = c("sector", "fuel", "year")) %>%
       # Net value = input value - output value
@@ -161,28 +203,41 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
     L123.in_EJ_state_elec_F %>%
       add_title("Electricity sector energy consumption by state and fuel") %>%
       add_units("EJ") %>%
-      add_comments("State fuel shares created from L101.inEIA_EJ_state_S_F multiplied by USA totals from L123.in_EJ_R_elec_F_Yh") %>%
+      add_comments("State fuel shares created from elec_fuelconsumption_state_vintage multiplied by USA totals from L123.in_EJ_R_elec_F_Yh") %>%
       add_legacy_name("L123.in_EJ_state_elec_F") %>%
-      add_precursors("L101.inEIA_EJ_state_S_F", "gcam-usa/NREL_us_re_technical_potential",
-                     "gcam-usa/states_subregions", "L123.in_EJ_R_elec_F_Yh") ->
+      add_precursors("gcam-usa/elec_fuelconsumption_state_vintage", "L123.in_EJ_R_elec_F_Yh") ->
       L123.in_EJ_state_elec_F
+
+    L123.in_EJ_state_elec_F_tech %>%
+      add_title("Electricity sector energy consumption by state and fuel and technology") %>%
+      add_units("EJ") %>%
+      add_comments("State fuel shares created from elec_fuelconsumption_state_vintage multiplied by USA totals from L123.in_EJ_R_elec_F_Yh") %>%
+      add_legacy_name("L123.in_EJ_state_elec_F_tech") %>%
+      add_precursors("gcam-usa/elec_fuelconsumption_state_vintage", "L123.in_EJ_R_elec_F_Yh") ->
+      L123.in_EJ_state_elec_F_tech
 
     L123.out_EJ_state_elec_F %>%
       add_title("Electricity generation by state and fuel") %>%
       add_units("EJ") %>%
-      add_comments("State fuel shares created from L101.inEIA_EJ_state_S_F multiplied by USA totals from L123.out_EJ_R_elec_F_Yh") %>%
+      add_comments("State fuel shares created from elec_generation_state_vintage multiplied by USA totals from L123.out_EJ_R_elec_F_Yh") %>%
       add_legacy_name("L123.out_EJ_state_elec_F") %>%
-      add_precursors("L101.inEIA_EJ_state_S_F", "gcam-usa/NREL_us_re_technical_potential",
-                     "gcam-usa/states_subregions", "L123.out_EJ_R_elec_F_Yh") ->
+      add_precursors("gcam-usa/elec_generation_state_vintage", "L123.out_EJ_R_elec_F_Yh") ->
       L123.out_EJ_state_elec_F
+
+    L123.out_EJ_state_elec_F_tech %>%
+      add_title("Electricity generation by state, fuel and technology") %>%
+      add_units("EJ") %>%
+      add_comments("State fuel shares created from elec_generation_state_vintage multiplied by USA totals from L123.out_EJ_R_elec_F_Yh") %>%
+      add_legacy_name("L123.out_EJ_state_elec_F_tech") %>%
+      add_precursors("gcam-usa/elec_generation_state_vintage", "L123.out_EJ_R_elec_F_Yh") ->
+      L123.out_EJ_state_elec_F_tech
 
     L123.in_EJ_state_ownuse_elec %>%
       add_title("Input to electricity net ownuse by state") %>%
       add_units("EJ") %>%
       add_comments("Sum of all generation from L123.out_EJ_state_elec_F and L132.out_EJ_state_indchp_F") %>%
       add_legacy_name("L123.in_EJ_state_ownuse_elec") %>%
-      add_precursors("L101.inEIA_EJ_state_S_F", "gcam-usa/NREL_us_re_technical_potential",
-                     "gcam-usa/states_subregions", "L123.out_EJ_R_elec_F_Yh", "L132.out_EJ_state_indchp_F") ->
+      add_precursors("L123.out_EJ_R_elec_F_Yh", "L132.out_EJ_state_indchp_F") ->
       L123.in_EJ_state_ownuse_elec
 
     L123.out_EJ_state_ownuse_elec %>%
@@ -191,12 +246,31 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       add_comments("Input values from L123.in_EJ_state_ownuse_elec subtracted by net values") %>%
       add_comments("Net values created with states shares from EIA_elect_td_ownuse_prices and USA total net from L126 files") %>%
       add_legacy_name("L123.out_EJ_state_ownuse_elec") %>%
-      add_precursors("L101.inEIA_EJ_state_S_F", "gcam-usa/NREL_us_re_technical_potential",
-                     "gcam-usa/states_subregions", "L123.out_EJ_R_elec_F_Yh", "L132.out_EJ_state_indchp_F",
+      add_precursors("L123.out_EJ_R_elec_F_Yh", "L132.out_EJ_state_indchp_F",
                      "L126.in_EJ_R_elecownuse_F_Yh", "L126.out_EJ_R_elecownuse_F_Yh", "gcam-usa/EIA_elect_td_ownuse_prices")  ->
       L123.out_EJ_state_ownuse_elec
 
-    return_data(L123.in_EJ_state_elec_F, L123.out_EJ_state_elec_F, L123.in_EJ_state_ownuse_elec, L123.out_EJ_state_ownuse_elec)
+    L123.capacity_EJ_state_elec_F_tech %>%
+      add_title("Electricity generation capacity by state and fuel and tech") %>%
+      add_units("EJ") %>%
+      add_comments("giving 2010 capacity to all historical years (capacity factors will low < 2010)") %>%
+      add_legacy_name("L123.capacity_EJ_state_elec_F_tech") %>%
+      add_precursors("gcam-usa/elec_capacity_state_vintage")  ->
+      L123.capacity_EJ_state_elec_F_tech
+
+    L123.capacity_factor_EJ_state_elec_F_tech %>%
+      add_title("Electricity generation capacity factor by state and fuel and tech") %>%
+      add_units("NA") %>%
+      add_comments("Need to check why some capacity factor is greater than 1") %>%
+      add_legacy_name("L123.capacity_factor_EJ_state_elec_F_tech") %>%
+      add_precursors("gcam-usa/elec_capacity_state_vintage", "gcam-usa/elec_generation_state_vintage",
+                     "L123.out_EJ_R_elec_F_Yh")  ->
+      L123.capacity_factor_EJ_state_elec_F_tech
+
+
+    return_data(L123.in_EJ_state_elec_F_tech, L123.out_EJ_state_elec_F, L123.in_EJ_state_ownuse_elec, L123.out_EJ_state_ownuse_elec,
+                L123.out_EJ_state_elec_F_tech, L123.capacity_EJ_state_elec_F_tech, L123.capacity_factor_EJ_state_elec_F_tech,
+                L123.in_EJ_state_elec_F)
   } else {
     stop("Unknown command")
   }
