@@ -159,6 +159,8 @@ void CapacityTechnology::completeInit(const std::string& aRegionName,
     // replace the primary output with a generic output (does not add supply to market)
     delete mOutputs[ 0 ];
     mOutputs[ 0 ] = new GenericOutput( aSectorName );
+    
+    initTechVintageVector();
 
 	// Make some tests for bad inputs
 	if (mCapacityFactor == 0.0) {

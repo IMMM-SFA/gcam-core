@@ -12,25 +12,26 @@
 #' \code{L2232.Supplysector_elec_FERC}, \code{L2232.ElecReserve_FERC}, \code{L2232.SubsectorShrwtFllt_elec_FERC},
 #' \code{L2232.SubsectorInterp_elec_FERC}, \code{L2232.SubsectorLogit_elec_FERC}, \code{L2232.TechShrwt_elec_FERC},
 #' \code{L2232.TechCoef_elec_FERC}, \code{L2232.TechCoef_elecownuse_FERC}, \code{L2232.Production_imports_FERC},
-#' \code{L2232.Production_elec_gen_FERC}, \code{L2232.StubTechElecMarket_backup_USA}. The corresponding file in the
+#' \code{L2232.Production_elec_gen_FERC}. The corresponding file in the
 #' original data system was \code{L2232.electricity_FERC_USA.R} (gcam-usa level2).
 #' @details This chunk generates input files to create electricity trade and passthrough sectors for the grid regions,
 #' and balances electricity supply and demand for each grid region.
+#' @details Update 2020 YO delete L2232.StubTechElecMarket_backup_USA related for dispatch rebase
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
-#' @author RC Oct 2017
-disabled_module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
+#' @author RC Oct 2017 / YO Mar 2020
+module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",
              FILE = "energy/A23.sector",
              FILE = "gcam-usa/A232.structure",
+             "L102.load_segments_gcamusa",
              "L123.in_EJ_state_ownuse_elec",
              "L123.out_EJ_state_ownuse_elec",
              "L126.in_EJ_state_td_elec",
              "L132.out_EJ_state_indchp_F",
-             "L1232.out_EJ_sR_elec",
-             "L223.StubTechMarket_backup_USA"))
+             "L1232.out_EJ_sR_elec"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L2232.DeleteSupplysector_USAelec",
              "L2232.Supplysector_USAelec",
@@ -49,8 +50,7 @@ disabled_module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
              "L2232.TechCoef_elec_FERC",
              "L2232.TechCoef_elecownuse_FERC",
              "L2232.Production_imports_FERC",
-             "L2232.Production_elec_gen_FERC",
-             "L2232.StubTechElecMarket_backup_USA"))
+             "L2232.Production_elec_gen_FERC"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -71,8 +71,7 @@ disabled_module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
     L126.in_EJ_state_td_elec <- get_data(all_data, "L126.in_EJ_state_td_elec")
     L132.out_EJ_state_indchp_F <- get_data(all_data, "L132.out_EJ_state_indchp_F")
     L1232.out_EJ_sR_elec <- get_data(all_data, "L1232.out_EJ_sR_elec")
-    L223.StubTechMarket_backup_USA <- get_data(all_data, "L223.StubTechMarket_backup_USA")
-
+    L102.load_segments <- get_data(all_data, "L102.load_segments_gcamusa")
     # This chunk builds the electric sector model with demand resolved at the grid region level.
 
     # A vector of USA grid region names
@@ -338,14 +337,207 @@ disabled_module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       L2232.Production_elec_gen_FERC
 
     # PART 3: THE STATES
-    # L2232.StubTechElecMarket_backup_USA_FERC: electric sector name for states
-    # Reset the electric sector market to the grid regions (for backup calculations)
-    L223.StubTechMarket_backup_USA %>%
-      select(LEVEL2_DATA_NAMES[["StubTechYr"]]) %>%
-      left_join_error_no_match(select(states_subregions, electric.sector.market = grid_region, state),
-                               by = c("region" = "state")) ->
-      L2232.StubTechElecMarket_backup_USA
+    #-----------------------------------------------------------------------------
+    # Adjust tables to include segments for dispatch
+    L102.load_segments %>%
+      # join duplicates rows because most grid regions map to more than one state
+      # LJENM throws an error, so left_join() is used
+      left_join(states_subregions %>%
+                  dplyr::select(state, grid_region),
+                by = ("grid_region")) ->
+      segStates
 
+    L2232.Supplysector_USAelec %>%
+      # join duplicates rows because electricity trade sector is created for 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(segment) %>%
+                  mutate(region = gcam.USA_REGION),
+                by = "region") %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.Supplysector_USAelec
+
+    L2232.SubsectorInterp_USAelec %>%
+      # join duplicates rows because electricity trade subsectors are multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(segment) %>%
+                  mutate(region = gcam.USA_REGION),
+                by = "region") %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.SubsectorInterp_USAelec
+
+    L2232.SubsectorShrwtFllt_USAelec %>%
+      # join duplicates rows because electricity trade subsectors are multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(segment) %>%
+                  mutate(region = gcam.USA_REGION),
+                by = "region") %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.SubsectorShrwtFllt_USAelec
+
+    L2232.SubsectorLogit_USAelec %>%
+      # join duplicates rows because electricity trade subsectors are multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(segment) %>%
+                  mutate(region = gcam.USA_REGION),
+                by = "region") %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.SubsectorLogit_USAelec
+
+    L2232.TechShrwt_USAelec %>%
+      # join duplicates rows because electricity trade technologies are multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(grid_region, segment),
+                by = c("grid_region")) %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_"),
+             technology = paste(technology, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.TechShrwt_USAelec
+
+    L2232.TechCoef_USAelec %>%
+      # join duplicates rows because electricity trade technologies are multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(grid_region, segment),
+                by = c("market.name" = "grid_region")) %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_"),
+             technology = paste(technology, segment, sep = "_"),
+             minicam.energy.input = paste(minicam.energy.input, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.TechCoef_USAelec
+
+    L2232.Production_exports_USAelec %>%
+      mutate(grid_region = gsub(" electricity trade", "", technology)) %>%
+      # join duplicates rows because electricity trade technologies are multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(segment, grid_region, generation.fraction),
+                by = "grid_region") %>%
+      mutate(calOutputValue = calOutputValue * generation.fraction,
+             supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_"),
+             technology = paste(technology, segment, sep = "_")) %>%
+      select(-segment, -generation.fraction, -grid_region) ->
+      L2232.Production_exports_USAelec
+
+    L2232.Supplysector_elec_FERC  %>%
+      # join duplicates rows because each entry is multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(grid_region, segment),
+                by = c("region" = "grid_region"))  %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.Supplysector_elec_FERC
+
+    L2232.SubsectorShrwtFllt_elec_FERC %>%
+      # join duplicates rows because each entry is multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(grid_region, segment),
+                by = c("region" = "grid_region")) %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.SubsectorShrwtFllt_elec_FERC
+
+    L2232.SubsectorInterp_elec_FERC %>%
+      # join duplicates rows because each entry is multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(grid_region, segment),
+                by = c("region" = "grid_region"))  %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.SubsectorInterp_elec_FERC
+
+    L2232.SubsectorLogit_elec_FERC %>%
+      # join duplicates rows because each entry is multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>% distinct(grid_region, segment),
+                by = c("region" = "grid_region"))  %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.SubsectorLogit_elec_FERC
+
+    L2232.TechShrwt_elec_FERC %>%
+      # join duplicates rows because each entry is multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(grid_region, segment),
+                by = c("region" = "grid_region")) %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_"),
+             technology = paste(technology, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.TechShrwt_elec_FERC
+
+    L2232.TechCoef_elec_FERC %>%
+      # join duplicates rows because each entry is multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(grid_region, segment),
+                by = c("region" = "grid_region")) %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_"),
+             technology = paste(technology, segment, sep = "_"),
+             minicam.energy.input = paste(minicam.energy.input, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.TechCoef_elec_FERC
+
+    L2232.TechCoef_elecownuse_FERC  %>%
+      # join duplicates rows because each entry is multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(grid_region, segment),
+                by = c("region" = "grid_region")) %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_"),
+             technology = paste(technology, segment, sep = "_"),
+             minicam.energy.input = paste(minicam.energy.input, segment, sep = "_")) %>%
+      select(-segment) ->
+      L2232.TechCoef_elecownuse_FERC
+
+    L2232.Production_imports_FERC %>%
+      # join duplicates rows because each entry is multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(grid_region, segment, generation.fraction),
+                by = c("region" = "grid_region")) %>%
+      mutate(calOutputValue = calOutputValue * generation.fraction,
+             supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_"),
+             technology = paste(technology, segment, sep = "_")) %>%
+      select(-segment, -generation.fraction)->
+      L2232.Production_imports_FERC
+
+    L2232.Production_elec_gen_FERC %>%
+      # join duplicates rows because each entry is multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  distinct(grid_region, segment, generation.fraction),
+                by = c("region" = "grid_region")) %>%
+      mutate(calOutputValue = calOutputValue * generation.fraction,
+             supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_"),
+             technology = paste(technology, segment, sep = "_")) %>%
+      select(-segment, -generation.fraction) ->
+      L2232.Production_elec_gen_FERC
 
     # Produce outputs
     L2232.DeleteSupplysector_USAelec %>%
@@ -361,7 +553,7 @@ disabled_module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       add_comments("All of the supplysector information is the same as before") %>%
       add_comments("except including logit exponent between grid regions") %>%
       add_legacy_name("L2232.Supplysector_USAelec") %>%
-      add_precursors("gcam-usa/A232.structure") ->
+      add_precursors("gcam-usa/A232.structure", "L102.load_segments_gcamusa") ->
       L2232.Supplysector_USAelec
 
     L2232.SubsectorShrwtFllt_USAelec %>%
@@ -370,7 +562,8 @@ disabled_module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       add_comments("No need to read in subsector logit exponents, which are applied to the technology competition") %>%
       add_legacy_name("L2232.SubsectorShrwtFllt_USAelec") %>%
       add_precursors("gcam-usa/states_subregions",
-                     "gcam-usa/A232.structure") ->
+                     "gcam-usa/A232.structure",
+                     "L102.load_segments_gcamusa") ->
       L2232.SubsectorShrwtFllt_USAelec
 
     L2232.SubsectorInterp_USAelec %>%
@@ -396,7 +589,8 @@ disabled_module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       add_comments("Set the same value across all model years") %>%
       add_legacy_name("L2232.TechShrwt_USAelec") %>%
       add_precursors("gcam-usa/A232.structure",
-                     "gcam-usa/states_subregions") ->
+                     "gcam-usa/states_subregions",
+                     "L102.load_segments_gcamusa") ->
       L2232.TechShrwt_USAelec
 
     L2232.TechCoef_USAelec %>%
@@ -431,7 +625,8 @@ disabled_module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       add_comments("Include electricity net own use and electricy domestic supply sectors") %>%
       add_legacy_name("L2232.Supplysector_elec_FERC") %>%
       add_precursors("gcam-usa/A232.structure",
-                     "gcam-usa/states_subregions") ->
+                     "gcam-usa/states_subregions",
+                     "L102.load_segments_gcamusa") ->
       L2232.Supplysector_elec_FERC
 
     L2232.ElecReserve_FERC %>%
@@ -449,7 +644,8 @@ disabled_module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       add_comments("Include electricity net own use and electricy domestic supply sectors") %>%
       add_legacy_name("L2232.SubsectorShrwtFllt_elec_FERC") %>%
       add_precursors("gcam-usa/A232.structure",
-                     "gcam-usa/states_subregions") ->
+                     "gcam-usa/states_subregions",
+                     "L102.load_segments_gcamusa") ->
       L2232.SubsectorShrwtFllt_elec_FERC
 
     L2232.SubsectorInterp_elec_FERC %>%
@@ -474,7 +670,8 @@ disabled_module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       add_comments("Include electricity net own use and electricy domestic supply sectors") %>%
       add_legacy_name("L2232.TechShrwt_elec_FERC") %>%
       add_precursors("gcam-usa/A232.structure",
-                     "gcam-usa/states_subregions") ->
+                     "gcam-usa/states_subregions",
+                     "L102.load_segments_gcamusa") ->
       L2232.TechShrwt_elec_FERC
 
     L2232.TechCoef_elec_FERC %>%
@@ -525,21 +722,12 @@ disabled_module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       same_precursors_as("L2232.Production_exports_USAelec") ->
       L2232.Production_elec_gen_FERC
 
-    L2232.StubTechElecMarket_backup_USA %>%
-      add_title("Electric sector name for states") %>%
-      add_units("Unitless") %>%
-      add_comments("Reset the electric sector market to the grid regions (for backup calculations)") %>%
-      add_legacy_name("L2232.StubTechElecMarket_backup_USA") %>%
-      add_precursors("L223.StubTechMarket_backup_USA") ->
-      L2232.StubTechElecMarket_backup_USA
-
     return_data(L2232.DeleteSupplysector_USAelec, L2232.Supplysector_USAelec, L2232.SubsectorShrwtFllt_USAelec,
                 L2232.SubsectorInterp_USAelec, L2232.SubsectorLogit_USAelec, L2232.TechShrwt_USAelec,
                 L2232.TechCoef_USAelec, L2232.Production_exports_USAelec, L2232.Supplysector_elec_FERC,
                 L2232.ElecReserve_FERC, L2232.SubsectorShrwtFllt_elec_FERC, L2232.SubsectorInterp_elec_FERC,
                 L2232.SubsectorLogit_elec_FERC, L2232.TechShrwt_elec_FERC, L2232.TechCoef_elec_FERC,
-                L2232.TechCoef_elecownuse_FERC, L2232.Production_imports_FERC, L2232.Production_elec_gen_FERC,
-                L2232.StubTechElecMarket_backup_USA)
+                L2232.TechCoef_elecownuse_FERC, L2232.Production_imports_FERC, L2232.Production_elec_gen_FERC)
   } else {
     stop("Unknown command")
   }

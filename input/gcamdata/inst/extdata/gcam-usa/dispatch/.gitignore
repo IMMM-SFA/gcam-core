@@ -1,0 +1,4 @@
+# ingnore the large hourly datasets used in the GCAM-USA dispatch
+DD_prima45_prima85.csv
+FERC_hourly_gen.csv
+wind_CFt.csv

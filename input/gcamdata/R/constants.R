@@ -692,7 +692,7 @@ gcamusa.DIGITS_EMISSIONS          <- 5
 
 # Electricity load segments
 gcamusa.LOAD_SEG_CAL_YEARS <- c(2010, 2005, 1990)       # Years for which electricity load segments are calibrated
-gcamusa.ELEC_SEGMENT_BASE <- "base load generation"
+gcamusa.ELEC_SEGMENT_BASE <- "baseload generation" # TODO: space between base and laod?
 gcamusa.ELEC_SEGMENT_INT <- "intermediate generation"
 gcamusa.ELEC_SEGMENT_SUBPEAK <- "subpeak generation"
 gcamusa.ELEC_SEGMENT_PEAK <- "peak generation"
@@ -700,8 +700,32 @@ gcamusa.ELEC_SEGMENT_PEAK <- "peak generation"
 # Electricity dispatch module
 gcamusa.ELEC_GEN_NAMES <- "electricity"
 gcamusa.ELEC_INV_NAMES <- c("peak electricity", "subpeak electricity", "intermediate electricity", "baseload electricity")
+# Used in combination with hourly generation profile to define the shape of the investment segments
+# where these breaks bind the hour into base, intermediate, subpeak, and peak based off of percentile
+# load. Note the breaks are applied exclusive to inclusive, i.e. (-0.001, 0.1], (0.1, 0.7], etc
+gcamusa.ELEC_INV_SHAPE <- c(0-0.001, 0.10, 0.7, 0.95, 1.0)
 gcamusa.ELEC_BASELOAD_HRS <- 8760 # technically here should be 8766 considering leap years
+gcamusa.ELEC_SEGMENT_SUPERPEAK <- "superpeak"
+gcamusa.ELEC_SUPERPEAK_HRS <- 10L
+gcamusa.SEGMENT_DELIM <- "_"
+gcamusa.MONTH_ORDER <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+gcamusa.DAYNIGHT_ORDER <- c("day", "night")
+gcamusa.ELEC_LOAD_SEGMENT_ORDER <- c("Jan_day", "Jan_night", "Feb_day","Feb_night", "Mar_day", "Mar_night","Apr_day", "Apr_night",
+                                     "May_day", "May_night", "Jun_day", "Jun_night","Jul_day", "Jul_night","Aug_day", "Aug_night",
+                                     "Sep_day", "Sep_night", "Oct_day", "Oct_night", "Nov_day", "Nov_night", "Dec_day", "Dec_night",
+                                     "superpeak")
+# threshold to define a temperature difference below which we do not heat or cool
+gcamusa.DEGREE_HOUR_CUTOFF <- 5.0
+# investment reserve margin
+# TODO: used in L223.electricity_USA.R, need to explain
+gcamusa.ELEC_INV_MARGIN <- 0.2
 
+# default capacity credit for renewables:
+# 2.5 (1975$/GJ) basically comes from the levelized capital cost of a gas combustion turbine.
+# And the idea is that all electricity users contribute to this investment credit
+# (thus gets added on to the dispatch price) and the on the investment tech side it is
+# given as a credit / subsidy (with the intermittent techs getting a reduced credit).
+gcamusa.ELEC_DEFAULT_RE_CC <- -2.5
 
 # Time shift conditions ======================================================================
 # Uncomment these lines to run under 'timeshift' conditions

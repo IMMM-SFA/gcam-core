@@ -9,6 +9,7 @@
 #' the generated outputs: \code{L232.DeleteSupplysector_USAind}, \code{L232.DeleteFinalDemand_USAind},
 #' \code{L232.StubTechCalInput_indenergy_USA}, \code{L232.StubTechCalInput_indfeed_USA}, \code{L232.StubTechProd_industry_USA},
 #' \code{L232.StubTechCoef_industry_USA}, \code{L232.StubTechMarket_ind_USA}, \code{L232.StubTechSecMarket_ind_USA},
+#' \code{L232.StubTechSecOut_ind_USA}, \code{L232.StubTechDeleteSecOut_ind_USA},
 #' \code{L232.BaseService_ind_USA}, \code{L232.Supplysector_ind_USA}, \code{L232.FinalEnergyKeyword_ind_USA},
 #' \code{L232.SubsectorLogit_ind_USA}, \code{L232.SubsectorShrwtFllt_ind_USA}, \code{L232.SubsectorInterp_ind_USA},
 #' \code{L232.StubTech_ind_USA}, \code{L232.StubTechInterp_ind_USA}, \code{L232.PerCapitaBased_ind_USA},
@@ -18,13 +19,14 @@
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
-#' @author ST October 2017
+#' @author ST October 2017 / YO April 2020
 module_gcamusa_L232.industry_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",
              FILE = "energy/A32.demand",
              FILE = "energy/A32.globaltech_eff",
              FILE = "energy/calibrated_techs",
+             "L102.load_segments_gcamusa",
              "L232.Supplysector_ind",
              "L232.StubTech_ind",
              "L232.PerCapitaBased_ind",
@@ -40,7 +42,8 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
              "L232.StubTechInterp_ind",
              "L232.PerCapitaBased_ind",
              "L232.PriceElasticity_ind",
-             "L232.IncomeElasticity_ind_gcam3"))
+             "L232.IncomeElasticity_ind_gcam3",
+             "L232.GlobalTechSecOut_ind"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L232.DeleteSupplysector_USAind",
              "L232.DeleteFinalDemand_USAind",
@@ -50,6 +53,8 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
              "L232.StubTechCoef_industry_USA",
              "L232.StubTechMarket_ind_USA",
              "L232.StubTechSecMarket_ind_USA",
+             "L232.StubTechSecOut_ind_USA",
+             "L232.StubTechDeleteSecOut_ind_USA",
              "L232.BaseService_ind_USA",
              "L232.Supplysector_ind_USA",
              "L232.FinalEnergyKeyword_ind_USA",
@@ -93,8 +98,8 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
     L232.PerCapitaBased_ind <- get_data(all_data, "L232.PerCapitaBased_ind")
     L232.PriceElasticity_ind <- get_data(all_data, "L232.PriceElasticity_ind")
     L232.IncomeElasticity_ind_gcam3 <- get_data(all_data, "L232.IncomeElasticity_ind_gcam3")
-
-
+    L102.load_segments <- get_data(all_data, "L102.load_segments_gcamusa")
+    L232.GlobalTechSecOut_ind <- get_data(all_data, "L232.GlobalTechSecOut_ind")
     # ===================================================
     # Data Processing
 
@@ -313,6 +318,49 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
       mutate(energy.final.demand = A32.demand$energy.final.demand) ->
       L232.BaseService_ind_USA  # base service is equal to the output of the industry supplysector
 
+    # dispatch update
+    # Creating new table for distributing industry cogeneration
+    L102.load_segments %>%
+      # join duplicates rows because most grid regions map to more than one state
+      # LJENM throws an error, so left_join() is used
+      left_join(states_subregions %>%
+                  dplyr::select(state, grid_region),
+                by = "grid_region") ->
+      segStates
+
+    L232.StubTechSecMarket_ind_USA %>%
+      # join duplicates rows because each entry is multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(segStates %>%
+                  dplyr::select(state, segment),
+                by = c("region" = "state")) %>%
+      mutate(secondary.output = paste(secondary.output, segment, sep = "_")) ->
+      L232.StubTechSecMarket_ind_USA_temp
+
+    L232.StubTechSecMarket_ind_USA_temp %>%
+      select(-market.name) %>%
+      left_join_error_no_match(L232.GlobalTechSecOut_ind %>%
+                                 select(-secondary.output),
+                               by = c("supplysector" = "sector.name",
+                                      "subsector" = "subsector.name",
+                                      "stub.technology" = "technology",
+                                      "year")) %>%
+      left_join_error_no_match(segStates %>%
+                  dplyr::select(state, segment, generation.fraction),
+                by = c("region" = "state", "segment")) %>%
+      mutate(output.ratio = output.ratio * generation.fraction) %>%
+      select(-segment, -generation.fraction) ->
+      L232.StubTechSecOut_ind_USA
+
+    L232.StubTechSecMarket_ind_USA_temp %>%
+      select(-segment) -> L232.StubTechSecMarket_ind_USA
+
+    # Create new table to remove previous assignment of "electricity" secondary.output from each state
+    L232.StubTechSecOut_ind_USA %>%
+      select(-output.ratio) %>%
+      mutate(secondary.output = "electricity") %>%
+      unique() ->
+      L232.StubTechDeleteSecOut_ind_USA
 
     # ===================================================
     # Produce outputs
@@ -393,6 +441,26 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
                      "energy/A32.globaltech_eff",
                      "gcam-usa/states_subregions") ->
       L232.StubTechSecMarket_ind_USA
+
+    L232.StubTechSecOut_ind_USA %>%
+      add_title("output ratio for the cogenerated electricity (secondary output)") %>%
+      add_units("Unitless") %>%
+      add_comments("map L232.GlobalTechSecOut_ind into segment by generation fraction of each segment") %>%
+      add_legacy_name("L232.StubTechSecOut_ind_USA") %>%
+      add_precursors("L232.StubTech_ind",
+                     "energy/A32.globaltech_eff",
+                     "gcam-usa/states_subregions",
+                     "L102.load_segments_gcamusa",
+                     "L232.GlobalTechSecOut_ind") ->
+      L232.StubTechSecOut_ind_USA
+
+    L232.StubTechDeleteSecOut_ind_USA %>%
+      add_title("remove previous assignment of secondary.output of electricity from each state") %>%
+      add_units("Unitless") %>%
+      add_comments("remove previous assignment of secondary.output of electricity from each state") %>%
+      add_legacy_name("L232.StubTechDeleteSecOut_ind_USA") %>%
+      same_precursors_as("L232.StubTechSecOut_ind_USA") ->
+      L232.StubTechDeleteSecOut_ind_USA
 
     L232.BaseService_ind_USA %>%
       add_title("base-year service output of industry final demand") %>%
@@ -497,6 +565,8 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
                 L232.StubTechCoef_industry_USA,
                 L232.StubTechMarket_ind_USA,
                 L232.StubTechSecMarket_ind_USA,
+                L232.StubTechSecOut_ind_USA,
+                L232.StubTechDeleteSecOut_ind_USA,
                 L232.BaseService_ind_USA,
                 L232.Supplysector_ind_USA,
                 L232.FinalEnergyKeyword_ind_USA,

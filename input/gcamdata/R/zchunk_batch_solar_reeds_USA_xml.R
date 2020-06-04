@@ -8,24 +8,30 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{solar_reeds_USA.xml}.
 #' The corresponding file in the original data system was \code{batch_solar_USA_reeds.xml} (gcamusa XML batch).
-disabled_module_gcamusa_batch_solar_reeds_USA_xml <- function(command, ...) {
+module_gcamusa_batch_solar_reeds_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L2238.DeleteStubTechMinicamEnergyInput_PV_reeds_USA",
+    return(c("L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA",
+             "L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA",
              "L2238.RenewRsrc_PV_reeds_USA",
              "L2238.GrdRenewRsrcCurves_PV_reeds_USA",
              "L2238.GrdRenewRsrcMax_PV_reeds_USA",
-             "L2238.StubTechEffFlag_PV_reeds_USA",
-             "L2238.StubTechCapFactor_PV_reeds_USA",
+             "L2238.StubTechEffFlag_investment_PV_reeds_USA",
+             "L2238.StubTechEffFlag_dispatch_PV_reeds_USA",
+             "L2238.StubTechPmultFlag_dispatch_PV_reeds_USA",
+             # "L2238.StubTechCapFactor_PV_reeds_USA",
              "L2238.RenewRsrcTechChange_PV_reeds_USA",
              "L2238.StubTechCost_PV_reeds_USA",
              "L2238.ResTechShrwt_PV_reeds_USA",
              "L2239.DeleteUnlimitRsrc_reeds_USA",
-             "L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA",
+             "L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA",
+             "L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA",
              "L2239.RenewRsrc_CSP_reeds_USA",
              "L2239.GrdRenewRsrcCurves_CSP_reeds_USA",
              "L2239.GrdRenewRsrcMax_CSP_reeds_USA",
-             "L2239.StubTechEffFlag_CSP_reeds_USA",
-             "L2239.StubTechCapFactor_CSP_reeds_USA",
+             "L2239.StubTechEffFlag_investment_CSP_reeds_USA",
+             "L2239.StubTechEffFlag_dispatch_CSP_reeds_USA",
+             "L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA",
+             # "L2239.StubTechCapFactor_CSP_reeds_USA",
              "L2239.RenewRsrcTechChange_CSP_reeds_USA",
              "L2239.StubTechCost_CSP_reeds_USA",
              "L2239.ResTechShrwt_CSP_reeds_USA"))
@@ -36,22 +42,28 @@ disabled_module_gcamusa_batch_solar_reeds_USA_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L2238.DeleteStubTechMinicamEnergyInput_PV_reeds_USA <- get_data(all_data, "L2238.DeleteStubTechMinicamEnergyInput_PV_reeds_USA")
+    L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA <- get_data(all_data,"L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA")
+    L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA <- get_data(all_data, "L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA")
     L2238.RenewRsrc_PV_reeds_USA <- get_data(all_data, "L2238.RenewRsrc_PV_reeds_USA")
     L2238.GrdRenewRsrcCurves_PV_reeds_USA <- get_data(all_data, "L2238.GrdRenewRsrcCurves_PV_reeds_USA")
     L2238.GrdRenewRsrcMax_PV_reeds_USA <- get_data(all_data, "L2238.GrdRenewRsrcMax_PV_reeds_USA")
-    L2238.StubTechEffFlag_PV_reeds_USA <- get_data(all_data, "L2238.StubTechEffFlag_PV_reeds_USA")
-    L2238.StubTechCapFactor_PV_reeds_USA <- get_data(all_data, "L2238.StubTechCapFactor_PV_reeds_USA")
+    L2238.StubTechEffFlag_investment_PV_reeds_USA <- get_data(all_data, "L2238.StubTechEffFlag_investment_PV_reeds_USA")
+    L2238.StubTechEffFlag_dispatch_PV_reeds_USA <- get_data(all_data, "L2238.StubTechEffFlag_dispatch_PV_reeds_USA")
+    L2238.StubTechPmultFlag_dispatch_PV_reeds_USA <- get_data(all_data, "L2238.StubTechPmultFlag_dispatch_PV_reeds_USA")
+    # L2238.StubTechCapFactor_PV_reeds_USA <- get_data(all_data, "L2238.StubTechCapFactor_PV_reeds_USA")
     L2238.RenewRsrcTechChange_PV_reeds_USA <- get_data(all_data, "L2238.RenewRsrcTechChange_PV_reeds_USA")
     L2238.StubTechCost_PV_reeds_USA <- get_data(all_data, "L2238.StubTechCost_PV_reeds_USA")
     L2238.ResTechShrwt_PV_reeds_USA <- get_data(all_data, "L2238.ResTechShrwt_PV_reeds_USA")
     L2239.DeleteUnlimitRsrc_reeds_USA <- get_data(all_data, "L2239.DeleteUnlimitRsrc_reeds_USA")
-    L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA <- get_data(all_data, "L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA")
+    L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA <- get_data(all_data, "L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA")
+    L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA <- get_data(all_data, "L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA")
     L2239.RenewRsrc_CSP_reeds_USA <- get_data(all_data, "L2239.RenewRsrc_CSP_reeds_USA")
     L2239.GrdRenewRsrcCurves_CSP_reeds_USA <- get_data(all_data, "L2239.GrdRenewRsrcCurves_CSP_reeds_USA")
     L2239.GrdRenewRsrcMax_CSP_reeds_USA <- get_data(all_data, "L2239.GrdRenewRsrcMax_CSP_reeds_USA")
-    L2239.StubTechEffFlag_CSP_reeds_USA <- get_data(all_data, "L2239.StubTechEffFlag_CSP_reeds_USA")
-    L2239.StubTechCapFactor_CSP_reeds_USA <- get_data(all_data, "L2239.StubTechCapFactor_CSP_reeds_USA")
+    L2239.StubTechEffFlag_investment_CSP_reeds_USA <- get_data(all_data, "L2239.StubTechEffFlag_investment_CSP_reeds_USA")
+    L2239.StubTechEffFlag_dispatch_CSP_reeds_USA <- get_data(all_data, "L2239.StubTechEffFlag_dispatch_CSP_reeds_USA")
+    L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA <- get_data(all_data, "L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA")
+    # L2239.StubTechCapFactor_CSP_reeds_USA <- get_data(all_data, "L2239.StubTechCapFactor_CSP_reeds_USA")
     L2239.RenewRsrcTechChange_CSP_reeds_USA <- get_data(all_data, "L2239.RenewRsrcTechChange_CSP_reeds_USA")
     L2239.StubTechCost_CSP_reeds_USA <- get_data(all_data, "L2239.StubTechCost_CSP_reeds_USA")
     L2239.ResTechShrwt_CSP_reeds_USA <- get_data(all_data, "L2239.ResTechShrwt_CSP_reeds_USA")
@@ -60,43 +72,55 @@ disabled_module_gcamusa_batch_solar_reeds_USA_xml <- function(command, ...) {
     # Produce outputs
 
     create_xml("solar_reeds_USA.xml") %>%
-      add_xml_data(L2238.DeleteStubTechMinicamEnergyInput_PV_reeds_USA, "DeleteStubTechMinicamEnergyInput") %>%
+      add_xml_data(L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA, "DeleteStubTechMinicamEnergyInput") %>%
+      add_xml_data(L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA, "DeleteStubTechMinicamEnergyInput_dispatch", NULL) %>%
       add_xml_data(L2238.RenewRsrc_PV_reeds_USA, "RenewRsrc") %>%
       add_xml_data(L2238.GrdRenewRsrcCurves_PV_reeds_USA, "GrdRenewRsrcCurves") %>%
       add_xml_data(L2238.GrdRenewRsrcMax_PV_reeds_USA, "GrdRenewRsrcMax") %>%
-      add_xml_data(L2238.StubTechEffFlag_PV_reeds_USA, "StubTechEffFlag") %>%
-      add_xml_data(L2238.StubTechCapFactor_PV_reeds_USA, "StubTechCapFactor") %>%
+      add_xml_data(L2238.StubTechEffFlag_investment_PV_reeds_USA, "StubTechEffFlag", NULL) %>%
+      add_xml_data(L2238.StubTechEffFlag_dispatch_PV_reeds_USA, "StubTechEffFlag_dispatch", NULL) %>%
+      add_xml_data(L2238.StubTechPmultFlag_dispatch_PV_reeds_USA, "CapacityTechPMultDispatch", NULL) %>%
+      # add_xml_data(L2238.StubTechCapFactor_PV_reeds_USA, "StubTechCapFactor", NULL) %>%
       add_xml_data(L2238.RenewRsrcTechChange_PV_reeds_USA, "RenewRsrcTechChange") %>%
-      add_xml_data(L2238.StubTechCost_PV_reeds_USA, "StubTechCost") %>%
+      add_xml_data(L2238.StubTechCost_PV_reeds_USA, "StubTechCost", NULL) %>%
       add_xml_data(L2239.DeleteUnlimitRsrc_reeds_USA, "DeleteUnlimitRsrc") %>%
-      add_xml_data(L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA, "DeleteStubTechMinicamEnergyInput") %>%
+      add_xml_data(L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA, "DeleteStubTechMinicamEnergyInput") %>%
+      add_xml_data(L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA, "DeleteStubTechMinicamEnergyInput_dispatch", NULL) %>%
       add_xml_data(L2239.RenewRsrc_CSP_reeds_USA, "RenewRsrc") %>%
       add_xml_data(L2239.GrdRenewRsrcCurves_CSP_reeds_USA, "GrdRenewRsrcCurves") %>%
       add_xml_data(L2239.GrdRenewRsrcMax_CSP_reeds_USA, "GrdRenewRsrcMax") %>%
-      add_xml_data(L2239.StubTechEffFlag_CSP_reeds_USA, "StubTechEffFlag") %>%
-      add_xml_data(L2239.StubTechCapFactor_CSP_reeds_USA, "StubTechCapFactor") %>%
+      add_xml_data(L2239.StubTechEffFlag_investment_CSP_reeds_USA, "StubTechEffFlag", NULL) %>%
+      add_xml_data(L2239.StubTechEffFlag_dispatch_CSP_reeds_USA, "StubTechEffFlag_dispatch", NULL) %>%
+      add_xml_data(L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA, "CapacityTechPMultDispatch", NULL) %>%
+      # add_xml_data(L2239.StubTechCapFactor_CSP_reeds_USA, "StubTechCapFactor", NULL) %>%
       add_xml_data(L2239.RenewRsrcTechChange_CSP_reeds_USA, "RenewRsrcTechChange") %>%
-      add_xml_data(L2239.StubTechCost_CSP_reeds_USA, "StubTechCost") %>%
+      add_xml_data(L2239.StubTechCost_CSP_reeds_USA, "StubTechCost", NULL) %>%
       add_node_equiv_xml("resource") %>%
       add_node_equiv_xml("subresource") %>%
       add_xml_data(L2238.ResTechShrwt_PV_reeds_USA, "ResTechShrwt") %>%
       add_xml_data(L2239.ResTechShrwt_CSP_reeds_USA, "ResTechShrwt") %>%
-      add_precursors("L2238.DeleteStubTechMinicamEnergyInput_PV_reeds_USA",
+      add_precursors("L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA",
+                     "L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA",
                      "L2238.RenewRsrc_PV_reeds_USA",
                      "L2238.GrdRenewRsrcCurves_PV_reeds_USA",
                      "L2238.GrdRenewRsrcMax_PV_reeds_USA",
-                     "L2238.StubTechEffFlag_PV_reeds_USA",
-                     "L2238.StubTechCapFactor_PV_reeds_USA",
+                     "L2238.StubTechEffFlag_investment_PV_reeds_USA",
+                     "L2238.StubTechEffFlag_dispatch_PV_reeds_USA",
+                     "L2238.StubTechPmultFlag_dispatch_PV_reeds_USA",
+                     # "L2238.StubTechCapFactor_PV_reeds_USA",
                      "L2238.RenewRsrcTechChange_PV_reeds_USA",
                      "L2238.StubTechCost_PV_reeds_USA",
                      "L2238.ResTechShrwt_PV_reeds_USA",
                      "L2239.DeleteUnlimitRsrc_reeds_USA",
-                     "L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA",
+                     "L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA",
+                     "L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA",
                      "L2239.RenewRsrc_CSP_reeds_USA",
                      "L2239.GrdRenewRsrcCurves_CSP_reeds_USA",
                      "L2239.GrdRenewRsrcMax_CSP_reeds_USA",
-                     "L2239.StubTechEffFlag_CSP_reeds_USA",
-                     "L2239.StubTechCapFactor_CSP_reeds_USA",
+                     "L2239.StubTechEffFlag_investment_CSP_reeds_USA",
+                     "L2239.StubTechEffFlag_dispatch_CSP_reeds_USA",
+                     "L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA",
+                     # "L2239.StubTechCapFactor_CSP_reeds_USA",
                      "L2239.RenewRsrcTechChange_CSP_reeds_USA",
                      "L2239.StubTechCost_CSP_reeds_USA",
                      "L2239.ResTechShrwt_CSP_reeds_USA") ->

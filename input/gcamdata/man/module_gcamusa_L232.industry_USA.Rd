@@ -17,6 +17,7 @@ a vector of output names, or (if \code{command} is "MAKE") all
 the generated outputs: \code{L232.DeleteSupplysector_USAind}, \code{L232.DeleteFinalDemand_USAind},
 \code{L232.StubTechCalInput_indenergy_USA}, \code{L232.StubTechCalInput_indfeed_USA}, \code{L232.StubTechProd_industry_USA},
 \code{L232.StubTechCoef_industry_USA}, \code{L232.StubTechMarket_ind_USA}, \code{L232.StubTechSecMarket_ind_USA},
+\code{L232.StubTechSecOut_ind_USA}, \code{L232.StubTechDeleteSecOut_ind_USA},
 \code{L232.BaseService_ind_USA}, \code{L232.Supplysector_ind_USA}, \code{L232.FinalEnergyKeyword_ind_USA},
 \code{L232.SubsectorLogit_ind_USA}, \code{L232.SubsectorShrwtFllt_ind_USA}, \code{L232.SubsectorInterp_ind_USA},
 \code{L232.StubTech_ind_USA}, \code{L232.StubTechInterp_ind_USA}, \code{L232.PerCapitaBased_ind_USA},
@@ -30,5 +31,5 @@ Prepare level 2 industry sector files for USA.
 Prepare level 2 industry sector files for USA.
 }
 \author{
-ST October 2017
+ST October 2017 / YO April 2020
 }

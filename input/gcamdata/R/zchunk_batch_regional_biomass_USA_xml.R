@@ -8,7 +8,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{regional_biomass_USA.xml}.
 #' The corresponding file in the original data system was \code{batch_regional_biomass_USA.xml} (gcamusa XML batch).
-disabled_module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...) {
+module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2261.DeleteSupplysector_bio_USA",
              "L2261.Supplysector_bio_USA",
@@ -34,7 +34,10 @@ disabled_module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...)
              "L2261.TechCost_dbm_USA",
              "L2261.CarbonCoef_bio_USA",
              "L2261.StubTechMarket_en_USA",
-             "L2261.StubTechMarket_elecS_USA",
+             # "L2261.StubTechMarket_elecS_USA",
+             "L2261.StubTechMarket_Investment_USA",
+             "L2261.TechEff_Dispatch_USA",
+             "L2261.TechEff_Cal_USA",
              "L2261.StubTechMarket_ind_USA",
              "L2261.StubTechMarket_cement_USA",
              "L2261.StubTechMarket_bld_USA"))
@@ -69,7 +72,10 @@ disabled_module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...)
     L2261.TechCost_dbm_USA <- get_data(all_data, "L2261.TechCost_dbm_USA")
     L2261.CarbonCoef_bio_USA <- get_data(all_data, "L2261.CarbonCoef_bio_USA")
     L2261.StubTechMarket_en_USA <- get_data(all_data, "L2261.StubTechMarket_en_USA")
-    L2261.StubTechMarket_elecS_USA <- get_data(all_data, "L2261.StubTechMarket_elecS_USA")
+    # L2261.StubTechMarket_elecS_USA <- get_data(all_data, "L2261.StubTechMarket_elecS_USA")
+    L2261.StubTechMarket_Investment_USA <- get_data(all_data, "L2261.StubTechMarket_Investment_USA")
+    L2261.TechEff_Dispatch_USA <- get_data(all_data, "L2261.TechEff_Dispatch_USA")
+    L2261.TechEff_Cal_USA <- get_data(all_data, "L2261.TechEff_Cal_USA")
     L2261.StubTechMarket_ind_USA <- get_data(all_data, "L2261.StubTechMarket_ind_USA")
     L2261.StubTechMarket_cement_USA <- get_data(all_data, "L2261.StubTechMarket_cement_USA")
     L2261.StubTechMarket_bld_USA <- get_data(all_data, "L2261.StubTechMarket_bld_USA")
@@ -103,7 +109,10 @@ disabled_module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...)
       add_xml_data(L2261.TechCost_dbm_USA, "TechCost") %>%
       add_xml_data(L2261.CarbonCoef_bio_USA, "CarbonCoef") %>%
       add_xml_data(L2261.StubTechMarket_en_USA, "StubTechMarket") %>%
-      add_xml_data(L2261.StubTechMarket_elecS_USA, "StubTechMarket") %>%
+      # add_xml_data(L2261.StubTechMarket_elecS_USA, "StubTechMarket") %>%
+      add_xml_data(L2261.StubTechMarket_Investment_USA, "StubTechMarket") %>%
+      add_xml_data(L2261.TechEff_Dispatch_USA, "TechEff_dispatch", NULL) %>%
+      add_xml_data(L2261.TechEff_Cal_USA, "TechEff_dispatch", NULL) %>%
       add_xml_data(L2261.StubTechMarket_ind_USA, "StubTechMarket") %>%
       add_xml_data(L2261.StubTechMarket_cement_USA, "StubTechMarket") %>%
       add_xml_data(L2261.StubTechMarket_bld_USA, "StubTechMarket") %>%
@@ -131,7 +140,10 @@ disabled_module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...)
                      "L2261.TechCost_dbm_USA",
                      "L2261.CarbonCoef_bio_USA",
                      "L2261.StubTechMarket_en_USA",
-                     "L2261.StubTechMarket_elecS_USA",
+                     # "L2261.StubTechMarket_elecS_USA",
+                     "L2261.StubTechMarket_Investment_USA",
+                     "L2261.TechEff_Dispatch_USA",
+                     "L2261.TechEff_Cal_USA",
                      "L2261.StubTechMarket_ind_USA",
                      "L2261.StubTechMarket_cement_USA",
                      "L2261.StubTechMarket_bld_USA") ->

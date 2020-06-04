@@ -11,18 +11,18 @@
 #' \code{L2261.StubTech_bio_USA}, \code{L2261.StubTechMarket_bio_USA}, \code{L2261.StubTechShrwt_rbO_USA},
 #' \code{L2261.StubTechFractSecOut_bio_USA}, \code{L2261.StubTechFractProd_bio_USA}, \code{L2261.Rsrc_DDGS_USA},
 #' \code{L2261.RsrcPrice_DDGS_USA}, \code{L2261.Tech_rbm_USA}, \code{L2261.TechShrwt_rbm_USA},
-#' \code{L2261.TechCoef_rbm_USA}, \code{L2261.Tech_dbm_USA}, \code{L2261.TechShrwt_dbm_USA},
+#' \code{L2261.TechCoef_rbm_USA}, \code{L2261.Tech_dbm_USA}, \code{L2261.TechShrwt_dbm_USA}, \code{L2261.TechEff_Cal_USA},
 #' \code{L2261.TechEff_dbm_USA}, \code{L2261.TechCost_dbm_USA}, \code{L2261.CarbonCoef_bio_USA},
-#' \code{L2261.StubTechMarket_en_USA}, \code{L2261.StubTechMarket_elecS_USA}, \code{L2261.StubTechMarket_ind_USA},
-#' \code{L2261.StubTechMarket_cement_USA}, \code{L2261.StubTechMarket_bld_USA}.
+#' \code{L2261.StubTechMarket_en_USA}, \code{L2261.StubTechMarket_Investment_USA}, \code{L2261.TechEff_Dispatch_USA},
+#' \code{L2261.StubTechMarket_ind_USA}, \code{L2261.StubTechMarket_cement_USA}, \code{L2261.StubTechMarket_bld_USA}.
 #' The corresponding file in the original data system was \code{L2261.regional_biomass_USA.R} (gcam-usa level2).
 #' @details Create biomass supply sectors at the state level, in order ensure that biomass carbon-tracking is
 #' contained entirely within the consuming region (state).
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
-#' @author MTB Aug 2018
-disabled_module_gcamusa_L2261.regional_biomass_USA <- function(command, ...) {
+#' @author MTB Aug 2018 / YO Apr 2020
+module_gcamusa_L2261.regional_biomass_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/A21.sector",
              FILE = "energy/A26.sector",
@@ -42,7 +42,10 @@ disabled_module_gcamusa_L2261.regional_biomass_USA <- function(command, ...) {
              "L226.GlobalTechEff_en",
              "L226.GlobalTechCost_en",
              "L222.StubTechMarket_en_USA",
-             "L2234.StubTechMarket_elecS_USA",
+             # "L2234.StubTechMarket_elecS_USA",
+             "L223.StubTechMarket_Investment",
+             "L223.TechEff_Dispatch",
+             "L223.TechEff_Cal",
              "L232.StubTechMarket_ind_USA",
              "L2321.StubTechMarket_cement_USA",
              "L244.StubTechMarket_bld",
@@ -74,7 +77,10 @@ disabled_module_gcamusa_L2261.regional_biomass_USA <- function(command, ...) {
              "L2261.TechCost_dbm_USA",
              "L2261.CarbonCoef_bio_USA",
              "L2261.StubTechMarket_en_USA",
-             "L2261.StubTechMarket_elecS_USA",
+             # "L2261.StubTechMarket_elecS_USA",
+             "L2261.StubTechMarket_Investment_USA",
+             "L2261.TechEff_Dispatch_USA",
+             "L2261.TechEff_Cal_USA",
              "L2261.StubTechMarket_ind_USA",
              "L2261.StubTechMarket_cement_USA",
              "L2261.StubTechMarket_bld_USA"))
@@ -109,7 +115,10 @@ disabled_module_gcamusa_L2261.regional_biomass_USA <- function(command, ...) {
     L226.GlobalTechEff_en <- get_data(all_data, "L226.GlobalTechEff_en")
     L226.GlobalTechCost_en <- get_data(all_data, "L226.GlobalTechCost_en")
     L222.StubTechMarket_en_USA <- get_data(all_data, "L222.StubTechMarket_en_USA")
-    L2234.StubTechMarket_elecS_USA <- get_data(all_data, "L2234.StubTechMarket_elecS_USA")
+    # L2234.StubTechMarket_elecS_USA <- get_data(all_data, "L2234.StubTechMarket_elecS_USA")
+    L223.StubTechMarket_Investment <- get_data(all_data, "L223.StubTechMarket_Investment")
+    L223.TechEff_Dispatch <- get_data(all_data, "L223.TechEff_Dispatch")
+    L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
     L232.StubTechMarket_ind_USA <- get_data(all_data, "L232.StubTechMarket_ind_USA")
     L2321.StubTechMarket_cement_USA <- get_data(all_data, "L2321.StubTechMarket_cement_USA")
     L244.StubTechMarket_bld <- get_data(all_data, "L244.StubTechMarket_bld")
@@ -364,8 +373,13 @@ disabled_module_gcamusa_L2261.regional_biomass_USA <- function(command, ...) {
     # Energy Transformation (Refining)
     L2261.StubTechMarket_en_USA <- set_state_biomass_markets(L222.StubTechMarket_en_USA)
 
-    # Electricity (load segments)
-    L2261.StubTechMarket_elecS_USA <- set_state_biomass_markets(L2234.StubTechMarket_elecS_USA)
+    # YO Apr 2020
+    # Electricity (both investment and dispatch)
+    # -------------------------------------------------------------------------------------------------
+    L2261.StubTechMarket_Investment_USA <- set_state_biomass_markets(L223.StubTechMarket_Investment)
+    L2261.TechEff_Dispatch_USA <- set_state_biomass_markets(L223.TechEff_Dispatch)
+    L2261.TechEff_Cal_USA <- set_state_biomass_markets(L223.TechEff_Cal)
+    #--------------------------------------------------------------------------------------------------
 
     # Industry
     L2261.StubTechMarket_ind_USA <- set_state_biomass_markets(L232.StubTechMarket_ind_USA)
@@ -589,14 +603,41 @@ disabled_module_gcamusa_L2261.regional_biomass_USA <- function(command, ...) {
                      "L222.StubTechMarket_en_USA") ->
       L2261.StubTechMarket_en_USA
 
-    L2261.StubTechMarket_elecS_USA %>%
-      add_title("Market Information for State-level (multiple load segment) Electricity Sectors") %>%
+    # L2261.StubTechMarket_elecS_USA %>%
+    #   add_title("Market Information for State-level (multiple load segment) Electricity Sectors") %>%
+    #   add_units("NA") %>%
+    #   add_comments("Updating market information for biomass inputs to state-level electricity sectors") %>%
+    #   add_comments("Now consuming from state-level biomass supply sectors") %>%
+    #   add_precursors("gcam-usa/A28.sector",
+    #                  "L2234.StubTechMarket_elecS_USA") ->
+    #   L2261.StubTechMarket_elecS_USA
+
+    L2261.StubTechMarket_Investment_USA %>%
+      add_title("Market Information for State-level electricity investment sectors") %>%
       add_units("NA") %>%
       add_comments("Updating market information for biomass inputs to state-level electricity sectors") %>%
       add_comments("Now consuming from state-level biomass supply sectors") %>%
       add_precursors("gcam-usa/A28.sector",
-                     "L2234.StubTechMarket_elecS_USA") ->
-      L2261.StubTechMarket_elecS_USA
+                     "L223.StubTechMarket_Investment") ->
+      L2261.StubTechMarket_Investment_USA
+
+    L2261.TechEff_Dispatch_USA %>%
+      add_title("Market Information for State-level electricity dispatch sectors") %>%
+      add_units("NA") %>%
+      add_comments("Updating market information for biomass inputs to state-level electricity sectors") %>%
+      add_comments("Now consuming from state-level biomass supply sectors") %>%
+      add_precursors("gcam-usa/A28.sector",
+                     "L223.TechEff_Dispatch") ->
+      L2261.TechEff_Dispatch_USA
+
+    L2261.TechEff_Cal_USA %>%
+      add_title("Market Information for State-level electricity dispatch sectors for calibration years") %>%
+      add_units("NA") %>%
+      add_comments("Updating market information for biomass inputs to state-level electricity sectors") %>%
+      add_comments("Now consuming from state-level biomass supply sectors") %>%
+      add_precursors("gcam-usa/A28.sector",
+                     "L223.TechEff_Cal") ->
+      L2261.TechEff_Cal_USA
 
     L2261.StubTechMarket_ind_USA %>%
       add_title("Market Information for State-level Industrial Energy Use Sectors") %>%
@@ -650,7 +691,10 @@ disabled_module_gcamusa_L2261.regional_biomass_USA <- function(command, ...) {
                 L2261.TechCost_dbm_USA,
                 L2261.CarbonCoef_bio_USA,
                 L2261.StubTechMarket_en_USA,
-                L2261.StubTechMarket_elecS_USA,
+                # L2261.StubTechMarket_elecS_USA,
+                L2261.StubTechMarket_Investment_USA,
+                L2261.TechEff_Dispatch_USA,
+                L2261.TechEff_Cal_USA,
                 L2261.StubTechMarket_ind_USA,
                 L2261.StubTechMarket_cement_USA,
                 L2261.StubTechMarket_bld_USA)

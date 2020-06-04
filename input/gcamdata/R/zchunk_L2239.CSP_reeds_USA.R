@@ -6,39 +6,44 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L2239.DeleteUnlimitRsrc_reeds_USA}, \code{L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA},
+#' the generated outputs: \code{L2239.DeleteUnlimitRsrc_reeds_USA},
+#' \code{L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA},
+#' \code{L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA},
 #' \code{L2239.RenewRsrc_CSP_reeds_USA}, \code{L2239.GrdRenewRsrcCurves_CSP_reeds_USA},
-#' \code{L2239.GrdRenewRsrcMax_CSP_reeds_USA}, \code{L2239.StubTechEffFlag_CSP_reeds_USA},
-#' \code{L2239.StubTechCapFactor_CSP_reeds_USA}, \code{L2239.RenewRsrcTechChange_CSP_reeds_USA},
-#' \code{L2239.StubTechCost_CSP_reeds_USA}, \code{L2239.ResTechShrwt_CSP_reeds_USA}.
+#' \code{L2239.GrdRenewRsrcMax_CSP_reeds_USA}, \code{L2239.StubTechEffFlag_investment_CSP_reeds_USA},
+#' \code{L2239.RenewRsrcTechChange_CSP_reeds_USA}, \code{L2239.StubTechEffFlag_dispatch_CSP_reeds_USA},
+#' \code{L2239.StubTechCost_CSP_reeds_USA}, \code{L2239.ResTechShrwt_CSP_reeds_USA},
+#' \code{L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA}.
 #' The corresponding file in the original data system was \code{L2239.CSP_reeds_USA.R} (gcam-usa level2).
 #' @details Create state-level solar CSP resource supply curves
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
-#' @author MTB September 2018
-disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
+#' @author MTB September 2018 / YO April 2020
+module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = 'gcam-usa/reeds_regions_states',
              FILE = 'gcam-usa/reeds_CSP_curve_capacity',
              FILE = 'gcam-usa/reeds_CSP_curve_CF',
              FILE = 'gcam-usa/reeds_CSP_curve_grid_cost',
-             'L2234.StubTechCapFactor_elecS_solar_USA',
-             'L2234.StubTechMarket_elecS_USA',
-             'L2247.GlobalIntTechCapitalOnly_elecS_USA',
+             'L223.StubTechMarket_Investment',
+             'L223.TechEff_Dispatch',
+             'L223.GlobalTechCapital_Investment',
              'L223.GlobalIntTechCapital_elec',
              'L223.GlobalIntTechOMfixed_elec'))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L2239.DeleteUnlimitRsrc_reeds_USA",
-             "L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA",
+             "L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA",
+             "L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA",
              "L2239.RenewRsrc_CSP_reeds_USA",
              "L2239.GrdRenewRsrcCurves_CSP_reeds_USA",
              "L2239.GrdRenewRsrcMax_CSP_reeds_USA",
-             "L2239.StubTechEffFlag_CSP_reeds_USA",
-             "L2239.StubTechCapFactor_CSP_reeds_USA",
+             "L2239.StubTechEffFlag_investment_CSP_reeds_USA",
+             "L2239.StubTechEffFlag_dispatch_CSP_reeds_USA",
              "L2239.RenewRsrcTechChange_CSP_reeds_USA",
              "L2239.StubTechCost_CSP_reeds_USA",
-             "L2239.ResTechShrwt_CSP_reeds_USA"))
+             "L2239.ResTechShrwt_CSP_reeds_USA",
+             "L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -48,9 +53,9 @@ disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
     reeds_CSP_curve_capacity <- get_data(all_data, 'gcam-usa/reeds_CSP_curve_capacity')
     reeds_CSP_curve_CF <- get_data(all_data, 'gcam-usa/reeds_CSP_curve_CF')
     reeds_CSP_curve_grid_cost <- get_data(all_data, 'gcam-usa/reeds_CSP_curve_grid_cost')
-    L2234.StubTechCapFactor_elecS_solar_USA <- get_data(all_data, 'L2234.StubTechCapFactor_elecS_solar_USA')
-    L2234.StubTechMarket_elecS_USA <- get_data(all_data, 'L2234.StubTechMarket_elecS_USA')
-    L2247.GlobalIntTechCapitalOnly_elecS_USA <- get_data(all_data, 'L2247.GlobalIntTechCapitalOnly_elecS_USA')
+    L223.StubTechMarket_Investment <- get_data(all_data, 'L223.StubTechMarket_Investment')
+    L223.TechEff_Dispatch <- get_data(all_data, 'L223.TechEff_Dispatch')
+    L223.GlobalTechCapital_Investment <- get_data(all_data, 'L223.GlobalTechCapital_Investment')
     L223.GlobalIntTechCapital_elec <- get_data(all_data, 'L223.GlobalIntTechCapital_elec')
     L223.GlobalIntTechOMfixed_elec <- get_data(all_data, 'L223.GlobalIntTechOMfixed_elec')
 
@@ -94,8 +99,8 @@ disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
 
     # L2239.CSP_matrix: Creating a matrix of costs (1975$/GJ) and resource potential (EJ) by state and class
 
-    L2247.GlobalIntTechCapitalOnly_elecS_USA %>%
-      filter(intermittent.technology == "CSP_peak",
+    L223.GlobalTechCapital_Investment %>%
+      filter(technology == "CSP" & sector.name == "intermediate electricity",
              year == max(MODEL_BASE_YEARS)) %>%
       select(capital.overnight) -> L2239.CSP_capital
     L2239.CSP_capital <- as.numeric(L2239.CSP_capital)
@@ -161,8 +166,8 @@ disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
     # Thus, we calculate model input parameter techChange (which is the reduction per year) as 1 - a'^(1/5).
     # This approach ignores changes in fixed OM costs over time.
 
-    L2247.GlobalIntTechCapitalOnly_elecS_USA %>%
-      filter(intermittent.technology == "CSP_peak") %>%
+    L223.GlobalTechCapital_Investment %>%
+      filter(technology == "CSP" & sector.name == "intermediate electricity") %>%
       select(year, capital.overnight) %>%
       mutate(capital.tech.change.period = lag(capital.overnight, 1) / capital.overnight,
              time.change = year - lag(year),
@@ -249,16 +254,24 @@ disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
       select(region = State,renewresource,sub.renewable.resource, year.fillout, maxSubResource ) %>%
       filter(region %in% states_list_curve) -> L2239.GrdRenewRsrcMax_CSP_reeds_USA
 
-    # Table to delete global solar resource minicam-energy-input
-    L2234.StubTechMarket_elecS_USA %>%
+    # Table to delete global solar resource minicam-energy-input in investment segments
+    L223.StubTechMarket_Investment %>%
       filter(region %in% states_list_curve,
              grepl("CSP", stub.technology)) %>%
       mutate(minicam.energy.input = "global solar resource") %>%
       select(region, supplysector, subsector, stub.technology, year, minicam.energy.input) ->
-      L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA
+      L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA
 
-    # Table to read in energy inputs at the technology level
-    L2234.StubTechMarket_elecS_USA %>%
+    # Table to delete global solar resource minicam-energy-input in dispatch segments
+    L223.TechEff_Dispatch %>%
+      filter(region %in% states_list_curve,
+             grepl("CSP", technology)) %>%
+      mutate(minicam.energy.input = "global solar resource") %>%
+      select(region, supplysector, subsector, technology, year, minicam.energy.input) ->
+      L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA
+
+    # Table to read in energy inputs at the technology level in investment segment
+    L223.StubTechMarket_Investment %>%
       filter(region %in% states_list_curve,
              grepl("CSP", stub.technology)) %>%
       mutate(minicam.energy.input = "CSP_resource",
@@ -267,42 +280,31 @@ disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
              # Hard code in type "Resource" for intermittent technology resource input only
              flag = "Resource") %>%
       select(region, supplysector, subsector, stub.technology, year,
-             minicam.energy.input, efficiency, market.name, flag) -> L2239.StubTechEffFlag_CSP_reeds_USA
+             minicam.energy.input, efficiency, market.name, flag) -> L2239.StubTechEffFlag_investment_CSP_reeds_USA
 
-    # Table to read in region-specific CFmax (that will be used to calculate Pmin within the model)
-    L2234.StubTechCapFactor_elecS_solar_USA %>%
-      filter(region %in% states_list_CF,
-             grepl("CSP", stub.technology),
-             !grepl("storage", stub.technology)) %>%
-      left_join_error_no_match(L2239.CSP_curve %>%
-                                 distinct(State, CFmax),
-                               by = c("region" = "State")) %>%
-      mutate(capacity.factor = round(CFmax, energy.DIGITS_CAPACITY_FACTOR)) %>%
-      select(region, supplysector, subsector, stub.technology, year,
-             capacity.factor) -> L2239.StubTechCapFactor_CSP_nostorage_reeds_USA
+    # Table to read in energy inputs at the technology level in dispatch segment
+    L223.TechEff_Dispatch %>%
+      filter(region %in% states_list_curve,
+             grepl("CSP", technology )) %>%
+      mutate(minicam.energy.input = "CSP_resource",
+             market.name = region,
+             efficiency = 1,
+             # Hard code in type "Resource" for intermittent technology resource input only
+             flag = "Resource") %>%
+      select(region, supplysector, subsector, technology, year,
+             minicam.energy.input, efficiency, market.name, flag) -> L2239.StubTechEffFlag_dispatch_CSP_reeds_USA
 
-    # We read in higher CFmax for CSP technologies with dedicated thermal storage.
-    # This is in contrast to our approach for wind and PV because CSP w/ thermal storage is argued to
-    # achieve better capacity factors compared to CSP systems without storage in the literature.
-    # Howeevr, wind w/ battery storage and PV w/ battery storage technologies do not really have solid
-    # arguments for higher capacity factors compared to their intermittent counterparts in the literature.
-    # We give a capacity factor credit of 0.2 to CSP with thermal storage technologies.
-    # This is rather arbitrary and needs looking into.
-    # See also Muratori et al. 2017: Cost of power or power of cost: A US modeling perspective,
-    # Renewable and Sustainable Energy Reviews, 77, pp.861-874.
-    L2234.StubTechCapFactor_elecS_solar_USA %>%
-      filter(region %in% states_list_CF,
-             grepl("CSP", stub.technology),
-             grepl("storage", stub.technology)) %>%
-      left_join_error_no_match(L2239.CSP_curve %>%
-                                 distinct(State, CFmax),
-                               by = c("region" = "State")) %>%
-      mutate(capacity.factor = round(CFmax + 0.2, energy.DIGITS_CAPACITY_FACTOR)) %>%
-      select(region, supplysector, subsector, stub.technology, year,
-             capacity.factor) -> L2239.StubTechCapFactor_CSP_storage_reeds_USA
-
-    L2239.StubTechCapFactor_CSP_nostorage_reeds_USA %>%
-      bind_rows(L2239.StubTechCapFactor_CSP_storage_reeds_USA) -> L2239.StubTechCapFactor_CSP_reeds_USA
+    # Table to add pMul = 0 for capacity-technology CSP resource
+    L223.TechEff_Dispatch %>%
+      filter(region %in% states_list_curve,
+             grepl("CSP", technology )) %>%
+      mutate(minicam.energy.input = "CSP_resource",
+             market.name = region,
+             pMultiplier = 0.01,
+             # Hard code in type "Resource" for intermittent technology resource input only
+             flag = "Resource") %>%
+      select(region, supplysector, subsector, technology, year,
+             minicam.energy.input, pMultiplier, market.name, flag) -> L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA
 
     # Copying tech change to all states and filtering out only the contiguous states
     L2239.RenewRsrcTechChange_CSP_reeds_USA <- write_to_all_states(L2239.CSP_curve_tech_change, c("region", "year","tech.change"))
@@ -314,7 +316,7 @@ disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
              year.fillout = year, techChange = tech.change) -> L2239.RenewRsrcTechChange_CSP_reeds_USA
 
     # Reading the grid connection cost as a state-level non-energy cost adder
-    L2234.StubTechCapFactor_elecS_solar_USA %>%
+    L223.StubTechMarket_Investment %>%
       filter(region %in% states_list_CF,
              grepl("CSP", stub.technology)) %>%
       select(region, supplysector, subsector, stub.technology, year) %>%
@@ -332,7 +334,6 @@ disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["ResTechShrwt"]]) ->
       L2239.ResTechShrwt_CSP_reeds_USA
 
-
     # ===================================================
     # Produce outputs
 
@@ -344,13 +345,13 @@ disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
       add_precursors('gcam-usa/reeds_regions_states',
                      'gcam-usa/reeds_CSP_curve_capacity',
                      'gcam-usa/reeds_CSP_curve_CF',
-                     'L2247.GlobalIntTechCapitalOnly_elecS_USA',
+                     'L223.GlobalTechCapital_Investment',
                      'L223.GlobalIntTechCapital_elec',
                      'L223.GlobalIntTechOMfixed_elec') ->
       L2239.DeleteUnlimitRsrc_reeds_USA
 
-    L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA %>%
-      add_title("Delete global solar resource Energy Input for CSP Technologies") %>%
+    L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA %>%
+      add_title("Delete global solar resource Energy Input for CSP Technologies in investment segment") %>%
       add_units("NA") %>%
       add_comments("global solar resource input deleted; will be replaced by CSP_resource") %>%
       add_comments("Only applies to 9 states in ReEDS CSP data set") %>%
@@ -358,11 +359,26 @@ disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
       add_precursors('gcam-usa/reeds_regions_states',
                      'gcam-usa/reeds_CSP_curve_capacity',
                      'gcam-usa/reeds_CSP_curve_CF',
-                     'L2234.StubTechMarket_elecS_USA',
-                     'L2247.GlobalIntTechCapitalOnly_elecS_USA',
+                     'L223.StubTechMarket_Investment',
+                     'L223.GlobalTechCapital_Investment',
                      'L223.GlobalIntTechCapital_elec',
                      'L223.GlobalIntTechOMfixed_elec') ->
-      L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA
+      L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA
+
+    L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA %>%
+      add_title("Delete global solar resource Energy Input for CSP Technologies in dispatch") %>%
+      add_units("NA") %>%
+      add_comments("global solar resource input deleted; will be replaced by CSP_resource") %>%
+      add_comments("Only applies to 9 states in ReEDS CSP data set") %>%
+      add_legacy_name("L2239.DeleteStubTechMinicamEnergyInput_CSP_USA_reeds") %>%
+      add_precursors('gcam-usa/reeds_regions_states',
+                     'gcam-usa/reeds_CSP_curve_capacity',
+                     'gcam-usa/reeds_CSP_curve_CF',
+                     'L223.TechEff_Dispatch',
+                     'L223.GlobalTechCapital_Investment',
+                     'L223.GlobalIntTechCapital_elec',
+                     'L223.GlobalIntTechOMfixed_elec') ->
+      L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA
 
     L2239.RenewRsrc_CSP_reeds_USA %>%
       add_title("Market Information for CSP Resources") %>%
@@ -389,29 +405,29 @@ disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
       same_precursors_as("L2239.DeleteUnlimitRsrc_reeds_USA") ->
       L2239.GrdRenewRsrcMax_CSP_reeds_USA
 
-    L2239.StubTechEffFlag_CSP_reeds_USA %>%
-      add_title("Market Information for CSP Technologies") %>%
+    L2239.StubTechEffFlag_investment_CSP_reeds_USA %>%
+      add_title("Market Information for CSP Technologies in investment segments") %>%
       add_units("unitless") %>%
       add_comments("Only applies to 9 states in ReEDS CSP data set") %>%
       add_legacy_name("L2239.StubTechEffFlag_CSP_USA_reeds") %>%
-      same_precursors_as("L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA") ->
-      L2239.StubTechEffFlag_CSP_reeds_USA
+      same_precursors_as("L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA") ->
+      L2239.StubTechEffFlag_investment_CSP_reeds_USA
 
-    L2239.StubTechCapFactor_CSP_reeds_USA %>%
-      add_title("State-specific Capacity Factors for CSP Technologies") %>%
+    L2239.StubTechEffFlag_dispatch_CSP_reeds_USA %>%
+      add_title("Market Information for CSP Technologies in dispatch") %>%
       add_units("unitless") %>%
-      add_comments("Capacity factors updated for all 18 states in the ReEDS CSP data set") %>%
-      add_comments("This includes 9 regions with only 1 CSP grade which are not assigned CSP resource supply curves") %>%
-      add_comments("Data from ReEDS") %>%
-      add_legacy_name("L2239.StubTechCapFactor_CSP_USA_reeds") %>%
-      add_precursors('gcam-usa/reeds_regions_states',
-                     'gcam-usa/reeds_CSP_curve_capacity',
-                     'gcam-usa/reeds_CSP_curve_CF',
-                     'L2234.StubTechCapFactor_elecS_solar_USA',
-                     'L2247.GlobalIntTechCapitalOnly_elecS_USA',
-                     'L223.GlobalIntTechCapital_elec',
-                     'L223.GlobalIntTechOMfixed_elec') ->
-      L2239.StubTechCapFactor_CSP_reeds_USA
+      add_comments("Only applies to 9 states in ReEDS CSP data set") %>%
+      add_legacy_name("L2239.StubTechEffFlag_CSP_USA_reeds") %>%
+      same_precursors_as("L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA") ->
+      L2239.StubTechEffFlag_dispatch_CSP_reeds_USA
+
+    L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA %>%
+      add_title("Market Information for CSP Technologies in dispatch") %>%
+      add_units("unitless") %>%
+      add_comments("Only applies to 9 states in ReEDS CSP data set") %>%
+      add_legacy_name("L2238.StubTechPmultFlag_dispatch_CSP_reeds_USA") %>%
+      same_precursors_as("L2238.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA") ->
+      L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA
 
     L2239.RenewRsrcTechChange_CSP_reeds_USA %>%
       add_title("Technological Change Parameter for CSP Resources") %>%
@@ -432,8 +448,8 @@ disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
                      'gcam-usa/reeds_CSP_curve_capacity',
                      'gcam-usa/reeds_CSP_curve_CF',
                      'gcam-usa/reeds_CSP_curve_grid_cost',
-                     'L2234.StubTechCapFactor_elecS_solar_USA',
-                     'L2247.GlobalIntTechCapitalOnly_elecS_USA',
+                     'L223.StubTechMarket_Investment',
+                     'L223.GlobalTechCapital_Investment',
                      'L223.GlobalIntTechCapital_elec',
                      'L223.GlobalIntTechOMfixed_elec') ->
       L2239.StubTechCost_CSP_reeds_USA
@@ -447,15 +463,17 @@ disabled_module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
 
 
     return_data(L2239.DeleteUnlimitRsrc_reeds_USA,
-                L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA,
+                L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA,
+                L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA,
                 L2239.RenewRsrc_CSP_reeds_USA,
                 L2239.GrdRenewRsrcCurves_CSP_reeds_USA,
                 L2239.GrdRenewRsrcMax_CSP_reeds_USA,
-                L2239.StubTechEffFlag_CSP_reeds_USA,
-                L2239.StubTechCapFactor_CSP_reeds_USA,
+                L2239.StubTechEffFlag_investment_CSP_reeds_USA,
+                L2239.StubTechEffFlag_dispatch_CSP_reeds_USA,
                 L2239.RenewRsrcTechChange_CSP_reeds_USA,
                 L2239.StubTechCost_CSP_reeds_USA,
-                L2239.ResTechShrwt_CSP_reeds_USA)
+                L2239.ResTechShrwt_CSP_reeds_USA,
+                L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA)
 
   } else {
     stop("Unknown command")

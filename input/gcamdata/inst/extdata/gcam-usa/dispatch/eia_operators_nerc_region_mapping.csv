@@ -1,9 +1,10 @@
 # File: eia_operators_nerc_region_mapping.csv
-# Title: Convert EIA Operator ID to NERC region
+# Title: map operator ID into NERC region
 # Units: NA
-# Column types: cc
+# Source: NA
+# Column types: ic
 # ----------
-Operator ID,NERC Region
+Operator.ID,NERC.Region
 195,SERC
 5701,WECC
 29305,MRO

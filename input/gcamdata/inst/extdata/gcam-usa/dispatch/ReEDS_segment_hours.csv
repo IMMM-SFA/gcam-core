@@ -1,0 +1,24 @@
+# File: ReEDS_segment_hours.csv
+# Title: map ReEDS segment and hours
+# Units: NA
+# Source: NA
+# Column types: cnccnn
+# ----------
+timeslice,hours,season,time of day,hours per season,days per season
+H1,736,summer,10PM-6AM,2208,92
+H2,644,summer,6AM-1PM,,
+H3,328,summer,1PM-5PM,,
+H4,460,summer,5PM-10PM,,
+H5,488,fall,10PM-6AM,1464,61
+H6,427,fall,6AM-1PM,,
+H7,244,fall,1PM-5PM,,
+H8,305,fall,5PM-10PM,,
+H9,960,winter,10PM-6AM,2880,120
+H10,840,winter,6AM-1PM,,
+H11,480,winter,1PM-5PM,,
+H12,600,winter,5PM-10PM,,
+H13,736,spring,10PM-6AM,2208,92
+H14,644,spring,6AM-1PM,,
+H15,368,spring,1PM-5PM,,
+H16,460,spring,5PM-10PM,,
+H17,40,summer,superpeak,,

@@ -28,7 +28,9 @@ module_gcamusa_batch_industry_USA_xml <- function(command, ...) {
              "L232.StubTechCoef_industry_USA",
              "L232.StubTechMarket_ind_USA",
              "L232.BaseService_ind_USA",
-             "L232.StubTechSecMarket_ind_USA"))
+             "L232.StubTechSecMarket_ind_USA",
+             "L232.StubTechSecOut_ind_USA",
+             "L232.StubTechDeleteSecOut_ind_USA"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "industry_USA.xml"))
   } else if(command == driver.MAKE) {
@@ -54,6 +56,8 @@ module_gcamusa_batch_industry_USA_xml <- function(command, ...) {
     L232.StubTechCoef_industry_USA <- get_data(all_data, "L232.StubTechCoef_industry_USA")
     L232.StubTechMarket_ind_USA <- get_data(all_data, "L232.StubTechMarket_ind_USA")
     L232.StubTechSecMarket_ind_USA <- get_data(all_data, "L232.StubTechSecMarket_ind_USA")
+    L232.StubTechSecOut_ind_USA <- get_data(all_data, "L232.StubTechSecOut_ind_USA")
+    L232.StubTechDeleteSecOut_ind_USA <- get_data(all_data, "L232.StubTechDeleteSecOut_ind_USA")
     L232.BaseService_ind_USA <- get_data(all_data, "L232.BaseService_ind_USA")
 
     # ===================================================
@@ -78,6 +82,8 @@ module_gcamusa_batch_industry_USA_xml <- function(command, ...) {
       add_xml_data(L232.StubTechCoef_industry_USA, "StubTechCoef") %>%
       add_xml_data(L232.StubTechMarket_ind_USA, "StubTechMarket") %>%
       add_xml_data(L232.StubTechSecMarket_ind_USA, "StubTechSecMarket") %>%
+      add_xml_data(L232.StubTechSecOut_ind_USA, "StubTechSecOut", NULL) %>%
+      add_xml_data(L232.StubTechDeleteSecOut_ind_USA, "StubTechDeleteSecOut", NULL) %>%
       add_xml_data(L232.BaseService_ind_USA, "BaseService") %>%
       add_precursors("L232.DeleteSupplysector_USAind",
                      "L232.DeleteFinalDemand_USAind",
@@ -97,7 +103,9 @@ module_gcamusa_batch_industry_USA_xml <- function(command, ...) {
                      "L232.StubTechCoef_industry_USA",
                      "L232.StubTechMarket_ind_USA",
                      "L232.BaseService_ind_USA",
-                     "L232.StubTechSecMarket_ind_USA") ->
+                     "L232.StubTechSecMarket_ind_USA",
+                     "L232.StubTechSecOut_ind_USA",
+                     "L232.StubTechDeleteSecOut_ind_USA") ->
       industry_USA.xml
 
     return_data(industry_USA.xml)

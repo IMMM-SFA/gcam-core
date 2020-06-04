@@ -35,13 +35,12 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
              FILE = "energy/A21.sector",
              FILE = "energy/A26.sector",
              FILE = "gcam-usa/EIA_state_energy_prices",
+             "L103.load_segments_sector_gcamusa",
              "L202.CarbonCoef",
              "L226.Supplysector_en",
              "L226.SubsectorLogit_en",
-             #"L226.SubsectorShrwt_en",
              "L226.SubsectorShrwtFllt_en",
              "L226.SubsectorInterp_en",
-             #"L226.SubsectorInterpTo_en",
              "L226.GlobalTechCost_en",
              "L226.GlobalTechShrwt_en",
              "L226.StubTechCoef_electd"))
@@ -72,12 +71,11 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
     A26.sector <- get_data(all_data, "energy/A26.sector")
     EIA_state_energy_prices <- get_data(all_data, "gcam-usa/EIA_state_energy_prices")
     L202.CarbonCoef <- get_data(all_data, "L202.CarbonCoef")
+    L103.load_segments_sector <- get_data(all_data, "L103.load_segments_sector_gcamusa")
     L226.Supplysector_en <- get_data(all_data, "L226.Supplysector_en")
     L226.SubsectorLogit_en <- get_data(all_data, "L226.SubsectorLogit_en")
-   # L226.SubsectorShrwt_en <- get_data(all_data, "L226.SubsectorShrwt_en")
     L226.SubsectorShrwtFllt_en <- get_data(all_data, "L226.SubsectorShrwtFllt_en")
     L226.SubsectorInterp_en <- get_data(all_data, "L226.SubsectorInterp_en")
-    # L226.SubsectorInterpTo_en <- get_data(all_data, "L226.SubsectorInterpTo_en")
     L226.GlobalTechCost_en <- get_data(all_data, "L226.GlobalTechCost_en")
     L226.GlobalTechShrwt_en <- get_data(all_data, "L226.GlobalTechShrwt_en")
     L226.StubTechCoef_electd <- get_data(all_data, "L226.StubTechCoef_electd")
@@ -306,6 +304,28 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
       rename(market.name = grid_region) ->
       L226.TechCoef_electd_USA
 
+    # Dispatch update
+    # YO Apr 2020
+    # Dis-aggregate electric subsector, technology, minicam.energy.input and minicam.non.energy.input by dispatch segments
+    # Not disaggregating supplysectors for final services will not be distributed by segments yet.
+    # Building services will eventually need to be split by demand segment.
+
+    # Attach states to grid-region names in L103.load_segments_sector_gcamusa.csv (L103.load_segments_sector)
+    L103.load_segments_sector %>%
+      left_join(states_subregions %>%
+                  dplyr::select(state,grid_region),
+                by=("grid_region")) ->
+      segStates
+
+    L226.TechCoef_electd_USA %>%
+      left_join(segStates %>%
+                  dplyr::select(state, sector, segment, generation.fraction),
+                by=c("region" = "state", "subsector" = "sector")) %>%
+      mutate(coefficient = coefficient * generation.fraction,
+             minicam.energy.input = paste( minicam.energy.input, segment, sep="_"))%>%
+      select(-segment,-generation.fraction)->
+      L226.TechCoef_electd_USA
+
 
     # Produce outputs
     L226.DeleteSupplysector_USAelec %>%
@@ -345,7 +365,8 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
       add_comments("The elect_td sectors can not use the global tech database as their input is different.") %>%
       add_legacy_name("L226.TechCoef_electd_USA") %>%
       add_precursors("gcam-usa/states_subregions",
-                     "L226.StubTechCoef_electd") ->
+                     "L226.StubTechCoef_electd",
+                     "L103.load_segments_sector_gcamusa") ->
       L226.TechCoef_electd_USA
 
     L226.Supplysector_en_USA %>%
