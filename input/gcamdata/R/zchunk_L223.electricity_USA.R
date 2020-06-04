@@ -23,7 +23,7 @@
 #' \code{L223.TechOMvar_Dispatch}, \code{L223.TechLifetime_Dispatch}, \code{L223.TechSCurve_Dispatch},
 #' \code{L223.TechCapFac_Dispatch}, \code{L223.TechCarbonCapture_Dispatch}, \code{L223.TechCapFac_Cal},
 #' \code{L223.TechEff_Cal}, \code{L223.Sector_Dispatch_Grid}, \code{L223.DispatchSectorCalProd},
-#' \code{L223.DispatchSectorDemandSegments}, \code{L223.InterestRate_FERC}, \code{L223.Pop_FERC}, \code{L223.BaseGDP_FERC},
+#' \code{L223.DispatchSectorDispatchSegments}, \code{L223.InterestRate_FERC}, \code{L223.Pop_FERC}, \code{L223.BaseGDP_FERC},
 #' \code{L223.LaborForceFillout_FERC}.
 #' The corresponding file in the
 #' original data system was \code{L223.electricity_USA.R} (gcam-usa level2 - dispatch branch).
@@ -118,7 +118,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              "L223.TechEff_Cal",
              "L223.Sector_Dispatch_Grid",
              "L223.DispatchSectorCalProd",
-             "L223.DispatchSectorDemandSegments",
+             "L223.DispatchSectorDispatchSegments",
              "L223.InterestRate_FERC",
              "L223.Pop_FERC",
              "L223.BaseGDP_FERC",
@@ -866,7 +866,22 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       rename(region = grid_region) %>%
       mutate(dispatch.sector = "electricity") %>%
       select(region, dispatch.sector, segment, hours, relative.generation, generation.fraction) ->
-      L223.DispatchSectorDemandSegments
+      L223.DispatchSectorDispatchSegments
+
+    # When the demand side has no segments we keep the load curve as part of
+    # the dispatch segments so it can downscale the total electricity demand
+    # L223.DispatchSectorDispatchSegments %>%
+    #   mutate(demand.segment.name = dispatch.sector) ->
+    #   L223.DispatchSectorDispatchSegments
+
+    # When the demand side is divided into segments we need to map the dispatch
+    # segments to those sectors and update the relative.generation accordingly
+    L223.DispatchSectorDispatchSegments %>%
+      # right now the dispatch segments exactly match the demand segments
+      # so the generation fraction is just 1.0.
+      mutate(demand.segment.name = paste(dispatch.sector, segment, sep = "_"),
+             generation.fraction = 1.0) ->
+      L223.DispatchSectorDispatchSegments
 
     # Calibration
     # calibrated capacity for electricity technology
@@ -1422,13 +1437,13 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_precursors("L123.out_EJ_state_elec_F_tech") ->
       L223.DispatchSectorCalProd
 
-    L223.DispatchSectorDemandSegments %>%
+    L223.DispatchSectorDispatchSegments %>%
       add_title("Dispatch dispatch.sector (electricity) relative generation and fraction for grid") %>%
       add_units("unitless") %>%
       add_comments("Set dispatch.sector (electricity) relative generation and fraction for grid") %>%
       add_legacy_name("L223.DispatchSectorDemandSegments (dispatch branch)") %>%
       add_precursors("L102.load_segments_gcamusa") ->
-      L223.DispatchSectorDemandSegments
+      L223.DispatchSectorDispatchSegments
 
     L223.InterestRate_FERC %>%
       add_title("Interest rates in grid regions") %>%
@@ -1511,7 +1526,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                 L223.TechEff_Cal,
                 L223.Sector_Dispatch_Grid,
                 L223.DispatchSectorCalProd,
-                L223.DispatchSectorDemandSegments,
+                L223.DispatchSectorDispatchSegments,
                 L223.InterestRate_FERC,
                 L223.Pop_FERC,
                 L223.BaseGDP_FERC,

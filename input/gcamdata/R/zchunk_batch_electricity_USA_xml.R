@@ -59,7 +59,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.TechEff_Cal",
              "L223.Sector_Dispatch_Grid",
              "L223.DispatchSectorCalProd",
-             "L223.DispatchSectorDemandSegments",
+             "L223.DispatchSectorDispatchSegments",
              "L223.InterestRate_FERC",
              "L223.Pop_FERC",
              "L223.BaseGDP_FERC",
@@ -141,7 +141,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
     L223.Sector_Dispatch_Grid <- get_data(all_data, "L223.Sector_Dispatch_Grid")
     L223.DispatchSectorCalProd <- get_data(all_data, "L223.DispatchSectorCalProd")
-    L223.DispatchSectorDemandSegments <- get_data(all_data, "L223.DispatchSectorDemandSegments")
+    L223.DispatchSectorDispatchSegments <- get_data(all_data, "L223.DispatchSectorDispatchSegments")
     L223.InterestRate_FERC <- get_data(all_data, "L223.InterestRate_FERC")
     L223.Pop_FERC <- get_data(all_data, "L223.Pop_FERC")
     L223.BaseGDP_FERC <- get_data(all_data, "L223.BaseGDP_FERC")
@@ -219,7 +219,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.TechEff_Cal, "TechEff") %>%
       add_logit_tables_xml(L223.Sector_Dispatch_Grid, "Supplysector") %>%
       add_xml_data(L223.DispatchSectorCalProd, "DispatchSectorCalProd", NULL) %>%
-      add_xml_data(L223.DispatchSectorDemandSegments, "DispatchSectorDemandSegments", NULL) %>%
+      add_xml_data(L223.DispatchSectorDispatchSegments, "DispatchSectorDispatchSegments", NULL) %>%
       add_xml_data(L223.InterestRate_FERC, "InterestRate") %>%
       add_xml_data(L223.Pop_FERC, "Pop") %>%
       add_xml_data(L223.BaseGDP_FERC, "BaseGDP") %>%
@@ -290,7 +290,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.TechEff_Cal",
                      "L223.Sector_Dispatch_Grid",
                      "L223.DispatchSectorCalProd",
-                     "L223.DispatchSectorDemandSegments",
+                     "L223.DispatchSectorDispatchSegments",
                      "L223.InterestRate_FERC",
                      "L223.Pop_FERC",
                      "L223.BaseGDP_FERC",

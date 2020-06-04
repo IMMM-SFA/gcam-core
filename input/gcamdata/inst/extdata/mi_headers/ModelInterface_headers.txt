@@ -745,7 +745,7 @@ DispatchSector, world/+{name}region, region/+{name}dispatch-sector, dispatch-sec
 
 DispatchSectorCalProd, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{year}cal-production, dispatch-sector/+cal-production, scenario, scenario/world
 
-DispatchSectorDemandSegments, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}demand-segment, dispatch-sector/+{hours}demand-segment, dispatch-sector/+{relative-generation}demand-segment, dispatch-sector/+{generation-fraction}demand-segment, scenario, scenario/world
+DispatchSectorDispatchSegments, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}dispatch-segment, dispatch-sector/+{hours}dispatch-segment, dispatch-sector/+{relative-generation}dispatch-segment, dispatch-sector/+{generation-fraction}dispatch-segment, dispatch-sector/+{demand-segment-name}dispatch-segment, scenario, scenario/world
 
 CapacityTech, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+capacity, scenario, scenario/world
 
