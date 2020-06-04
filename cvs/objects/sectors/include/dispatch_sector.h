@@ -97,6 +97,7 @@ protected:
                     )
         
     public:
+        DemandSegment( const std::string& aName ):mName( aName ) {}
         virtual const std::string& getName() const {
             return mName;
         }
@@ -104,6 +105,15 @@ protected:
             return mCost;
         }
         std::string mName;
+    };
+    
+    class DispatchSegment : public INamed {
+    public:
+        virtual const std::string& getName() const {
+            return mName;
+        }
+        std::string mName;
+        std::string mDemandSegmentName;
          double mHours;
          double mRelativeGen;
          double mTotalGenFraction;
@@ -121,6 +131,8 @@ protected:
         DEFINE_VARIABLE( SIMPLE, "generation-sector", mGenSectors, std::vector<std::pair<std::string, std::string> > ),
 
         DEFINE_VARIABLE( CONTAINER, "demand-segment", mDemandSegments, std::vector<DemandSegment*> ),
+                            
+        DEFINE_VARIABLE( SIMPLE, "dispatch-segment", mDispatchSegments, std::vector<DispatchSegment*> ),
                             
         //! Helper to set supply = demand
         DEFINE_VARIABLE( SIMPLE | STATE, "supply-state", mSupply, Value ),

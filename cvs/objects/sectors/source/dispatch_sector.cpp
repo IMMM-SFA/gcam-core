@@ -83,13 +83,14 @@ bool DispatchSector::XMLDerivedClassParse( const string& aNodeName, const DOMNod
     else if( aNodeName == "generation-sector" ) {
         mGenSectors.push_back(make_pair( XMLHelper<string>::getAttr( aNode, "name" ), XMLHelper<string>::getAttr( aNode, "market" ) ) );
     }
-    else if( aNodeName == "demand-segment" ) {
-        DemandSegment* currSeg = new DemandSegment;
+    else if( aNodeName == "dispatch-segment" ) {
+        DispatchSegment* currSeg = new DispatchSegment;
         currSeg->mName = XMLHelper<string>::getAttr( aNode, "name" );
+        currSeg->mDemandSegmentName = XMLHelper<string>::getAttr( aNode, "demand-segment-name" );
         currSeg->mHours = XMLHelper<double>::getAttr( aNode, "hours" );
         currSeg->mRelativeGen = XMLHelper<double>::getAttr( aNode, "relative-generation" );
         currSeg->mTotalGenFraction = XMLHelper<double>::getAttr( aNode, "generation-fraction" );
-        mDemandSegments.push_back( currSeg );
+        mDispatchSegments.push_back( currSeg );
     }
     else {
         didParse = false;
@@ -137,18 +138,28 @@ void DispatchSector::completeInit( const IInfo* aRegionInfo,
     if(mSubsectors.empty()) {
     //depFinder->addDependency( mName, mRegionName, "capacity investment", mRegionName );
         Marketplace* marketplace = scenario->getMarketplace();
+        set<string> demandSegmentNames;
+        for(auto dispSegment : mDispatchSegments) {
+            if(demandSegmentNames.find(dispSegment->mDemandSegmentName) == demandSegmentNames.end()) {
+                DemandSegment* newDmdSegment = new DemandSegment(dispSegment->mDemandSegmentName);
+                mDemandSegments.push_back(newDmdSegment);
+                demandSegmentNames.insert(dispSegment->mDemandSegmentName);
+            }
+        }
         for(auto segment : mDemandSegments) {
-            const string segmentMarketName = mName+"_"+segment->mName;
-            marketplace->createMarket( mRegionName, mRegionName, segmentMarketName, IMarketType::NORMAL);
-            IInfo* marketInfo = marketplace->getMarketInfo( segmentMarketName, mRegionName, 0, true );
-            marketInfo->setString( "price-unit", mPriceUnit );
-            marketInfo->setString( "output-unit", mOutputUnit );
+            const string segmentMarketName = segment->mName;
+            bool isNew = marketplace->createMarket( mRegionName, mRegionName, segmentMarketName, IMarketType::NORMAL);
+            if( isNew ) {
+                IInfo* marketInfo = marketplace->getMarketInfo( segmentMarketName, mRegionName, 0, true );
+                marketInfo->setString( "price-unit", mPriceUnit );
+                marketInfo->setString( "output-unit", mOutputUnit );
 
-            depFinder->addDependency( segmentMarketName, mRegionName, segmentMarketName, mRegionName );
-            depFinder->resolveActivityToDependency( mRegionName, segmentMarketName,
-                                                   new DummyActivity(), new DummyActivity() );
-            depFinder->copyDependencies( mName, mRegionName, segmentMarketName, mRegionName );
-            depFinder->addDependency( segmentMarketName, mRegionName, mName, mRegionName );
+                depFinder->addDependency( segmentMarketName, mRegionName, segmentMarketName, mRegionName );
+                depFinder->resolveActivityToDependency( mRegionName, segmentMarketName,
+                                                       new DummyActivity(), new DummyActivity() );
+                depFinder->copyDependencies( mName, mRegionName, segmentMarketName, mRegionName );
+                depFinder->addDependency( segmentMarketName, mRegionName, mName, mRegionName );
+            }
         }
     }
 }
@@ -256,7 +267,7 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         double totalElecDemand = 0.0;
         //if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod() ) {
             for( auto segment : mDemandSegments ) {
-                totalElecDemand += marketplace->getDemand( mName + "_" + segment->mName, mRegionName, aPeriod );
+                totalElecDemand += marketplace->getDemand( segment->mName, mRegionName, aPeriod );
             }
         //}
         auto sortedTechs = mAllTechs;
@@ -270,6 +281,7 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         for( auto tech : sortedTechs ) {
             techProd[ tech ] = 0.0;
         }
+        
         const double HOURS_IN_YEAR = 8760.0;
         const double RESERVE_FRACTION = 1.15;
         int currYear = scenario->getModeltime()->getper_to_yr( aPeriod );
@@ -277,10 +289,12 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         double maxRequiredCapacity = 0.0;
         double capacityPrice = marketplace->getPrice( "capacity investment" , mRegionName, aPeriod );
         double avgCost = 0.0;
-        for( auto segment : mDemandSegments ) {
-            const string segmentMarketName = mName+"_"+segment->mName;
+        for( auto demandSegment : mDemandSegments ) {
+                        const string segmentMarketName = demandSegment->mName;
+        for( auto segment : mDispatchSegments ) {
+            if(segment->mDemandSegmentName == segmentMarketName) {
             double segmentDemand = marketplace->getDemand(segmentMarketName, mRegionName, aPeriod);
-            double remainingProduction = segmentDemand;
+            double remainingProduction = segmentDemand * segment->mTotalGenFraction;
             double segmentScaleFraction = segment->mHours / HOURS_IN_YEAR;
             if( segment->mRelativeGen == 1.0 ) {
                 maxRequiredCapacity = ( remainingProduction / segmentScaleFraction ) * RESERVE_FRACTION;
@@ -289,6 +303,7 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
                 remainingProduction = totalElecDemand * 1.0 / mDemandSegments.size();
                 segmentScaleFraction = 1.0 / mDemandSegments.size();
             }
+
             for( auto tech : sortedTechs) {
                 auto techMarket = mAllTechMarketMap[ tech ];
                 tuple<ITechnology*, string, string> currSave = make_tuple( tech, segment->mName, techMarket.second );
@@ -310,11 +325,14 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
                 //cout << "Remaining production in segment: " << remainingProduction << " in " << mRegionName << ", " << mName << ", " << segment.mName << endl;
                 //avgCost += sortedTechs.back()->getEnergyCost( mRegionName, mName, aPeriod ) * segment.mHours;
             }
+
+            }
+        }
         }
         avgCost = avgCost / totalElecDemand + capacityPrice;
         for( auto segment : mDemandSegments ) {
             segment->getCost() = avgCost;
-            const string segmentMarketName = mName+"_"+segment->mName;
+            const string segmentMarketName = /*mName+"_"+*/segment->mName;
             marketplace->setPrice( segmentMarketName, mRegionName, avgCost, aPeriod );
         }
         //double remainingProduction = marketDemand;

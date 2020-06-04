@@ -913,6 +913,7 @@ void MarketDependencyFinder::createTrialsForItem( CItemIterator aItemToReset, Ca
     // Dependencies on the price vertex must remain since it is responsible
     // for setting it's actual price into the marketplace.
     vector<CalcVertex*> fixedOutputVertices;
+    int numUnBreakable = 0;
     for( CItemIterator it = mDependencyItems.begin(); it != mDependencyItems.end(); ++it ) {
         for( VertexIterator vertexIter = (*it)->mDemandVertices.begin(); vertexIter != (*it)->mDemandVertices.end(); ++vertexIter ) {
             VertexIterator dependIter = find( (*vertexIter)->mOutEdges.begin(), (*vertexIter)->mOutEdges.end(), (*aItemToReset)->getFirstDemandVertex() );
@@ -920,13 +921,16 @@ void MarketDependencyFinder::createTrialsForItem( CItemIterator aItemToReset, Ca
                 if( boost::algorithm::ends_with( (*vertexIter)->mCalcItem->getDescription(), "-fixed-output" ) ) {
                     fixedOutputVertices.push_back( *vertexIter );
                 }
+                else if( !(*it)->mCanBreakCycle ) {
+                    ++numUnBreakable;
+                }
                 else {
                     (*vertexIter)->mOutEdges.erase( dependIter );
                 }
             }
         }
     }
-    aNumDependencies[ (*aItemToReset)->getFirstDemandVertex() ] = fixedOutputVertices.size();
+    aNumDependencies[ (*aItemToReset)->getFirstDemandVertex() ] = fixedOutputVertices.size() + numUnBreakable;
 
     // Lookup/create the associated market linkages to the price and demand
     // vertices.
