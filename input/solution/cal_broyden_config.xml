@@ -44,11 +44,11 @@
         <solution-tolerance>0.001</solution-tolerance>
         <solution-floor>0.0001</solution-floor>
         <calibration-tolerance>0.01</calibration-tolerance>
-        <max-model-calcs>500</max-model-calcs>
+        <max-model-calcs>1000</max-model-calcs>
 
         <preconditioner-solver-component>
             <solution-info-filter>solvable &amp;&amp; !(has-market-flag="fully-calibrated")</solution-info-filter>
-            <ftol>1.0e-4</ftol>
+            <ftol>1.0e-2</ftol>
             <itmax>2</itmax>
         </preconditioner-solver-component>
 
@@ -82,7 +82,7 @@
             <max-iterations>10</max-iterations>
             <ftol>5.0e-3</ftol>
             <linear-price/>
-            <solution-info-filter>solvable-nr || (market-type="Tax" &amp;&amp; solvable)</solution-info-filter>
+            <solution-info-filter>solvable-nr</solution-info-filter>
         </broyden-solver-component>
         <preconditioner-solver-component>
             <solution-info-filter>solvable &amp;&amp; unsolved</solution-info-filter>

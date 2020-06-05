@@ -1,4 +1,6 @@
-#' module_gcamusa_LA114.wind
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
+#' module_gcamusa_LA114.Wind
 #'
 #' Compute capacity factors for wind by US state.
 #'
@@ -10,11 +12,10 @@
 #' The corresponding file in the original data system was \code{LA114.Wind.R} (gcam-usa level1).
 #' @details Computes capacity factors for wind by US state.
 #' @importFrom assertthat assert_that
-#' @importFrom dplyr filter mutate select
-#' @importFrom tidyr gather spread
-#' @author YO May 2020
-module_gcamusa_LA114.wind <- function(command, ...)
-  {
+#' @importFrom dplyr filter mutate select pull
+#' @importFrom tidyr gather spread complete
+#' @author ST September 2017 / YO June 2020
+module_gcamusa_LA114.wind <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c( FILE = "gcam-usa/us_state_wind",
               FILE = "energy/A23.globaltech_capital",

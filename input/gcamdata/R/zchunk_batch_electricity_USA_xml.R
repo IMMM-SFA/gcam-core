@@ -1,3 +1,5 @@
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
 #' module_gcamusa_batch_electricity_USA_xml
 #'
 #' Construct XML data structure for \code{electricity_USA.xml}.
@@ -63,25 +65,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.InterestRate_FERC",
              "L223.Pop_FERC",
              "L223.BaseGDP_FERC",
-             "L223.LaborForceFillout_FERC",
-             "L2232.DeleteSupplysector_USAelec",
-             "L2232.Supplysector_USAelec",
-             "L2232.SubsectorShrwtFllt_USAelec",
-             "L2232.SubsectorInterp_USAelec",
-             "L2232.SubsectorLogit_USAelec",
-             "L2232.TechShrwt_USAelec",
-             "L2232.TechCoef_USAelec",
-             "L2232.Production_exports_USAelec",
-             "L2232.Supplysector_elec_FERC",
-             "L2232.ElecReserve_FERC",
-             "L2232.SubsectorShrwtFllt_elec_FERC",
-             "L2232.SubsectorInterp_elec_FERC",
-             "L2232.SubsectorLogit_elec_FERC",
-             "L2232.TechShrwt_elec_FERC",
-             "L2232.TechCoef_elec_FERC",
-             "L2232.TechCoef_elecownuse_FERC",
-             "L2232.Production_imports_FERC",
-             "L2232.Production_elec_gen_FERC"))
+             "L223.LaborForceFillout_FERC"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "electricity_USA.xml"))
   } else if(command == driver.MAKE) {
@@ -146,25 +130,14 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.Pop_FERC <- get_data(all_data, "L223.Pop_FERC")
     L223.BaseGDP_FERC <- get_data(all_data, "L223.BaseGDP_FERC")
     L223.LaborForceFillout_FERC <- get_data(all_data, "L223.LaborForceFillout_FERC")
+    # L223.StubTechCost_offshore_wind_USA <- get_data(all_data,"L223.StubTechCost_offshore_wind_USA")
 
-    L2232.DeleteSupplysector_USAelec <- get_data(all_data, "L2232.DeleteSupplysector_USAelec")
-    L2232.Supplysector_USAelec <- get_data(all_data, "L2232.Supplysector_USAelec")
-    L2232.SubsectorShrwtFllt_USAelec <- get_data(all_data, "L2232.SubsectorShrwtFllt_USAelec")
-    L2232.SubsectorInterp_USAelec <- get_data(all_data, "L2232.SubsectorInterp_USAelec")
-    L2232.SubsectorLogit_USAelec <- get_data(all_data, "L2232.SubsectorLogit_USAelec")
-    L2232.TechShrwt_USAelec <- get_data(all_data, "L2232.TechShrwt_USAelec")
-    L2232.TechCoef_USAelec <- get_data(all_data, "L2232.TechCoef_USAelec")
-    L2232.Production_exports_USAelec <- get_data(all_data, "L2232.Production_exports_USAelec")
-    L2232.Supplysector_elec_FERC <- get_data(all_data, "L2232.Supplysector_elec_FERC")
-    L2232.ElecReserve_FERC <- get_data(all_data, "L2232.ElecReserve_FERC")
-    L2232.SubsectorShrwtFllt_elec_FERC <- get_data(all_data, "L2232.SubsectorShrwtFllt_elec_FERC")
-    L2232.SubsectorInterp_elec_FERC <- get_data(all_data, "L2232.SubsectorInterp_elec_FERC")
-    L2232.SubsectorLogit_elec_FERC <- get_data(all_data, "L2232.SubsectorLogit_elec_FERC")
-    L2232.TechShrwt_elec_FERC <- get_data(all_data, "L2232.TechShrwt_elec_FERC")
-    L2232.TechCoef_elec_FERC <- get_data(all_data, "L2232.TechCoef_elec_FERC")
-    L2232.TechCoef_elecownuse_FERC <- get_data(all_data, "L2232.TechCoef_elecownuse_FERC")
-    L2232.Production_imports_FERC <- get_data(all_data, "L2232.Production_imports_FERC")
-    L2232.Production_elec_gen_FERC <- get_data(all_data, "L2232.Production_elec_gen_FERC")
+    # ===================================================
+    # Rename tibble columns to match the L2 data names.
+    # L223.PassthroughSector_elec_USA <- rename(L223.PassthroughSector_elec_USA, pass.through.sector = passthrough.sector)
+    # L223.PassthroughTech_elec_FERC  <- rename(L223.PassthroughTech_elec_FERC, pass.through.technology = technology)
+    # L223.StubTechProd_elec_USA      <- rename(L223.StubTechProd_elec_USA, tech.share.weight = share.weight)
+
 
     # Produce outputs
     create_xml("electricity_USA.xml") %>%
@@ -224,24 +197,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.Pop_FERC, "Pop") %>%
       add_xml_data(L223.BaseGDP_FERC, "BaseGDP") %>%
       add_xml_data(L223.LaborForceFillout_FERC, "LaborForceFillout") %>%
-      add_xml_data(L2232.DeleteSupplysector_USAelec, "DeleteSupplysector") %>%
-      add_logit_tables_xml(L2232.Supplysector_USAelec, "Supplysector") %>%
-      add_xml_data(L2232.SubsectorShrwtFllt_USAelec, "SubsectorShrwtFllt") %>%
-      add_xml_data(L2232.SubsectorInterp_USAelec, "SubsectorInterp") %>%
-      add_logit_tables_xml(L2232.SubsectorLogit_USAelec, "SubsectorLogit") %>%
-      add_xml_data(L2232.TechShrwt_USAelec, "TechShrwt") %>%
-      add_xml_data(L2232.TechCoef_USAelec, "TechCoef") %>%
-      add_xml_data(L2232.Production_exports_USAelec, "Production") %>%
-      add_logit_tables_xml(L2232.Supplysector_elec_FERC, "Supplysector") %>%
-      add_xml_data(L2232.ElecReserve_FERC, "ElecReserve") %>%
-      add_xml_data(L2232.SubsectorShrwtFllt_elec_FERC, "SubsectorShrwtFllt") %>%
-      add_xml_data(L2232.SubsectorInterp_elec_FERC, "SubsectorInterp") %>%
-      add_logit_tables_xml(L2232.SubsectorLogit_elec_FERC, "SubsectorLogit") %>%
-      add_xml_data(L2232.TechShrwt_elec_FERC, "TechShrwt") %>%
-      add_xml_data(L2232.TechCoef_elec_FERC, "TechCoef") %>%
-      add_xml_data(L2232.TechCoef_elecownuse_FERC, "TechCoef") %>%
-      add_xml_data(L2232.Production_imports_FERC, "Production") %>%
-      add_xml_data(L2232.Production_elec_gen_FERC, "Production") %>%
+      # add_xml_data(L223.StubTechCost_offshore_wind_USA, "StubTechCost") %>%
       add_precursors("L223.Sector_Investment",
                      "L223.SubsectorLogit_Investment",
                      "L223.SubsectorShrwt_Investment",
@@ -294,25 +250,8 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.InterestRate_FERC",
                      "L223.Pop_FERC",
                      "L223.BaseGDP_FERC",
-                     "L223.LaborForceFillout_FERC",
-                     "L2232.DeleteSupplysector_USAelec",
-                     "L2232.Supplysector_USAelec",
-                     "L2232.SubsectorShrwtFllt_USAelec",
-                     "L2232.SubsectorInterp_USAelec",
-                     "L2232.SubsectorLogit_USAelec",
-                     "L2232.TechShrwt_USAelec",
-                     "L2232.TechCoef_USAelec",
-                     "L2232.Production_exports_USAelec",
-                     "L2232.Supplysector_elec_FERC",
-                     "L2232.ElecReserve_FERC",
-                     "L2232.SubsectorShrwtFllt_elec_FERC",
-                     "L2232.SubsectorInterp_elec_FERC",
-                     "L2232.SubsectorLogit_elec_FERC",
-                     "L2232.TechShrwt_elec_FERC",
-                     "L2232.TechCoef_elec_FERC",
-                     "L2232.TechCoef_elecownuse_FERC",
-                     "L2232.Production_imports_FERC",
-                     "L2232.Production_elec_gen_FERC") ->
+                     # "L223.StubTechCost_offshore_wind_USA",
+                     "L223.LaborForceFillout_FERC") ->
       electricity_USA.xml
 
     return_data(electricity_USA.xml)
