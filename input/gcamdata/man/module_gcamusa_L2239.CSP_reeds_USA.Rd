@@ -31,5 +31,5 @@ Create updated solar CSP resource supply curves consistent with ReEDS.
 Create state-level solar CSP resource supply curves
 }
 \author{
-MTB September 2018 / YO April 2020
+MTB September 2018 / AJS June 2019 / YO April 2020
 }

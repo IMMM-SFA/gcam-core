@@ -27,5 +27,5 @@ Calculate electricity fuel consumption, electricity generation, and inputs and o
 By state, calculates electricity fuel consumption, electricity generation, and inputs and outputs of net ownuse.
 }
 \author{
-RLH August 2017 YO Feb 2020
+RLH August 2017 YO Jun 2020
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/zchunk_LA114.wind_USA.R
 \name{module_gcamusa_LA114.wind}
 \alias{module_gcamusa_LA114.wind}
-\title{module_gcamusa_LA114.wind}
+\title{module_gcamusa_LA114.Wind}
 \usage{
 module_gcamusa_LA114.wind(command, ...)
 }
@@ -14,7 +14,7 @@ module_gcamusa_LA114.wind(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L114.CapacityFactor_wind_state}, \code{L114.CapacityFactor_wind_state_segment}.
+the generated outputs: \code{L114.CapacityFactor_wind_state_gcamusa}, \code{L114.CapacityFactor_wind_state_segment_gcamusa}.
 The corresponding file in the original data system was \code{LA114.Wind.R} (gcam-usa level1).
 }
 \description{
@@ -24,5 +24,5 @@ Compute capacity factors for wind by US state.
 Computes capacity factors for wind by US state.
 }
 \author{
-YO Janurary 2020
+ST September 2017 / YO June 2020
 }

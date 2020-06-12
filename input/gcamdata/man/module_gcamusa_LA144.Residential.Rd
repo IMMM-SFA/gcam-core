@@ -24,5 +24,5 @@ Calculate residential floorspace by state and residential energy consumption by 
 Calculate residential floorspace by state and residential energy consumption by state/fuel/end use.
 }
 \author{
-RLH September 2017
+RLH September 2017; PK and NK, January 2020,   updated for RECS 2015
 }

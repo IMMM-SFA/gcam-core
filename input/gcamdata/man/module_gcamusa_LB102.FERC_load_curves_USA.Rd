@@ -25,5 +25,5 @@ Process FERC hours data into load segments by grid regions for dispatch model.
 Compute load curve related parameters for investment and disparch segments
 }
 \author{
-YO May 2020
+PLP YO May 2020
 }
