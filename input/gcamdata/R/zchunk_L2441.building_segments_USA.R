@@ -1,3 +1,5 @@
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
 #' module_gcamusa_L2441.building_segments_USA
 #'
 #' Creates GCAM-USA building dispatch output files for writing to xml.

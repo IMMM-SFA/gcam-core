@@ -1,3 +1,5 @@
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
 #' module_gcamusa_LB102.FERC_load_curves_USA
 #'
 #' Process FERC hours data into load segments by grid regions for dispatch model.

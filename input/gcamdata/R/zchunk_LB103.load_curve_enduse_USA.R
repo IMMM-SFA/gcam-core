@@ -1,3 +1,5 @@
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
 #' module_gcamusa_LB103.load_curve_enduse_USA
 #'
 #' Process EIA monthly retail electricity sales data by grid regions to get load curves for enduse sectors.

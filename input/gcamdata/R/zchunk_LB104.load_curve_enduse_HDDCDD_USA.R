@@ -1,3 +1,5 @@
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
 #' module_gcamusa_LB104.load_curve_enduse_HDDCDD_USA
 #'
 #' Use HDDCDD to calculate buildings heating and cooling demand profiles.
