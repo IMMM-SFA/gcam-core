@@ -64,8 +64,9 @@ const Modeltime* Modeltime::getInstance() {
 Modeltime::Modeltime() :
 mStartYear( -1 ),
 mEndYear( -1 ),
-mFinalCalibrationYear( 2010 ),
-mIsInitialized( false )
+mFinalCalibrationYear( 2015 ),
+mIsInitialized( false ),
+mCarbonModelStartYear( -1 )
 {
 }
 
@@ -118,15 +119,27 @@ bool Modeltime::XMLParse( const DOMNode* aNode ) {
         }
         else if ( nodeName == "final-calibration-year" ){
             int tempCalibrationYear = XMLHelper<int>::getValue( curr ); 
-            // mFinalCalibrationYear is initialized to 2010
-            if ( tempCalibrationYear != mFinalCalibrationYear ){
+            // mFinalCalibrationYear is initialized to 2015
+            if ( tempCalibrationYear < mFinalCalibrationYear ){
                 ILogger& mainLog = ILogger::getLogger( "main_log" );
                 mainLog.setLevel( ILogger::WARNING );
-                mainLog << "Using read in final-calibration-year (" << tempCalibrationYear
-                    << ") and not the last historical year (" << mFinalCalibrationYear << ")." << endl;
+                mainLog << "\nRead in final-calibration-year (" << tempCalibrationYear << ") "
+                        << "earlier than last historical year (" << mFinalCalibrationYear << ").\n"
+                        << "Running in HINDCASTING MODE with (" << tempCalibrationYear
+                        << ") as the final calibration year.\n" << endl;
                 mFinalCalibrationYear = tempCalibrationYear;
             }
+            else if (tempCalibrationYear > mFinalCalibrationYear ){
+                ILogger& mainLog = ILogger::getLogger( "main_log" );
+                mainLog.setLevel( ILogger::WARNING );
+                mainLog << "\nHistorical calibration to (" << tempCalibrationYear << ") is not possible! "
+                        << "Setting final calibration year to default year (" << mFinalCalibrationYear
+                        << ").\n" << endl;
+            }
         } 
+        else if( nodeName == "carbon-model-start-year" ) {
+            mCarbonModelStartYear = XMLHelper<int>::getValue( curr );
+        }
         else {
             ILogger& mainLog = ILogger::getLogger( "main_log" );
             mainLog.setLevel( ILogger::WARNING );
@@ -157,6 +170,8 @@ void Modeltime::toDebugXML( const int aPeriod, ostream& aOut, Tabs* aTabs ) cons
         XMLWriteElementWithAttributes( mPeriodToYear[ aPeriod ], "inter-year", aOut, aTabs, attrs );
     }
     XMLWriteElement( mFinalCalibrationYear, "final-calibration-year", aOut, aTabs );
+    XMLWriteElementCheckDefault( mCarbonModelStartYear, "carbon-model-start-year", aOut, aTabs, 1975 );
+
 
     XMLWriteClosingTag( getXMLNameStatic(), aOut, aTabs );
 }
@@ -343,3 +358,6 @@ int Modeltime::getFinalCalibrationPeriod() const {
     return getyr_to_per( mFinalCalibrationYear );
 }
 
+int Modeltime::getCarbonModelStartYear() const {
+    return mCarbonModelStartYear;
+}

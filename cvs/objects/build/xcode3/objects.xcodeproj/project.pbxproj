@@ -316,6 +316,8 @@
 		CDF83C1413A30CA600DF178D /* s_curve_shutdown_decider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF83C1213A30CA600DF178D /* s_curve_shutdown_decider.cpp */; };
 		CDF83C1A13A30CC500DF178D /* kyoto_forcing_target.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF83C1813A30CC500DF178D /* kyoto_forcing_target.cpp */; };
 		CDF83C1B13A30CC500DF178D /* secanter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF83C1913A30CC500DF178D /* secanter.cpp */; };
+		DD443E1924119FE80042FD58 /* dispatch_sector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD443E1824119FE80042FD58 /* dispatch_sector.cpp */; };
+		DD443E1C2411A00A0042FD58 /* capacity_technology.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD443E1B2411A00A0042FD58 /* capacity_technology.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1063,6 +1065,10 @@
 		CDF83C1713A30CB800DF178D /* secanter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = secanter.h; sourceTree = "<group>"; };
 		CDF83C1813A30CC500DF178D /* kyoto_forcing_target.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kyoto_forcing_target.cpp; sourceTree = "<group>"; };
 		CDF83C1913A30CC500DF178D /* secanter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = secanter.cpp; sourceTree = "<group>"; };
+		DD443E1624119FDA0042FD58 /* dispatch_sector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dispatch_sector.h; sourceTree = "<group>"; };
+		DD443E1824119FE80042FD58 /* dispatch_sector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dispatch_sector.cpp; sourceTree = "<group>"; };
+		DD443E1A24119FFD0042FD58 /* capacity_technology.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = capacity_technology.h; sourceTree = "<group>"; };
+		DD443E1B2411A00A0042FD58 /* capacity_technology.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = capacity_technology.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1865,7 +1871,7 @@
 		CD4885E4122873C200F5A88A /* include */ = {
 			isa = PBXGroup;
 			children = (
-				CDB8FB9224897AD8008E9B85 /* dispatch_sector.h */,
+				DD443E1624119FDA0042FD58 /* dispatch_sector.h */,
 				0E90E7BA23200F0C00B0454A /* nesting_subsector.h */,
 				CD8DFFDA1FA8D20600CB3719 /* negative_emissions_final_demand.h */,
 				CD8FDEC71C0647050099C752 /* pass_through_sector.h */,
@@ -1896,7 +1902,7 @@
 		CD488600122873C200F5A88A /* source */ = {
 			isa = PBXGroup;
 			children = (
-				CDB8FB8F24897ACC008E9B85 /* dispatch_sector.cpp */,
+				DD443E1824119FE80042FD58 /* dispatch_sector.cpp */,
 				0E90E7BD23200F1E00B0454A /* nesting_subsector.cpp */,
 				CD8DFFDB1FA8D21700CB3719 /* negative_emissions_final_demand.cpp */,
 				CD8FDEC81C0647140099C752 /* pass_through_sector.cpp */,
@@ -2115,7 +2121,8 @@
 		CD48866B122873C200F5A88A /* include */ = {
 			isa = PBXGroup;
 			children = (
-				CDB8FB9324897AE4008E9B85 /* capacity_technology.h */,
+
+				DD443E1A24119FFD0042FD58 /* capacity_technology.h */,
 				0EDA1125220B73B60066113A /* resource_reserve_technology.h */,
 				CD8FDECA1C0647640099C752 /* pass_through_technology.h */,
 				0EB5CE771C063E3E008CEF7D /* fractional_secondary_output.h */,
@@ -2177,7 +2184,7 @@
 		CD48869E122873C200F5A88A /* source */ = {
 			isa = PBXGroup;
 			children = (
-				CDB8FB9424897AED008E9B85 /* capacity_technology.cpp */,
+				DD443E1B2411A00A0042FD58 /* capacity_technology.cpp */,
 				0EDA1123220B73A90066113A /* resource_reserve_technology.cpp */,
 				CD8FDECB1C0647A20099C752 /* pass_through_technology.cpp */,
 				0EB5CE781C063E4B008CEF7D /* fractional_secondary_output.cpp */,
@@ -2774,7 +2781,7 @@
 				CDD5A20F130338B60088463C /* technology_container.cpp in Sources */,
 				CDAF62F0130DAB6900D93AFB /* MAGICC_array.cpp in Sources */,
 				CDAF62F1130DAB6900D93AFB /* MAGICC_IO_helpers.cpp in Sources */,
-				CDB8FB9124897ACC008E9B85 /* dispatch_sector.cpp in Sources */,
+				DD443E1924119FE80042FD58 /* dispatch_sector.cpp in Sources */,
 				CDAF62F2130DAB6900D93AFB /* ObjECTS_MAGICC_others.cpp in Sources */,
 				CDAF62F3130DAB6900D93AFB /* ObjECTS_MAGICC.cpp in Sources */,
 				CDF0CA10139FD0C100B20B01 /* luc_emissions_summer.cpp in Sources */,
@@ -2801,7 +2808,7 @@
 				CDE074B3146895AA00432712 /* satiation_demand_function.cpp in Sources */,
 				CDCB33331469934E00BEA539 /* consumer_activity.cpp in Sources */,
 				CDCBBF0D14BB6658008B5F4D /* thermal_building_service_input.cpp in Sources */,
-				CDB8FB9524897AED008E9B85 /* capacity_technology.cpp in Sources */,
+				DD443E1C2411A00A0042FD58 /* capacity_technology.cpp in Sources */,
 				CD83E61614F4584900A1D301 /* linked_market.cpp in Sources */,
 				CD83E63A14F54B1000A1D301 /* linked_ghg_policy.cpp in Sources */,
 				CD177C3B159A0C5B000A996F /* cumulative_emissions_target.cpp in Sources */,
@@ -2893,6 +2900,7 @@
 					../../../../libs/java/lib,
 					"../../../../libs/boost-lib/stage/lib",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lxerces-c",
@@ -2937,6 +2945,7 @@
 					../../../../libs/java/lib,
 					"../../../../libs/boost-lib/stage/lib",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lxerces-c",
@@ -2983,6 +2992,7 @@
 					../../../../libs/java/lib,
 					"../../../../libs/boost-lib/stage/lib",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lxerces-c",
@@ -3047,6 +3057,7 @@
 					../../../../libs/tbb/lib,
 					"../../../../libs/boost-lib/stage/lib",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lxerces-c",
