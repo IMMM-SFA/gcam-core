@@ -5121,6 +5121,74 @@ local:generate-sector-output-coefs(remove($inputNameQueue, 1), $currTree, $coefs
                   </level>
                </labelRewriteList>
             </supplyDemandQuery>
+            <supplyDemandQuery title="Electricity capacity by technology">
+         <axis1 name="technology">technology</axis1>
+         <axis2 name="Year">technology[@year]</axis2>
+         <xPath buildList="true" dataName="capacity" group="false" sumAll="false">*[@type = 'sector' (: collapse :) and (@name='electricity')]//*[@type = 'technology']/capacity/node()</xPath>
+         <comments/>
+      </supplyDemandQuery>
+      <supplyDemandQuery title="Electricity capacity-factor by technology">
+         <axis1 name="technology">technology</axis1>
+         <axis2 name="Year">technology[@year]</axis2>
+         <xPath buildList="true" dataName="capacity" group="false" sumAll="false">*[@type = 'sector' (: collapse :) and (@name='electricity')]//*[@type = 'technology']/capacity-factor/node()</xPath>
+         <comments/>
+      </supplyDemandQuery>
+      <query title="electricity generation by segment and tech">
+         <axis1 name="segment">segment[@name]</axis1>
+         <axis2 name="Year">dispatch[@year]</axis2>
+         <xPath buildList="true" dataName="segment-production" group="false" sumAll="false"><![CDATA[
+            declare function local:nest-land-category($leaf as node(), $level as xs:string, $child as node()*) as node() {
+                let $attrMatch := $leaf/@*[name()=$level],
+                    $attrValue := if(exists($attrMatch)) then string($attrMatch) else "NA"
+                return element { $level } {
+                    attribute name { $attrValue },
+                    $child
+                }
+            };
+            declare function local:run-nest-land-categories($scenarios as xs:string*, $regions as xs:string*, $collection as xs:string) as node()* { 	
+                let $regionsG := if(not($regions[1] = 'Global'))
+                                 then $regions
+                                 else distinct-values(collection($collection)/scenario/world/*[@type='region']/@name)
+                return
+                    for $scenario in $scenarios, 	    
+                        $region in $regionsG 	
+                    let $scenario_split := tokenize($scenario, ' '), 	    
+                        $currTree := collection($collection)/scenario[@name = $scenario_split[1] and @date = $scenario_split[2]]/world/*[@type='region' and @name=$region],
+                        $landLeaves := $currTree/*[@type='sector' and @name='electricity']/dispatch,
+                        $ret := document {
+                            element scenario {
+                                attribute name { $scenario_split[1] },
+                                attribute date { $scenario_split[2] },
+                                element region {
+                                    attribute type { "region" },
+                                    attribute name { $region },
+                                    for $disp in $landLeaves
+                                    return element dispatch {
+                                    attribute year { $disp/@year },
+                                    for $leaf in $disp/segment-production
+                                    (: TODO: not sure why I have to explicitly copy the land-allocation :)
+                                    let $copy := for $landAlloc in $leaf
+                                                 return element segment-production {
+                                                    text { $landAlloc/text() }
+                                                 }
+                                    (: A user could choose to nest by recursively calling for any of: ("crop", "land-region", "water", "mgmt-tech") :)
+                                    return local:nest-land-category($leaf, "tech-year", local:nest-land-category($leaf, "tech-name", local:nest-land-category($leaf, "state", local:nest-land-category($leaf, "segment", $copy))))
+                                    }
+                                }
+                            }
+                        }
+                    return $ret//text()
+            };
+            local:run-nest-land-categories((:scenarios:), (:regions:), (:collection:))
+            ]]></xPath>
+         <comments/>
+      </query>
+      <supplyDemandQuery title="Electricity generation by segment">
+         <axis1 name="segment">segment-production[@segment]</axis1>
+         <axis2 name="Year">dispatch[@year]</axis2>
+         <xPath buildList="true" dataName="generation" group="false" sumAll="false">*[@type = 'sector' (collapse :and (@name='electricity')]/dispatch/segment-production/node()</xPath>
+         <comments/>
+      </supplyDemandQuery>
          </queryGroup>
          <queryGroup name="refining">
             <supplyDemandQuery title="refined liquids production by region">
@@ -5272,7 +5340,8 @@ local:generate-sector-output-coefs(remove($inputNameQueue, 1), $currTree, $coefs
                   <rewrite from="comm non-building" to="building"/>
                </level>
             </labelRewriteList>
-          </supplyDemandQuery>
+            </supplyDemandQuery>
+            
         </queryGroup>
       </queryGroup>
    </queryGroup>
