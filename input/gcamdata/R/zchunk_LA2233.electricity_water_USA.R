@@ -1,3 +1,5 @@
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
 #' module_gcamusa_LA2233.electricity_water_USA
 #'
 #' Weighted water coefficient for reference scenario and load segment classification
@@ -10,6 +12,8 @@
 #' The corresponding file in the
 #' original data system was \code{LA2233.electricity_water_USA} (gcam-usa level2)
 #' @details Weighted water coefficient for reference scenario and load segment classification
+#' @importFrom dplyr anti_join inner_join
+#' @importFrom tidyr gather
 #' @author Zarrar Khan September 2018
 disabled_module_gcamusa_LA2233.electricity_water_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
@@ -117,7 +121,11 @@ disabled_module_gcamusa_LA2233.electricity_water_USA <- function(command, ...) {
 
 
     years_to_create <- MODEL_YEARS[!MODEL_YEARS %in% names(L2233.StubTech_WaterCoef_ref_temp)]
-    L2233.StubTech_WaterCoef_ref_temp[, years_to_create] <- NA_real_
+    #kbn and nk 2019-11-25: adding columns has been changed in R. You need to make sure your column names are characters explicitly.
+    years_to_create<-as.character(years_to_create)
+
+
+    L2233.StubTech_WaterCoef_ref_temp[years_to_create] <- NA_real_
 
     # Interpolate for missing years using approx_fun and map elec_tech_water_map technologies
     L2233.StubTech_WaterCoef_ref_temp %>%

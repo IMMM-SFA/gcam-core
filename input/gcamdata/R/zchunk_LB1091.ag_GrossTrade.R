@@ -1,3 +1,52 @@
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
+#' module_data_FAO_BilateralTrade
+#'
+#' Read the FAO_BilateralTrade trade from file and reduce / summarize as soon as possible to
+#' keep its memory footprint small.  NOTE: we do not market the FAO_BilateralTrade as
+#' INPUT in order to have more control of when it gets loaded and minimize the amount of
+#' time it is loaded in memory.
+#'
+#' @param command API command to execute
+#' @param ... other optional parameters, depending on command
+#' @return Depends on \code{command}: either a vector of required inputs,
+#' a vector of output names, or (if \code{command} is "MAKE") all
+#' the generated outputs: \code{FAO_BilateralTrade}.
+#' @importFrom dplyr filter if_else mutate select
+#' @author PLP
+module_data_FAO_BilateralTrade <- function(command, ...) {
+  if(command == driver.DECLARE_INPUTS) {
+    # Note: we do not declare any inputs and will handle loading the data directly
+    # to have more control.
+    return(NULL)
+  } else if(command == driver.DECLARE_OUTPUTS) {
+    return(c("FAO_BilateralTrade"))
+  } else if(command == driver.MAKE) {
+
+    Element <- Reporter.Countries <- Partner.Countries <-
+      Item.Code <- Item <- item.code <- NULL # silence package check.
+
+    # The bilateral trade dataset is massive (286m data points). The order of the steps below is intended to minimize
+    # processing time (i.e., the dataset is filtered before performing operations)
+
+    # Select columns, filter to the import and export quantity variables, and gather_years dropping NAs
+    # as the "matrix" is very sparse
+    fn <- "aglu/FAO/FAO_BilateralTrade"
+    fqfn <- find_csv_file(fn, FALSE, quiet = TRUE)
+    load_csv_files(fn, FALSE, quiet = TRUE)[[1]] %>%
+      select(Reporter.Countries, Partner.Countries, Item.Code, Item, Element, as.character(aglu.TRADE_CAL_YEARS)) %>%
+      filter(Element %in% c( "Import Quantity", "Export Quantity")) %>%
+      gather_years(na.rm = TRUE) %>%
+      parse_csv_header(fqfn, find_header(fqfn)) %>%
+      add_flags(FLAG_NO_TEST) ->
+      FAO_BilateralTrade
+
+    return_data(FAO_BilateralTrade)
+  } else {
+    stop("Unknown command")
+  }
+}
+
 #' module_aglu_LB1091.ag_GrossTrade
 #'
 #' Calculate primary agricultural good and animal product mass balances, by region / commodity / year.
@@ -17,8 +66,9 @@ module_aglu_LB1091.ag_GrossTrade <- function(command, ...) {
     return(c(FILE = "common/iso_GCAM_regID",
              FILE = "aglu/AGLU_ctry",
              FILE = "aglu/FAO/FAO_ag_items_TRADE",
-             FILE = "aglu/FAO/FAO_BilateralTrade",
-             "L109.ag_ALL_Mt_R_C_Y"))
+             "FAO_BilateralTrade",
+             "L109.ag_ALL_Mt_R_C_Y",
+             "L109.an_ALL_Mt_R_C_Y"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L1091.GrossTrade_Mt_R_C_Y"))
   } else if(command == driver.MAKE) {
@@ -35,22 +85,23 @@ module_aglu_LB1091.ag_GrossTrade <- function(command, ...) {
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID")
     AGLU_ctry <- get_data(all_data, "aglu/AGLU_ctry")
     FAO_ag_items_TRADE <- get_data(all_data, "aglu/FAO/FAO_ag_items_TRADE")
-    FAO_BilateralTrade <- get_data(all_data, "aglu/FAO/FAO_BilateralTrade")
+    FAO_BilateralTrade <- get_data(all_data, "FAO_BilateralTrade")
     L109.ag_ALL_Mt_R_C_Y <- get_data(all_data, "L109.ag_ALL_Mt_R_C_Y")
+    L109.an_ALL_Mt_R_C_Y <- get_data(all_data, "L109.an_ALL_Mt_R_C_Y")
 
+    # 0: Bind crops and livestock for prod and netexp
+    L109.ag_an_ALL_Mt_R_C_Y <- L109.ag_ALL_Mt_R_C_Y %>%
+      select(GCAM_region_ID, GCAM_commodity, year, Prod_Mt, NetExp_Mt) %>%
+      bind_rows(L109.an_ALL_Mt_R_C_Y %>%
+                  select(GCAM_region_ID, GCAM_commodity, year, Prod_Mt, NetExp_Mt))
     # 1: Filter and prepare the bi-lateral trade flow volume data by country and FAO commodity
 
-    # The bilateral trade dataset is massive (286m data points). The order of the steps below is intended to minimize
-    # processing time (i.e., the dataset is filtered before performing operations)
-
-    # Select columns, filter to the import and export quantity variables, and filter to traded GCAM commodities
+    # Filter to traded GCAM commodities
     # left_join because many of the trade commodities don't map to GCAM commodities (e.g., silk worm cocoons)
-    L1091.BiTrade_t_ctry_item <- filter(FAO_BilateralTrade, Element %in% c( "Import Quantity", "Export Quantity")) %>%
-      select(Reporter.Countries, Partner.Countries, Item.Code, Item, Element, as.character(aglu.TRADE_CAL_YEARS)) %>%
-      left_join(select(FAO_ag_items_TRADE, item.code, bitrade_commod, GCAM_commodity),
+    L1091.BiTrade_t_ctry_item <- left_join(FAO_BilateralTrade, select(FAO_ag_items_TRADE, item.code, bitrade_commod, GCAM_commodity),
                 by = c(Item.Code = "item.code")) %>%
       filter(!is.na(GCAM_commodity),
-             GCAM_commodity %in% aglu.TRADED_CROPS) %>%
+             GCAM_commodity %in% aglu.TRADED_AG_AN) %>%
       # Join the reporter and partner countries. 10/17/2017 this does produce some missing iso codes for partner
       # countries but they're all tiny. Many  (e.g., "Unspecified Area") do not have 3-digit iso codes anyway. They are
       # dropped by drop_na().
@@ -63,9 +114,7 @@ module_aglu_LB1091.ag_GrossTrade <- function(command, ...) {
       left_join_keep_first_only(select(AGLU_ctry, FAO_country, iso),
                                 by = c( Partner.Countries = "FAO_country")) %>%
       rename(iso.partner = iso) %>%
-      drop_na(iso.partner) %>%
-      gather_years() %>%
-      drop_na(value)
+      drop_na(iso.partner)
 
     #2. Re-balancing bilateral trade data
     # The bilateral trade data are not symmetrical - some countries are partner countries but not reporter countries
@@ -122,7 +171,7 @@ module_aglu_LB1091.ag_GrossTrade <- function(command, ...) {
       rename(iso.partner = iso,
              GCAMreg.partner = GCAM_region_ID)
     L1091.XregTrade_Mt_R_C <- L1091.BiTrade_t_ctry_item_full %>%
-      filter(GCAM_commodity %in% aglu.TRADED_CROPS) %>%
+      filter(GCAM_commodity %in% aglu.TRADED_AG_AN) %>%
       left_join_error_no_match(select(iso_GCAM_regID, iso, GCAM_region_ID),
                                by = c("iso.reporter" = "iso")) %>%
       left_join_error_no_match(iso_mapping_partner,
@@ -148,7 +197,7 @@ module_aglu_LB1091.ag_GrossTrade <- function(command, ...) {
     # production, trade, food, feed, biofuels, and other.
     # If ScaledNetTrade > 0 (net exporter), then ScaledExports = Exports + (ScaledNetTrade - NetTrade) and ScaledImports = Imports
     # If ScaledNetTrade <= 0 (net importer), then ScaledImports = Imports + (NetTrade - ScaledNetTrade) and ScaledExports = Exports
-    L1091.ag_ALL_Mt_R_C_fhy <- filter(L109.ag_ALL_Mt_R_C_Y, year == aglu.TRADE_FINAL_BASE_YEAR)
+    L1091.ag_ALL_Mt_R_C_fhy <- filter(L109.ag_an_ALL_Mt_R_C_Y, year == aglu.TRADE_FINAL_BASE_YEAR)
     L1091.GrossTrade_Mt_R_C_fhy <- L1091.XregTrade_Mt_R_C %>%
       left_join_error_no_match(L1091.ag_ALL_Mt_R_C_fhy,
                                by = c("GCAM_region_ID", "GCAM_commodity")) %>%
@@ -169,7 +218,7 @@ module_aglu_LB1091.ag_GrossTrade <- function(command, ...) {
       select(GCAM_region_ID, GCAM_commodity, year, GrossExp_Mt, GrossImp_Mt)
 
     # The gross trade file needs to have data for all calibration years, so just use the net exports to determine this
-    L1091.GrossTrade_Mt_R_C_Y <- filter(L109.ag_ALL_Mt_R_C_Y, year != aglu.TRADE_FINAL_BASE_YEAR) %>%
+    L1091.GrossTrade_Mt_R_C_Y <- filter(L109.ag_an_ALL_Mt_R_C_Y, year != aglu.TRADE_FINAL_BASE_YEAR) %>%
       select(GCAM_region_ID, GCAM_commodity, year, NetExp_Mt) %>%
       mutate(GrossExp_Mt = if_else(NetExp_Mt > 0, NetExp_Mt, 0),
              GrossImp_Mt = if_else(NetExp_Mt <= 0, -1 * NetExp_Mt, 0)) %>%
@@ -184,8 +233,9 @@ module_aglu_LB1091.ag_GrossTrade <- function(command, ...) {
       add_precursors("common/iso_GCAM_regID",
                      "aglu/AGLU_ctry",
                      "aglu/FAO/FAO_ag_items_TRADE",
-                     "aglu/FAO/FAO_BilateralTrade",
-                     "L109.ag_ALL_Mt_R_C_Y") ->
+                     "FAO_BilateralTrade",
+                     "L109.ag_ALL_Mt_R_C_Y",
+                     "L109.an_ALL_Mt_R_C_Y") ->
       L1091.GrossTrade_Mt_R_C_Y
 
     return_data(L1091.GrossTrade_Mt_R_C_Y)

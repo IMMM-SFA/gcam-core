@@ -10,7 +10,7 @@
 #' The corresponding file in the original data system was \code{LA104.load_curves_enduse_HDDCDD.R} (gcamusa dispatch level1).
 #' @details Use HDDCDD to calculate buildings heating and cooling demand profiles.
 #' @importFrom assertthat assert_that
-#' @importFrom dplyr filter mutate select
+#' @importFrom dplyr filter mutate select top_n
 #' @importFrom tidyr gather spread
 #' @author YO May 2020
 module_gcamusa_LB104.load_curve_enduse_HDDCDD_USA <- function(command, ...) {

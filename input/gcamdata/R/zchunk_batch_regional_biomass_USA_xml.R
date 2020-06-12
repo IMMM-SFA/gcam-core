@@ -1,3 +1,5 @@
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
 #' module_gcamusa_batch_regional_biomass_USA_xml
 #'
 #' Construct XML data structure for \code{regional_biomass_USA.xml}.
@@ -17,6 +19,7 @@ module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...) {
              "L2261.SubsectorLogit_bio_USA",
              "L2261.StubTech_bio_USA",
              "L2261.StubTechMarket_bio_USA",
+             "L2261.StubTechCoef_bioOil_USA",
              "L2261.StubTechShrwt_rbO_USA",
              "L2261.StubTechFractSecOut_bio_USA",
              "L2261.StubTechFractProd_bio_USA",
@@ -55,6 +58,7 @@ module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...) {
     L2261.SubsectorLogit_bio_USA <- get_data(all_data, "L2261.SubsectorLogit_bio_USA")
     L2261.StubTech_bio_USA <- get_data(all_data, "L2261.StubTech_bio_USA")
     L2261.StubTechMarket_bio_USA <- get_data(all_data, "L2261.StubTechMarket_bio_USA")
+    L2261.StubTechCoef_bioOil_USA   <- get_data(all_data,"L2261.StubTechCoef_bioOil_USA")
     L2261.StubTechShrwt_rbO_USA <- get_data(all_data, "L2261.StubTechShrwt_rbO_USA")
     L2261.StubTechFractSecOut_bio_USA <- get_data(all_data, "L2261.StubTechFractSecOut_bio_USA")
     L2261.StubTechFractProd_bio_USA <- get_data(all_data, "L2261.StubTechFractProd_bio_USA")
@@ -92,6 +96,7 @@ module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...) {
       add_logit_tables_xml(L2261.SubsectorLogit_bio_USA, "SubsectorLogit") %>%
       add_xml_data(L2261.StubTech_bio_USA, "StubTech") %>%
       add_xml_data(L2261.StubTechMarket_bio_USA, "StubTechMarket") %>%
+      add_xml_data(L2261.StubTechCoef_bioOil_USA,"StubTechCoef") %>%
       add_xml_data(L2261.StubTechShrwt_rbO_USA, "StubTechShrwt") %>%
       add_xml_data(L2261.StubTechFractSecOut_bio_USA, "StubTechFractSecOut") %>%
       add_xml_data(L2261.StubTechFractProd_bio_USA, "StubTechFractProd") %>%
@@ -123,6 +128,7 @@ module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...) {
                      "L2261.SubsectorLogit_bio_USA",
                      "L2261.StubTech_bio_USA",
                      "L2261.StubTechMarket_bio_USA",
+                     "L2261.StubTechCoef_bioOil_USA",
                      "L2261.StubTechShrwt_rbO_USA",
                      "L2261.StubTechFractSecOut_bio_USA",
                      "L2261.StubTechFractProd_bio_USA",

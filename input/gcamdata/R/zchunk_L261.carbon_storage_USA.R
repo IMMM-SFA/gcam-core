@@ -1,3 +1,5 @@
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
 #' module_gcamusa_L261.carbon_storage_USA
 #'
 #' Generates GCAM-USA input files of carbon storage resource supply curves, shareweights, technology coefficients and costs, and other carbon storage information.
@@ -12,8 +14,7 @@
 #' @details This chunk generates input files of carbon storage resource supply curves by the US grid regions, and input files of logit, shareweights, and
 #' technology information of carbon storage by the US states.
 #' @importFrom assertthat assert_that
-#' @importFrom dplyr filter mutate select
-#' @importFrom tidyr gather spread
+#' @importFrom dplyr arrange distinct filter mutate one_of select semi_join
 #' @author RC Nov 2017
 module_gcamusa_L261.carbon_storage_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
@@ -123,7 +124,9 @@ module_gcamusa_L261.carbon_storage_USA <- function(command, ...) {
       write_to_all_states(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], LOGIT_TYPE_COLNAME)) %>%
       left_join_error_no_match(select(states_subregions, state, grid_region), by = c("region" = "state")) %>%
       # Drop the states where no carbon storage resources may exist at the grid level
-      filter(!paste(grid_region, subsector) %in% grid_Cstorage_nonexist) ->
+      filter(!(paste(grid_region, subsector) %in% grid_Cstorage_nonexist),
+             # Drop offshore carbon storage for states without ocean coastline
+             grepl("onshore", subsector) | (region %in% gcamusa.COASTAL_STATES & grepl("offshore", subsector))) ->
       L261.SubsectorLogit_C_USA
 
     # L261.SubsectorShrwtFllt_C_USA: subsector shareweight information in the states
@@ -132,7 +135,9 @@ module_gcamusa_L261.carbon_storage_USA <- function(command, ...) {
       write_to_all_states(c(LEVEL2_DATA_NAMES[["SubsectorShrwtFllt"]])) %>%
       left_join_error_no_match(select(states_subregions, state, grid_region), by = c("region" = "state")) %>%
       # Drop the states where no carbon storage resources may exist at the grid level
-      filter(!paste(grid_region, subsector) %in% grid_Cstorage_nonexist) ->
+      filter(!paste(grid_region, subsector) %in% grid_Cstorage_nonexist,
+             # Drop offshore carbon storage for states without ocean coastline
+             grepl("onshore", subsector) | (region %in% gcamusa.COASTAL_STATES & grepl("offshore", subsector))) ->
       L261.SubsectorShrwtFllt_C_USA
 
     # L261.StubTech_C_USA: stub technology information for the states
@@ -141,7 +146,9 @@ module_gcamusa_L261.carbon_storage_USA <- function(command, ...) {
       write_to_all_states(c(LEVEL2_DATA_NAMES[["StubTech"]])) %>%
       left_join_error_no_match(select(states_subregions, state, grid_region), by = c("region" = "state")) %>%
       # Drop the states where no carbon storage resources may exist at the grid level
-      filter(!paste(grid_region, stub.technology) %in% grid_Cstorage_nonexist) %>%
+      filter(!paste(grid_region, stub.technology) %in% grid_Cstorage_nonexist,
+             # Drop offshore carbon storage for states without ocean coastline
+             grepl("onshore", subsector) | (region %in% gcamusa.COASTAL_STATES & grepl("offshore", subsector))) %>%
       select(one_of(c(LEVEL2_DATA_NAMES[["StubTech"]])))->
       L261.StubTech_C_USA
 

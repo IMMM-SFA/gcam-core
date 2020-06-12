@@ -11,9 +11,9 @@
 #' original data system was \code{LA102.FERC_load_curves.R} (gcamusa dispatch level1).
 #' @details Compute load curve related parameters for investment and disparch segments
 #' @importFrom assertthat assert_that
-#' @importFrom dplyr filter mutate select
+#' @importFrom dplyr filter mutate select nth recode
 #' @importFrom tidyr gather spread
-#' @author YO May 2020
+#' @author PLP YO May 2020
 module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",

@@ -1,3 +1,5 @@
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
 #' module_gcamusa_L2242.elec_hydro_USA
 #'
 #' Update hydro-electricity fixed output to match historical data for 2015 and AEO-2018 for the future.
@@ -10,13 +12,13 @@
 #' The corresponding file in the original data system was \code{L2242.elec_hydro_USA.R} (gcam-usa level2).
 #' @details Update state-level hydro-electricity fixed outputs
 #' @importFrom assertthat assert_that
-#' @importFrom dplyr filter mutate select
-#' @importFrom tidyr gather spread
+#' @importFrom dplyr distinct filter lag mutate select semi_join
+#' @importFrom tidyr complete nesting
 #' @author MTB September 2018
 disabled_module_gcamusa_L2242.elec_hydro_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = 'gcam-usa/EIA_elec_gen_hydro',
-             FILE = 'gcam-usa/AEO_2018_elec_gen_hydro',
+             FILE = 'gcam-usa/AEO_2020_elec_gen_hydro',
              'L2234.StubTechFixOut_elecS_USA'))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L2242.StubTechFixOut_hydro_USA"))
@@ -26,7 +28,7 @@ disabled_module_gcamusa_L2242.elec_hydro_USA <- function(command, ...) {
 
     # Load required inputs
     EIA_elec_gen_hydro <- get_data(all_data, 'gcam-usa/EIA_elec_gen_hydro')
-    AEO_2018_elec_gen_hydro <- get_data(all_data, 'gcam-usa/AEO_2018_elec_gen_hydro')
+    AEO_2020_elec_gen_hydro <- get_data(all_data, 'gcam-usa/AEO_2020_elec_gen_hydro')
     L2234.StubTechFixOut_elecS_USA <- get_data(all_data, 'L2234.StubTechFixOut_elecS_USA')
 
     # Silence package checks
@@ -71,7 +73,7 @@ disabled_module_gcamusa_L2242.elec_hydro_USA <- function(command, ...) {
 
     # Apply the national level ratio of AEO future years to 2015 to GCAM fixed output and create table through 2050.
     # The same ratio is assumed for all states
-    AEO_2018_elec_gen_hydro %>%
+    AEO_2020_elec_gen_hydro %>%
       mutate(AEO_2015_ratio = (AEO * CONV_TWH_EJ) / L2242.hydro_EIA_US_2015) %>%
       filter(year %in% MODEL_YEARS,
              year >= gcamusa.HYDRO_HIST_YEAR) %>%
@@ -117,7 +119,7 @@ disabled_module_gcamusa_L2242.elec_hydro_USA <- function(command, ...) {
       add_comments("Post-2015 values based on USA-level hydro electricity growth from AEO-2018") %>%
       add_legacy_name("L2242.StubTechFixOut_hydro_USA") %>%
       add_precursors('gcam-usa/EIA_elec_gen_hydro',
-                     'gcam-usa/AEO_2018_elec_gen_hydro',
+                     'gcam-usa/AEO_2020_elec_gen_hydro',
                      'L2234.StubTechFixOut_elecS_USA') ->
       L2242.StubTechFixOut_hydro_USA
 

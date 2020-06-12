@@ -1,3 +1,5 @@
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
 #' module_gcamusa_L2232.electricity_FERC_USA
 #'
 #' Generate GCAM-USA model inputs for electrcity trade sectors at the level of grid regions.
@@ -18,9 +20,10 @@
 #' and balances electricity supply and demand for each grid region.
 #' @details Update 2020 YO delete L2232.StubTechElecMarket_backup_USA related for dispatch rebase
 #' @importFrom assertthat assert_that
-#' @importFrom dplyr filter mutate select
+#' @importFrom dplyr arrange filter if_else group_by left_join mutate select
 #' @importFrom tidyr gather spread
 #' @author RC Oct 2017 / YO Mar 2020
+
 module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",
@@ -542,14 +545,14 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
     # Produce outputs
     L2232.DeleteSupplysector_USAelec %>%
       add_title("Remove the electricity and net ownuse sectors of the USA region") %>%
-      add_units("Uniteless") %>%
+      add_units("Unitless") %>%
       add_comments("Remove the USA electricity supply sectors, and replace with electricity trade") %>%
       add_legacy_name("L2232.DeleteSupplysector_USAelec") ->
       L2232.DeleteSupplysector_USAelec
 
     L2232.Supplysector_USAelec %>%
       add_title("Supplysector for electricity sector in the USA region") %>%
-      add_units("Uniteless") %>%
+      add_units("Unitless") %>%
       add_comments("All of the supplysector information is the same as before") %>%
       add_comments("except including logit exponent between grid regions") %>%
       add_legacy_name("L2232.Supplysector_USAelec") %>%
@@ -558,7 +561,7 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
 
     L2232.SubsectorShrwtFllt_USAelec %>%
       add_title("Subsector (grid region) share-weights in USA electricity trade") %>%
-      add_units("Uniteless") %>%
+      add_units("Unitless") %>%
       add_comments("No need to read in subsector logit exponents, which are applied to the technology competition") %>%
       add_legacy_name("L2232.SubsectorShrwtFllt_USAelec") %>%
       add_precursors("gcam-usa/states_subregions",
@@ -568,7 +571,7 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
 
     L2232.SubsectorInterp_USAelec %>%
       add_title("Table headers for temporal interpolation of subsector (grid region) share-weights in USA electricity trade") %>%
-      add_units("Uniteless") %>%
+      add_units("Unitless") %>%
       add_comments("This just carries the base year share-weights forward") %>%
       add_comments("Regions that don't export in the base year don't export at all") %>%
       add_legacy_name("L2232.SubsectorInterp_USAelec") %>%
@@ -577,7 +580,7 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
 
     L2232.SubsectorLogit_USAelec %>%
       add_title("Logit exponent of subsector (grid region) in USA electricity trade") %>%
-      add_units("Uniteless") %>%
+      add_units("Unitless") %>%
       add_comments("There is only one tech per subsector, so the logit choice does not matter") %>%
       add_legacy_name("L2232.SubsectorLogit_USAelec") %>%
       same_precursors_as("L2232.SubsectorShrwtFllt_USAelec") ->
@@ -585,7 +588,7 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
 
     L2232.TechShrwt_USAelec %>%
       add_title("Technology share-weights in the USA electricity trade") %>%
-      add_units("Uniteless") %>%
+      add_units("Unitless") %>%
       add_comments("Set the same value across all model years") %>%
       add_legacy_name("L2232.TechShrwt_USAelec") %>%
       add_precursors("gcam-usa/A232.structure",
@@ -595,7 +598,7 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
 
     L2232.TechCoef_USAelec %>%
       add_title("Technology coefficients and market names in the USA electricity trade") %>%
-      add_units("Uniteless") %>%
+      add_units("Unitless") %>%
       add_comments("Set the same value across all model years") %>%
       add_comments("Set grid region as market name") %>%
       add_legacy_name("L2232.TechCoef_USAelec") %>%
