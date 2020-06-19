@@ -24,12 +24,12 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
     return(c("L123.in_EJ_R_elec_F_Yh",
              "L123.out_EJ_R_elec_F_Yh",
              FILE = "gcam-usa/EIA_elect_td_ownuse",
+             "L105.elec_fuelconsumption_state_vintage_gcamusa",
+             "L105.elec_generation_state_vintage_gcamusa",
+             "L105.elec_capacity_state_vintage_gcamusa",
              "L126.in_EJ_R_elecownuse_F_Yh",
              "L126.out_EJ_R_elecownuse_F_Yh",
-             "L132.out_EJ_state_indchp_F",
-             FILE = "gcam-usa/elec_fuelconsumption_state_vintage",
-             FILE = "gcam-usa/elec_generation_state_vintage",
-             FILE = "gcam-usa/elec_capacity_state_vintage"))
+             "L132.out_EJ_state_indchp_F"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L123.in_EJ_state_elec_F",
              "L123.in_EJ_state_elec_F_tech",
@@ -59,9 +59,9 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       filter(GCAM_region_ID == gcam.USA_CODE)
     L132.out_EJ_state_indchp_F <- get_data(all_data, "L132.out_EJ_state_indchp_F")
 
-    elec_fuelconsumption_state_vintage <- get_data(all_data, "gcam-usa/elec_fuelconsumption_state_vintage" )
-    elec_generation_state_vintage <- get_data(all_data, "gcam-usa/elec_generation_state_vintage" )
-    elec_capacity_state_vintage <- get_data(all_data, "gcam-usa/elec_capacity_state_vintage" )
+    elec_fuelconsumption_state_vintage <- get_data(all_data, "L105.elec_fuelconsumption_state_vintage_gcamusa" )
+    elec_generation_state_vintage <- get_data(all_data, "L105.elec_generation_state_vintage_gcamusa" )
+    elec_capacity_state_vintage <- get_data(all_data, "L105.elec_capacity_state_vintage_gcamusa" )
 
     # ===================================================
     # ELECTRICITY - INPUT & OUTPUT
@@ -208,7 +208,7 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("State fuel shares created from elec_fuelconsumption_state_vintage multiplied by USA totals from L123.in_EJ_R_elec_F_Yh") %>%
       add_legacy_name("L123.in_EJ_state_elec_F") %>%
-      add_precursors("gcam-usa/elec_fuelconsumption_state_vintage", "L123.in_EJ_R_elec_F_Yh") ->
+      add_precursors("L105.elec_fuelconsumption_state_vintage_gcamusa", "L123.in_EJ_R_elec_F_Yh") ->
       L123.in_EJ_state_elec_F
 
     L123.in_EJ_state_elec_F_tech %>%
@@ -216,7 +216,7 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("State fuel shares created from elec_fuelconsumption_state_vintage multiplied by USA totals from L123.in_EJ_R_elec_F_Yh") %>%
       add_legacy_name("L123.in_EJ_state_elec_F_tech") %>%
-      add_precursors("gcam-usa/elec_fuelconsumption_state_vintage", "L123.in_EJ_R_elec_F_Yh") ->
+      add_precursors("L105.elec_fuelconsumption_state_vintage_gcamusa", "L123.in_EJ_R_elec_F_Yh") ->
       L123.in_EJ_state_elec_F_tech
 
     L123.out_EJ_state_elec_F %>%
@@ -224,7 +224,7 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("State fuel shares created from elec_generation_state_vintage multiplied by USA totals from L123.out_EJ_R_elec_F_Yh") %>%
       add_legacy_name("L123.out_EJ_state_elec_F") %>%
-      add_precursors("gcam-usa/elec_generation_state_vintage", "L123.out_EJ_R_elec_F_Yh") ->
+      add_precursors("L105.elec_generation_state_vintage_gcamusa", "L123.out_EJ_R_elec_F_Yh") ->
       L123.out_EJ_state_elec_F
 
     L123.out_EJ_state_elec_F_tech %>%
@@ -232,7 +232,7 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("State fuel shares created from elec_generation_state_vintage multiplied by USA totals from L123.out_EJ_R_elec_F_Yh") %>%
       add_legacy_name("L123.out_EJ_state_elec_F_tech") %>%
-      add_precursors("gcam-usa/elec_generation_state_vintage", "L123.out_EJ_R_elec_F_Yh") ->
+      add_precursors("L105.elec_generation_state_vintage_gcamusa", "L123.out_EJ_R_elec_F_Yh") ->
       L123.out_EJ_state_elec_F_tech
 
     L123.in_EJ_state_ownuse_elec %>%
@@ -256,9 +256,9 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
     L123.capacity_EJ_state_elec_F_tech %>%
       add_title("Electricity generation capacity by state and fuel and tech") %>%
       add_units("EJ") %>%
-      add_comments("giving 2010 capacity to all historical years (capacity factors will low < 2010)") %>%
+      add_comments("giving 2015 capacity to all historical years") %>%
       add_legacy_name("L123.capacity_EJ_state_elec_F_tech") %>%
-      add_precursors("gcam-usa/elec_capacity_state_vintage")  ->
+      add_precursors("L105.elec_capacity_state_vintage_gcamusa")  ->
       L123.capacity_EJ_state_elec_F_tech
 
     L123.capacity_factor_EJ_state_elec_F_tech %>%
@@ -266,7 +266,7 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Need to check why some capacity factor is greater than 1") %>%
       add_legacy_name("L123.capacity_factor_EJ_state_elec_F_tech") %>%
-      add_precursors("gcam-usa/elec_capacity_state_vintage", "gcam-usa/elec_generation_state_vintage",
+      add_precursors("L105.elec_capacity_state_vintage_gcamusa", "L105.elec_generation_state_vintage_gcamusa",
                      "L123.out_EJ_R_elec_F_Yh")  ->
       L123.capacity_factor_EJ_state_elec_F_tech
 

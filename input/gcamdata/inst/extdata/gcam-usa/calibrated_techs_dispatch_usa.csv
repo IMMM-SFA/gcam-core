@@ -17,6 +17,7 @@ electricity generation,biomass,biomass_conv,electricity,biomass,biomass (conv),r
 electricity generation,nuclear,nuclear_conv,electricity,nuclear,Gen_II_LWR,nuclearFuelGenII,output,,0.95
 electricity generation,hydro,hyrdo,electricity,hydro,hydro,,fixed output,,0.8
 electricity generation,wind,wind_onshore,electricity,wind,wind,onshore wind resource,output,,0.5
+electricity generation,wind,wind_offshore,electricity,wind,wind_offshore,offshore wind resource,output,,0.5
 electricity generation,solar PV,solar_PV,electricity,solar,PV,global solar resource,output,,0.4
 electricity generation,solar CSP,solar_CSP,electricity,solar,CSP,global solar resource,output,,0.4
 electricity generation,geothermal,geothermal_conv,electricity,geothermal,geothermal,geothermal,output,,0.8
@@ -54,6 +55,7 @@ intermediate electricity,biomass,,electricity,biomass,biomass (IGCC),regional bi
 intermediate electricity,biomass,,electricity,biomass,biomass (IGCC CCS),regional biomass,output,,0.6
 intermediate electricity,nuclear,,electricity,nuclear,Gen_III,nuclearFuelGenIII,output,,0.6
 intermediate electricity,wind,,electricity,wind,wind,onshore wind resource,output,,0.5
+intermediate electricity,wind,,electricity,wind,wind_offshore,offshore wind resource,output,,0.5
 intermediate electricity,solar PV,,electricity,solar,PV,global solar resource,output,,0.4
 intermediate electricity,solar CSP,,electricity,solar,CSP,global solar resource,output,,0.4
 intermediate electricity,geothermal,,electricity,geothermal,geothermal,geothermal,output,,0.6
@@ -71,6 +73,7 @@ baseload electricity,biomass,,electricity,biomass,biomass (IGCC),regional biomas
 baseload electricity,biomass,,electricity,biomass,biomass (IGCC CCS),regional biomass,output,,0.9
 baseload electricity,nuclear,,electricity,nuclear,Gen_III,nuclearFuelGenIII,output,,0.9
 baseload electricity,wind,,electricity,wind,wind,onshore wind resource,output,,0.5
+baseload electricity,wind,,electricity,wind,wind_offshore,offshore wind resource,output,,0.5
 baseload electricity,solar PV,,electricity,solar,PV,global solar resource,output,,0.4
 baseload electricity,solar CSP,,electricity,solar,CSP,global solar resource,output,,0.4
 baseload electricity,geothermal,,electricity,geothermal,geothermal,geothermal,output,,0.9

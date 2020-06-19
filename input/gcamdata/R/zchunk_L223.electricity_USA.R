@@ -510,7 +510,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       L223.Subsector_Investment_StateShare
 
     # ===========================================================================
-    ## L223.SubsectorShrwtFllt_Investment_StateShare subsector share.weigth normalized by 2010 capaicity shares in grid
+    ## L223.SubsectorShrwtFllt_Investment_StateShare subsector share.weigth normalized by 2015 capaicity shares in grid
     # ===========================================================================
     # Distribute State Investment share-weights within a grid region based on capacity distribution normalized to maximum in region
     # Normalize capacity by grid region
@@ -518,13 +518,13 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # !!! note that here the capacity is in EJ (MW * hrs)
     L123.capacity_EJ_state_elec_F_tech %>%
       select(state, year, capacity) %>%
-      filter(year == 2010) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       group_by(state) %>%
-      summarise(X2010 = sum(capacity)) %>%
+      summarise(capacity = sum(capacity)) %>%
       left_join_error_no_match(states_subregions %>% select(state, grid_region), by = "state") %>%
       group_by(grid_region) %>%
-      mutate(grid_region_max = max(X2010),
-             grid_region_norm = X2010/grid_region_max) %>%
+      mutate(grid_region_max = max(capacity),
+             grid_region_norm = capacity/grid_region_max) %>%
       ungroup() ->
       L123.capacity_EJ_state_elec_F_tech_Norm
 
