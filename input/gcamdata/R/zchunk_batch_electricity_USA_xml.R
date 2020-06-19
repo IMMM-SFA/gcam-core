@@ -63,6 +63,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.DispatchSectorCalProd",
              "L223.DispatchSectorDispatchSegments",
              "L223.InterestRate_FERC",
+             "L223.TechCost_offshore_wind_Dispatch",
              "L223.Pop_FERC",
              "L223.BaseGDP_FERC",
              "L223.LaborForceFillout_FERC",
@@ -148,7 +149,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.Pop_FERC <- get_data(all_data, "L223.Pop_FERC")
     L223.BaseGDP_FERC <- get_data(all_data, "L223.BaseGDP_FERC")
     L223.LaborForceFillout_FERC <- get_data(all_data, "L223.LaborForceFillout_FERC")
-    # L223.StubTechCost_offshore_wind_USA <- get_data(all_data,"L223.StubTechCost_offshore_wind_USA")
+    L223.TechCost_offshore_wind_Dispatch <- get_data(all_data,"L223.TechCost_offshore_wind_Dispatch")
 
     L2232.DeleteSupplysector_USAelec <- get_data(all_data, "L2232.DeleteSupplysector_USAelec")
     L2232.Supplysector_USAelec <- get_data(all_data, "L2232.Supplysector_USAelec")
@@ -235,7 +236,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.Pop_FERC, "Pop") %>%
       add_xml_data(L223.BaseGDP_FERC, "BaseGDP") %>%
       add_xml_data(L223.LaborForceFillout_FERC, "LaborForceFillout") %>%
-      # add_xml_data(L223.StubTechCost_offshore_wind_USA, "StubTechCost") %>%
+      add_xml_data(L223.TechCost_offshore_wind_Dispatch, "TechCost", NULL) %>%
       add_xml_data(L2232.DeleteSupplysector_USAelec, "DeleteSupplysector") %>%
       add_logit_tables_xml(L2232.Supplysector_USAelec, "Supplysector") %>%
       add_xml_data(L2232.SubsectorShrwtFllt_USAelec, "SubsectorShrwtFllt") %>%
@@ -307,7 +308,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.InterestRate_FERC",
                      "L223.Pop_FERC",
                      "L223.BaseGDP_FERC",
-                     # "L223.StubTechCost_offshore_wind_USA",
+                     "L223.TechCost_offshore_wind_Dispatch",
                      "L223.LaborForceFillout_FERC",
                      "L2232.DeleteSupplysector_USAelec",
                      "L2232.Supplysector_USAelec",

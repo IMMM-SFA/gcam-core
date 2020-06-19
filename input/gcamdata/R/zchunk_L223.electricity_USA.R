@@ -26,7 +26,7 @@
 #' \code{L223.TechCapFac_Dispatch}, \code{L223.TechCarbonCapture_Dispatch}, \code{L223.TechCapFac_Cal},
 #' \code{L223.TechEff_Cal}, \code{L223.Sector_Dispatch_Grid}, \code{L223.DispatchSectorCalProd},
 #' \code{L223.DispatchSectorDispatchSegments}, \code{L223.InterestRate_FERC}, \code{L223.Pop_FERC}, \code{L223.BaseGDP_FERC},
-#' \code{L223.LaborForceFillout_FERC}.
+#' \code{L223.LaborForceFillout_FERC}, \code{L223.TechCost_offshore_wind_Dispatch}.
 #' The corresponding file in the
 #' original data system was \code{L223.electricity_USA.R} (gcam-usa level2 - dispatch branch).
 #' @details This chunk generates input files to create an annualized electricity generation sector for each state
@@ -127,7 +127,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              "L223.InterestRate_FERC",
              "L223.Pop_FERC",
              "L223.BaseGDP_FERC",
-             # "L223.StubTechCost_offshore_wind_USA",
+             "L223.TechCost_offshore_wind_Dispatch",
              "L223.LaborForceFillout_FERC"))
   } else if(command == driver.MAKE) {
 
@@ -996,54 +996,90 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
 
     # Modifications for offshore wind
     # Remove states with no offshore wind resources
-    # offshore_wind_states <- unique(L120.RsrcCurves_EJ_R_offshore_wind_USA$region)
-    #
-    # L223.StubTech_elec_USA %>%
-    #   filter(stub.technology != "wind_offshore") %>%
-    #   bind_rows(L223.StubTech_elec_USA %>%
-    #               filter(stub.technology == "wind_offshore",
-    #                      region %in% offshore_wind_states)) -> L223.StubTech_elec_USA
-    #
-    # L223.StubTechCapFactor_elec_USA %>%
-    #   filter(stub.technology != "wind_offshore") %>%
-    #   bind_rows(L223.StubTechCapFactor_elec_USA %>%
-    #               filter(stub.technology == "wind_offshore",
-    #                      region %in% offshore_wind_states)) -> L223.StubTechCapFactor_elec_USA
-    #
-    # L223.StubTechMarket_elec_USA %>%
-    #   filter(stub.technology != "wind_offshore") %>%
-    #   bind_rows(L223.StubTechMarket_elec_USA %>%
-    #               filter(stub.technology == "wind_offshore",
-    #                      region %in% offshore_wind_states)) -> L223.StubTechMarket_elec_USA
-    #
-    # L223.StubTechMarket_backup_USA %>%
-    #   filter(stub.technology != "wind_offshore") %>%
-    #   bind_rows(L223.StubTechMarket_backup_USA %>%
-    #               filter(stub.technology == "wind_offshore",
-    #                      region %in% offshore_wind_states)) -> L223.StubTechMarket_backup_USA
-    #
-    # # Replacing with correct state-specific offshore wind capacity factors
-    # L223.StubTechCapFactor_elec_wind_USA %>%
-    #   filter(stub.technology == "wind_offshore",
-    #          region %in% offshore_wind_states) %>%
-    #   select(-capacity.factor) %>%
-    #   left_join_error_no_match(L120.RegCapFactor_offshore_wind_USA,
-    #                            by= c("region" = "State")) %>%
-    #   mutate(capacity.factor= round(CFmax,energy.DIGITS_CAPACITY_FACTOR)) %>%
-    #   select(region, supplysector, subsector, stub.technology, year,
-    #          capacity.factor) -> L223.StubTechCapFactor_elec_offshore_wind_USA
-    #
-    # L223.StubTechCapFactor_elec_wind_USA %>%
-    #   filter(stub.technology != "wind_offshore") %>%
-    #   bind_rows(L223.StubTechCapFactor_elec_offshore_wind_USA) -> L223.StubTechCapFactor_elec_wind_USA
-    #
-    # # L223.StubTechCost_offshore_wind_USA: State-specific non-energy cost adder for offshore wind grid connection cost
-    # L223.StubTechCapFactor_elec_wind_USA %>%
-    #   filter(stub.technology == "wind_offshore") %>%
-    #   select(region, supplysector, subsector, stub.technology, year) %>%
-    #   mutate(minicam.non.energy.input = "regional price adjustment") %>%
-    #   left_join(L120.GridCost_offshore_wind_USA, by = c("region" = "State")) %>%
-    #   rename(input.cost = grid.cost) -> L223.StubTechCost_offshore_wind_USA
+    offshore_wind_states <- unique(L120.RsrcCurves_EJ_R_offshore_wind_USA$region)
+
+    L223.StubTech_Investment %>%
+      filter(stub.technology != "wind_offshore") %>%
+      bind_rows(L223.StubTech_Investment %>%
+                  filter(stub.technology == "wind_offshore",
+                         region %in% offshore_wind_states)) -> L223.StubTech_Investment
+
+    L223.StubTechMarket_Investment %>%
+      filter(stub.technology != "wind_offshore") %>%
+      bind_rows(L223.StubTechMarket_Investment %>%
+                  filter(stub.technology == "wind_offshore",
+                         region %in% offshore_wind_states)) -> L223.StubTechMarket_Investment
+
+    L223.CapacityTech_FutureTechs %>%
+      filter(technology != "wind_offshore") %>%
+      bind_rows(L223.CapacityTech_FutureTechs %>%
+                  filter(technology == "wind_offshore",
+                         region %in% offshore_wind_states)) -> L223.CapacityTech_FutureTechs
+
+
+    L223.CapacityTechSegmentCapFac %>%
+      filter(technology != "wind_offshore") %>%
+      bind_rows(L223.CapacityTechSegmentCapFac %>%
+                  filter(technology == "wind_offshore",
+                         region %in% offshore_wind_states)) -> L223.CapacityTechSegmentCapFac
+
+    L223.TechShrwt_Dispatch %>%
+      filter(technology != "wind_offshore") %>%
+      bind_rows(L223.TechShrwt_Dispatch %>%
+                  filter(technology == "wind_offshore",
+                         region %in% offshore_wind_states)) -> L223.TechShrwt_Dispatch
+
+    L223.TechEff_Dispatch %>%
+      filter(technology != "wind_offshore") %>%
+      bind_rows(L223.TechEff_Dispatch %>%
+                  filter(technology == "wind_offshore",
+                         region %in% offshore_wind_states)) -> L223.TechEff_Dispatch
+
+    L223.TechOMfixed_Dispatch %>%
+      filter(technology != "wind_offshore") %>%
+      bind_rows(L223.TechOMfixed_Dispatch %>%
+                  filter(technology == "wind_offshore",
+                         region %in% offshore_wind_states)) -> L223.TechOMfixed_Dispatch
+
+    L223.TechOMvar_Dispatch %>%
+      filter(technology != "wind_offshore") %>%
+      bind_rows(L223.TechOMvar_Dispatch %>%
+                  filter(technology == "wind_offshore",
+                         region %in% offshore_wind_states)) -> L223.TechOMvar_Dispatch
+
+
+    L223.TechLifetime_Dispatch %>%
+      filter(technology != "wind_offshore") %>%
+      bind_rows(L223.TechLifetime_Dispatch %>%
+                  filter(technology == "wind_offshore",
+                         region %in% offshore_wind_states)) -> L223.TechLifetime_Dispatch
+
+    L223.TechSCurve_Dispatch %>%
+      filter(technology != "wind_offshore") %>%
+      bind_rows(L223.TechSCurve_Dispatch %>%
+                  filter(technology == "wind_offshore",
+                         region %in% offshore_wind_states)) -> L223.TechSCurve_Dispatch
+
+    L223.TechCapFac_Dispatch %>%
+      filter(technology == "wind_offshore",
+             region %in% offshore_wind_states) %>%
+      select(-capacity.factor) %>%
+      left_join_error_no_match(L120.RegCapFactor_offshore_wind_USA,
+                               by= c("region" = "State")) %>%
+      mutate(capacity.factor= round(CFmax,energy.DIGITS_CAPACITY_FACTOR)) %>%
+      select(region, supplysector, subsector, technology, year,
+             capacity.factor) -> L223.TechCapFac_offshore_wind_Dispatch
+
+    L223.TechCapFac_Dispatch %>%
+      filter(technology != "wind_offshore") %>%
+      bind_rows(L223.TechCapFac_offshore_wind_Dispatch) -> L223.TechCapFac_Dispatch
+
+    L223.TechCapFac_offshore_wind_Dispatch %>%
+      select(region, supplysector, subsector, technology, year) %>%
+      mutate(minicam.non.energy.input = "regional price adjustment") %>%
+      left_join_error_no_match(L120.GridCost_offshore_wind_USA, by = c("region" = "State")) %>%
+      rename(input.cost = grid.cost) ->
+      L223.TechCost_offshore_wind_Dispatch
 
 
     # ----------------------------------------------------------------------------------------------------------------------------
@@ -1097,7 +1133,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set stub.technology names as a template for states") %>%
       add_legacy_name("L223.StubTech_Investment (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
-                     "gcam-usa/NREL_us_re_technical_potential") ->
+                     "gcam-usa/NREL_us_re_technical_potential",
+                     "L120.RsrcCurves_EJ_R_offshore_wind_USA",
+                     "L120.RegCapFactor_offshore_wind_USA",
+                     "L120.GridCost_offshore_wind_USA") ->
       L223.StubTech_Investment
 
     L223.GlobalTechEff_Investment %>%
@@ -1117,7 +1156,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_legacy_name("L223.StubTechMarket_Investment (dispatch branch)") %>%
       add_precursors("gcam-usa/states_subregions",
                      "gcam-usa/calibrated_techs_dispatch_usa",
-                     "gcam-usa/NREL_us_re_technical_potential") ->
+                     "gcam-usa/NREL_us_re_technical_potential",
+                     "L120.RsrcCurves_EJ_R_offshore_wind_USA",
+                     "L120.RegCapFactor_offshore_wind_USA",
+                     "L120.GridCost_offshore_wind_USA") ->
       L223.StubTechMarket_Investment
 
     L223.GlobalTechOMfixed_Investment %>%
@@ -1360,7 +1402,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("In this dataset all capacity is set to 0 (as a template") %>%
       add_legacy_name("L223.CapacityTech_FutureTechs (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
-                     "gcam-usa/NREL_us_re_technical_potential") ->
+                     "gcam-usa/NREL_us_re_technical_potential",
+                     "L120.RsrcCurves_EJ_R_offshore_wind_USA",
+                     "L120.RegCapFactor_offshore_wind_USA",
+                     "L120.GridCost_offshore_wind_USA") ->
       L223.CapacityTech_FutureTechs
 
     L223.CapacityTechSegmentCapFac %>%
@@ -1372,7 +1417,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "gcam-usa/NREL_us_re_technical_potential",
                      "L114.CapacityFactor_wind_state_segment_gcamusa",
                      "L119.CapacityFactor_CSP_state_segment_gcamusa",
-                     "L119.CapacityFactor_PV_state_segment_gcamusa") ->
+                     "L119.CapacityFactor_PV_state_segment_gcamusa",
+                     "L120.RsrcCurves_EJ_R_offshore_wind_USA",
+                     "L120.RegCapFactor_offshore_wind_USA",
+                     "L120.GridCost_offshore_wind_USA") ->
       L223.CapacityTechSegmentCapFac
 
     L223.CapacityTech %>%
@@ -1391,7 +1439,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology shareweight for state all as 1") %>%
       add_legacy_name("L223.TechShrwt_Dispatch (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
-                     "gcam-usa/NREL_us_re_technical_potential") ->
+                     "gcam-usa/NREL_us_re_technical_potential",
+                     "L120.RsrcCurves_EJ_R_offshore_wind_USA",
+                     "L120.RegCapFactor_offshore_wind_USA",
+                     "L120.GridCost_offshore_wind_USA") ->
       L223.TechShrwt_Dispatch
 
     L223.TechEff_Dispatch %>%
@@ -1402,7 +1453,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "energy/A23.globaltech_eff",
-                     "gcam-usa/A23.dispatch_globaltech_eff_additional") ->
+                     "gcam-usa/A23.dispatch_globaltech_eff_additional",
+                     "L120.RsrcCurves_EJ_R_offshore_wind_USA",
+                     "L120.RegCapFactor_offshore_wind_USA",
+                     "L120.GridCost_offshore_wind_USA") ->
       L223.TechEff_Dispatch
 
     L223.TechOMfixed_Dispatch %>%
@@ -1413,7 +1467,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "energy/A23.globaltech_OMfixed",
-                     "gcam-usa/A23.dispatch_globaltech_OMvar_additional") ->
+                     "gcam-usa/A23.dispatch_globaltech_OMvar_additional",
+                     "L120.RsrcCurves_EJ_R_offshore_wind_USA",
+                     "L120.RegCapFactor_offshore_wind_USA",
+                     "L120.GridCost_offshore_wind_USA") ->
       L223.TechOMfixed_Dispatch
 
     L223.TechOMvar_Dispatch %>%
@@ -1424,7 +1481,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "energy/A23.globaltech_OMvar",
-                     "gcam-usa/A23.dispatch_globaltech_OMvar_additional") ->
+                     "gcam-usa/A23.dispatch_globaltech_OMvar_additional",
+                     "L120.RsrcCurves_EJ_R_offshore_wind_USA",
+                     "L120.RegCapFactor_offshore_wind_USA",
+                     "L120.GridCost_offshore_wind_USA") ->
       L223.TechOMvar_Dispatch
 
     L223.TechLifetime_Dispatch %>%
@@ -1435,7 +1495,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "energy/A23.globaltech_retirement",
-                     "gcam-usa/A23.dispatch_globaltech_retirement_additional") ->
+                     "gcam-usa/A23.dispatch_globaltech_retirement_additional",
+                     "L120.RsrcCurves_EJ_R_offshore_wind_USA",
+                     "L120.RegCapFactor_offshore_wind_USA",
+                     "L120.GridCost_offshore_wind_USA") ->
       L223.TechLifetime_Dispatch
 
     L223.TechSCurve_Dispatch %>%
@@ -1446,7 +1509,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "energy/A23.globaltech_retirement",
-                     "gcam-usa/A23.dispatch_globaltech_retirement_additional") ->
+                     "gcam-usa/A23.dispatch_globaltech_retirement_additional",
+                     "L120.RsrcCurves_EJ_R_offshore_wind_USA",
+                     "L120.RegCapFactor_offshore_wind_USA",
+                     "L120.GridCost_offshore_wind_USA") ->
       L223.TechSCurve_Dispatch
 
     L223.TechCapFac_Dispatch %>%
@@ -1455,7 +1521,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology capacity factor for state") %>%
       add_legacy_name("L223.TechCapFac_Dispatch (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
-                     "gcam-usa/NREL_us_re_technical_potential") ->
+                     "gcam-usa/NREL_us_re_technical_potential",
+                     "L120.RsrcCurves_EJ_R_offshore_wind_USA",
+                     "L120.RegCapFactor_offshore_wind_USA",
+                     "L120.GridCost_offshore_wind_USA") ->
       L223.TechCapFac_Dispatch
 
     L223.TechCarbonCapture_Dispatch %>%
@@ -1542,29 +1611,16 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_precursors("gcam-usa/states_subregions") ->
       L223.LaborForceFillout_FERC
 
-    # L223.StubTechCost_offshore_wind_USA %>%
-    #   add_title("State-specific non-energy cost adder for offshore wind grid connection cost") %>%
-    #   add_units("Unitless") %>%
-    #   add_comments("Adder") %>%
-    #   add_precursors("L114.CapacityFactor_wind_state",
-    #                  "L223.Supplysector_elec",
-    #                  "L223.ElecReserve",
-    #                  "L223.SubsectorLogit_elec",
-    #                  "L223.SubsectorShrwtFllt_elec",
-    #                  "L223.SubsectorShrwt_renew",
-    #                  "L223.SubsectorInterp_elec",
-    #                  "L223.SubsectorInterpTo_elec",
-    #                  "L223.StubTech_elec",
-    #                  "L223.StubTechEff_elec",
-    #                  "L223.StubTechCapFactor_elec",
-    #                  "L223.GlobalIntTechBackup_elec",
-    #                  "L123.in_EJ_state_elec_F_tech",
-    #                  "L123.out_EJ_state_elec_F_tech",
-    #                  "L1232.out_EJ_sR_elec",
-    #                  "L120.RsrcCurves_EJ_R_offshore_wind_USA",
-    #                  "L120.RegCapFactor_offshore_wind_USA",
-    #                  "L120.GridCost_offshore_wind_USA")->
-    #   L223.StubTechCost_offshore_wind_USA
+    L223.TechCost_offshore_wind_Dispatch %>%
+      add_title("State-specific non-energy cost adder for offshore wind grid connection cost") %>%
+      add_units("Unitless") %>%
+      add_comments("Adder") %>%
+      add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/NREL_us_re_technical_potential",
+                     "L120.RsrcCurves_EJ_R_offshore_wind_USA",
+                     "L120.RegCapFactor_offshore_wind_USA",
+                     "L120.GridCost_offshore_wind_USA")->
+      L223.StubTechCost_offshore_wind_USA
 
     return_data(L223.Sector_Investment,
                 L223.SubsectorLogit_Investment,
@@ -1619,7 +1675,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                 L223.InterestRate_FERC,
                 L223.Pop_FERC,
                 L223.BaseGDP_FERC,
-                L223.LaborForceFillout_FERC)
+                L223.LaborForceFillout_FERC,
+                L223.TechCost_offshore_wind_Dispatch)
   } else {
     stop("Unknown command")
   }
