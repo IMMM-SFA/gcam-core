@@ -33,7 +33,7 @@ MODEL_BASE_YEARS        <- c(1975, 1990, 2005, 2010, 2015)
 # Future (not calibrated) model periods. Only level 2 chunks should reference these
 MODEL_FUTURE_YEARS      <- seq(2020, 2100, 5)
 MODEL_YEARS             <- c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)
-MODEL_FINAL_BASE_YEAR   <- 2015
+MODEL_FINAL_BASE_YEAR   <- max(MODEL_BASE_YEARS)
 
 # GCAM constants ======================================================================
 

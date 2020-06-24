@@ -56,7 +56,7 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
       # We will generate load curve shapes from just the final calibration year
       # for simplicity
       FERC_hourly_gen_raw %>%
-        filter(report_yr == FINAL_MODEL_BASE_YEARS) %>%
+        filter(report_yr == MODEL_FINAL_BASE_YEAR) %>%
         gather(hour, generation, matches("^hour..$")) %>%
         filter(generation > 0) %>%
         mutate(hour = as.integer(gsub('hour', '', hour))) %>%
@@ -79,7 +79,7 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
         ungroup() ->
         NERC_hourly_gen
 
-      if(FINAL_MODEL_BASE_YEARS == 2010) {
+      if(MODEL_FINAL_BASE_YEAR == 2010) {
         # Data error is way off base and throws things off, manualy reset it to something resasonable
         NERC_hourly_gen[NERC_hourly_gen$NERC.Region == "ASCC" & NERC_hourly_gen$date == as.POSIXct("2010-04-01 00:00:00", tz="EST"), "generation"] <- 270.0
         # NOTE: the following hours were missing:
@@ -92,7 +92,7 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
                            date = as.POSIXct(c("2010-03-14 00:00:00", "2010-03-14 01:00:00", "2010-11-07 00:00:00"), tz="EST"),
                            generation = c(300.0, 290.0, 280.0)))
       } else {
-        stop(paste0("Manual data cleaning has been performed for ", FINAL_MODEL_BASE_YEARS))
+        stop(paste0("Manual data cleaning has been performed for ", MODEL_FINAL_BASE_YEAR))
       }
 
       # Since our Grid regions do not perfectly align with NERC regions we will now switch to
@@ -128,7 +128,7 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
       # https://en.wikipedia.org/wiki/Sunrise_equation
       calc_day_night <- function(d) {
         d %>%
-          mutate(n = as.integer(difftime(date, as.POSIXct(paste0(FINAL_MODEL_BASE_YEARS, "-01-01 00:00:00"), tz="EST"), units="days"))) ->
+          mutate(n = as.integer(difftime(date, as.POSIXct(paste0(MODEL_FINAL_BASE_YEAR, "-01-01 00:00:00"), tz="EST"), units="days"))) ->
           d
         J_star <- d$n - d$lon / 360.0
         M <- (357.5291 + 0.98560028 * J_star) %% 360.0
@@ -143,13 +143,13 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
         J_rise <- J_transit - omega / 360.0
 
         d %>%
-          mutate(sunrise = as.POSIXct(paste0(FINAL_MODEL_BASE_YEARS, "-01-01 00:00:00"), tz="EST") + J_rise * 24 * 60 * 60) %>%
-          mutate(sunset = as.POSIXct(paste0(FINAL_MODEL_BASE_YEARS, "-01-01 00:00:00"), tz="EST") + J_set * 24 * 60 * 60)
+          mutate(sunrise = as.POSIXct(paste0(MODEL_FINAL_BASE_YEAR, "-01-01 00:00:00"), tz="EST") + J_rise * 24 * 60 * 60) %>%
+          mutate(sunset = as.POSIXct(paste0(MODEL_FINAL_BASE_YEAR, "-01-01 00:00:00"), tz="EST") + J_set * 24 * 60 * 60)
       }
 
       # create mappings from hours into day/night and month
       region_coord %>%
-        expand(., ., tibble(date = as.POSIXct(paste0(FINAL_MODEL_BASE_YEARS, "-01-01 00:00:00"), tz="EST") + ((seq(1:8760) - 1) * 60 * 60))) %>%
+        expand(., ., tibble(date = as.POSIXct(paste0(MODEL_FINAL_BASE_YEAR, "-01-01 00:00:00"), tz="EST") + ((seq(1:8760) - 1) * 60 * 60))) %>%
         calc_day_night() %>%
         mutate(day_night = if_else(sunrise <= date & date < sunset, "day", "night")) %>%
         mutate(month = format(date, format="%b")) %>%

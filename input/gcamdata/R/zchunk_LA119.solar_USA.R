@@ -99,7 +99,7 @@ module_gcamusa_LA119.solar <- function(command, ...) {
     PV_cf_raw %>%
       gather("hour", "capacity_factor", dplyr::matches("[0-9]+")) %>%
       mutate(hour = as.integer(hour)) %>%
-      mutate(date = as.POSIXct(paste0(FINAL_MODEL_BASE_YEARS, "-01-01 00:00:00"), tz="EST") + ((hour - 1) * 60 * 60)) ->
+      mutate(date = as.POSIXct(paste0(MODEL_FINAL_BASE_YEAR, "-01-01 00:00:00"), tz="EST") + ((hour - 1) * 60 * 60)) ->
       PV_cf
 
     ReEDS_region_mapping_raw %>%

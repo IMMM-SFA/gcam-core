@@ -52,8 +52,8 @@ module_gcamusa_LB103.load_curve_enduse_USA <- function(command, ...) {
       # so we can pre-pend the decade 20 to get the full year
       mutate(year = paste0("20", year)) %>%
       select(-units, -source.key) %>%
-      # here automatically filter FINAL_MODEL_BASE_YEARS to accommodate BYU
-      filter(year == FINAL_MODEL_BASE_YEARS) %>%
+      # here automatically filter MODEL_FINAL_BASE_YEAR to accommodate BYU
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       # clean up missing values
       mutate(generation = as.numeric(if_else(generation == "--", "0", generation))) ->
       EIA_elec_Mon_enduse_tidy

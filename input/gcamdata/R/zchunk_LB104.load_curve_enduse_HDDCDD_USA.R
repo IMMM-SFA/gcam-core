@@ -179,7 +179,7 @@ module_gcamusa_LB104.load_curve_enduse_HDDCDD_USA <- function(command, ...) {
 
       L104.DD_S_Segment_all %>%
         filter (rcp == "rcp8.5",
-                year == FINAL_MODEL_BASE_YEARS) %>%
+                year == MODEL_FINAL_BASE_YEAR) %>%
         select (-rcp,-year) ->
         L104.HistoricalDD_S_Segment
 

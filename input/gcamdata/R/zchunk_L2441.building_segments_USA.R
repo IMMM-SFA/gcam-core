@@ -157,7 +157,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L244.StubTechCalInput_bld %>%
       filter(minicam.energy.input == "elect_td_bld",
              supplysector %in% thermal_services,
-             year == FINAL_MODEL_BASE_YEARS) %>%
+             year == MODEL_FINAL_BASE_YEAR) %>%
       group_by(region, supplysector) %>%
       summarize(calibrated.value = sum(calibrated.value)) %>%
       ungroup() %>%
@@ -174,7 +174,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     # of the non-thermal uses of electricity
     L244.StubTechCalInput_bld %>%
       filter(minicam.energy.input == "elect_td_bld",
-             year==FINAL_MODEL_BASE_YEARS) %>%
+             year==MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(select(states_subregions, state, grid_region), by=c("region" = "state")) %>%
       group_by(grid_region) %>%
       summarize(calibrated.value = sum(calibrated.value)) %>%
@@ -262,7 +262,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     # Calculate what the coefficient would be when using the climate across the entire year
     # by back calculating the thermal building service function.
     L244.ThermalBaseService %>%
-      filter(year == FINAL_MODEL_BASE_YEARS) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(L244.Floorspace,
                                by = c("region", "gcam.consumer", "nodeInput", "building.node.input", "year")) %>%
       left_join_error_no_match(L244.ShellConductance_bld,
@@ -280,7 +280,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     # Use the default coefficient for any state + service + segment that would have been
     # zero otherwise
     L2441.ThermalBaseService %>%
-      filter(year == FINAL_MODEL_BASE_YEARS, base.service == 0.0) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR, base.service == 0.0) %>%
       left_join_error_no_match(L2441.DD_segments_rel,
                                by = c("region" = "state", "thermal.building.service.input" = "s3")) %>%
       left_join_error_no_match(L2441.DefaultCoef, by = c("region", "s2" = "thermal.building.service.input")) %>%

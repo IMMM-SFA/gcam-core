@@ -816,13 +816,13 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # all technology capacity factor by load segment
     # update renewables CF
     L223.TechCapFac_Dispatch %>%
-      filter(year >= FINAL_MODEL_BASE_YEARS) %>%
+      filter(year >= MODEL_FINAL_BASE_YEAR) %>%
       filter(technology != "hydro") %>%
       # here using left_join becuase we only update capacity factors for renewables
       # so left_join and if there is new values (for renewables) then using new values
       # for NAs after left_join (not renewables) then using the existing values
       left_join(L223.renew_seg_cap_fac, by=c("region", "technology")) %>%
-      filter(!is.na(Jan_day) | year == FINAL_MODEL_BASE_YEARS) %>%
+      filter(!is.na(Jan_day) | year == MODEL_FINAL_BASE_YEAR) %>%
       mutate_at(vars(Apr_day:superpeak), funs(if_else(is.na(.), capacity.factor, .))) %>%
       select(-capacity.factor) %>%
       gather("segment", "capacity.factor", Apr_day:superpeak) ->
