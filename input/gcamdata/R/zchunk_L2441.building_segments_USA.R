@@ -486,6 +486,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.DeleteThermalService %>%
       add_title("Delete original thermal service names in order to create new ones by segment") %>%
       add_units("NA") %>%
+      add_comments("Delete original thermal service names in order to create new ones by segment") %>%
       add_legacy_name("L2441.DeleteThermalService") %>%
       add_precursors("L244.ThermalBaseService_gcamusa") ->
       L2441.DeleteThermalService_gcamusa
@@ -493,6 +494,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.ThermalBaseService %>%
       add_title("add building service input by segment") %>%
       add_units("EJ") %>%
+      add_comments("add building service input by segment") %>%
       add_legacy_name("L2441.ThermalBaseService") %>%
       add_precursors("L244.ThermalBaseService_gcamusa",
                      "L104.HistoricalDD_S_Segment_gcamusa") ->
@@ -501,6 +503,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.ThermalServiceSatiation %>%
       add_title("add building service input by segment") %>%
       add_units("NA") %>%
+      add_comments("add building add building service input by segment input by segment") %>%
       add_legacy_name("L2441.ThermalServiceSatiation") %>%
       add_precursors("L244.ThermalServiceSatiation_gcamusa",
                      "L104.HistoricalDD_S_Segment_gcamusa") ->
@@ -509,6 +512,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.ThermalServiceCalSatiationValue %>%
       add_title("add building service input by segment and assign cal.satiation.value as 0.8") %>%
       add_units("NA") %>%
+      add_comments("add building service input by segment and assign cal.satiation.value as 0.8") %>%
       add_legacy_name("L2441.ThermalServiceCalSatiationValue") %>%
       same_precursors_as("L2441.ThermalServiceSatiation_usa") ->
       L2441.ThermalServiceCalSatiationValue_gcamusa
@@ -516,6 +520,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.ThermalDefaultCoef %>%
       add_title("add building service input by segment") %>%
       add_units("NA") %>%
+      add_comments("add building service input by segment") %>%
       add_legacy_name("L2441.ThermalDefaultCoef") %>%
       add_precursors("L244.ThermalBaseService_gcamusa",
                      "L104.HistoricalDD_S_Segment_gcamusa",
@@ -526,6 +531,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.Intgains_scalar %>%
       add_title("add building service input by segment") %>%
       add_units("NA") %>%
+      add_comments("add building service input by segment") %>%
       add_legacy_name("L2441.Intgains_scalar") %>%
       add_precursors("L244.Intgains_scalar_gcamusa",
                      "L104.HistoricalDD_S_Segment_gcamusa") ->
@@ -534,6 +540,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.Supplysector_bld %>%
       add_title("add building supplysector names by segment") %>%
       add_units("NA") %>%
+      add_comments("add building supplysector names by segment") %>%
       add_legacy_name("L2441.Supplysector_bld") %>%
       add_precursors("gcam-usa/A44.sector",
                      "L103.load_segments_sector_gcamusa") ->
@@ -542,6 +549,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.FinalEnergyKeyword_bld %>%
       add_title("add building supplysector names by segment") %>%
       add_units("NA") %>%
+      add_comments("add building supplysector names by segment") %>%
       add_legacy_name("L2441.FinalEnergyKeyword_bld") %>%
       add_precursors("gcam-usa/A44.sector",
                      "L103.load_segments_sector_gcamusa") ->
@@ -550,6 +558,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.SubsectorLogit_bld %>%
       add_title("add building supplysector names by segment") %>%
       add_units("NA") %>%
+      add_comments("add building supplysector names by segment") %>%
       add_legacy_name("L2441.SubsectorLogit_bld") %>%
       add_precursors("gcam-usa/A44.subsector_logit",
                      "L103.load_segments_sector_gcamusa") ->
@@ -558,6 +567,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.SubsectorShrwtFllt_bld %>%
       add_title("add building supplysector names by segment") %>%
       add_units("NA") %>%
+      add_comments("add building supplysector names by segment") %>%
       add_legacy_name("L2441.SubsectorShrwtFllt_bld") %>%
       add_precursors("L244.SubsectorShrwtFllt_bld_gcamusa",
                      "L103.load_segments_sector_gcamusa") ->
@@ -566,6 +576,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.SubsectorInterp_bld %>%
       add_title("add building supplysector names by segment") %>%
       add_units("NA") %>%
+      add_comments("add building supplysector names by segment") %>%
       add_legacy_name("L2441.SubsectorInterp_bld") %>%
       add_precursors("L244.SubsectorInterp_bld_gcamusa",
                      "L103.load_segments_sector_gcamusa") ->
@@ -574,6 +585,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.SubsectorInterpTo_bld %>%
       add_title("add building supplysector names by segment") %>%
       add_units("NA") %>%
+      add_comments("add building supplysector names by segment") %>%
       add_legacy_name("L2441.SubsectorInterpTo_bld") %>%
       add_precursors("L244.SubsectorInterpTo_bld_gcamusa",
                      "L103.load_segments_sector_gcamusa") ->
@@ -582,6 +594,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.StubTechFromSector_bld %>%
       add_title("add building supplysector names by segment") %>%
       add_units("NA") %>%
+      add_comments("add building supplysector names by segment") %>%
       add_legacy_name("L2441.StubTechFromSector_bld") %>%
       add_precursors("L244.StubTech_bld_gcamusa",
                      "L103.load_segments_sector_gcamusa") ->
@@ -590,6 +603,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.StubTechDeleteInput %>%
       add_title("delete minicam.energy.input of elect_td_bld") %>%
       add_units("NA") %>%
+      add_comments("delete minicam.energy.input of elect_td_bld") %>%
       add_legacy_name("L2441.StubTechDeleteInput") %>%
       add_precursors("gcam-usa/states_subregions",
                      "L103.load_segments_sector_gcamusa",
@@ -599,6 +613,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.StubTechEff_segmentinputs %>%
       add_title("define inputs by segment for each corresponding supplysector") %>%
       add_units("NA") %>%
+      add_comments("define inputs by segment for each corresponding supplysector") %>%
       add_legacy_name("L2441.StubTechEff_segmentinputs") %>%
       add_precursors("gcam-usa/states_subregions",
                      "L103.load_segments_sector_gcamusa",
@@ -611,6 +626,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.StubTechCalInput_bld %>%
       add_title("define inputs by segment for stub.technology for each corresponding supplysector") %>%
       add_units("NA") %>%
+      add_comments("define inputs by segment for stub.technology for each corresponding supplysector") %>%
       add_legacy_name("L2441.StubTechCalInput_bld") %>%
       add_precursors("L244.StubTechCalInput_bld_gcamusa",
                      "L104.HistoricalDD_S_Segment_gcamusa",
@@ -622,6 +638,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.StubTechMarket_bld %>%
       add_title("define market at grid level for stub.technology by segment") %>%
       add_units("NA") %>%
+      add_comments("define market at grid level for stub.technology by segment") %>%
       add_legacy_name("L2441.StubTechMarket_bld") %>%
       add_precursors("L244.StubTechMarket_bld",
                      "L103.load_segments_sector_gcamusa",
@@ -631,6 +648,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.TechCoef_nonthermal_load_curve %>%
       add_title("calculate tech coefficients by segment adjusted by non-thermal load curve") %>%
       add_units("NA") %>%
+      add_comments("calculate tech coefficients by segment adjusted by non-thermal load curve") %>%
       add_legacy_name("L2441.TechCoef_nonthermal_load_curve") %>%
       add_precursors("L103.load_segments_sector_gcamusa",
                      "L226.TechCoef_electd_USA",
@@ -642,6 +660,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.HDDCDD_Fixed %>%
       add_title("define DD by building service by segment") %>%
       add_units("NA") %>%
+      add_comments("define DD by building service by segment") %>%
       add_legacy_name("L2441.HDDCDD_Fixed") %>%
       add_precursors("L104.HistoricalDD_S_Segment_gcamusa",
                      "L244.ThermalBaseService_gcamusa") ->
@@ -650,6 +669,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.HDDCDD_Fixed_rcp4p5 %>%
       add_title("define DD by building service by segment for rcp45 scenario") %>%
       add_units("NA") %>%
+      add_comments("define DD by building service by segment for rcp45 scenario") %>%
       add_legacy_name("L2441.HDDCDD_Fixed_rcp4p5") %>%
       add_precursors("L104.DD_S_Segment_all_gcamusa",
                      "L244.ThermalBaseService_gcamusa") ->
@@ -658,6 +678,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L2441.HDDCDD_Fixed_rcp8p5 %>%
       add_title("define DD by building service by segment for rcp85 scenario") %>%
       add_units("NA") %>%
+      add_comments("define DD by building service by segment for rcp85 scenario") %>%
       add_legacy_name("L2441.HDDCDD_Fixed_rcp8p5") %>%
       add_precursors("L104.DD_S_Segment_all_gcamusa",
                      "L244.ThermalBaseService_gcamusa") ->

@@ -1620,7 +1620,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "L120.RsrcCurves_EJ_R_offshore_wind_USA",
                      "L120.RegCapFactor_offshore_wind_USA",
                      "L120.GridCost_offshore_wind_USA")->
-      L223.StubTechCost_offshore_wind_USA
+      L223.TechCost_offshore_wind_Dispatch
 
     return_data(L223.Sector_Investment,
                 L223.SubsectorLogit_Investment,
