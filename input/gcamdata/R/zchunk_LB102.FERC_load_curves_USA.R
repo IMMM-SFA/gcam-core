@@ -91,8 +91,6 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
           bind_rows(tibble(NERC.Region = "ASCC",
                            date = as.POSIXct(c("2010-03-14 00:00:00", "2010-03-14 01:00:00", "2010-11-07 00:00:00"), tz="EST"),
                            generation = c(300.0, 290.0, 280.0)))
-      } else {
-        stop(paste0("Manual data cleaning has been performed for ", MODEL_FINAL_BASE_YEAR))
       }
 
       # Since our Grid regions do not perfectly align with NERC regions we will now switch to

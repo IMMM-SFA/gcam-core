@@ -68,7 +68,7 @@ module_gcamusa_LB104.load_curve_enduse_HDDCDD_USA <- function(command, ...) {
       # Remove non-model years
       DD_EST %>%
         filter(!(month==2 & day==29),
-               year %in% c(2000,2005,2010, MODEL_FUTURE_YEARS)) ->
+               year %in% MODEL_YEARS) ->
         DD_EST_noLeap_modelYears
 
       # After converting timezones from GMT to EST we lose the last few hours of Dec 30 (hours 19 to 23)
