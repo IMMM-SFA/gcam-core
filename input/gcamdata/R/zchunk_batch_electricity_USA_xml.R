@@ -56,7 +56,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.TechSCurve_Dispatch",
              "L223.TechCapFac_Dispatch",
              "L223.TechCarbonCapture_Dispatch",
-             "L223.TechCapFac_Cal",
+             "L223.Production_Dispatch",
              "L223.TechEff_Cal",
              "L223.Sector_Dispatch_Grid",
              "L223.DispatchSectorCalProd",
@@ -140,7 +140,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.TechSCurve_Dispatch <- get_data(all_data, "L223.TechSCurve_Dispatch")
     L223.TechCapFac_Dispatch <- get_data(all_data, "L223.TechCapFac_Dispatch")
     L223.TechCarbonCapture_Dispatch <- get_data(all_data, "L223.TechCarbonCapture_Dispatch")
-    L223.TechCapFac_Cal <- get_data(all_data, "L223.TechCapFac_Cal")
+    L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
     L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
     L223.Sector_Dispatch_Grid <- get_data(all_data, "L223.Sector_Dispatch_Grid")
     L223.DispatchSectorCalProd <- get_data(all_data, "L223.DispatchSectorCalProd")
@@ -226,7 +226,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.TechSCurve_Dispatch, "TechSCurve_dispatch", NULL) %>%
       add_xml_data(L223.TechCapFac_Dispatch, "TechCapFac", NULL) %>%
       add_xml_data(L223.TechCarbonCapture_Dispatch, "CarbonCapture") %>%
-      add_xml_data(L223.TechCapFac_Cal, "TechCapFac", NULL) %>%
+      add_xml_data(L223.Production_Dispatch, "Production", NULL) %>%
       add_xml_data(L223.TechEff_Cal, "TechEff") %>%
       add_logit_tables_xml(L223.Sector_Dispatch_Grid, "Supplysector") %>%
       add_xml_data(L223.DispatchSectorCalProd, "DispatchSectorCalProd", NULL) %>%
@@ -298,7 +298,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.TechSCurve_Dispatch",
                      "L223.TechCapFac_Dispatch",
                      "L223.TechCarbonCapture_Dispatch",
-                     "L223.TechCapFac_Cal",
+                     "L223.Production_Dispatch",
                      "L223.TechEff_Cal",
                      "L223.Sector_Dispatch_Grid",
                      "L223.DispatchSectorCalProd",

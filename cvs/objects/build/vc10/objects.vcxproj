@@ -630,6 +630,7 @@
     <ClCompile Include="..\..\sectors\source\backup_calculator_factory.cpp" />
     <ClCompile Include="..\..\sectors\source\capacity_limit_backup_calculator.cpp" />
     <ClCompile Include="..\..\sectors\source\CSP_backup_calculator.cpp" />
+    <ClCompile Include="..\..\sectors\source\dispatch_sector.cpp" />
     <ClCompile Include="..\..\sectors\source\energy_final_demand.cpp" />
     <ClCompile Include="..\..\sectors\source\export_sector.cpp" />
     <ClCompile Include="..\..\sectors\source\factor_supply.cpp" />
@@ -689,6 +690,7 @@
     <ClCompile Include="..\..\technologies\source\base_technology.cpp" />
     <ClCompile Include="..\..\technologies\source\cal_data_output.cpp" />
     <ClCompile Include="..\..\technologies\source\cal_data_output_percap.cpp" />
+    <ClCompile Include="..\..\technologies\source\capacity_technology.cpp" />
     <ClCompile Include="..\..\technologies\source\capture_component_factory.cpp" />
     <ClCompile Include="..\..\technologies\source\default_technology.cpp" />
     <ClCompile Include="..\..\technologies\source\empty_technology.cpp" />
@@ -956,6 +958,7 @@
     <ClInclude Include="..\..\sectors\include\backup_calculator_factory.h" />
     <ClInclude Include="..\..\sectors\include\capacity_limit_backup_calculator.h" />
     <ClInclude Include="..\..\sectors\include\CSP_backup_calculator.h" />
+    <ClInclude Include="..\..\sectors\include\dispatch_sector.h" />
     <ClInclude Include="..\..\sectors\include\energy_final_demand.h" />
     <ClInclude Include="..\..\sectors\include\export_sector.h" />
     <ClInclude Include="..\..\sectors\include\factor_supply.h" />
@@ -1027,6 +1030,7 @@
     <ClInclude Include="..\..\technologies\include\base_technology.h" />
     <ClInclude Include="..\..\technologies\include\cal_data_output.h" />
     <ClInclude Include="..\..\technologies\include\cal_data_output_percap.h" />
+    <ClInclude Include="..\..\technologies\include\capacity_technology.h" />
     <ClInclude Include="..\..\technologies\include\capture_component_factory.h" />
     <ClInclude Include="..\..\technologies\include\default_technology.h" />
     <ClInclude Include="..\..\technologies\include\empty_technology.h" />

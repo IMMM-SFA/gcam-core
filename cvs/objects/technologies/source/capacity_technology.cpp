@@ -228,17 +228,26 @@ double CapacityTechnology::tryDispatch( const string& aRegionName,
                                         const double aSegmentScaleFactor,
                                         const int aPeriod )
 {
+	double effectiveCapacityFactor = mCapacityFactor;
+	auto segCapFac = mSegCapFac.find( aDemandSegment );
+	if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod()) {
+		effectiveCapacityFactor = mCapacity == 0.0 ? 0.0 : mCalValue->getCalOutput() / mCapacity;
+		}
+	else if( segCapFac != mSegCapFac.end() ) {
+		effectiveCapacityFactor = (*segCapFac).second;
+		}
+	
     MarginalProfitCalculator marginalProfitCalc( this );
     double maxProduction = mProductionState[ aPeriod ]->calcProduction( aRegionName,
                                                                            aSectorName,
-                                                                           mCapacity * mCapacityFactor * aSegmentScaleFactor,
+                                                                           mCapacity * effectiveCapacityFactor * aSegmentScaleFactor,
                                                                            &marginalProfitCalc,
                                                                            aSegmentScaleFactor,
                                                                            mShutdownDeciders,
                                                                            aPeriod );
-    auto segCapFac = mSegCapFac.find( aDemandSegment );
+
     if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && segCapFac != mSegCapFac.end() ) {
-        maxProduction *= (*segCapFac).second / mCapacityFactor;
+        maxProduction *= (*segCapFac).second / effectiveCapacityFactor;
     }
     return maxProduction;
 }
