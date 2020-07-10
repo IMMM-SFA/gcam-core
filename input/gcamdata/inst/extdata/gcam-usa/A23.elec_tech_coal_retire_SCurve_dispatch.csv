@@ -1,0 +1,9 @@
+# File: A23.elec_tech_coal_retire_SCurve_dispatch.csv
+# Title: capacity technology conventional coal separate into still operating ones and retire in 2020 ones
+# Units: Unitless
+# Comments: lifetime = maximum life of plant from final model base year; steepness = S curve exponent; half.life = year from final model base year at which half of initial final model base year plants will be retired
+# Column types: cinn 
+# ----------
+technology,lifetime,steepness,half.life
+coal (conv pul),60,0.3,50
+coal (conv pul)_retire2020,5,0.1,2.5
