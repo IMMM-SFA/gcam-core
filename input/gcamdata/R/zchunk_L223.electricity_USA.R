@@ -189,6 +189,15 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       unlist ->
       geo_states_noresource
 
+    # # A vector indicating states where CSP electric technologies will not be created
+    L119.CapacityFactor_CSP_state %>%
+      # states with effectively no resource has a very minor capacity.factor (<0.001)
+      # remove these states to avoid creating CSP technologies there
+      filter(capacity.factor < 0.01) %>%
+      transmute(csp_state_noresource = paste(state, "CSP", sep = " ")) %>%
+      unlist ->
+      csp_states_noresource
+
     #############################################################################
     # Set up investment sectors
     #############################################################################
@@ -1013,6 +1022,21 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechSCurve_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
     L223.TechCapFac_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
     L223.Production_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
+
+    # Remove CSP option from states that do not have potential
+    L223.StubTech_Investment %<>% filter(!(paste(region, stub.technology) %in% csp_states_noresource))
+    L223.StubTechMarket_Investment %<>% filter(!(paste(region, stub.technology) %in% csp_states_noresource))
+    L223.CapacityTech %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.CapacityTech_FutureTechs %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.CapacityTechSegmentCapFac %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechShrwt_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechEff_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechOMfixed_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechOMvar_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechLifetime_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechCapFac_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.Production_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechCapFac_Investment %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
 
 
     # Modifications for offshore wind

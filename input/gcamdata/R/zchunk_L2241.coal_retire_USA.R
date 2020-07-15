@@ -366,7 +366,8 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              # Create new technologies. Naming the variable as technology.new so that we can use technology as reference later
              capacity.technology = paste(capacity.technology, vintage.bin, sep = "_"),
              year = MODEL_FINAL_BASE_YEAR, share.weight.year = MODEL_FINAL_BASE_YEAR,
-             subs.share.weight = 1, tech.share.weight = 1) %>%
+             subs.share.weight = gcamusa.DEFAULT_SHAREWEIGHT,
+             tech.share.weight = gcamusa.DEFAULT_SHAREWEIGHT) %>%
       # Select variables. For now, include lifetime and vintage.bin as well. We'll remove it later
       select(LEVEL2_DATA_NAMES[["Production_dispatch"]], lifetime, vintage.bin) ->
       L2241.TechProd_coal_vintage_dispatch_gcamusa
