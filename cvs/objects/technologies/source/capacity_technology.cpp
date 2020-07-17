@@ -228,27 +228,24 @@ double CapacityTechnology::tryDispatch( const string& aRegionName,
                                         const double aSegmentScaleFactor,
                                         const int aPeriod )
 {
-	double effectiveCapacityFactor = mCapacityFactor;
-	auto segCapFac = mSegCapFac.find( aDemandSegment );
-	if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod()) {
-		effectiveCapacityFactor = mCapacity == 0.0 ? 0.0 : mCalValue->getCalOutput() / mCapacity;
-		}
-	else if( segCapFac != mSegCapFac.end() ) {
-		effectiveCapacityFactor = (*segCapFac).second;
-		}
-	
+    double effectiveCapacityFactor = mCapacityFactor;
+    auto segCapFac = mSegCapFac.find( aDemandSegment );
+    if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod()) {
+        effectiveCapacityFactor = mCapacity == 0.0 ? 0.0 : mCalValue->getCalOutput() / mCapacity;
+    }
+    else if( segCapFac != mSegCapFac.end() ) {
+        effectiveCapacityFactor = (*segCapFac).second;
+    }
+    
     MarginalProfitCalculator marginalProfitCalc( this );
     double maxProduction = mProductionState[ aPeriod ]->calcProduction( aRegionName,
-                                                                           aSectorName,
-                                                                           mCapacity * effectiveCapacityFactor * aSegmentScaleFactor,
-                                                                           &marginalProfitCalc,
-                                                                           aSegmentScaleFactor,
-                                                                           mShutdownDeciders,
-                                                                           aPeriod );
+                                                                        aSectorName,
+                                                                        mCapacity * effectiveCapacityFactor * aSegmentScaleFactor,
+                                                                        &marginalProfitCalc,
+                                                                        aSegmentScaleFactor,
+                                                                        mShutdownDeciders,
+                                                                        aPeriod );
 
-    if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && segCapFac != mSegCapFac.end() ) {
-        maxProduction *= (*segCapFac).second / effectiveCapacityFactor;
-    }
     return maxProduction;
 }
 
