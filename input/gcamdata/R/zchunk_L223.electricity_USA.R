@@ -819,26 +819,32 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       L223.CapacityTech_FutureTechs
 
     # renewable capacity factor by load segment
-    L114.CapacityFactor_wind_state_segment %>%
-      bind_rows(L119.CapacityFactor_PV_state_segment, L119.CapacityFactor_CSP_state_segment) %>%
+
+    # We need to make sure hydro continues to use the historical capacity factor into
+    # the future.  We can do that by using the segment specific capacity factors.
+    # TODO: get actual seasonal variations for hydro instead
+    L123.out_EJ_state_elec_F_tech %>%
+      filter(fuel == "hydro", year == MODEL_FINAL_BASE_YEAR) %>%
+      left_join_error_no_match(L123.capacity_EJ_state_elec_F_tech, by= c("state", "fuel" = "gcam_fuel", "year")) %>%
+      mutate(capacity.factor = value / capacity) %>%
+      select(state, sector, fuel, capacity.factor) %>%
+      expand(., ., segment = gcamusa.ELEC_LOAD_SEGMENT_ORDER) ->
+      L223.hydro_CapFac_segment
+
+    bind_rows(L114.CapacityFactor_wind_state_segment,
+              L119.CapacityFactor_PV_state_segment,
+              L119.CapacityFactor_CSP_state_segment,
+              L223.hydro_CapFac_segment) %>%
       select(-sector) %>%
       rename(technology = fuel, region = state) %>%
-      spread(segment, capacity.factor) ->
-      L223.renew_seg_cap_fac
-
-    # all technology capacity factor by load segment
-    # update renewables CF
-    L223.TechCapFac_Dispatch %>%
-      filter(year >= MODEL_FINAL_BASE_YEAR) %>%
-      filter(technology != "hydro") %>%
-      # here using left_join becuase we only update capacity factors for renewables
-      # so left_join and if there is new values (for renewables) then using new values
-      # for NAs after left_join (not renewables) then using the existing values
-      left_join(L223.renew_seg_cap_fac, by=c("region", "technology")) %>%
-      filter(!is.na(Jan_day) | year == MODEL_FINAL_BASE_YEAR) %>%
-      mutate_at(vars(Apr_day:superpeak), funs(if_else(is.na(.), capacity.factor, .))) %>%
-      select(-capacity.factor) %>%
-      gather("segment", "capacity.factor", Apr_day:superpeak) ->
+      # note expanding by rows here so just regular left join
+      left_join(L223.TechCapFac_Dispatch %>% select(-capacity.factor), by = c("region", "technology")) %>%
+      # hydro is currently only produced out of the final calibration year, while
+      # it is not an error to include the segment specific capacity factor in the
+      # future, not including it helps keep the size of the XML down
+      filter((technology == "hydro" & year == MODEL_FINAL_BASE_YEAR) |
+             (technology != "hydro" & year >= MODEL_FINAL_BASE_YEAR)) %>%
+      select(region, supplysector, subsector, technology, year, segment, capacity.factor) ->
       L223.CapacityTechSegmentCapFac
 
     # carbon storage market and remove.fraction

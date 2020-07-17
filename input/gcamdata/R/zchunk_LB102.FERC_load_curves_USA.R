@@ -160,7 +160,9 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
         filter(state != NERC.Region) ->
         L102.date_load_curve_mapping_S
 
-      # reclassify the top
+      # reclassify the top N (assumption in gcamusa.ELEC_SUPERPEAK_HRS) hours of
+      # generation as in the "super peak" segment instead of of the month + day/night
+      # that they were in
       date_load_curve_mapping %>%
         filter(state == NERC.Region) %>%
         select(-state) %>%
