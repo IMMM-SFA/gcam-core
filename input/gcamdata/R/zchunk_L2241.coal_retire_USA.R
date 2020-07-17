@@ -164,7 +164,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       # otherwise we will need another data flow (probably EIA 860 for both 2015 and 2018 to track which capacity is retired)
       left_join_error_no_match(fraction_coal_gen_retire, by = "region") %>%
       rename(capacity_OLD = capacity) %>%
-      mutate(capacity = if_else(!grepl("_retire_2020", technology),
+      mutate(capacity = if_else(!grepl("_retire2020", technology),
                                 capacity_OLD * (1 - retire_frac),
                                 capacity_OLD * retire_frac)) %>%
       rename(dispatch.sector = supplysector, capacity.technology = technology) %>%
