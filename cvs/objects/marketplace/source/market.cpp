@@ -598,7 +598,7 @@ bool Market::shouldSolve() const {
 */
 bool Market::shouldSolveNR() const {
     // Solves all solvable markets where there is nonzero supply.
-    return mSolveMarket && ( getRawSupply() != 0.0 || getRawDemand() >= util::getVerySmallNumber() );
+    return mSolveMarket && ( getRawSupply() >= util::getSmallNumber() || getRawDemand() >= 0.001 );
 }
 
 /*! \brief Return whether a market is solved according to market type specific
