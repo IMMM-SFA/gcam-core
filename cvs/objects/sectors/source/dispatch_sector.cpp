@@ -174,7 +174,7 @@ void DispatchSector::setMarket() {
     Marketplace* marketplace = scenario->getMarketplace();
     
     
-    if ( marketplace->createMarket( mRegionName, mRegionName+, mName, IMarketType::NORMAL ) ) {
+    if ( marketplace->createMarket( mRegionName, mRegionName, mName, IMarketType::NORMAL ) ) {
         // Set price and output units for period 0 market info
         IInfo* marketInfo = marketplace->getMarketInfo( mName, mRegionName, 0, true );
         marketInfo->setString( "price-unit", mPriceUnit );
