@@ -25,6 +25,7 @@
 module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = 'gcam-usa/reeds_regions_states',
+             FILE = 'gcam-usa/states_subregions',
              FILE = 'gcam-usa/reeds_CSP_curve_capacity',
              FILE = 'gcam-usa/reeds_CSP_curve_CF',
              FILE = 'gcam-usa/reeds_CSP_curve_grid_cost',
@@ -52,6 +53,7 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
 
     # Load required inputs
     reeds_regions_states <- get_data(all_data, 'gcam-usa/reeds_regions_states')
+    states_subregions <- get_data(all_data, 'gcam-usa/states_subregions')
     reeds_CSP_curve_capacity <- get_data(all_data, 'gcam-usa/reeds_CSP_curve_capacity')
     reeds_CSP_curve_CF <- get_data(all_data, 'gcam-usa/reeds_CSP_curve_CF')
     reeds_CSP_curve_grid_cost <- get_data(all_data, 'gcam-usa/reeds_CSP_curve_grid_cost')
@@ -220,15 +222,6 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
     # Hence, creating a list of all states.
     states_list_CF <- unique(L2239.CSP_curve$State)
 
-    # Table to delete global solar resource in states that have CSP resource.
-    # Since the 48 contiguous states have PV_resource, only the ones that
-    # have CSP resource need to be included in this table.
-    L2239.CSP_curve %>%
-      filter(grade == "grade 2",
-             State %in% states_list_curve) %>%
-      select(region = State) %>%
-      mutate(unlimited.resource = "global solar resource") -> L2239.DeleteUnlimitRsrc_reeds_USA
-
     # Table to read in renewresource, output.unit, price.unit and market
     L2239.CSP_curve %>%
       distinct(State) %>%
@@ -238,6 +231,25 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
              price.unit = "1975$/GJ",
              market = region) %>%
       filter(region %in% states_list_curve) -> L2239.RenewRsrc_CSP_reeds_USA
+
+    # Table to delete global solar resource
+    # All states now have a PV_resource, 19 states originally have CSP
+    # but here only 9 states have updated REEDS CSP_resources
+    # so the remaining CSP states still need to have global source resources
+    L223.StubTechMarket_Investment %>%
+      filter(stub.technology == "CSP") %>%
+      select(region) %>%
+      # 19 states have CSP
+      distinct() %>%
+      # CSP_resource was only created for 9 states,
+      # so we need to isolate the remaining 10 states to keep their global solar reource
+      filter(!(region %in% L2239.RenewRsrc_CSP_reeds_USA$region)) ->
+      keep_csp_global_solar_states
+
+    states_subregions %>%
+      distinct(region = state) %>%
+      filter(!(region %in% keep_csp_global_solar_states$region)) %>%
+      mutate(unlimited.resource = "global solar resource") -> L2239.DeleteUnlimitRsrc_reeds_USA
 
     # Table to create the graded resource curves
     L2239.CSP_curve %>%
@@ -342,14 +354,11 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
     L2239.DeleteUnlimitRsrc_reeds_USA %>%
       add_title("Delete global solar resource for States with PV & CSP Resource Supply Curves") %>%
       add_units("NA") %>%
-      add_comments("Only applies to 9 states in ReEDS PV & CSP data sets") %>%
+      add_comments("Only applies to those states in ReEDS PV & CSP data sets") %>%
       add_legacy_name("L2239.DeleteUnlimitRsrc_USA_reeds") %>%
-      add_precursors('gcam-usa/reeds_regions_states',
+      add_precursors('gcam-usa/states_subregions',
                      'gcam-usa/reeds_CSP_curve_capacity',
-                     'gcam-usa/reeds_CSP_curve_CF',
-                     'L223.GlobalTechCapital_Investment',
-                     'L223.GlobalIntTechCapital_elec',
-                     'L223.GlobalIntTechOMfixed_elec') ->
+                     'L223.StubTechMarket_Investment') ->
       L2239.DeleteUnlimitRsrc_reeds_USA
 
     L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA %>%

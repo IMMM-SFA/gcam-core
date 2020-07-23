@@ -123,6 +123,7 @@ CONV_MWH_EJ <- 3.6e-9 # Megawatt hours to Exajoules
 CONV_GWH_EJ <- 3.6e-6
 CONV_TWH_EJ <- 3.6e-3
 CONV_KWH_GJ <- 3.6e-3
+CONV_KWH_BTU <- 3412.14
 CONV_GJ_EJ <- 1e-9
 CONV_EJ_GJ <- 1 / CONV_GJ_EJ
 CONV_MBLD_EJYR <- 6.119 * 365.25 * 1e-3 # million barrels a day to EJ per year

@@ -10,8 +10,7 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L123.in_EJ_state_elec_F_tech}, \code{L123.out_EJ_state_elec_F}, \code{L123.in_EJ_state_ownuse_elec},
-#' \code{L123.out_EJ_state_ownuse_elec}, \code{L123.out_EJ_state_elec_F_tech}, \code{L123.capacity_EJ_state_elec_F_tech},
-#' \code{L123.capacity_factor_EJ_state_elec_F_tech}
+#' \code{L123.out_EJ_state_ownuse_elec}, \code{L123.out_EJ_state_elec_F_tech}, \code{L123.capacity_EJ_state_elec_F_tech}.
 #' The corresponding file in the original data system was \code{LB123.Electricity.R} (gcam-usa level1).
 #' @details By state, calculates electricity fuel consumption, electricity generation, and inputs and outputs of net ownuse.
 #' @importFrom assertthat assert_that
@@ -37,8 +36,7 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
              "L123.in_EJ_state_ownuse_elec",
              "L123.out_EJ_state_ownuse_elec",
              "L123.out_EJ_state_elec_F_tech",
-             "L123.capacity_EJ_state_elec_F_tech",
-             "L123.capacity_factor_EJ_state_elec_F_tech"))
+             "L123.capacity_EJ_state_elec_F_tech"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -147,15 +145,6 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       repeat_add_columns(tibble::tibble(year = HISTORICAL_YEARS)) ->
       L123.capacity_EJ_state_elec_F_tech
 
-    # Note: here the capacity unit is EJ
-    # TODO: check why some capacity factor is greater than 1
-    L123.out_EJ_state_elec_F_tech %>%
-      left_join_error_no_match(elec_capacity_state_vintage %>% rename(fuel = gcam_fuel),
-                               by = c("state", "fuel", "elec_tech")) %>%
-      mutate(capacity_factor = value / capacity) %>%
-      select(-capacity) ->
-      L123.capacity_factor_EJ_state_elec_F_tech
-
     # ELECTRICITY - OWNUSE
     # NOTE: Electricity net own use energy is apportioned to states on the basis of EIA's direct use by state
     # First calculate the national own use quantity
@@ -261,19 +250,9 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       add_precursors("L105.elec_capacity_state_vintage_gcamusa")  ->
       L123.capacity_EJ_state_elec_F_tech
 
-    L123.capacity_factor_EJ_state_elec_F_tech %>%
-      add_title("Electricity generation capacity factor by state and fuel and tech") %>%
-      add_units("NA") %>%
-      add_comments("Need to check why some capacity factor is greater than 1") %>%
-      add_legacy_name("L123.capacity_factor_EJ_state_elec_F_tech") %>%
-      add_precursors("L105.elec_capacity_state_vintage_gcamusa", "L105.elec_generation_state_vintage_gcamusa",
-                     "L123.out_EJ_R_elec_F_Yh")  ->
-      L123.capacity_factor_EJ_state_elec_F_tech
-
 
     return_data(L123.in_EJ_state_elec_F_tech, L123.out_EJ_state_elec_F, L123.in_EJ_state_ownuse_elec, L123.out_EJ_state_ownuse_elec,
-                L123.out_EJ_state_elec_F_tech, L123.capacity_EJ_state_elec_F_tech, L123.capacity_factor_EJ_state_elec_F_tech,
-                L123.in_EJ_state_elec_F)
+                L123.out_EJ_state_elec_F_tech, L123.capacity_EJ_state_elec_F_tech, L123.in_EJ_state_elec_F)
   } else {
     stop("Unknown command")
   }

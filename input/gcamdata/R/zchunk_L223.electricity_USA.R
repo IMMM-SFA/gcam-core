@@ -23,7 +23,7 @@
 #' \code{L223.TechCost_Investment_LoadCurve}, \code{L223.DispatchSector}, \code{L223.Sector_Dispatch},
 #' \code{L223.SubsectorLogit_Dispatch}, \code{L223.SubsectorShrwtFllt_Dispatch}, \code{L223.CapacityTech_FutureTechs},
 #' \code{L223.TechOMvar_Dispatch}, \code{L223.TechLifetime_Dispatch}, \code{L223.TechSCurve_Dispatch},
-#' \code{L223.TechCapFac_Dispatch}, \code{L223.TechCarbonCapture_Dispatch}, \code{L223.TechCapFac_Cal},
+#' \code{L223.TechCapFac_Dispatch}, \code{L223.TechCarbonCapture_Dispatch}, \code{L223.Production_Dispatch},
 #' \code{L223.TechEff_Cal}, \code{L223.Sector_Dispatch_Grid}, \code{L223.DispatchSectorCalProd},
 #' \code{L223.DispatchSectorDispatchSegments}, \code{L223.InterestRate_FERC}, \code{L223.Pop_FERC}, \code{L223.BaseGDP_FERC},
 #' \code{L223.LaborForceFillout_FERC}, \code{L223.TechCost_offshore_wind_Dispatch}.
@@ -55,7 +55,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              "L123.in_EJ_state_elec_F_tech",
              "L123.out_EJ_state_elec_F_tech",
              "L123.capacity_EJ_state_elec_F_tech",
-             "L123.capacity_factor_EJ_state_elec_F_tech",
              "L102.load_segments_gcamusa",
              "L102.invest_segments_gcamusa",
              FILE = "gcam-usa/A23.dispatch_sector",
@@ -119,7 +118,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              "L223.TechSCurve_Dispatch",
              "L223.TechCapFac_Dispatch",
              "L223.TechCarbonCapture_Dispatch",
-             "L223.TechCapFac_Cal",
+             "L223.Production_Dispatch",
              "L223.TechEff_Cal",
              "L223.Sector_Dispatch_Grid",
              "L223.DispatchSectorCalProd",
@@ -162,7 +161,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L123.in_EJ_state_elec_F_tech <- get_data(all_data, "L123.in_EJ_state_elec_F_tech")
     L123.out_EJ_state_elec_F_tech <- get_data(all_data, "L123.out_EJ_state_elec_F_tech")
     L123.capacity_EJ_state_elec_F_tech <- get_data(all_data, "L123.capacity_EJ_state_elec_F_tech")
-    L123.capacity_factor_EJ_state_elec_F_tech <- get_data(all_data, "L123.capacity_factor_EJ_state_elec_F_tech")
 
     L102.load_segments <- get_data(all_data, "L102.load_segments_gcamusa")
     L102.invest_segments <- get_data(all_data, "L102.invest_segments_gcamusa")
@@ -190,6 +188,15 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       transmute(geo_state_noresource = paste(state, "geothermal", sep = " ")) %>%
       unlist ->
       geo_states_noresource
+
+    # # A vector indicating states where CSP electric technologies will not be created
+    L119.CapacityFactor_CSP_state %>%
+      # states with effectively no resource has a very minor capacity.factor (<0.001)
+      # remove these states to avoid creating CSP technologies there
+      filter(capacity.factor < 0.01) %>%
+      transmute(csp_state_noresource = paste(state, "CSP", sep = " ")) %>%
+      unlist ->
+      csp_states_noresource
 
     #############################################################################
     # Set up investment sectors
@@ -397,6 +404,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       mutate(supplysector = sector) %>%
       select(supplysector, subsector, technology, year, capacity.factor) ->
       L223.GlobalTechCapFac_Investment
+    # Warning message:
+    # Column `sector` joining factor and character vector, coercing into character vector
 
     # ===========================================================================
     ## L223 GlobalTechCapture_Investment  storage market investment
@@ -481,6 +490,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       mutate(supplysector = sector) %>%
       select(region, supplysector, subsector, technology, year, capacity.factor) ->
       L223.TechCapFac_Investment
+    # Warning message:
+    # Column `sector` joining factor and character vector, coercing into character vector
 
     # ===========================================================================
     ## L223 Sector_Investment_StateShare investment sharing sectors at the grid region
@@ -629,6 +640,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(-hours, -generation, -area, -generation.fraction) %>%
       mutate(market.name = region) ->
       L223.TechCoef_Investment_LoadCurve
+    # Warning message:
+    # Column `invest_segment` joining character vector and factor, coercing into character vector
 
     # ===========================================================================
     ## L223.TechPMult_Investment_LoadCurve  p multiplier load curve
@@ -806,26 +819,32 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       L223.CapacityTech_FutureTechs
 
     # renewable capacity factor by load segment
-    L114.CapacityFactor_wind_state_segment %>%
-      bind_rows(L119.CapacityFactor_PV_state_segment, L119.CapacityFactor_CSP_state_segment) %>%
+
+    # We need to make sure hydro continues to use the historical capacity factor into
+    # the future.  We can do that by using the segment specific capacity factors.
+    # TODO: get actual seasonal variations for hydro instead
+    L123.out_EJ_state_elec_F_tech %>%
+      filter(fuel == "hydro", year == MODEL_FINAL_BASE_YEAR) %>%
+      left_join_error_no_match(L123.capacity_EJ_state_elec_F_tech, by= c("state", "fuel" = "gcam_fuel", "year")) %>%
+      mutate(capacity.factor = value / capacity) %>%
+      select(state, sector, fuel, capacity.factor) %>%
+      expand(., ., segment = gcamusa.ELEC_LOAD_SEGMENT_ORDER) ->
+      L223.hydro_CapFac_segment
+
+    bind_rows(L114.CapacityFactor_wind_state_segment,
+              L119.CapacityFactor_PV_state_segment,
+              L119.CapacityFactor_CSP_state_segment,
+              L223.hydro_CapFac_segment) %>%
       select(-sector) %>%
       rename(technology = fuel, region = state) %>%
-      spread(segment, capacity.factor) ->
-      L223.renew_seg_cap_fac
-
-    # all technology capacity factor by load segment
-    # update renewables CF
-    L223.TechCapFac_Dispatch %>%
-      filter(year >= MODEL_FINAL_BASE_YEAR) %>%
-      filter(technology != "hydro") %>%
-      # here using left_join becuase we only update capacity factors for renewables
-      # so left_join and if there is new values (for renewables) then using new values
-      # for NAs after left_join (not renewables) then using the existing values
-      left_join(L223.renew_seg_cap_fac, by=c("region", "technology")) %>%
-      filter(!is.na(Jan_day) | year == MODEL_FINAL_BASE_YEAR) %>%
-      mutate_at(vars(Apr_day:superpeak), funs(if_else(is.na(.), capacity.factor, .))) %>%
-      select(-capacity.factor) %>%
-      gather("segment", "capacity.factor", Apr_day:superpeak) ->
+      # note expanding by rows here so just regular left join
+      left_join(L223.TechCapFac_Dispatch %>% select(-capacity.factor), by = c("region", "technology")) %>%
+      # hydro is currently only produced out of the final calibration year, while
+      # it is not an error to include the segment specific capacity factor in the
+      # future, not including it helps keep the size of the XML down
+      filter((technology == "hydro" & year == MODEL_FINAL_BASE_YEAR) |
+             (technology != "hydro" & year >= MODEL_FINAL_BASE_YEAR)) %>%
+      select(region, supplysector, subsector, technology, year, segment, capacity.factor) ->
       L223.CapacityTechSegmentCapFac
 
     # carbon storage market and remove.fraction
@@ -906,16 +925,32 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(region, supplysector, subsector, technology, year, capacity) ->
       L223.CapacityTech
 
-    # calibrated capacity factor for electricity technology
-    L123.capacity_factor_EJ_state_elec_F_tech %>%
-      filter(year %in% MODEL_YEARS) %>%
-      mutate(capacity_factor = pmax(capacity_factor, 0.001)) %>%
+    # calibrated output for electricity technology
+    L123.out_EJ_state_elec_F_tech %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      # mutate(calOutputValue = round(value, energy.DIGITS_CALOUTPUT)) %>%
+      mutate(calOutputValue = value) %>%
       left_join_error_no_match(calibrated_techs_dispatch_usa %>%
                                  select(-minicam.energy.input, -secondary.output),
-                               by=c("fuel" = "fuel", "elec_tech" = "elec_tech")) %>%
+                               by = c("sector", "fuel", "elec_tech")) %>%
       rename(region = state) %>%
-      select(region, supplysector, subsector, technology, year, capacity_factor) ->
-      L223.TechCapFac_Cal
+      select(LEVEL2_DATA_NAMES[["TechYr"]], calOutputValue)-> L223.Production_Dispatch_temp
+
+    # L123.out_EJ_state_elec_F_tech contains only technologies which have non-zero historical generation
+    # start with full set of dispatch techs, join in non-zero calibrated values, and assign
+    # zero calibrated output for the others
+    L223.TechShrwt_Dispatch %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      # L123.out_EJ_state_elec_F_tech contains subset of technologies which have non-zero historical generation
+      # LJENM throws error; left_join() is used; NAs are assigned zero calOutputValue below
+      left_join(L223.Production_Dispatch_temp, by = c(LEVEL2_DATA_NAMES[["TechYr"]])) %>%
+      # technologies missing calOutputValue have no generation in that region / period
+      mutate(calOutputValue = if_else(is.na(calOutputValue), 0, calOutputValue),
+             share.weight.year = year,
+             # share weights are 1 for all dispatch subsectors / technologies
+             subs.share.weight = gcamusa.DEFAULT_SHAREWEIGHT,
+             tech.share.weight = gcamusa.DEFAULT_SHAREWEIGHT) %>%
+      select(LEVEL2_DATA_NAMES[["Production"]]) -> L223.Production_Dispatch
 
     # calibrated capacity factor for electricity technology
     L123.in_EJ_state_elec_F_tech %>%
@@ -992,10 +1027,27 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechLifetime_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
     L223.TechSCurve_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
     L223.TechCapFac_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
+    L223.Production_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
+
+    # Remove CSP option from states that do not have potential
+    L223.StubTech_Investment %<>% filter(!(paste(region, stub.technology) %in% csp_states_noresource))
+    L223.StubTechMarket_Investment %<>% filter(!(paste(region, stub.technology) %in% csp_states_noresource))
+    L223.CapacityTech %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.CapacityTech_FutureTechs %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.CapacityTechSegmentCapFac %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechShrwt_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechEff_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechOMfixed_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechOMvar_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechLifetime_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechCapFac_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.Production_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechCapFac_Investment %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
 
 
     # Modifications for offshore wind
     # Remove states with no offshore wind resources
+    # todo: create function for repetitive operation
     offshore_wind_states <- unique(L120.RsrcCurves_EJ_R_offshore_wind_USA$region)
 
     L223.StubTech_Investment %>%
@@ -1047,7 +1099,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                   filter(technology == "wind_offshore",
                          region %in% offshore_wind_states)) -> L223.TechOMvar_Dispatch
 
-
     L223.TechLifetime_Dispatch %>%
       filter(technology != "wind_offshore") %>%
       bind_rows(L223.TechLifetime_Dispatch %>%
@@ -1059,6 +1110,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       bind_rows(L223.TechSCurve_Dispatch %>%
                   filter(technology == "wind_offshore",
                          region %in% offshore_wind_states)) -> L223.TechSCurve_Dispatch
+
+    L223.Production_Dispatch %>%
+      filter(technology != "wind_offshore") %>%
+      bind_rows(L223.Production_Dispatch %>%
+                  filter(technology == "wind_offshore",
+                         region %in% offshore_wind_states)) -> L223.Production_Dispatch
 
     L223.TechCapFac_Dispatch %>%
       filter(technology == "wind_offshore",
@@ -1536,14 +1593,13 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "energy/A23.globaltech_co2capture") ->
       L223.TechCarbonCapture_Dispatch
 
-    L223.TechCapFac_Cal %>%
-      add_title("Dispatch technology calibrated capacity-factor for state") %>%
-      add_units("unitless") %>%
-      add_comments("Set technology calibrated capacity-factor for state") %>%
-      add_legacy_name("L223.TechCapFac_Cal (dispatch branch)") %>%
-      add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
-                     "L123.capacity_factor_EJ_state_elec_F_tech") ->
-      L223.TechCapFac_Cal
+    L223.Production_Dispatch %>%
+      add_title("Dispatch technology calibrated output by state") %>%
+      add_units("EJ") %>%
+      add_comments("Set technology calibrated output by state") %>%
+      same_precursors_as("L223.TechShrwt_Dispatch") %>%
+      add_precursors("L123.out_EJ_state_elec_F_tech") ->
+      L223.Production_Dispatch
 
     L223.TechEff_Cal %>%
       add_title("Dispatch technology calibrated efficiency for state") %>%
@@ -1667,7 +1723,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                 L223.TechSCurve_Dispatch,
                 L223.TechCapFac_Dispatch,
                 L223.TechCarbonCapture_Dispatch,
-                L223.TechCapFac_Cal,
+                L223.Production_Dispatch,
                 L223.TechEff_Cal,
                 L223.Sector_Dispatch_Grid,
                 L223.DispatchSectorCalProd,

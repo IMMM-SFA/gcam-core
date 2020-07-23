@@ -415,9 +415,12 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
              # future. The idea here is the sector will be driven by zero demand so if we read
              # calibation values it will still calibrate the right share-weights AND not
              # produce incorrect total demands.
-             calibrated.value = calibrated.value * pmax(rel, 1e-10),
-             subs.share.weight = if_else(calibrated.value == 0, 0, 1),
-             tech.share.weight = subs.share.weight) %>%
+             # TODO: here originally use max, not sure why at some point changed into pmax
+             calibrated.value = calibrated.value * max(rel, 1e-10),
+             # subs.share.weight = if_else(calibrated.value == 0, 0, 1),
+             # tech.share.weight = subs.share.weight) %>%
+            subs.share.weight = 1,
+            tech.share.weight = if_else(calibrated.value == 0, 0, 1)) %>%
       # Set the appropriate names and adjust the efficiency for losses given we are by passing
       # the elec_td sector.  Note, we use left_join as the non-electricity inputs will
       # be NA but that is ok since we don't need to update those.

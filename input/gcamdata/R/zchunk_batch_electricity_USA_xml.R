@@ -56,7 +56,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.TechSCurve_Dispatch",
              "L223.TechCapFac_Dispatch",
              "L223.TechCarbonCapture_Dispatch",
-             "L223.TechCapFac_Cal",
+             "L223.Production_Dispatch",
              "L223.TechEff_Cal",
              "L223.Sector_Dispatch_Grid",
              "L223.DispatchSectorCalProd",
@@ -128,9 +128,11 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.Sector_Dispatch <- get_data(all_data, "L223.Sector_Dispatch")
     L223.SubsectorLogit_Dispatch <- get_data(all_data, "L223.SubsectorLogit_Dispatch")
     L223.SubsectorShrwtFllt_Dispatch <- get_data(all_data, "L223.SubsectorShrwtFllt_Dispatch")
-    L223.CapacityTech_FutureTechs <- get_data(all_data, "L223.CapacityTech_FutureTechs")
+    L223.CapacityTech_FutureTechs <- get_data(all_data, "L223.CapacityTech_FutureTechs") %>%
+      rename(dispatch.sector = supplysector, capacity.technology = technology)
     L223.CapacityTechSegmentCapFac <- get_data(all_data, "L223.CapacityTechSegmentCapFac")
-    L223.CapacityTech <- get_data(all_data, "L223.CapacityTech")
+    L223.CapacityTech <- get_data(all_data, "L223.CapacityTech") %>%
+      rename(dispatch.sector = supplysector, capacity.technology = technology)
     L223.TechShrwt_Dispatch <- get_data(all_data, "L223.TechShrwt_Dispatch")
     L223.TechEff_Dispatch <- get_data(all_data, "L223.TechEff_Dispatch")
     L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch")
@@ -138,7 +140,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.TechSCurve_Dispatch <- get_data(all_data, "L223.TechSCurve_Dispatch")
     L223.TechCapFac_Dispatch <- get_data(all_data, "L223.TechCapFac_Dispatch")
     L223.TechCarbonCapture_Dispatch <- get_data(all_data, "L223.TechCarbonCapture_Dispatch")
-    L223.TechCapFac_Cal <- get_data(all_data, "L223.TechCapFac_Cal")
+    L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
     L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
     L223.Sector_Dispatch_Grid <- get_data(all_data, "L223.Sector_Dispatch_Grid")
     L223.DispatchSectorCalProd <- get_data(all_data, "L223.DispatchSectorCalProd")
@@ -214,17 +216,17 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_logit_tables_xml(L223.Sector_Dispatch, "Supplysector") %>%
       add_logit_tables_xml(L223.SubsectorLogit_Dispatch, "SubsectorLogit") %>%
       add_xml_data(L223.SubsectorShrwtFllt_Dispatch, "SubsectorShrwtFllt") %>%
-      add_xml_data(L223.CapacityTech_FutureTechs, "CapacityTech", NULL) %>%
+      add_xml_data(L223.CapacityTech_FutureTechs, "CapacityTech") %>%
       add_xml_data(L223.CapacityTechSegmentCapFac, "CapacityTechSegmentCapFac", NULL) %>%
-      add_xml_data(L223.CapacityTech, "CapacityTech", NULL) %>%
+      add_xml_data(L223.CapacityTech, "CapacityTech") %>%
       add_xml_data(L223.TechShrwt_Dispatch, "TechShrwt") %>%
       add_xml_data(L223.TechEff_Dispatch, "TechEff") %>%
       add_xml_data(L223.TechOMvar_Dispatch, "TechOMvar") %>%
       add_xml_data(L223.TechLifetime_Dispatch, "TechLifetime") %>%
-      add_xml_data(L223.TechSCurve_Dispatch, "TechSCurveDistpatch", NULL) %>%
+      add_xml_data(L223.TechSCurve_Dispatch, "TechSCurve_dispatch", NULL) %>%
       add_xml_data(L223.TechCapFac_Dispatch, "TechCapFac", NULL) %>%
       add_xml_data(L223.TechCarbonCapture_Dispatch, "CarbonCapture") %>%
-      add_xml_data(L223.TechCapFac_Cal, "TechCapFac", NULL) %>%
+      add_xml_data(L223.Production_Dispatch, "Production", NULL) %>%
       add_xml_data(L223.TechEff_Cal, "TechEff") %>%
       add_logit_tables_xml(L223.Sector_Dispatch_Grid, "Supplysector") %>%
       add_xml_data(L223.DispatchSectorCalProd, "DispatchSectorCalProd", NULL) %>%
@@ -296,7 +298,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.TechSCurve_Dispatch",
                      "L223.TechCapFac_Dispatch",
                      "L223.TechCarbonCapture_Dispatch",
-                     "L223.TechCapFac_Cal",
+                     "L223.Production_Dispatch",
                      "L223.TechEff_Cal",
                      "L223.Sector_Dispatch_Grid",
                      "L223.DispatchSectorCalProd",

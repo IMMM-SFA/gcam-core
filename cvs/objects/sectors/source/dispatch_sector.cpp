@@ -129,14 +129,8 @@ void DispatchSector::completeInit( const IInfo* aRegionInfo,
     SupplySector::completeInit( aRegionInfo, aLandAllocator );
     
     MarketDependencyFinder* depFinder = scenario->getMarketplace()->getDependencyFinder();
-    for( auto genSector : mGenSectors ) {
-        depFinder->addDependency( genSector.first, genSector.second, mName, mRegionName, false );
-        if(mSubsectors.empty()) {
-        depFinder->copyDependencies( genSector.first, genSector.second, mName, mRegionName );
-        }
-    }
     if(mSubsectors.empty()) {
-    //depFinder->addDependency( mName, mRegionName, "capacity investment", mRegionName );
+    depFinder->addDependency( "capacity investment", mRegionName, "capacity investment", mRegionName );
         Marketplace* marketplace = scenario->getMarketplace();
         set<string> demandSegmentNames;
         for(auto dispSegment : mDispatchSegments) {
@@ -157,9 +151,41 @@ void DispatchSector::completeInit( const IInfo* aRegionInfo,
                 depFinder->addDependency( segmentMarketName, mRegionName, segmentMarketName, mRegionName );
                 depFinder->resolveActivityToDependency( mRegionName, segmentMarketName,
                                                        new DummyActivity(), new DummyActivity() );
-                depFinder->copyDependencies( mName, mRegionName, segmentMarketName, mRegionName );
+                //depFinder->copyDependencies( mName, mRegionName, segmentMarketName, mRegionName );
                 depFinder->addDependency( segmentMarketName, mRegionName, mName, mRegionName );
             }
+        }
+    }
+    else {
+        for( auto genSector : mGenSectors ) {
+            depFinder->addDependency( genSector.first, genSector.second, mName, mRegionName, false );
+            /*if(mSubsectors.empty()) {
+             depFinder->copyDependencies( genSector.first, genSector.second, mName, mRegionName );
+             }*/
+        }
+    }
+}
+
+void DispatchSector::setMarket() {
+    if(!mSubsectors.empty()) {
+        // let the grid region create the market
+        return;
+    }
+    Marketplace* marketplace = scenario->getMarketplace();
+    
+    
+    if ( marketplace->createMarket( mRegionName, mRegionName, mName, IMarketType::NORMAL ) ) {
+        // Set price and output units for period 0 market info
+        IInfo* marketInfo = marketplace->getMarketInfo( mName, mRegionName, 0, true );
+        marketInfo->setString( "price-unit", mPriceUnit );
+        marketInfo->setString( "output-unit", mOutputUnit );
+        
+        // Set market prices to initial price vector
+        marketplace->setPriceVector( mName, mRegionName, mPrice );
+        
+        // add states to market
+        for( auto genSector : mGenSectors ) {
+            marketplace->createMarket( genSector.second, mRegionName, mName, IMarketType::NORMAL );
         }
     }
 }

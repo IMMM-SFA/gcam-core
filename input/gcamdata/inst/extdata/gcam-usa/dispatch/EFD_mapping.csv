@@ -1,0 +1,38 @@
+# File: EFD_mapping.csv
+# Title: map REEDS plant file (AEO2019Plantfile) EFDT column into plant type
+# Units: NA
+# Source: REEDS
+# Column types: cc
+# ----------
+EFDT_(NEMS_TYPE),Description
+COU,Coal Steam pre-1965
+CSU,Coal Steam post-1965
+CSC,Coal Steam with Scrubber
+CNC,New Coal Steam
+CAV,New Advanced Coal
+CAS,New Adv. Coal with Sequestration
+STO,Oil Steam
+STG,Gas Steam
+STX,Oil/Gas Steam
+CTO,Oil Turbine
+CTG,Gas Turbine
+CTX,Oil/Gas Turbine
+ACT,Advanced Turbine
+CCO,Oil Combined Cycle
+CCG,Gas Combined Cycle
+CCX,Oil/Gas Combined Cycle
+ACC,Advanced Combined Cycle
+ACS,Adv. Combined Cyc w/Sequestration
+FCG,Fuel Cell
+CNU,Conventional Nuclear
+ANC,Advanced Nuclear
+BMS,Wood/Biomass
+GTH,Geothermal
+MSW,Municipal Solid Waste
+HYC,Conventional Hydroelectric
+HYR,Reversible Hydroelectric
+WND,Wind
+STH,Solar Thermal
+SPV,Solar Photovoltaic
+DGB,Distributed Generation-Base
+DGP,Distributed Generation-Peak

@@ -235,17 +235,22 @@ double CapacityTechnology::tryDispatch( const string& aRegionName,
 {
     MarginalProfitCalculator marginalProfitCalc( this );
     double maxProduction = mProductionState[ aPeriod ]->calcProduction( aRegionName,
-                                                                           aSectorName,
-                                                                           mCapacity * mCapacityFactor * aSegmentScaleFactor,
-                                                                           &marginalProfitCalc,
-                                                                           aSegmentScaleFactor,
-                                                                           mShutdownDeciders,
-                                                                           aPeriod );
+                                                                        aSectorName,
+                                                                        mCapacity * mCapacityFactor * aSegmentScaleFactor,
+                                                                        &marginalProfitCalc,
+                                                                        aSegmentScaleFactor,
+                                                                        mShutdownDeciders,
+                                                                        aPeriod );
+    double effectiveCapacityFactor = mCapacityFactor;
     auto segCapFac = mSegCapFac.find( aDemandSegment );
-    if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && segCapFac != mSegCapFac.end() ) {
-        maxProduction *= (*segCapFac).second / mCapacityFactor;
+    if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod()) {
+        effectiveCapacityFactor = mCapacity == 0.0 ? 0.0 : mCalValue->getCalOutput() / mCapacity;
     }
-    return maxProduction;
+    else if( segCapFac != mSegCapFac.end() ) {
+        effectiveCapacityFactor = (*segCapFac).second;
+    }
+
+    return maxProduction * effectiveCapacityFactor / mCapacityFactor;
 }
 
 void CapacityTechnology::setProductionState( const int aPeriod ) {

@@ -1,0 +1,8 @@
+# File: A23.elec_tech_mapping_coal_retire_dispatch.csv
+# Title: capacity technology conventional coal separate into still operating ones and retire in 2020 ones
+# Units: Unitless
+# Column types: cccc
+# ----------
+supplysector,subsector,current.tech,technology
+electricity,coal,coal (conv pul),coal (conv pul)
+electricity,coal,coal (conv pul),coal (conv pul)_retire2020

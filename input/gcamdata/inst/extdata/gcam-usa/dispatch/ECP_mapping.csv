@@ -1,0 +1,66 @@
+# File: ECP_mapping.csv
+# Title: map REEDS plant file (AEO2019Plantfile) ECPT column into fuels
+# Units: NA
+# Source: REEDS
+# Comment: ECPT of DS PT P2 and WF need to check whether are are coal catagories
+# Column types: ccc
+# ----------
+ECPT,Description,Fuel
+B1,B100 Unscb-BH -Any-,Coal
+B2,B100 Unscb-BH -Any-SC,Coal
+B3,B100 W_scb-BH -   -,Coal
+B4,B100 W_scb-BH -   -SC,Coal
+B5,B100 W_scb-BH -SCR-,Coal
+B6,B100 W_scb-BH -SCR-SC,Coal
+B7,B100 Dry  -BH -Any-,Coal
+B8,B100 Dry  -BH -Any-SC,Coal
+C1,B100 Unscb-CSE-Any-,Coal
+C2,B100 Unscb-CSE-Any-   FF,Coal
+C3,B100 Unscb-CSE-Any-SC/FF,Coal
+C4,B100 W_scb-CSE-   -,Coal
+C5,B100 W_scb-CSE-   -   FF,Coal
+C6,B100 W_scb-CSE-   -SC/FF,Coal
+C7,B100 W_scb-CSE-SCR-,Coal
+C8,B100 W_scb-CSE-SCR-   FF,Coal
+C9,B100 W_scb-CSE-SCR-SC/FF,Coal
+CX,B100 D_scb-CSE-   -,Coal
+CY,B100 D_scb-CSE-   -   FF,Coal
+CZ,B100 D_scb-CSE-SCR-SC/FF,Coal
+H1,B100 Unscb-O/N-Any-,Coal
+H2,B100 Unscb-O/N-Any-   FF,Coal
+H3,B100 Unscb-O/N-Any-SC/FF,Coal
+H4,B100 W_scb-O/N-   -,Coal
+H5,B100 W_scb-O/N-   -   FF,Coal
+H6,B100 W_scb-O/N-   -SC/FF,Coal
+H7,B100 W_scb-O/N-SCR-,Coal
+H8,B100 W_scb-O/N-SCR-   FF,Coal
+H9,B100 W_scb-O/N-SCR-SC/FF,Coal
+HA,B100 D_scb-O/N-Any-,Coal
+HB,B100 D_scb-O/N-Any-   FF,Coal
+HC,B100 D_scb-O/N-Any-SC/FF,Coal
+PC,Scrubbed Coal New,Coal
+IG,Integrated Gas Comb Cycle,Coal
+IS,IGCC w/Sequestration,Coal
+ST,Gas/Oil Steam Turbine,OFS
+ET,Existing Combustion Turbine,Turb
+CT,Conv Combustion Turbine,Turb
+AT,Adv Combustion Turbine,Turb
+EC,Existing Gas/Oil Comb Cycle,CC
+CC,Conv Gas/Oil Comb Cycle,CC
+AC,Adv Gas/Oil Comb Cycle,CC
+CS,Adv CC w/Sequestration,CC
+FC,Fuel Cells,Fuel Cell
+CN,Conventional Nuclear,Nuclear
+AN,Advanced Nuclear,Nuclear
+WD,Biomass (Wood),Renew
+GT,Geothermal,Renew
+MS,Mun Solid Waste,Renew
+HY,Hydroelectric,Renew
+PS,Pumped Storage,Renew
+WN,Wind,Renew
+SO,Solar Thermal,Renew
+PV,Photovoltaic,Renew
+DS,need to check,Other
+PT,need to check,Other
+P2,need to check,Other
+WF,need to check,Other
