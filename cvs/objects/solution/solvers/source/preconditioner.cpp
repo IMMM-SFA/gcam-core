@@ -362,7 +362,13 @@ SolverComponent::ReturnCode Preconditioner::solve( SolutionInfoSet& aSolutionSet
                     if(pass>=0) {
                         double normoldprice = oldprice / solvable[i].getForecastDemand();
                         double normolddemand = olddmnd / solvable[i].getForecastDemand();
-                        if(olddmnd <= 0.0) {
+                        if(oldprice == util::getSmallNumber() && olddmnd == 0.0) {
+                            newprice = 0.0;
+                            solvable[i].setPrice(newprice);
+                            chg = true;
+                            ++nchg;
+                        }
+                        else if(olddmnd <= 0.0) {
                             newprice = util::getSmallNumber();
                             solvable[i].setPrice(newprice);
                             chg = true;

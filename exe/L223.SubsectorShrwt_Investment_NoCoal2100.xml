@@ -4,8 +4,8 @@
       <region name="AK">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -30,8 +30,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -58,8 +58,8 @@
       <region name="AL">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -84,8 +84,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -112,8 +112,8 @@
       <region name="AR">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -138,8 +138,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -166,8 +166,8 @@
       <region name="AZ">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -192,8 +192,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -220,8 +220,8 @@
       <region name="CA">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -246,8 +246,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -274,8 +274,8 @@
       <region name="CO">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -300,8 +300,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -328,8 +328,8 @@
       <region name="CT">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -354,8 +354,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -382,8 +382,8 @@
       <region name="DC">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -408,8 +408,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -436,8 +436,8 @@
       <region name="DE">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -462,8 +462,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -490,8 +490,8 @@
       <region name="FL">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -516,8 +516,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -544,8 +544,8 @@
       <region name="GA">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -570,8 +570,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -598,8 +598,8 @@
       <region name="HI">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -624,8 +624,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -652,8 +652,8 @@
       <region name="IA">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -678,8 +678,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -706,8 +706,8 @@
       <region name="ID">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -732,8 +732,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -760,8 +760,8 @@
       <region name="IL">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -786,8 +786,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -814,8 +814,8 @@
       <region name="IN">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -840,8 +840,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -868,8 +868,8 @@
       <region name="KS">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -894,8 +894,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -922,8 +922,8 @@
       <region name="KY">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -948,8 +948,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -976,8 +976,8 @@
       <region name="LA">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1002,8 +1002,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1030,8 +1030,8 @@
       <region name="MA">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1056,8 +1056,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1084,8 +1084,8 @@
       <region name="MD">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1110,8 +1110,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1138,8 +1138,8 @@
       <region name="ME">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1164,8 +1164,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1192,8 +1192,8 @@
       <region name="MI">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1218,8 +1218,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1246,8 +1246,8 @@
       <region name="MN">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1272,8 +1272,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1300,8 +1300,8 @@
       <region name="MO">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1326,8 +1326,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1354,8 +1354,8 @@
       <region name="MS">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1380,8 +1380,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1408,8 +1408,8 @@
       <region name="MT">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1434,8 +1434,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1462,8 +1462,8 @@
       <region name="NC">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1488,8 +1488,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1516,8 +1516,8 @@
       <region name="ND">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1542,8 +1542,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1570,8 +1570,8 @@
       <region name="NE">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1596,8 +1596,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1624,8 +1624,8 @@
       <region name="NH">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1650,8 +1650,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1678,8 +1678,8 @@
       <region name="NJ">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1704,8 +1704,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1732,8 +1732,8 @@
       <region name="NM">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1758,8 +1758,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1786,8 +1786,8 @@
       <region name="NV">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1812,8 +1812,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1840,8 +1840,8 @@
       <region name="NY">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1866,8 +1866,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1894,8 +1894,8 @@
       <region name="OH">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1920,8 +1920,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1948,8 +1948,8 @@
       <region name="OK">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -1974,8 +1974,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2002,8 +2002,8 @@
       <region name="OR">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2028,8 +2028,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2056,8 +2056,8 @@
       <region name="PA">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2082,8 +2082,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2110,8 +2110,8 @@
       <region name="RI">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2136,8 +2136,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2164,8 +2164,8 @@
       <region name="SC">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2190,8 +2190,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2218,8 +2218,8 @@
       <region name="SD">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2244,8 +2244,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2272,8 +2272,8 @@
       <region name="TN">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2298,8 +2298,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2326,8 +2326,8 @@
       <region name="TX">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2352,8 +2352,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2380,8 +2380,8 @@
       <region name="UT">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2406,8 +2406,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2434,8 +2434,8 @@
       <region name="VA">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2460,8 +2460,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2488,8 +2488,8 @@
       <region name="VT">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2514,8 +2514,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2542,8 +2542,8 @@
       <region name="WA">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2568,8 +2568,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2596,8 +2596,8 @@
       <region name="WI">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2622,8 +2622,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2650,8 +2650,8 @@
       <region name="WV">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2676,8 +2676,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2704,8 +2704,8 @@
       <region name="WY">
          <supplysector name="intermediate electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>
@@ -2730,8 +2730,8 @@
          </supplysector>
          <supplysector name="baseload electricity">
             <subsector name="coal">
-               <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2300">
-                  <to-value>1</to-value>
+               <interpolation-rule apply-to="share-weight" delete="1" from-year="2020" to-year="2300">
+                  <to-value>0</to-value>
                   <interpolation-function name="s-curve"/>
                </interpolation-rule>
                <share-weight year="2015">0</share-weight>

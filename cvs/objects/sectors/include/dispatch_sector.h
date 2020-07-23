@@ -84,6 +84,8 @@ protected:
 
     virtual void toDebugXMLDerived( const int period, std::ostream& aOut, Tabs* aTabs ) const;
     
+    virtual void setMarket();
+    
     class DemandSegment : public INamed {
     protected:
         DEFINE_DATA(
