@@ -751,6 +751,8 @@ DispatchSectorDispatchSegments, world/+{name}region, region/+{name}dispatch-sect
 
 CapacityTech, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+capacity, scenario, scenario/world
 
+CapacityTechAvail, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+initial-available-year, capacity-technology/+final-available-year, scenario, scenario/world
+
 CapacityTechSegmentCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name}segment-capacity-factor, period/+segment-capacity-factor, scenario, scenario/world
 
 TechSCurve_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+lifetime, s-curve-shutdown-decider/+steepness, s-curve-shutdown-decider/+half-life, scenario, scenario/world, period/{name=s-curve}s-curve-shutdown-decider 
