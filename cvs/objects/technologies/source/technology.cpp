@@ -141,7 +141,7 @@ void Technology::copy( const Technology& techIn ) {
     mFixedOutput = techIn.mFixedOutput;
     mAlphaZero = techIn.mAlphaZero;
     mCapacityFactor = techIn.mCapacityFactor;
-    mTotalHack = techIn.mTotalHack;
+   // mTotalHack = techIn.mTotalHack; //GI: Delete since this is accounted for in InvestmentTechnology
 
     // Copy the input vector.
     for( vector<IInput*>::const_iterator iter = techIn.mInputs.begin(); iter != techIn.mInputs.end(); ++iter ) {
@@ -218,7 +218,7 @@ void Technology::init()
     mFixedOutput = -1;
     mAlphaZero = 1;
     mCapacityFactor = 1;
-    mTotalHack = false;
+   // mTotalHack = false; //GI: Delete since this is accounted for in InvestmentTechnology
 }
 
 bool Technology::isSameType( const string& aType ) const {
@@ -260,9 +260,12 @@ bool Technology::XMLParse( const DOMNode* node )
         else if( nodeName == "capacity-factor" ) {
             mCapacityFactor = XMLHelper<double>::getValue( curr );
         }
+
+	  /* GI: need to delete this since the InvestmentTechnology class will take care of this.
         else if( nodeName == "total-hack" ) {
             mTotalHack = XMLHelper<bool>::getValue( curr );
-        }
+        } 
+		*/
         else if( InputFactory::isOfType( nodeName ) ) {
             parseContainerNode( curr, mInputs, InputFactory::create( nodeName ).release() );
         }
@@ -949,10 +952,13 @@ void Technology::production( const string& aRegionName,
                                                      aFixedOutputScaleFactor,
                                                      mShutdownDeciders,
                                                      aPeriod );
-    if(mTotalHack) {
-        mOutputs[0]->setPhysicalOutput( primaryOutput, aRegionName, mCaptureComponent, aPeriod );
-    }
-    else {
+   
+	// GI: The totalHack code can be deleted since it is now added in the InvestmentTechnology
+	/* if(mTotalHack) {
+    /    mOutputs[0]->setPhysicalOutput( primaryOutput, aRegionName, mCaptureComponent, aPeriod );
+    } 
+    else { 
+	*/
 
     // Calculate input demand.
     mProductionFunction->calcDemand( mInputs, primaryOutput, aRegionName, aSectorName,
@@ -960,7 +966,7 @@ void Technology::production( const string& aRegionName,
 
     calcEmissionsAndOutputs( aRegionName, primaryOutput, aGDP, aPeriod );
     }
-}
+
 
 /*!
  * \brief Calculate the emissions, primary and secondary outputs for the

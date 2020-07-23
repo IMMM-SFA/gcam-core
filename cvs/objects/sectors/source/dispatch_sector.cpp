@@ -264,6 +264,19 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
     
 
     if( mDoDispatchCapacity ) {
+		/*GI: Aggregating capacity across all capacity technologies 
+		for capacity credits calculations to be done in CapacityTechnology and InvestmentTechnology classes.
+		*/
+		double aggregateCapacity = calcAggregateCapacity(mRegionName, aPeriod);
+
+		/*GI: Calling the CapacityTechnology::addCapacityShareToMarket method which will add the capacity shares of 
+		intermittent (i.e. non-dispatchable technologies) to the trial market.
+        */
+
+		for (auto tech : mAllTechs) {
+			dynamic_cast<CapacityTechnology*>(tech)->addCapacityShareToMarket(aggregateCapacity, mRegionName, aPeriod);
+		}
+
         double totalElecDemand = 0.0;
         //if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod() ) {
             for( auto segment : mDemandSegments ) {
@@ -392,3 +405,25 @@ template<>
 void DispatchSector::GetCapacityHelper::processData<ITechnology*>( ITechnology*& aData ) {
     mTotalCapacity += aData->getOutput( mPeriod ) / aData->getCapacityFactor();
 }
+
+
+/*Author GI
+**The calcAggregateCapaicty method aggregates capacity across all capacity-technology vintages. 
+**we can use mAllTechs which contains all capacity-technologies by vintage from the dispatch sector to loop through 
+  all capacity technology vintages.
+**This method is called in the DispactchSector::Supply method to add capacity shares of intermittent 
+  (i.e. non-dispatchable) technologies to the trial market. 
+**Note that I used "AggregateCapacity" since "TotalCapacity" corresponds 
+  to capacity of a single technology summed across investment segments.
+*/
+
+
+double DispatchSector::calcAggregateCapacity(const string& aRegionName, const int aPeriod) {
+	double aggregateCapacity = 0;
+	for (auto tech : mAllTechs) {
+		double capacity = dynamic_cast<CapacityTechnology*>(tech)->getCapacity(aPeriod); 
+		aggregateCapacity =+ capacity;
+	}
+	return aggregateCapacity;
+}
+

@@ -77,6 +77,9 @@ public:
     
     virtual void postCalc( const int aPeriod );
 
+	virtual double calcAggregateCapacity(const std::string& aRegionName,
+										 const int aPeriod);
+
 protected:
     virtual bool XMLDerivedClassParse( const std::string& nodeName, const xercesc::DOMNode* curr );
 
@@ -149,6 +152,9 @@ protected:
     
     bool mDoDispatchCapacity;
     
+	double mAggregateCapacity;
+	double mCapacity;
+
     objects::PeriodVector<double> mExistingCapacity;
     objects::PeriodVector<double> mRequiredCapacity;
     objects::PeriodVector<std::map<std::tuple<ITechnology*, std::string, std::string>, double> > mSaveTechCurve;

@@ -109,6 +109,7 @@ class BuildingServiceInput;
 class BuildingNodeInput;
 class GCAMConsumer;
 class NoEmissCarbonCalc;
+class InvestmentTechnology;
 
 /*!
  * \brief An interface to a class which visits every node in the tree and
@@ -219,6 +220,9 @@ public:
     
     virtual void startVisitCapacityTechnology( const CapacityTechnology* aTechnology, const int aPeriod ) = 0;
     virtual void endVisitCapacityTechnology( const CapacityTechnology* aTechnology, const int aPeriod ) = 0;
+
+	virtual void startVisitInvestmentTechnology(const InvestmentTechnology* aTechnology, const int aPeriod) = 0;
+	virtual void endVisitInvestmentTechnology(const InvestmentTechnology* aTechnology, const int aPeriod) = 0;
 
     virtual void startVisitBaseTechnology( const BaseTechnology* aBaseTechnology, const int aPeriod ) = 0;
     virtual void endVisitBaseTechnology( const BaseTechnology* aBaseTechnology, const int aPeriod ) = 0;

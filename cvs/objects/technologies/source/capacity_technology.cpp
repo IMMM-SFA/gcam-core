@@ -53,7 +53,7 @@
 #include "technologies/include/generic_output.h"
 #include "util/base/include/ivisitor.h"
 //#include "containers/include/market_dependency_finder.h"
-//#include "sectors/include/sector_utils.h"
+#include "sectors/include/sector_utils.h"
 
 using namespace std;
 using namespace xercesc;
@@ -98,6 +98,10 @@ bool CapacityTechnology::XMLDerivedClassParse(const string& aNodeName, const DOM
         mSegCapFac[ segmentName ] = segCapFac;
         success = true;
     }
+	else if (aNodeName == "trial-market-name") {
+		mTrialMarketName = XMLHelper<string>::getValue(aCurrNode);
+		success = true;
+	}
 	return success;
 }
 
@@ -109,6 +113,7 @@ void CapacityTechnology::toInputXMLDerived(ostream& aOut, Tabs* aTabs) const {
 //! write object to xml output stream
 void CapacityTechnology::toDebugXMLDerived(const int aPeriod, ostream& aOut, Tabs* aTabs) const {
 	XMLWriteElement(mCapacity, "capacity", aOut, aTabs);
+	XMLWriteElement(mTrialMarketName, "trial-market-name", aOut, aTabs);
 }
 
 /*! \brief Get the XML node name for output to XML.
@@ -289,4 +294,32 @@ void CapacityTechnology::acceptDerived( IVisitor* aVisitor, const int aPeriod ) 
     aVisitor->startVisitCapacityTechnology( this, aPeriod );
     // End the derived class visit.
     aVisitor->endVisitCapacityTechnology( this, aPeriod );
+}
+
+double CapacityTechnology::getCapacity(const int aPeriod) {
+	if (mProductionState[aPeriod]->isOperating()) {
+		
+		return mCapacity;
+
+	}
+	else {
+		return 0.0;
+	}
+
+}
+
+
+/* GI: Share Calculations to be used in renewable share calculations in CapacityCreditCalculator class 
+
+*/
+
+void  CapacityTechnology::addCapacityShareToMarket( double aAggregateCapacity, 
+													const string& aRegionName, 
+													const int aPeriod) {
+if (!mTrialMarketName.empty()) {
+	mIntermitOutTechRatio = 0;
+	mIntermitOutTechRatio = getCapacity(aPeriod) / aAggregateCapacity;
+	SectorUtils::addToTrialDemand(aRegionName, mTrialMarketName, mIntermitOutTechRatio, aPeriod);
+
+}
 }

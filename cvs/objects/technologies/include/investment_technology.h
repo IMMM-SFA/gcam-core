@@ -1,5 +1,5 @@
-#ifndef _CAPACITY_TECHNOLOGY_H_
-#define _CAPACITY_TECHNOLOGY_H_
+#ifndef _INVESTMENT_TECHNOLOGY_H_
+#define _INVESTMENT_TECHNOLOGY_H_
 #if defined(_MSC_VER)
 #pragma once
 #endif
@@ -39,9 +39,9 @@
 
 
 /*!
-* \file capacity_technology.h
+* \file investment_technology.h
 * \ingroup Objects
-* \brief The CapacityTechnology class header file.
+* \brief The InvestmentTechnology class header file.
 * \details TODO:
 *
 * \author Pralit Patel, Gokul Iyer
@@ -49,18 +49,20 @@
 
 #include <xercesc/dom/DOMNode.hpp>
 #include "technologies/include/technology.h"
+#include "util/base/include/value.h"
+#include "sectors/include/capacity_credit_calculator.h"
 
 // Forward declaration
 class Tabs;
 
-class CapacityTechnology : public Technology {
+class InvestmentTechnology : public Technology {
 	friend class XMLDBOutputter;
 public:
-	CapacityTechnology(const std::string& aName,
+	InvestmentTechnology(const std::string& aName,
 		const int aYear);
-	~CapacityTechnology();
+	~InvestmentTechnology();
 	static const std::string& getXMLNameStatic();
-	CapacityTechnology* clone() const;
+	InvestmentTechnology* clone() const;
 
 	virtual void completeInit(const std::string& aRegionName,
 		const std::string& aSectorName,
@@ -82,51 +84,52 @@ public:
 		const GDP* aGDP,
 		const int aPeriod);
     
-    double tryDispatch( const std::string& aRegionName, const std::string& aSectorName,
-                        const std::string& aDemandSegment, const double aVariableDemand,
-                        const double aSegmentScaleFactor, const int aPeriod );
+	virtual void calcCost(const std::string& aRegionName,
+		const std::string& aSectorName,
+		const int aPeriod);
     
-    virtual double getCalibrationOutput( const bool aHasRequiredInput,
-                                         const std::string& aRequiredInput,
-                                         const int aPeriod ) const;
+    virtual double getCapacityPayment(const std::string& aRegionName,
+		const std::string& aSectorName,
+		const int aPeriod);
 
 	virtual void doInterpolations(const Technology* aPrevTech, const Technology* aNextTech);
-
-	virtual double CapacityTechnology::getCapacity(const int aPeriod);
-
-	virtual void  CapacityTechnology::addCapacityShareToMarket(double aAggregateCapacity,
-															   const std::string& aRegionName,
-															   const int aPeriod);
 
 protected:
     
     // Define data such that introspection utilities can process the data from this
     // subclass together with the data members of the parent classes.
-    DEFINE_DATA_WITH_PARENT(
-        Technology,
+	
+	// DEFINE_DATA(
+	//	DEFINE_SUBCLASS_FAMILY(InvestmentTechnology),
+	
+	DEFINE_DATA_WITH_PARENT(
+		Technology,
+		//! A calculator which determines the capacity credit as a function of renewable share.
+		DEFINE_VARIABLE(CONTAINER, "capacity-credit-calculator", mCapacityCreditCalculator, CapacityCreditCalculator*),
 
-		//! Name of trial market associated with this Capacity Technology.
-		DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string),
+		//! The capacity market price for this technology.
+		DEFINE_VARIABLE(SIMPLE, "capacity-market-price", mCapacityMarketPrice, double),
 
-        //! The capacity for this technology.
-        DEFINE_VARIABLE( SIMPLE | STATE, "capacity", mCapacity, Value ),
-                            
-        DEFINE_VARIABLE( SIMPLE, "segment-capacity-factor", mSegCapFac, std::map<std::string, double> ),
+		DEFINE_VARIABLE(SIMPLE, "is-dispatchable", mIsDispatchable, bool)
 
-		//! State value necessary to track tech output ration
-		DEFINE_VARIABLE(SIMPLE | STATE, "tech-output-ratio", mIntermitOutTechRatio, Value)
-
+				
     )
+	
+	//! Variable to track capacity
+	// double mCapacity;
+	//! Variable to track capacity payments
+	double mCapacityPayment;
 
-	virtual void toInputXMLDerived(std::ostream& out, Tabs* tabs) const;
+
+	//virtual void toInputXMLDerived(std::ostream& out, Tabs* tabs) const;
 	virtual void toDebugXMLDerived(const int period, std::ostream& out, Tabs* tabs) const;
 	virtual bool XMLDerivedClassParse(const std::string& nodeName, const xercesc::DOMNode* curr);
 	//virtual void acceptDerived(IVisitor* aVisitor, const int aPeriod) const;
 	virtual const std::string& getXMLName() const;
-    void copy( const CapacityTechnology& aOther );
-    virtual void setProductionState( const int aPeriod );
+    void copy( const InvestmentTechnology& aOther );
+  //  virtual void setProductionState( const int aPeriod );
     virtual void acceptDerived( IVisitor* aVisitor, const int aPeriod ) const; 
 };
 
-#endif // _CAPACITY_TECHNOLOGY_H_
+#endif // _INVESTMENT_TECHNOLOGY_H_
 
