@@ -518,12 +518,12 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     L2241.TechEff_elec_coalret_dispatch_gcamusa %>%
       left_join_error_no_match(L2241.eff_adj, by = "region") %>%
       mutate(efficiency = efficiency * eff_adj) %>%
-      select(-eff_adj)
+      select(-eff_adj) -> L2241.TechEff_elec_coalret_dispatch_gcamusa
 
     L2241.TechEff_coal_vintage_dispatch_gcamusa %>%
       left_join_error_no_match(L2241.eff_adj, by = "region") %>%
       mutate(efficiency = efficiency * eff_adj) %>%
-      select(-eff_adj)
+      select(-eff_adj) -> L2241.TechEff_coal_vintage_dispatch_gcamusa
 
     # ===================================================
     # Produce outputs
