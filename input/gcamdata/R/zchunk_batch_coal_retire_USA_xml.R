@@ -71,8 +71,8 @@ module_gcamusa_batch_coal_retire_USA_xml <- function(command, ...) {
       add_xml_data(L2241.TechOMvar_coal_vintage_dispatch_gcamusa, "TechOMvar_dispatch") %>%
       add_xml_data(L2241.TechShrwt_coal_vintage_dispatch_gcamusa, "TechShrwt_dispatch") %>%
       add_xml_data(L2241.TechSCurve_coal_vintage_dispatch_gcamusa, "TechSCurve_dispatch") %>%
-      add_xml_data(L2241.TechCapFac_coalret_vintage_dispatch_gcamusa, "TechCapFac", NULL) %>%
-      add_xml_data(L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa, "CapacityTechAvail", NULL) %>%
+      add_xml_data(L2241.TechCapFac_coalret_vintage_dispatch_gcamusa, "TechCapFac_dispatch") %>%
+      add_xml_data(L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa, "CapacityTechAvail") %>%
       add_precursors("L2241.TechProd_elec_coalret_dispatch_gcamusa",
                      "L2241.CapacityTech_elec_coalret_dispatch_gcamusa",
                      "L2241.TechEff_elec_coalret_dispatch_gcamusa",

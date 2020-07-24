@@ -184,6 +184,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
       group_by(grid_region, segment) %>%
       summarize(elec_total = sum(elec_total)) %>%
       ungroup() %>%
+      mutate(segment = as.character(segment)) %>%
       left_join_error_no_match(L2441.elec_thermal, by = c("grid_region", "segment")) %>%
       mutate(elec_nonthermal = elec_total - elec_thermal) %>%
       group_by(grid_region) %>%
@@ -199,6 +200,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
       mutate(minicam.energy.input = paste0("electricity domestic supply_", segment)) %>%
       left_join_error_no_match(L103.load_segments_sector %>%
                   filter(sector == "elect_td_bld") %>%
+                  mutate(segment = as.character(segment)) %>%
                   select(grid_region, segment, generation.fraction), by=c("grid_region", "segment")) %>%
       left_join_error_no_match(filter(L226.TechCoef_electd_USA, supplysector == "elect_td_bld"), ., by=c("market.name" = "grid_region", "minicam.energy.input")) %>%
       mutate(coefficient = coefficient / generation.fraction) ->

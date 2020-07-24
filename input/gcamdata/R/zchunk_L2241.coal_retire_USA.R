@@ -32,6 +32,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              FILE = "gcam-usa/EIA_923_generator_gen_fuel_2018",
              FILE = "gcam-usa/dispatch/coal_vintage_bins",
              "L123.out_EJ_state_elec_F_tech",
+             "L123.in_EJ_state_elec_F_tech",
              "L223.CapacityTech",
              "L223.TechEff_Cal",
              "L223.TechOMvar_Dispatch",
@@ -79,6 +80,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     vintage_bins_mapping <- get_data(all_data, "gcam-usa/dispatch/coal_vintage_bins")
 
     L123.out_EJ_state_elec_F_tech <- get_data(all_data, "L123.out_EJ_state_elec_F_tech")
+    L123.in_EJ_state_elec_F_tech <- get_data(all_data, "L123.in_EJ_state_elec_F_tech")
     L223.CapacityTech <- get_data(all_data, "L223.CapacityTech")
     L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
     L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch")
@@ -473,6 +475,55 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       mutate(initial.available.year = MODEL_FINAL_BASE_YEAR,
              final.available.year = MODEL_FINAL_BASE_YEAR) -> L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa
 
+    # scale efficiency to match both energy input and ouput from IEA in 2015
+    # here need to do both coal (conv pul)_retire2020 and coal vintage bins
+
+    # total production
+    L2241.TechProd_elec_coalret_dispatch_gcamusa %>%
+      filter(capacity.technology == "coal (conv pul)_retire2020") %>%
+      bind_rows(L2241.TechProd_coal_vintage_dispatch_gcamusa %>%
+                  filter(capacity.technology != "coal (conv pul)")) -> L2241.total_production
+
+    # current efficiency assumption
+    L2241.TechEff_elec_coalret_dispatch_gcamusa %>%
+      filter(capacity.technology == "coal (conv pul)_retire2020") %>%
+      bind_rows(L2241.TechEff_coal_vintage_dispatch_gcamusa %>%
+                  filter(capacity.technology != "coal (conv pul)")) -> L2241.efficiency_unadjusted
+
+    # calculate the corresponding enengy input for coal based on unadjusted efficiency
+    L2241.total_production %>%
+      left_join_error_no_match(L2241.efficiency_unadjusted,
+                               by = c("region", "dispatch.sector", "subsector", "capacity.technology", "year")) %>%
+      mutate(calInputValue = calOutputValue / efficiency) %>%
+      group_by(region) %>%
+      summarise(calInputValue = sum(calInputValue)) %>%
+      ungroup() -> L2241.input_unadjusted
+
+    # obtain the input energy from IEA balance
+    L123.in_EJ_state_elec_F_tech %>%
+      filter(year == 2015 & elec_tech == "coal_conv") %>%
+      group_by(state) %>%
+      summarise(calibratedInputValue = sum(value)) %>%
+      ungroup() %>%
+      rename(region = state) -> L2241.input_calibrated
+
+    # derive efficiency adjustment factor at state level
+    L2241.input_calibrated %>%
+      left_join_error_no_match(L2241.input_unadjusted, by = "region") %>%
+      mutate(eff_adj = calInputValue / calibratedInputValue) %>%
+      select(region, eff_adj) ->
+      L2241.eff_adj
+
+    # update current efficiency table
+    L2241.TechEff_elec_coalret_dispatch_gcamusa %>%
+      left_join_error_no_match(L2241.eff_adj, by = "region") %>%
+      mutate(efficiency = efficiency * eff_adj) %>%
+      select(-eff_adj)
+
+    L2241.TechEff_coal_vintage_dispatch_gcamusa %>%
+      left_join_error_no_match(L2241.eff_adj, by = "region") %>%
+      mutate(efficiency = efficiency * eff_adj) %>%
+      select(-eff_adj)
 
     # ===================================================
     # Produce outputs
@@ -503,6 +554,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       add_comments("same efficiency are applied to fast retire and slow retire technologies") %>%
       add_precursors("gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
                      "L123.out_EJ_state_elec_F_tech",
+                     "L123.in_EJ_state_elec_F_tech",
                      "L223.TechEff_Cal") ->
       L2241.TechEff_elec_coalret_dispatch_gcamusa
 
@@ -575,6 +627,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
                      "gcam-usa/states_subregions",
                      "gcam-usa/EIA_coal_generation_2018",
                      "L123.out_EJ_state_elec_F_tech",
+                     "L123.in_EJ_state_elec_F_tech",
                      "gcam-usa/EIA_923_generator_gen_fuel_2018",
                      "gcam-usa/dispatch/coal_vintage_bins",
                      "gcam-usa/dispatch/ECP_mapping",

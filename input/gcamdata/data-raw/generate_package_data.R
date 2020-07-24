@@ -426,11 +426,13 @@ generate_level2_data_names <- function() {
 
   # Dispatch
   level2_data_names[["CapacityTech"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "capacity")
+  level2_data_names[["CapacityTechAvail"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "initial.available.year", "final.available.year")
   level2_data_names[["TechEff_dispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "minicam.energy.input", "efficiency", "market.name")
   level2_data_names[["Production_dispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "calOutputValue", "share.weight.year", "subs.share.weight", "tech.share.weight")
   level2_data_names[["TechSCurve_dispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "lifetime", "steepness", "half.life")
   level2_data_names[["TechOMvar_dispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "input.OM.var", "OM.var")
   level2_data_names[["TechShrwt_dispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "share.weight")
+  level2_data_names[["TechCapFac_dispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "capacity.factor")
 
   level2_data_names
 }

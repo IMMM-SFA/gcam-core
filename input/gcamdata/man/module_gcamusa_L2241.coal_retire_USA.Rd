@@ -19,7 +19,8 @@ the generated outputs: \code{L2241.TechProd_elec_coalret_dispatch_gcamusa}, \cod
 \code{L2241.TechShrwt_elec_coalret_dispatch_gcamusa}, \code{L2241.TechOMvar_elec_coalret_dispatch_gcamusa},
 \code{L2241.TechProd_coal_vintage_dispatch_gcamusa}, \code{L2241.CapacityTech_coal_vintage_dispatch_gcamusa},
 \code{L2241.TechEff_coal_vintage_dispatch_gcamusa}, \code{L2241.TechOMvar_coal_vintage_dispatch_gcamusa},
-\code{L2241.TechShrwt_coal_vintage_dispatch_gcamusa}, \code{L2241.TechSCurve_coal_vintage_dispatch_gcamusa}.
+\code{L2241.TechShrwt_coal_vintage_dispatch_gcamusa}, \code{L2241.TechSCurve_coal_vintage_dispatch_gcamusa},
+\code{L2241.TechCapFac_coalret_vintage_dispatch_gcamusa}, \code{L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa}.
 The corresponding file in the original data system was \code{L2241.coal_slow_fast_retire_USA.R} (gcam-usa level2).
 }
 \description{

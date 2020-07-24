@@ -781,5 +781,6 @@ TechOMvar_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch
 
 TechShrwt_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+share-weight, scenario, scenario/world, period/{name=CO2}CO2
 
+TechCapFac_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+capacity-factor, scenario, scenario/world
 
 EQUIV_TABLE,NODE_EQUIVALENCE

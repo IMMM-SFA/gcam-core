@@ -395,6 +395,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(technology, capacity.factor) %>%
       repeat_add_columns(tibble::tibble(sector = L223.TechCapFac_Investment_SegAdjust$sector)) %>%
       left_join_error_no_match(L223.TechCapFac_Investment_SegAdjust, by = "sector") %>%
+      mutate(sector = as.character(sector)) %>%
       mutate(capacity.factor = capacity.factor * seg_fraction) %>%
       right_join(calibrated_techs_dispatch_usa %>%
                    filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
@@ -404,8 +405,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       mutate(supplysector = sector) %>%
       select(supplysector, subsector, technology, year, capacity.factor) ->
       L223.GlobalTechCapFac_Investment
-    # Warning message:
-    # Column `sector` joining factor and character vector, coercing into character vector
 
     # ===========================================================================
     ## L223 GlobalTechCapture_Investment  storage market investment
@@ -482,6 +481,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       # here using inner_join as a cross-reference process to filter wind and solar for those only exist
       # in certain segment defined in calibrated_techs_dispatch_usa
       # currently wind and solar only exsit in base and intermediate segments
+      mutate(sector = as.character(sector)) %>%
       inner_join(calibrated_techs_dispatch_usa %>%
                    filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
                    select(sector, supplysector, subsector, technology),
@@ -490,8 +490,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       mutate(supplysector = sector) %>%
       select(region, supplysector, subsector, technology, year, capacity.factor) ->
       L223.TechCapFac_Investment
-    # Warning message:
-    # Column `sector` joining factor and character vector, coercing into character vector
 
     # ===========================================================================
     ## L223 Sector_Investment_StateShare investment sharing sectors at the grid region
@@ -634,14 +632,13 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechShrwt_Investment_LoadCurve %>%
       select(-share.weight) %>%
       repeat_add_columns(tibble::tibble(invest_segment = gcamusa.ELEC_INV_NAMES)) %>%
-      left_join_error_no_match(L102.invest_segments, by=c("region" = "grid_region", "invest_segment")) %>%
+      left_join_error_no_match(L102.invest_segments %>% mutate(invest_segment = as.character(invest_segment)),
+                               by=c("region" = "grid_region", "invest_segment")) %>%
       mutate(coefficient = hours / gcamusa.ELEC_BASELOAD_HRS * (1 - gcamusa.ELEC_INV_MARGIN) * generation.fraction) %>%
       rename(minicam.energy.input = invest_segment) %>%
       select(-hours, -generation, -area, -generation.fraction) %>%
       mutate(market.name = region) ->
       L223.TechCoef_Investment_LoadCurve
-    # Warning message:
-    # Column `invest_segment` joining character vector and factor, coercing into character vector
 
     # ===========================================================================
     ## L223.TechPMult_Investment_LoadCurve  p multiplier load curve
@@ -776,6 +773,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       bind_rows(L223.TechLifetime_Dispatch, .) %>%
       distinct() ->
       L223.TechLifetime_Dispatch
+
     # "initial-nonhistorical-year"
     A23.globaltech_retirement %>%
       bind_rows(A23.dispatch_globaltech_retirement_additional) %>%
