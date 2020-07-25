@@ -302,11 +302,27 @@ void InvestmentTechnology::calcCost(const string& aRegionName,
 			* mPMultiplier 
 			- calcSecondaryValue(aRegionName, aPeriod);
 
-	//Convert capacity payments to $/GJ using capacity factors. Assuming a Capital charge out rate (FCR = 0.13). 
-	//Ideally we want to use the FCR that's being read in in the input-capital object but apparently that's not possible.
+	/*Obtain capacity payments in $/kW using the getCapacityPayment() method and levelize those to $/GJ using 
+	technology-specific capacity factors. 
+	TODO: DO these calculations as part of the input-capital class*/
 
-		double CapacityPayment_USD_GJ = getCapacityPayment(aRegionName, aSectorName, aPeriod) * 0.13 / mCapacityFactor;
+		// Initialize a constant to convert GJ to kWh
+		const double KWH_TO_GJ = 0.0036;
+		
+		// Initialize a constant for number of hours in a year.
+		const int HOURS_PER_YEAR = 8760;
+		
+		// Initialize a constant for the fixed charge out rate or capital recovery factor.
+		// Assuming an FCR of 0.13 which is prevalent in GCAM. 
+		// Ideally we want to use the FCR that's being read in in the input-capital object but that's complicated.
+		
+		const double FCR = 0.13;
+
+		double CapacityPayment_USD_GJ = getCapacityPayment(aRegionName, aSectorName, aPeriod) 
+																	* FCR / mCapacityFactor/ HOURS_PER_YEAR/ KWH_TO_GJ;
+		
 		cost =- CapacityPayment_USD_GJ;
+		
 		mCosts[aPeriod] = cost;
 
 		assert(util::isValidNumber(mCosts[aPeriod]));
@@ -318,7 +334,7 @@ void InvestmentTechnology::calcCost(const string& aRegionName,
 
 /* The InvestmentTechnology::getCapacityPayment method returns the capacity payments to be deducted from 
 	technology costs. The units are in $/kW. 
-	It calls the CapacityCreditCalculator::getCapacityCredit method which is used to calculate 
+	 calls the CapacityCreditCalculator::getCapacityCredit method which is used to calculate 
 	the capacity credit (0-1) as a function of renewable share for renewable technologies 
  */
 
@@ -339,6 +355,7 @@ double InvestmentTechnology::getCapacityPayment(const string& aRegionName,
 																										  aPeriod);
 		mCapacityPayment = mCapacityMarketPrice * capacityPaymentFraction;
 
+		
 		// PP sugested reading in capacity-market-price as a input-capital. But that might confuse users - especially if we were to read it in as  "capital-overnight". 
 		// Instead, GI thinks it might just be simpler and more intuitive to either: i.) create a new input class or 
 		// ii.) just read in capacity - market - price along with the investment - technology object and include it in the costs within the calcCost() method.
