@@ -60,10 +60,10 @@ using namespace xercesc;
  */
 CapacityCreditCalculator::CapacityCreditCalculator()
 {
-    double mCapacityCreditMax = 0.4;
-    double mCapacityCreditMin = 0.15;
-    double mSteepness = 40.0;
-    double mXmid = 0.075;
+     mCapacityCreditMax = 0.4;
+    mCapacityCreditMin = 0.15;
+    mSteepness = 40.0;
+    mXmid = 0.075;
 }
 
 // Documentation is inherited.
@@ -162,8 +162,8 @@ void CapacityCreditCalculator::initCalc( const IInfo* aTechInfo ) {
 			share of capacity of the intermittent resource within
  *          the electricity sector. This is determined using trial values for
  *          the intermittent technologies and electricity sector capacity. 
- * \param aResource The name of the resource the sector consumes.
  * \param aRegion Name of the containing region.
+ * \param aSector The name of the sector for which capacity credits are being calculated.
  * \param aPeriod Model period.
  * \return Capacity credit.
  */
@@ -174,7 +174,6 @@ double CapacityCreditCalculator::getCapacityCredit (const string& aRegion,
    
 	{
     // Preconditions
-    assert( !aResource.empty() );
     assert( !aRegion.empty() );
     
 	double renewElecShare = std::min( SectorUtils::getTrialSupply( aRegion, aSector, aPeriod ), 1.0 );

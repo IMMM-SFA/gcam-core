@@ -71,9 +71,10 @@ extern Scenario* scenario;
 InvestmentTechnology::InvestmentTechnology(const string& aName, const int aYear) :
 Technology(aName, aYear)
 {
-    double mCapacityFactor = 0.1;
-	double mCapacityMarketPrice = 0; 
-	bool mIsDispatchable = 1;
+     mCapacityFactor = 0.1;
+	 mCapacityMarketPrice = 0; 
+	 mIsDispatchable = true;
+	 mCapacityCreditCalculator = 0;
 }
 
 /*!
@@ -84,10 +85,19 @@ Technology(aName, aYear)
 */
 void InvestmentTechnology::copy(const InvestmentTechnology& aTech) {
     Technology::copy( aTech );
+	mCapacityMarketPrice = aTech.mCapacityMarketPrice;
+	mIsDispatchable = aTech.mIsDispatchable;
+	
+	if (aTech.mCapacityCreditCalculator) {
+		delete mCapacityCreditCalculator;
+		mCapacityCreditCalculator = aTech.mCapacityCreditCalculator->clone();
+	}
+
 }
 
 // ! Destructor
 InvestmentTechnology::~InvestmentTechnology() {
+	delete mCapacityCreditCalculator; 
 }
 
 //! Parses any input variables specific to derived classes
@@ -161,13 +171,6 @@ void InvestmentTechnology::completeInit(const std::string& aRegionName,
 	Technology::completeInit(aRegionName, aSectorName, aSubsectorName, aSubsectorInfo,
 		aLandAllocator);
     
-    // replace the primary output with a generic output (does not add supply to market)
-	// GI: I don't know if we need this for the InvestmentTechnology class
-    delete mOutputs[ 0 ];
-    mOutputs[ 0 ] = new GenericOutput( aSectorName );
-    
-    initTechVintageVector();
-
 	// Make some tests for bad inputs
 	
 	if (mCapacityFactor == 0.0) {
@@ -179,21 +182,22 @@ void InvestmentTechnology::completeInit(const std::string& aRegionName,
 	}
 
 	// If capacity-market-price has not been read in then throw error.
-	else if (!mCapacityMarketPrice) {
+	if (mCapacityMarketPrice == 0.0) {
 		ILogger& mainLog = ILogger::getLogger("main_log");
 		mainLog.setLevel(ILogger::NOTICE);
 		mainLog << "Investment Technology " << mName << " in sector " << aSectorName
 			<< " in region " << aRegionName
+			<< " in vintage " << mYear
 			<< " did not read in a capacity market price. Capacity payments will default to zero. " << endl;
 	}
 	
-	else if (!mIsDispatchable) {
+	if (!mIsDispatchable && !mCapacityCreditCalculator) {
 		ILogger& mainLog = ILogger::getLogger("main_log");
 		mainLog.setLevel(ILogger::NOTICE);
 		mainLog << "Investment Technology " << mName << " in sector " << aSectorName
 			<< " in region " << aRegionName
-			<< " did not read in an is-dispatchable bool. Investment technology object will be assumed to be dispatchable. " << endl;
-	};
+			<< " did not read in a capacity credit calculator for a non-dispatchable technology. Default parameter values will be used" << endl;
+	}
 
 		
 }
@@ -206,6 +210,9 @@ void InvestmentTechnology::toDebugXMLDerived(const int aPeriod, ostream& aOut, T
 	
 	if (mCapacityPayment) {
 		XMLWriteElement(mCapacityPayment, "capacity-payment", aOut, aTabs);
+	}
+	if (mCapacityCreditCalculator) {
+			mCapacityCreditCalculator->toDebugXML(aPeriod, aOut, aTabs);
 	}
 }
 
@@ -321,7 +328,7 @@ void InvestmentTechnology::calcCost(const string& aRegionName,
 		double CapacityPayment_USD_GJ = getCapacityPayment(aRegionName, aSectorName, aPeriod) 
 																	* FCR / mCapacityFactor/ HOURS_PER_YEAR/ KWH_TO_GJ;
 		
-		cost =- CapacityPayment_USD_GJ;
+		cost -= CapacityPayment_USD_GJ;
 		
 		mCosts[aPeriod] = cost;
 

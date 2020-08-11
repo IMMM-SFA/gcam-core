@@ -43,7 +43,7 @@
 //#include "emissions/include/aghg.h"
 #include "containers/include/scenario.h"
 #include "util/base/include/xml_helper.h"
-//#include "marketplace/include/marketplace.h"
+#include "marketplace/include/marketplace.h"
 #include "containers/include/iinfo.h"
 #include "technologies/include/ical_data.h"
 #include "technologies/include/iproduction_state.h"
@@ -52,7 +52,7 @@
 #include "technologies/include/ioutput.h"
 #include "technologies/include/generic_output.h"
 #include "util/base/include/ivisitor.h"
-//#include "containers/include/market_dependency_finder.h"
+#include "containers/include/market_dependency_finder.h"
 #include "sectors/include/sector_utils.h"
 
 using namespace std;
@@ -79,6 +79,10 @@ Technology(aName, aYear)
 */
 void CapacityTechnology::copy(const CapacityTechnology& aTech) {
     Technology::copy( aTech );
+	mCapacityFactor = aTech.mCapacityFactor; 
+	mSegCapFac = aTech.mSegCapFac;
+	mTrialMarketName = aTech.mTrialMarketName;
+	mCapacityMarketName = aTech.mCapacityMarketName;
 }
 
 // ! Destructor
@@ -92,6 +96,8 @@ bool CapacityTechnology::XMLDerivedClassParse(const string& aNodeName, const DOM
         mCapacity = XMLHelper<double>::getValue( aCurrNode );
         success = true;
     }
+
+
     else if( aNodeName == "segment-capacity-factor" ) {
         string segmentName = XMLHelper<string>::getAttr( aCurrNode, "name" );
         double segCapFac = XMLHelper<double>::getValue( aCurrNode );
@@ -100,6 +106,10 @@ bool CapacityTechnology::XMLDerivedClassParse(const string& aNodeName, const DOM
     }
 	else if (aNodeName == "trial-market-name") {
 		mTrialMarketName = XMLHelper<string>::getValue(aCurrNode);
+		success = true;
+	}
+	else if (aNodeName == "capacity-market-name") {
+		mCapacityMarketName = XMLHelper<string>::getValue(aCurrNode);
 		success = true;
 	}
 	return success;
@@ -114,6 +124,8 @@ void CapacityTechnology::toInputXMLDerived(ostream& aOut, Tabs* aTabs) const {
 void CapacityTechnology::toDebugXMLDerived(const int aPeriod, ostream& aOut, Tabs* aTabs) const {
 	XMLWriteElement(mCapacity, "capacity", aOut, aTabs);
 	XMLWriteElement(mTrialMarketName, "trial-market-name", aOut, aTabs);
+	XMLWriteElement(mCapacityMarketName, "capacity-market-name", aOut, aTabs);
+	XMLWriteElement(mIntermitOutTechRatio, "intermittent-capacity-ratio", aOut, aTabs);
 }
 
 /*! \brief Get the XML node name for output to XML.
@@ -175,6 +187,31 @@ void CapacityTechnology::completeInit(const std::string& aRegionName,
 			    << " in region " << aRegionName << " and sector " << aSectorName << endl;
 		//abort();
 	}
+
+	if (!mTrialMarketName.empty() && mCapacityMarketName.empty()) {
+		ILogger& mainLog = ILogger::getLogger("main_log");
+		mainLog.setLevel(ILogger::WARNING);
+		mainLog << "Capacity market name not read in while trial market name is read in " << mName << ", " << mYear
+			<< " in region " << aRegionName << " and sector " << aSectorName
+			<< "Capacity market name will default to region name" << endl;
+
+		mCapacityMarketName = aRegionName;
+	}
+
+	if (!mTrialMarketName.empty()) {
+		// Create Trial Market if trial-market-name has been read in
+		SectorUtils::createTrialSupplyMarket(aRegionName, mTrialMarketName, mTechnologyInfo.get(), mCapacityMarketName);
+		MarketDependencyFinder* depFinder = scenario->getMarketplace()->getDependencyFinder();
+		depFinder->addDependency(aSectorName, aRegionName,
+			SectorUtils::getTrialMarketName(mTrialMarketName),
+			aRegionName);
+	
+	/*	if (aSectorName != mCapacityMarketName) {
+			// This dependency can not be removed since it is inherently different
+			// than sector dependencies.
+			depFinder->addDependency(aSectorName, aRegionName, mCapacityMarketName, aRegionName, false);
+		} */
+		}
 }
 
 void CapacityTechnology::initCalc(const string& aRegionName,
@@ -190,6 +227,14 @@ void CapacityTechnology::initCalc(const string& aRegionName,
     if( aPeriod < (scenario->getModeltime()->getmaxper()-1) ) {
         setProductionState( aPeriod + 1 );
     }
+
+	if (!mTrialMarketName.empty()) {
+		// The renewable trial market is a share calculation so we can give the
+		// solver some additional hints that the range should be between 0 and 1.
+		SectorUtils::setSupplyBehaviorBounds(SectorUtils::getTrialMarketName(mTrialMarketName),
+			aRegionName, 0, 1, aPeriod);
+	}
+
 }
 
 /*! \brief Calculates the output of the technology.
@@ -325,6 +370,9 @@ if (!mTrialMarketName.empty()) {
 	mIntermitOutTechRatio = 0;
 	mIntermitOutTechRatio = getCapacity(aPeriod) / aAggregateCapacity;
 	SectorUtils::addToTrialDemand(aRegionName, mTrialMarketName, mIntermitOutTechRatio, aPeriod);
+
+	//Marketplace* marketplace = scenario->getMarketplace();
+	// marketplace->setPrice(mTrialMarketName, aRegionName, 0.05, aPeriod);
 
 }
 }

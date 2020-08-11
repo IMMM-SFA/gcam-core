@@ -62,6 +62,7 @@
 #include "technologies/include/unmanaged_land_technology.h"
 #include "technologies/include/resource_reserve_technology.h"
 #include "technologies/include/capacity_technology.h"
+#include "technologies/include/investment_technology.h"
 #include "technologies/include/empty_technology.h"
 
 extern Scenario* scenario;
@@ -135,6 +136,7 @@ bool TechnologyContainer::hasTechnologyType( const string& aTechNodeName ) {
              aTechNodeName == AgProductionTechnology::getXMLNameStatic() ||
              aTechNodeName == PassThroughTechnology::getXMLNameStatic() ||
 			 aTechNodeName == CapacityTechnology::getXMLNameStatic() ||
+			 aTechNodeName == InvestmentTechnology::getXMLNameStatic() ||
              aTechNodeName == UnmanagedLandTechnology::getXMLNameStatic() );
 }
 
@@ -198,8 +200,12 @@ bool TechnologyContainer::createAndParseVintage( const DOMNode* aNode, const str
         else if( aTechType == ResourceReserveTechnology::getXMLNameStatic() ) {
             newVintage = new ResourceReserveTechnology( mName, techYear );
         }
-		else if( aTechType == CapacityTechnology::getXMLNameStatic() ) {
-			newVintage = new CapacityTechnology( mName, techYear );
+		else if (aTechType == CapacityTechnology::getXMLNameStatic()) {
+			newVintage = new CapacityTechnology(mName, techYear);
+		}
+		
+		else if (aTechType == InvestmentTechnology::getXMLNameStatic()) {
+			newVintage = new InvestmentTechnology(mName, techYear);
 		}
         else {
             // Getting an error message here implies that the known technologies in this method are
@@ -611,7 +617,7 @@ void TechnologyContainer::interpolateShareWeights( const int aPeriod ) {
         if( period > modeltime->getFinalCalibrationPeriod() && !techShareWeights[ period ].isInited() ) {
             ILogger& mainLog = ILogger::getLogger( "main_log" );
             mainLog.setLevel( ILogger::ERROR );
-            mainLog << "Found uninitialized share weight in tech: " << mName
+            mainLog << "Found uninitialized share weight in tech: " << mName 
                 << " in period " << aPeriod << endl;
             abort();
         }

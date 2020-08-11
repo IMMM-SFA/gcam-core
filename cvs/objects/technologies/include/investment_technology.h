@@ -44,7 +44,7 @@
 * \brief The InvestmentTechnology class header file.
 * \details TODO:
 *
-* \author Pralit Patel, Gokul Iyer
+* \author Gokul Iyer, Pralit Patel
 */
 
 #include <xercesc/dom/DOMNode.hpp>

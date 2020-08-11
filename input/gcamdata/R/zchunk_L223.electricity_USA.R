@@ -13,7 +13,7 @@
 #' \code{L223.StubTech_Investment}, \code{L223.GlobalTechEff_Investment}, \code{L223.StubTechMarket_Investment},
 #' \code{L223.GlobalTechOMfixed_Investment},\code{L223.GlobalTechOMvar_Investment}, \code{L223.GlobalTechCapital_Investment},
 #' \code{L223.GlobalTechShrwt_Investment}, \code{L223.GlobalTechCapFac_Investment}, \code{L223.TechCapFac_Investment},
-#' \code{L223.GlobalTechCapture_Investment}, \code{L223.GlobalTechCost_Investment}, \code{L223.GlobalTechHack_Investment},
+#' \code{L223.GlobalTechCapture_Investment}, \code{L223.GlobalTechCost_Investment}, \code{L223.GlobalTechCost_CapacityCreditCalulator},
 #' \code{L223.Sector_Investment_StateShare}, \code{L223.Subsector_Investment_StateShare}, \code{L223.CapacityTech},
 #' \code{L223.SubsectorShrwtFllt_Investment_StateShare}, \code{L223.TechCoef_Investment_StateShare},
 #' \code{L223.TechShrwt_Investment_StateShare},\code{L223.Sector_Investment_LoadCurve}, \code{L223.TechShrwt_Dispatch},
@@ -24,7 +24,7 @@
 #' \code{L223.SubsectorLogit_Dispatch}, \code{L223.SubsectorShrwtFllt_Dispatch}, \code{L223.CapacityTech_FutureTechs},
 #' \code{L223.TechOMvar_Dispatch}, \code{L223.TechLifetime_Dispatch}, \code{L223.TechSCurve_Dispatch},
 #' \code{L223.TechCapFac_Dispatch}, \code{L223.TechCarbonCapture_Dispatch}, \code{L223.Production_Dispatch},
-#' \code{L223.TechEff_Cal}, \code{L223.Sector_Dispatch_Grid}, \code{L223.DispatchSectorCalProd},
+#' \code{L223.TechEff_Cal}, \code{L223.TechTrialMarket_Dispatch}, \code{L223.Sector_Dispatch_Grid}, \code{L223.DispatchSectorCalProd},
 #' \code{L223.DispatchSectorDispatchSegments}, \code{L223.InterestRate_FERC}, \code{L223.Pop_FERC}, \code{L223.BaseGDP_FERC},
 #' \code{L223.LaborForceFillout_FERC}, \code{L223.TechCost_offshore_wind_Dispatch}.
 #' The corresponding file in the
@@ -69,6 +69,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              FILE = "gcam-usa/A23.dispatch_globaltech_retirement_additional",
              FILE = "gcam-usa/A23.dispatch_globaltech_shrwt_additional",
              FILE = "gcam-usa/calibrated_techs_dispatch_usa",
+             FILE = "gcam-usa/dispatch/capacity_credit_calculator",
              "L120.RsrcCurves_EJ_R_offshore_wind_USA",
              "L120.RegCapFactor_offshore_wind_USA",
              "L120.GridCost_offshore_wind_USA"))
@@ -89,7 +90,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              "L223.TechCapFac_Investment",
              "L223.GlobalTechCapture_Investment",
              "L223.GlobalTechCost_Investment",
-             "L223.GlobalTechHack_Investment",
+             "L223.GlobalTechCost_CapacityCreditCalulator",
              "L223.Sector_Investment_StateShare",
              "L223.Subsector_Investment_StateShare",
              "L223.SubsectorShrwtFllt_Investment_StateShare",
@@ -120,6 +121,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              "L223.TechCarbonCapture_Dispatch",
              "L223.Production_Dispatch",
              "L223.TechEff_Cal",
+             "L223.TechTrialMarket_Dispatch",
              "L223.Sector_Dispatch_Grid",
              "L223.DispatchSectorCalProd",
              "L223.DispatchSectorDispatchSegments",
@@ -176,10 +178,14 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     A23.dispatch_globaltech_retirement_additional <- get_data(all_data, "gcam-usa/A23.dispatch_globaltech_retirement_additional")
     A23.dispatch_globaltech_shrwt_additional <- get_data(all_data, "gcam-usa/A23.dispatch_globaltech_shrwt_additional")
     calibrated_techs_dispatch_usa <- get_data(all_data, "gcam-usa/calibrated_techs_dispatch_usa")
+    capacity_credit_calculator <- get_data(all_data, "gcam-usa/dispatch/capacity_credit_calculator")
 
     L120.RsrcCurves_EJ_R_offshore_wind_USA <- get_data(all_data, "L120.RsrcCurves_EJ_R_offshore_wind_USA")
     L120.RegCapFactor_offshore_wind_USA <- get_data(all_data, "L120.RegCapFactor_offshore_wind_USA")
     L120.GridCost_offshore_wind_USA <- get_data(all_data, "L120.GridCost_offshore_wind_USA")
+
+    # -----------------------------------------------------------------------------
+    # 2. Perform computations
 
     #A vector indicate states where geothermal electric technologies will not be created
     NREL_us_re_technical_potential %>%
@@ -395,6 +401,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(technology, capacity.factor) %>%
       repeat_add_columns(tibble::tibble(sector = L223.TechCapFac_Investment_SegAdjust$sector)) %>%
       left_join_error_no_match(L223.TechCapFac_Investment_SegAdjust, by = "sector") %>%
+      mutate(sector = as.character(sector)) %>%
       mutate(capacity.factor = capacity.factor * seg_fraction) %>%
       right_join(calibrated_techs_dispatch_usa %>%
                    filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
@@ -404,8 +411,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       mutate(supplysector = sector) %>%
       select(supplysector, subsector, technology, year, capacity.factor) ->
       L223.GlobalTechCapFac_Investment
-    # Warning message:
-    # Column `sector` joining factor and character vector, coercing into character vector
 
     # ===========================================================================
     ## L223 GlobalTechCapture_Investment  storage market investment
@@ -433,39 +438,51 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     ## L223 GlobalTechCost_Investment  capacity credit investment
     # ===========================================================================
 
-    # current assumption of gcamusa.ELEC_DEFAULT_RE_CC
-    # capacity credit = -2.5 * capacity factor
-    # 2.5 (1975$/GJ) basically comes from the levelized capital cost of a gas combustion turbine.
-    # And the idea is that all electricity users contribute to this investment credit
-    # (thus gets added on to the dispatch price) and the on the investment tech side it is
-    # given as a credit / subsidy (with the intermittent techs getting a reduced credit).
-
-    calibrated_techs_dispatch_usa %>%
-      filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
-      select(sector, supplysector, subsector, technology, capacity.factor) %>%
-      repeat_add_columns(tibble::tibble(year = MODEL_YEARS)) %>%
-      mutate(supplysector = sector) %>%
-      mutate(minicam.non.energy.input = "capacity credit") %>%
-      mutate(input.cost = gcamusa.ELEC_DEFAULT_RE_CC * capacity.factor) %>%
-      select(supplysector, subsector, technology, year, minicam.non.energy.input, input.cost) ->
-      L223.GlobalTechCost_Investment
-
-    # ===========================================================================
-    ## L223 GlobalTechHack_Investment  total hack investment
-    # ===========================================================================
-
-    # current assumption
-    # total.hack = 1
-    # TODO: check what does this mean
+    # 1) capacity-market-price：the capital overnight cost of a gas CT in USD/KW for that corresponding period.
+    # All investment-technologies would get the same capacity-market-price.
+    # 2) For wind and solar investment technologies, is-dispatchable = 0, for all others is-dispatchable = 1
+    # 3) CAPITAL_COST_GAS_CT_USD/KW is the capital overnight cost of a gas CT in 1975USD/KW, according to
+    # EIA 2016 data (page 7) (https://www.eia.gov/analysis/studies/powerplants/capitalcost/pdf/capcost_assumption.pdf)
+    # Gas CT is 1101 2016$/kW (~309.8 1975$/kW)
+    # GI: 8/7/2020: Updating this value to what's in the datsystem gcamdata\inst\extdata\gcam-usa\A23.globaltech_capital_additional.csv
 
     calibrated_techs_dispatch_usa %>%
       filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
       select(sector, supplysector, subsector, technology) %>%
       repeat_add_columns(tibble::tibble(year = MODEL_YEARS)) %>%
       mutate(supplysector = sector) %>%
-      select(-sector) %>%
-      mutate(total.hack = 1) ->
-      L223.GlobalTechHack_Investment
+      mutate(is.dispatchable = ifelse(subsector %in% capacity_credit_calculator$subsector, 0, 1)) %>%
+      mutate(capacity.market.price = 1101.0 * gdp_deflator(1975, 2016)) %>%
+      # GITODO: read this in from the actual file (gcamdata\inst\extdata\gcam-usa\A23.globaltech_capital_additional.csv)
+      mutate(capacity.market.price = 150) %>%
+      select(supplysector, subsector, technology, year, is.dispatchable, capacity.market.price) ->
+      L223.GlobalTechCost_Investment
+
+    # ===========================================================================
+    ## L223 GlobalTechCost_CapacityCreditCalulator  capacity credit calculator for non-dispatchable techs
+    # ===========================================================================
+    L223.GlobalTechCost_Investment %>%
+      filter(is.dispatchable == 0) %>%
+      # currently need to create a blank column otherwise the xml structure will be incorrect
+      mutate(capacity.credit.calculator = NA) %>%
+      left_join_error_no_match(capacity_credit_calculator, by = "subsector") %>%
+      select(-is.dispatchable, -capacity.market.price) ->
+      L223.GlobalTechCost_CapacityCreditCalulator_WindSolar
+
+    # temp: apply the same values for other technologies
+    L223.GlobalTechCost_Investment %>%
+      filter(is.dispatchable == 1) %>%
+      # currently need to create a blank column otherwise the xml structure will be incorrect
+      mutate(capacity.credit.calculator = NA) %>%
+      rename(subsector_temp = subsector) %>%
+      mutate(subsector = "wind") %>%
+      left_join_error_no_match(capacity_credit_calculator, by = "subsector") %>%
+      select(-is.dispatchable, -capacity.market.price, -subsector) %>%
+      rename(subsector = subsector_temp) ->
+      L223.GlobalTechCost_CapacityCreditCalulator_temp
+
+    L223.GlobalTechCost_CapacityCreditCalulator <- rbind(L223.GlobalTechCost_CapacityCreditCalulator_WindSolar,
+                                                         L223.GlobalTechCost_CapacityCreditCalulator_temp)
 
     # ===========================================================================
     ## L223 TechCapFac_Investment wind/solar capacity factor investment
@@ -482,6 +499,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       # here using inner_join as a cross-reference process to filter wind and solar for those only exist
       # in certain segment defined in calibrated_techs_dispatch_usa
       # currently wind and solar only exsit in base and intermediate segments
+      mutate(sector = as.character(sector)) %>%
       inner_join(calibrated_techs_dispatch_usa %>%
                    filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
                    select(sector, supplysector, subsector, technology),
@@ -490,8 +508,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       mutate(supplysector = sector) %>%
       select(region, supplysector, subsector, technology, year, capacity.factor) ->
       L223.TechCapFac_Investment
-    # Warning message:
-    # Column `sector` joining factor and character vector, coercing into character vector
 
     # ===========================================================================
     ## L223 Sector_Investment_StateShare investment sharing sectors at the grid region
@@ -634,14 +650,13 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechShrwt_Investment_LoadCurve %>%
       select(-share.weight) %>%
       repeat_add_columns(tibble::tibble(invest_segment = gcamusa.ELEC_INV_NAMES)) %>%
-      left_join_error_no_match(L102.invest_segments, by=c("region" = "grid_region", "invest_segment")) %>%
+      left_join_error_no_match(L102.invest_segments %>% mutate(invest_segment = as.character(invest_segment)),
+                               by=c("region" = "grid_region", "invest_segment")) %>%
       mutate(coefficient = hours / gcamusa.ELEC_BASELOAD_HRS * (1 - gcamusa.ELEC_INV_MARGIN) * generation.fraction) %>%
       rename(minicam.energy.input = invest_segment) %>%
       select(-hours, -generation, -area, -generation.fraction) %>%
       mutate(market.name = region) ->
       L223.TechCoef_Investment_LoadCurve
-    # Warning message:
-    # Column `invest_segment` joining character vector and factor, coercing into character vector
 
     # ===========================================================================
     ## L223.TechPMult_Investment_LoadCurve  p multiplier load curve
@@ -776,6 +791,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       bind_rows(L223.TechLifetime_Dispatch, .) %>%
       distinct() ->
       L223.TechLifetime_Dispatch
+
     # "initial-nonhistorical-year"
     A23.globaltech_retirement %>%
       bind_rows(A23.dispatch_globaltech_retirement_additional) %>%
@@ -843,7 +859,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       # it is not an error to include the segment specific capacity factor in the
       # future, not including it helps keep the size of the XML down
       filter((technology == "hydro" & year == MODEL_FINAL_BASE_YEAR) |
-             (technology != "hydro" & year >= MODEL_FINAL_BASE_YEAR)) %>%
+               (technology != "hydro" & year >= MODEL_FINAL_BASE_YEAR)) %>%
       select(region, supplysector, subsector, technology, year, segment, capacity.factor) ->
       L223.CapacityTechSegmentCapFac
 
@@ -983,6 +999,16 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       ungroup() ->
       L223.DispatchSectorCalProd
 
+    # capacity technology use trail market at grid level
+    L223.TechShrwt_Dispatch %>%
+      filter(subsector %in% capacity_credit_calculator$subsector) %>%
+      left_join_error_no_match(select(states_subregions, state, grid_region), by = c("region" = "state")) %>%
+      mutate(trial.market.name = subsector) %>%
+      # GITODO: Check this is OK.
+      mutate(capacity.market.name = grid_region) %>%
+      select(region, supplysector, subsector, technology, year, trial.market.name, capacity.market.name) ->
+      L223.TechTrialMarket_Dispatch
+
     # Socioeconomic information in the electricity grid regions (required for GCAM to run with these regions)
 
     # L223.InterestRate_FERC: Interest rates in the FERC grid regions
@@ -1043,6 +1069,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechCapFac_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
     L223.Production_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
     L223.TechCapFac_Investment %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechTrialMarket_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
 
 
     # Modifications for offshore wind
@@ -1127,9 +1154,11 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(region, supplysector, subsector, technology, year,
              capacity.factor) -> L223.TechCapFac_offshore_wind_Dispatch
 
+
     L223.TechCapFac_Dispatch %>%
       filter(technology != "wind_offshore") %>%
       bind_rows(L223.TechCapFac_offshore_wind_Dispatch) -> L223.TechCapFac_Dispatch
+
 
     L223.TechCapFac_offshore_wind_Dispatch %>%
       select(region, supplysector, subsector, technology, year) %>%
@@ -1138,6 +1167,11 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       rename(input.cost = grid.cost) ->
       L223.TechCost_offshore_wind_Dispatch
 
+    L223.TechTrialMarket_Dispatch %>%
+      filter(technology != "wind_offshore") %>%
+      bind_rows(L223.TechTrialMarket_Dispatch %>%
+                  filter(technology == "wind_offshore",
+                         region %in% offshore_wind_states)) -> L223.TechTrialMarket_Dispatch
 
     # ----------------------------------------------------------------------------------------------------------------------------
     L223.Sector_Investment %>%
@@ -1293,18 +1327,18 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_title("Investment technology capacity credit") %>%
       add_units("1975 $/GJ") %>%
       add_comments("Set technology capacity credit") %>%
-      add_comments("Assuming -2.5 * capacity factor") %>%
       add_legacy_name("L223.GlobalTechCost_Investment (dispatch branch)") %>%
-      add_precursors("gcam-usa/calibrated_techs_dispatch_usa") ->
+      add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/dispatch/capacity_credit_calculator") ->
       L223.GlobalTechCost_Investment
 
-    L223.GlobalTechHack_Investment %>%
-      add_title("Investment technology total-hack") %>%
-      add_units("Unitless") %>%
-      add_comments("Set technology total-hack") %>%
-      add_legacy_name("L223.GlobalTechHack_Investment (dispatch branch)") %>%
-      add_precursors("gcam-usa/calibrated_techs_dispatch_usa") ->
-      L223.GlobalTechHack_Investment
+    L223.GlobalTechCost_CapacityCreditCalulator %>%
+      add_title("Investment technology capacity credit calculator for dispatchable technologies") %>%
+      add_units("NA") %>%
+      add_comments("wind and solar only") %>%
+      add_legacy_name("L223.GlobalTechCost_CapacityCreditCalulator (dispatch branch)") %>%
+      same_precursors_as("L223.GlobalTechCost_Investment") ->
+      L223.GlobalTechCost_CapacityCreditCalulator
 
     L223.Sector_Investment_StateShare %>%
       add_title("Investment supplysector logit-exponent for grid") %>%
@@ -1611,6 +1645,15 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "L123.out_EJ_state_elec_F_tech") ->
       L223.TechEff_Cal
 
+    L223.TechTrialMarket_Dispatch %>%
+      add_title("Dispatch technology set trial market for renewables") %>%
+      add_units("unitless") %>%
+      add_comments("Set set trial market for renewables") %>%
+      add_legacy_name("L223.TechTrialMarket_Dispatch (dispatch branch)") %>%
+      same_precursors_as("L223.TechShrwt_Dispatch") %>%
+      add_precursors("gcam-usa/dispatch/capacity_credit_calculator") ->
+      L223.TechTrialMarket_Dispatch
+
     L223.Sector_Dispatch_Grid %>%
       add_title("Dispatch supplysector (electricity) logit.exponent for grid") %>%
       add_units("unitless") %>%
@@ -1694,7 +1737,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                 L223.TechCapFac_Investment,
                 L223.GlobalTechCapture_Investment,
                 L223.GlobalTechCost_Investment,
-                L223.GlobalTechHack_Investment,
+                L223.GlobalTechCost_CapacityCreditCalulator,
                 L223.Sector_Investment_StateShare,
                 L223.Subsector_Investment_StateShare,
                 L223.SubsectorShrwtFllt_Investment_StateShare,
@@ -1725,6 +1768,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                 L223.TechCarbonCapture_Dispatch,
                 L223.Production_Dispatch,
                 L223.TechEff_Cal,
+                L223.TechTrialMarket_Dispatch,
                 L223.Sector_Dispatch_Grid,
                 L223.DispatchSectorCalProd,
                 L223.DispatchSectorDispatchSegments,

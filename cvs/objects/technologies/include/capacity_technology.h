@@ -108,6 +108,9 @@ protected:
 		//! Name of trial market associated with this Capacity Technology.
 		DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string),
 
+		//! Name of capacity market associated with this Capacity Technology.
+		DEFINE_VARIABLE(SIMPLE, "capacity-market-name", mCapacityMarketName, std::string),
+
         //! The capacity for this technology.
         DEFINE_VARIABLE( SIMPLE | STATE, "capacity", mCapacity, Value ),
                             

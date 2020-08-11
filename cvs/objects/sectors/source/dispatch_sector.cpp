@@ -286,23 +286,25 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         for( auto filterStep : getCapSteps ) {
             delete filterStep;
         }
-    }
-    
 
-    if( mDoDispatchCapacity ) {
-		/*GI: Aggregating capacity across all capacity technologies 
+		/*GI: Aggregating capacity across all capacity technologies
 		for capacity credits calculations to be done in CapacityTechnology and InvestmentTechnology classes.
 		*/
 		double aggregateCapacity = calcAggregateCapacity(mRegionName, aPeriod);
 
-		/*GI: Calling the CapacityTechnology::addCapacityShareToMarket method which will add the capacity shares of 
+		/*GI: Calling the CapacityTechnology::addCapacityShareToMarket method which will add the capacity shares of
 		intermittent (i.e. non-dispatchable technologies) to the trial market.
-        */
+		*/
 
 		for (auto tech : mAllTechs) {
 			dynamic_cast<CapacityTechnology*>(tech)->addCapacityShareToMarket(aggregateCapacity, mRegionName, aPeriod);
-		}
 
+		}
+    }
+    
+
+    if( mDoDispatchCapacity ) {
+		
         double totalElecDemand = 0.0;
         //if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod() ) {
             for( auto segment : mDemandSegments ) {
@@ -448,7 +450,7 @@ double DispatchSector::calcAggregateCapacity(const string& aRegionName, const in
 	double aggregateCapacity = 0;
 	for (auto tech : mAllTechs) {
 		double capacity = dynamic_cast<CapacityTechnology*>(tech)->getCapacity(aPeriod); 
-		aggregateCapacity =+ capacity;
+		aggregateCapacity += capacity;
 	}
 	return aggregateCapacity;
 }
