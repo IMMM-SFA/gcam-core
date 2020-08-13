@@ -445,7 +445,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # 3) CAPITAL_COST_GAS_CT_USD/KW is the capital overnight cost of a gas CT in 1975USD/KW, according to
     # EIA 2016 data (page 7) (https://www.eia.gov/analysis/studies/powerplants/capitalcost/pdf/capcost_assumption.pdf)
     # Gas CT is 1101 2016$/kW (~309.8 1975$/kW)
-    # GI: 8/7/2020: Updating this value to what's in the datsystem gcamdata\inst\extdata\gcam-usa\A23.globaltech_capital_additional.csv
+    # GITODO: 8/7/2020: Updating this value to what's in the datsystem gcamdata\inst\extdata\gcam-usa\A23.globaltech_capital_additional.csv
+    # GITODO: We don't need the is-dispatchable bool any more.
 
     calibrated_techs_dispatch_usa %>%
       filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
@@ -470,6 +471,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(-is.dispatchable, -capacity.market.price) ->
       L223.GlobalTechCost_CapacityCreditCalulator_WindSolar
 
+    # GITODO: We don't need capacity credit calculator for dispatchable technologies.
     # temp: apply the same values for other technologies
     L223.GlobalTechCost_Investment %>%
       filter(is.dispatchable == 1) %>%
