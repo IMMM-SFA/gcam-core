@@ -87,6 +87,7 @@ void InvestmentTechnology::copy(const InvestmentTechnology& aTech) {
     Technology::copy( aTech );
 	mCapacityMarketPrice = aTech.mCapacityMarketPrice;
 	mIsDispatchable = aTech.mIsDispatchable;
+	mTrialMarketName = aTech.mTrialMarketName;
 	
 	if (aTech.mCapacityCreditCalculator) {
 		delete mCapacityCreditCalculator;
@@ -110,12 +111,17 @@ bool InvestmentTechnology::XMLDerivedClassParse(const string& aNodeName, const D
     else if( aNodeName == "is-dispatchable" ) {
 		mIsDispatchable = XMLHelper<bool>::getValue(aCurrNode);
         success = true;
-    }
+    } 
 	//GI: Reading in parameters of the capacity-credit function. 
 	else if (aNodeName == CapacityCreditCalculator::getXMLNameStatic()) {
 		parseSingleNode(aCurrNode, mCapacityCreditCalculator, new CapacityCreditCalculator);
 		success = true;
 	}
+
+	else if (aNodeName == "trial-market-name") {
+		mTrialMarketName = XMLHelper<string>::getValue(aCurrNode);
+		success = true;
+	} 
 
 	return success;
 }
@@ -191,7 +197,7 @@ void InvestmentTechnology::completeInit(const std::string& aRegionName,
 			<< " did not read in a capacity market price. Capacity payments will default to zero. " << endl;
 	}
 	
-	if (!mIsDispatchable && !mCapacityCreditCalculator) {
+	if (mTrialMarketName.empty() && !mCapacityCreditCalculator) {
 		ILogger& mainLog = ILogger::getLogger("main_log");
 		mainLog.setLevel(ILogger::NOTICE);
 		mainLog << "Investment Technology " << mName << " in sector " << aSectorName
@@ -206,7 +212,7 @@ void InvestmentTechnology::completeInit(const std::string& aRegionName,
 void InvestmentTechnology::toDebugXMLDerived(const int aPeriod, ostream& aOut, Tabs* aTabs) const
 {
 	XMLWriteElement(mCapacityMarketPrice, "capacity-market-price", aOut, aTabs);
-	XMLWriteElement(mIsDispatchable, "is-dispatchable", aOut, aTabs);
+	XMLWriteElement(mTrialMarketName, "trial-market-name", aOut, aTabs);
 	
 	if (mCapacityPayment) {
 		XMLWriteElement(mCapacityPayment, "capacity-payment", aOut, aTabs);
@@ -285,12 +291,11 @@ void InvestmentTechnology::production(const string& aRegionName,
 
 }
   
-/*!Performing capacity credit calculation. We loop over all InvestmentTechnology objects. 
-	For each InvestmentTechnology object, the CapacityCreditCalculator:: getCapacityPayment method is called
-	to apply the credit to the non-energy cost component of the investment-technology. 
-	Note that ideally we should be applying this to the capital-overnight component but that's not possible for now.
-	We're keeping it simple and applying the credit in levelized cost terms. 
-	*/
+/*!Applying capacity payments to levelized costs of investment technologies. 
+	The CapacityCreditCalculator:: getCapacityPayment method is called to apply the payment to the levelized costs 
+	of the investment-technology (which is in turn used for logit calculations). 
+	Note that ideally we should be applying this to the capital-overnight component but that could be messy.
+*/
 
 void InvestmentTechnology::calcCost(const string& aRegionName,
 	const string& aSectorName,
@@ -328,6 +333,7 @@ void InvestmentTechnology::calcCost(const string& aRegionName,
 		double CapacityPayment_USD_GJ = getCapacityPayment(aRegionName, aSectorName, aPeriod) 
 																	* FCR / mCapacityFactor/ HOURS_PER_YEAR/ KWH_TO_GJ;
 		
+		// Adjust levelized costs with capacity payments. 
 		cost -= CapacityPayment_USD_GJ;
 		
 		mCosts[aPeriod] = cost;
@@ -339,69 +345,48 @@ void InvestmentTechnology::calcCost(const string& aRegionName,
 }
 		  
 
-/* The InvestmentTechnology::getCapacityPayment method returns the capacity payments to be deducted from 
-	technology costs. The units are in $/kW. 
-	 calls the CapacityCreditCalculator::getCapacityCredit method which is used to calculate 
-	the capacity credit (0-1) as a function of renewable share for renewable technologies 
+/*!
+ * \brief The InvestmentTechnology::getCapacityPayment method returns the capacity payments to be deducted from 
+			technology costs. The units are in $/kW..
+ * \details For dispatchable technologies, capacity payment is equal to the capacity market price. 
+			FOr intermittent technologies, the method calls the CapacityCreditCalculator::getCapacityCredit method 
+			which is used to calculate the capacity credit (same as capacityPaymentFraction, 0-1) as a function of renewable share 
+			in the capacity market (typically grid region).
+* \param aRegion Name of the containing region.
+ * \param aSector The name of the sector for which capacity credits are being calculated.
+ * \param aPeriod Model period.
+ * \return Capacity Payments in $/kW.
+ NOTE:  PP sugested reading in capacity-market-price within the InputCapital class. But that might confuse users - especially 
+		if we were to read it in as  "capital-overnight". Instead, GI thinks it might just be simpler and more intuitive to 
+		either: i.) create a new input class or ii.) just read in capacity - market - price along with the investment - technology 
+		object and include it in the costs within the calcCost() method. For now, GI started along second option above.
  */
+
 
 double InvestmentTechnology::getCapacityPayment(const string& aRegionName,
 	const string& aSectorName,
 	const int aPeriod) {
 
-	if (mIsDispatchable) {
+	if (mTrialMarketName.empty()) {
 		mCapacityPayment = mCapacityMarketPrice;
 	}
 		
 	else {
 		
-		// double capacityPaymentFraction = mCapacityCreditCalculator -> getCapacityCredit(aRegionName, aSectorName, aPeriod);
+		
 
 		double capacityPaymentFraction = dynamic_cast<CapacityCreditCalculator*>(mCapacityCreditCalculator)->getCapacityCredit(aRegionName, 
-																										  aSectorName, 
+																										  mTrialMarketName, 
 																										  aPeriod);
 		mCapacityPayment = mCapacityMarketPrice * capacityPaymentFraction;
 
 		
-		// PP sugested reading in capacity-market-price as a input-capital. But that might confuse users - especially if we were to read it in as  "capital-overnight". 
-		// Instead, GI thinks it might just be simpler and more intuitive to either: i.) create a new input class or 
-		// ii.) just read in capacity - market - price along with the investment - technology object and include it in the costs within the calcCost() method.
-		// FOr now, GI started along second option above.
-		// mInputs[mCapCreditInputIndex]->setCoefficient(capacityPaymentFraction, aPeriod);
-	}
+			}
 		   	
 	return mCapacityPayment;
 }
 
-// Probably don't need this for investment technology class. 
-/*
-void InvestmentTechnology::setProductionState( const int aPeriod ) {
-    // Check that the state for this period has not already been initialized.
-    // Note that this is the case when the same scenario is run multiple times
-    // for instance when doing the policy cost calculation.  In which case
-    // we must delete the memory to avoid a memory leak.
-    if( mProductionState[ aPeriod ] ) {
-        delete mProductionState[ aPeriod ];
-    }
-    
-    double initialOutput = mCapacity * mCapacityFactor;
-    
-    mProductionState[ aPeriod ] =
-        ProductionStateFactory::create( mYear, mLifetimeYears, mFixedOutput,
-                                   initialOutput, aPeriod ).release();
-}
-*/
 
-
-/*// Probably don't need this for investment technology class since it will be carried forward from the parent Technology class.
-double InvestmentTechnology::getCalibrationOutput( const bool aHasRequiredInput,
-                                                 const string& aRequiredInput,
-                                                 const int aPeriod ) const
-{
-    double techCalOutput = Technology::getCalibrationOutput( aHasRequiredInput, aRequiredInput, aPeriod );
-    return techCalOutput ;//== -1 ? techCalOutput : techCalOutput / mCapacityFactor;
-}
-*/
 
 
 void InvestmentTechnology::doInterpolations(const Technology* aPrevTech, const Technology* aNextTech) {
@@ -418,7 +403,7 @@ void InvestmentTechnology::doInterpolations(const Technology* aPrevTech, const T
 	
 	assert(nextTech);
 }
-//GI: Do we need this or will this be carried forward by parent class?
+
 void InvestmentTechnology::acceptDerived( IVisitor* aVisitor, const int aPeriod ) const {
     // Derived visit.
     aVisitor->startVisitInvestmentTechnology( this, aPeriod );

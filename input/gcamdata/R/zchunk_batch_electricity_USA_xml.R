@@ -59,6 +59,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.Production_Dispatch",
              "L223.TechEff_Cal",
              "L223.TechTrialMarket_Dispatch",
+             "L223.TechTrialMarket_Investment",
              "L223.Sector_Dispatch_Grid",
              "L223.DispatchSectorCalProd",
              "L223.DispatchSectorDispatchSegments",
@@ -144,6 +145,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
     L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
     L223.TechTrialMarket_Dispatch <- get_data(all_data, "L223.TechTrialMarket_Dispatch")
+    L223.TechTrialMarket_Investment <- get_data(all_data, "L223.TechTrialMarket_Investment")
     L223.Sector_Dispatch_Grid <- get_data(all_data, "L223.Sector_Dispatch_Grid")
     L223.DispatchSectorCalProd <- get_data(all_data, "L223.DispatchSectorCalProd")
     L223.DispatchSectorDispatchSegments <- get_data(all_data, "L223.DispatchSectorDispatchSegments")
@@ -231,6 +233,10 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.Production_Dispatch, "Production", NULL) %>%
       add_xml_data(L223.TechEff_Cal, "TechEff") %>%
       add_xml_data(L223.TechTrialMarket_Dispatch, "TechTrial_dispatch", NULL) %>%
+      #GITODO: Note the TechTrial_investment variable is StubTech.
+      # May need to change vriable name to L223.StubTechTrial_Investment.
+      # And header name to StubTechTrialMarket
+      add_xml_data(L223.TechTrialMarket_Investment, "TechTrial_investment", NULL) %>%
       add_logit_tables_xml(L223.Sector_Dispatch_Grid, "Supplysector") %>%
       add_xml_data(L223.DispatchSectorCalProd, "DispatchSectorCalProd", NULL) %>%
       add_xml_data(L223.DispatchSectorDispatchSegments, "DispatchSectorDispatchSegments", NULL) %>%
@@ -304,6 +310,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.Production_Dispatch",
                      "L223.TechEff_Cal",
                      "L223.TechTrialMarket_Dispatch",
+                     "L223.TechTrialMarket_Investment",
                      "L223.Sector_Dispatch_Grid",
                      "L223.DispatchSectorCalProd",
                      "L223.DispatchSectorDispatchSegments",

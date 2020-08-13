@@ -68,6 +68,7 @@ extern Scenario* scenario;
 DispatchSector::DispatchSector( const string& aRegionName ):
 SupplySector( aRegionName )
 {
+	mAggregateCapacity = 0; 
 }
 
 const string& DispatchSector::getXMLNameStatic() {
@@ -111,6 +112,7 @@ void DispatchSector::toDebugXMLDerived( const int aPeriod, ostream& aOut, Tabs* 
     XMLWriteElement( mNewCapacity, "new-capacity", aOut, aTabs );
     XMLWriteElement( mExistingCapacity[ aPeriod ], "existing-capacity", aOut, aTabs );
     XMLWriteElement( mRequiredCapacity[ aPeriod ], "required-capacity", aOut, aTabs );
+	XMLWriteElement(mAggregateCapacity, "aggregate-capacity", aOut, aTabs);
     for(auto techSegIt : mSaveTechCurve[ aPeriod ] ) {
         map<string, string> attrs;
         attrs["segment"] = get<1>(techSegIt.first);
@@ -287,19 +289,7 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
             delete filterStep;
         }
 
-		/*GI: Aggregating capacity across all capacity technologies
-		for capacity credits calculations to be done in CapacityTechnology and InvestmentTechnology classes.
-		*/
-		double aggregateCapacity = calcAggregateCapacity(mRegionName, aPeriod);
-
-		/*GI: Calling the CapacityTechnology::addCapacityShareToMarket method which will add the capacity shares of
-		intermittent (i.e. non-dispatchable technologies) to the trial market.
-		*/
-
-		for (auto tech : mAllTechs) {
-			dynamic_cast<CapacityTechnology*>(tech)->addCapacityShareToMarket(aggregateCapacity, mRegionName, aPeriod);
-
-		}
+	
     }
     
 
@@ -402,7 +392,31 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         marketplace->addToSupply( mName, mRegionName, mSupply, aPeriod );*/
         mNewCapacity = aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() ? std::max( maxRequiredCapacity - maxExistingCapacity , 0.0 ) : 0.0;
         marketplace->addToDemand( "capacity investment", mRegionName, mNewCapacity, aPeriod );
-    }
+    
+
+}
+
+/* GI: Next we perform Trial Market Calculations for Capacity Credits. Typically, we want all regions (states) within a containing grid region
+		to see the same capacity market price and capacity payments based on share of renewables in that grid region. 
+		Hence, we begin by aggregating capaicty in the grid region (that is, when mDoDispatchCapacity = True).
+*/
+
+if(mDoDispatchCapacity){
+
+/* Aggregating capacity across all capacity technologies (the mDDispatchCapacity = True check would
+	typically imply aggregation within a grid region) for capacity credits calculations to be done 
+	in CapacityTechnology and InvestmentTechnology classes.
+*/
+	mAggregateCapacity = calcAggregateCapacity(mRegionName, aPeriod);
+	
+	/* Calling the CapacityTechnology::addCapacityShareToMarket method which will add the capacity shares of
+	intermittent (i.e. non-dispatchable technologies) to the trial market using aggregate capacity as calculated for the entire grid region.
+	*/
+for (auto tech : mAllTechs) {
+	dynamic_cast<CapacityTechnology*>(tech)->addCapacityShareToMarket(mAggregateCapacity, mRegionName, aPeriod);
+}
+}
+
 }
 
 void DispatchSector::postCalc( const int aPeriod ) {
@@ -435,23 +449,31 @@ void DispatchSector::GetCapacityHelper::processData<ITechnology*>( ITechnology*&
 }
 
 
-/*Author GI
-**The calcAggregateCapaicty method aggregates capacity across all capacity-technology vintages. 
-**we can use mAllTechs which contains all capacity-technologies by vintage from the dispatch sector to loop through 
-  all capacity technology vintages.
-**This method is called in the DispactchSector::Supply method to add capacity shares of intermittent 
-  (i.e. non-dispatchable) technologies to the trial market. 
-**Note that I used "AggregateCapacity" since "TotalCapacity" corresponds 
-  to capacity of a single technology summed across investment segments.
-*/
+/*!
+ * \brief The calcAggregateCapacity method aggregates capacity across all capacity-technology vintages.
+ * \details We use mAllTechs member variable which contains all capacity-technologies by vintage from the dispatch sector 
+			to loop through all capacity technology vintages. This method is called in the DispactchSector::Supply method to 
+			add capacity shares of intermittent (i.e. non-dispatchable) technologies to the trial market. This method
+			calls the CapacityTechnology::getCapacity() method whoch does not account for retirements. 
+			Note that we used "AggregateCapacity" since "TotalCapacity" corresponds to capacity 
+			of a single technology summed across investment segments.
+ * \param aRegionName The name of the region.
+ * \param aPeriod Model period.
+ * \return aggregate capacity which is the total capacity of all capacity vintages within the containing sector.
+	TODO: Account for retirements in capacity calculations.
+	TODO: Pass the vector of capacity to be summed across as an argument. 
+ */
 
 
 double DispatchSector::calcAggregateCapacity(const string& aRegionName, const int aPeriod) {
+
+	
 	double aggregateCapacity = 0;
 	for (auto tech : mAllTechs) {
 		double capacity = dynamic_cast<CapacityTechnology*>(tech)->getCapacity(aPeriod); 
 		aggregateCapacity += capacity;
 	}
 	return aggregateCapacity;
+
 }
 

@@ -110,6 +110,11 @@ protected:
 		//! The capacity market price for this technology.
 		DEFINE_VARIABLE(SIMPLE, "capacity-market-price", mCapacityMarketPrice, double),
 
+		//! Name of trial market associated with this Investment Technology. This is read in only for intermittent-technologies
+		//! for which trial market calculations are performed in the CapacityTechnology class. The value read in here should be
+		//! equal to the value read in under the capacity technologies.
+		DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string),
+
 		DEFINE_VARIABLE(SIMPLE, "is-dispatchable", mIsDispatchable, bool)
 
 				

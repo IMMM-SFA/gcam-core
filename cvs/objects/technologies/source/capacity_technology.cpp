@@ -199,18 +199,26 @@ void CapacityTechnology::completeInit(const std::string& aRegionName,
 	}
 
 	if (!mTrialMarketName.empty()) {
-		// Create Trial Market if trial-market-name has been read in
+		// Create Trial Market if trial-market-name has been read in. 
 		SectorUtils::createTrialSupplyMarket(aRegionName, mTrialMarketName, mTechnologyInfo.get(), mCapacityMarketName);
+		
+		// Also create trial market associated with the capacity market name (typically read in as the containing grid region). This
+		// will make sure that regions associated with a capacity market would see the same intermittent capacity shares and hence
+		// capacity payments. In future, this would also help us ensure that regions associated with a capacity market see the same
+		// capacity market price. 
+		SectorUtils::createTrialSupplyMarket(mCapacityMarketName, mTrialMarketName, mTechnologyInfo.get(), mCapacityMarketName);
+		
+		// Add to dependency relationships to keep track of.  
 		MarketDependencyFinder* depFinder = scenario->getMarketplace()->getDependencyFinder();
 		depFinder->addDependency(aSectorName, aRegionName,
 			SectorUtils::getTrialMarketName(mTrialMarketName),
 			aRegionName);
 	
-	/*	if (aSectorName != mCapacityMarketName) {
-			// This dependency can not be removed since it is inherently different
-			// than sector dependencies.
-			depFinder->addDependency(aSectorName, aRegionName, mCapacityMarketName, aRegionName, false);
-		} */
+		depFinder->addDependency(aSectorName, mCapacityMarketName,
+			SectorUtils::getTrialMarketName(mTrialMarketName),
+			mCapacityMarketName);
+
+	
 		}
 }
 
@@ -346,6 +354,16 @@ void CapacityTechnology::acceptDerived( IVisitor* aVisitor, const int aPeriod ) 
     aVisitor->endVisitCapacityTechnology( this, aPeriod );
 }
 
+/*!
+ * \brief The getCapacity() method returns mCapacity which corresponds to the capacities of  capacity-technology vintages. 
+ * \details In other words, this variable contains the capacity of a capacity-technology vintage (typically summed across all investment segments.) 
+			It is noteworthy that the mCapacity is not exactly capacity in GW terms but instead, it corresponds to generation divided by 
+			capacity factor. The capacity factors used for this calculation correspond to investment-segment-specific capacity factors. 
+			Also note that mCapacity does not include retirement functions in it. So this variable represents total capacity without retirements.
+			Retirements are handled in the calacultion of maxProduction under the CapacityTechnology::tryDispatch() method.
+ * \param aPeriod Model period.
+	TODO: Account for retirements in capacity calculations.
+ */
 double CapacityTechnology::getCapacity(const int aPeriod) {
 	if (mProductionState[aPeriod]->isOperating()) {
 		
@@ -359,9 +377,15 @@ double CapacityTechnology::getCapacity(const int aPeriod) {
 }
 
 
-/* GI: Share Calculations to be used in renewable share calculations in CapacityCreditCalculator class 
-
-*/
+/*!
+ * \brief Add share of an intermittent capacity technology to trial market for capacity credit calculations.
+ * \details Calculates the share of intermittent capacity  by first checking if a trial-market-name has been read in.
+			It uses the argument aAggregateCapacity for the share calculations. This needs to be passed on during the function call.
+			Note that DispatchSector::calcAggregateCapacity() method performs the aggregate capacity calculations.
+ * \param aAggregateCapacity Aggregate capacity of all capacity technology vintages in the containing sector.
+ * \param aRegionName The name of the region.
+ * \param aPeriod Model period.
+ */
 
 void  CapacityTechnology::addCapacityShareToMarket( double aAggregateCapacity, 
 													const string& aRegionName, 
@@ -371,8 +395,6 @@ if (!mTrialMarketName.empty()) {
 	mIntermitOutTechRatio = getCapacity(aPeriod) / aAggregateCapacity;
 	SectorUtils::addToTrialDemand(aRegionName, mTrialMarketName, mIntermitOutTechRatio, aPeriod);
 
-	//Marketplace* marketplace = scenario->getMarketplace();
-	// marketplace->setPrice(mTrialMarketName, aRegionName, 0.05, aPeriod);
-
+	
 }
 }
