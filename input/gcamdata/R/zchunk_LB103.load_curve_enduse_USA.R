@@ -87,6 +87,7 @@ module_gcamusa_LB103.load_curve_enduse_USA <- function(command, ...) {
     L103.generation_Gr_Mon %>%
       expand(., ., tibble(segment = gcamusa.DAYNIGHT_ORDER)) %>%
       unite(segment, month, segment, sep=gcamusa.SEGMENT_DELIM, remove = FALSE) %>%
+      mutate(month = as.character(month)) %>%
       left_join_error_no_match(L102.load_segments_Mon %>%
                   select(grid_region, segment, month, hours, monthHours) %>%
                   distinct, by = c("grid_region", "month", "segment")) %>%

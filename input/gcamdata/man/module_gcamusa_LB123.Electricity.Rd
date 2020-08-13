@@ -15,8 +15,7 @@ module_gcamusa_LB123.Electricity(command, ...)
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
 the generated outputs: \code{L123.in_EJ_state_elec_F_tech}, \code{L123.out_EJ_state_elec_F}, \code{L123.in_EJ_state_ownuse_elec},
-\code{L123.out_EJ_state_ownuse_elec}, \code{L123.out_EJ_state_elec_F_tech}, \code{L123.capacity_EJ_state_elec_F_tech},
-\code{L123.capacity_factor_EJ_state_elec_F_tech}
+\code{L123.out_EJ_state_ownuse_elec}, \code{L123.out_EJ_state_elec_F_tech}, \code{L123.capacity_EJ_state_elec_F_tech}.
 The corresponding file in the original data system was \code{LB123.Electricity.R} (gcam-usa level1).
 }
 \description{
