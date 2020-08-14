@@ -413,7 +413,7 @@ if(mDoDispatchCapacity){
 	intermittent (i.e. non-dispatchable technologies) to the trial market using aggregate capacity as calculated for the entire grid region.
 	*/
 for (auto tech : mAllTechs) {
-	dynamic_cast<CapacityTechnology*>(tech)->addCapacityShareToMarket(mAggregateCapacity, mRegionName, aPeriod);
+	dynamic_cast<CapacityTechnology*>(tech)->addCapacityShareToMarket(mAggregateCapacity, mRegionName, mName, aPeriod);
 }
 }
 
@@ -454,13 +454,14 @@ void DispatchSector::GetCapacityHelper::processData<ITechnology*>( ITechnology*&
  * \details We use mAllTechs member variable which contains all capacity-technologies by vintage from the dispatch sector 
 			to loop through all capacity technology vintages. This method is called in the DispactchSector::Supply method to 
 			add capacity shares of intermittent (i.e. non-dispatchable) technologies to the trial market. This method
-			calls the CapacityTechnology::getCapacity() method whoch does not account for retirements. 
+			calls the CapacityTechnology::getCapacity() method whoch accounts only for natural retirements. 
 			Note that we used "AggregateCapacity" since "TotalCapacity" corresponds to capacity 
 			of a single technology summed across investment segments.
  * \param aRegionName The name of the region.
  * \param aPeriod Model period.
- * \return aggregate capacity which is the total capacity of all capacity vintages within the containing sector.
-	TODO: Account for retirements in capacity calculations.
+ * \return aggregate capacity which is the total capacity of all capacity vintages within the containing sector. This includes natural
+								retirements. 
+	TODO: Account for retirements other than natural retirements (e.g. economic retirements) in capacity calculations.
 	TODO: Pass the vector of capacity to be summed across as an argument. 
  */
 
@@ -470,7 +471,7 @@ double DispatchSector::calcAggregateCapacity(const string& aRegionName, const in
 	
 	double aggregateCapacity = 0;
 	for (auto tech : mAllTechs) {
-		double capacity = dynamic_cast<CapacityTechnology*>(tech)->getCapacity(aPeriod); 
+		double capacity = dynamic_cast<CapacityTechnology*>(tech)->getCapacity(aRegionName, mName, aPeriod);
 		aggregateCapacity += capacity;
 	}
 	return aggregateCapacity;

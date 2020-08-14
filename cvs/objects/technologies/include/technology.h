@@ -349,8 +349,7 @@ protected:
         //! Number of years for which the vintage exists.
         DEFINE_VARIABLE( SIMPLE, "lifetime", mLifetimeYears, int )
 
-        //! Total hack for capacity investment. COmmenting this out since it is replaced by calculations in the InvestmentTechnology class
-      //  DEFINE_VARIABLE( SIMPLE, "total-hack", mTotalHack, bool )
+ 
     )
 
     //! The technology's information store.

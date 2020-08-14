@@ -360,15 +360,29 @@ void CapacityTechnology::acceptDerived( IVisitor* aVisitor, const int aPeriod ) 
 			It is noteworthy that the mCapacity is not exactly capacity in GW terms but instead, it corresponds to generation divided by 
 			capacity factor. The capacity factors used for this calculation correspond to investment-segment-specific capacity factors. 
 			Also note that mCapacity does not include retirement functions in it. So this variable represents total capacity without retirements.
-			Retirements are handled in the calacultion of maxProduction under the CapacityTechnology::tryDispatch() method.
+			Retirements are handled in the calacultion of maxProduction under the CapacityTechnology::tryDispatch() method
+			using the calcProduction() method which is replicated here to account for retirements. For now, this method considers
+			only natural retirements. 
+ * \param aRegionName Name of region.
+ * \param aSectorName Name of sector.
  * \param aPeriod Model period.
-	TODO: Account for retirements in capacity calculations.
+	TODO: Account for retirements other than natural shutdowns (e.g. economic retirements) in capacity calculations.
  */
-double CapacityTechnology::getCapacity(const int aPeriod) {
+double CapacityTechnology::getCapacity(	const const std::string& aRegionName,
+										const std::string& aSectorName,
+										const int aPeriod) const {
+	
 	if (mProductionState[aPeriod]->isOperating()) {
 		
-		return mCapacity;
-
+		MarginalProfitCalculator marginalProfitCalc(this);
+		double effectiveCapacity = mProductionState[aPeriod]->calcProduction(aRegionName,
+			aSectorName,
+			mCapacity,
+			&marginalProfitCalc,
+			1.0,
+			mShutdownDeciders,
+			aPeriod);
+		return effectiveCapacity;
 	}
 	else {
 		return 0.0;
@@ -389,10 +403,11 @@ double CapacityTechnology::getCapacity(const int aPeriod) {
 
 void  CapacityTechnology::addCapacityShareToMarket( double aAggregateCapacity, 
 													const string& aRegionName, 
+													const string& aSectorName,
 													const int aPeriod) {
 if (!mTrialMarketName.empty()) {
 	mIntermitOutTechRatio = 0;
-	mIntermitOutTechRatio = getCapacity(aPeriod) / aAggregateCapacity;
+	mIntermitOutTechRatio = getCapacity( aRegionName, aSectorName, aPeriod ) / aAggregateCapacity;
 	SectorUtils::addToTrialDemand(aRegionName, mTrialMarketName, mIntermitOutTechRatio, aPeriod);
 
 	
