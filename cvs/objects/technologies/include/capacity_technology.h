@@ -92,11 +92,11 @@ public:
 
 	virtual void doInterpolations(const Technology* aPrevTech, const Technology* aNextTech);
 
-	virtual double CapacityTechnology::getCapacity(	const std::string& aRegionName,
+	virtual double getCapacity(	const std::string& aRegionName,
 													const std::string& aSectorName, 
 													const int aPeriod ) const;
 
-	virtual void  CapacityTechnology::addCapacityShareToMarket(double aAggregateCapacity,
+	virtual void  addCapacityShareToMarket(double aAggregateCapacity,
 		const std::string& aRegionName,
 		const std::string& aSectorName,
 		const int aPeriod);

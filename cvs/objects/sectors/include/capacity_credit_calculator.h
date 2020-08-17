@@ -89,7 +89,7 @@ public:
     virtual void toDebugXML( const int aPeriod, std::ostream& aOut, Tabs* aTabs ) const;
     virtual void initCalc( const IInfo* aTechInfo );
     
-    virtual double CapacityCreditCalculator::getCapacityCredit(const std::string& aRegion,
+    virtual double getCapacityCredit(const std::string& aRegion,
 																const std::string& aSector,
 																const int aPeriod) ;
 	
