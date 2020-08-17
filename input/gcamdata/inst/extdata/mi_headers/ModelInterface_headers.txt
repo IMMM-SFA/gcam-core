@@ -787,7 +787,7 @@ TechTrial_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch
 
 TechTrial_investment, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+trial-market-name, scenario, scenario/world
 
-GlobalTechCost_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, period/+is-dispatchable, period/+capacity-market-price, scenario, scenario/world, world/global-technology-database, period/{name=CO2}CO2
+GlobalTechCost_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, period/+capacity-market-price, scenario, scenario/world, world/global-technology-database, period/{name=CO2}CO2
 
 GlobalTechEff_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, period/+{name}minicam-energy-input, minicam-energy-input/+efficiency, scenario, scenario/world, world/global-technology-database, period/{name=CO2}CO2
 

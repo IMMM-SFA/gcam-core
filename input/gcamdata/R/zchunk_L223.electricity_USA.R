@@ -439,53 +439,29 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     ## L223 GlobalTechCost_Investment  capacity credit investment
     # ===========================================================================
 
-    # 1) capacity-market-price：the capital overnight cost of a gas CT in USD/KW for that corresponding period.
-    # All investment-technologies would get the same capacity-market-price.
-    # 2) For wind and solar investment technologies, is-dispatchable = 0, for all others is-dispatchable = 1
-    # 3) CAPITAL_COST_GAS_CT_USD/KW is the capital overnight cost of a gas CT in 1975USD/KW, according to
-    # EIA 2016 data (page 7) (https://www.eia.gov/analysis/studies/powerplants/capitalcost/pdf/capcost_assumption.pdf)
-    # Gas CT is 1101 2016$/kW (~309.8 1975$/kW)
-    # GITODO: 8/7/2020: Updating this value to what's in the datsystem gcamdata\inst\extdata\gcam-usa\A23.globaltech_capital_additional.csv
-    # GITODO: We don't need the is-dispatchable bool any more.
+    # capacity-market-price：the capital overnight cost of a gas CT in 1975USD/KW
+    # use 2015 value
+    gas_CT_cost <- A23.dispatch_globaltech_capital_additional$`2015`[A23.dispatch_globaltech_capital_additional$technology == "gas (CT)"]
 
     calibrated_techs_dispatch_usa %>%
       filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
       select(sector, supplysector, subsector, technology) %>%
       repeat_add_columns(tibble::tibble(year = MODEL_YEARS)) %>%
       mutate(supplysector = sector) %>%
-      mutate(is.dispatchable = ifelse(subsector %in% capacity_credit_calculator$subsector, 0, 1)) %>%
-      mutate(capacity.market.price = 1101.0 * gdp_deflator(1975, 2016)) %>%
-      # GITODO: read this in from the actual file (gcamdata\inst\extdata\gcam-usa\A23.globaltech_capital_additional.csv)
-      mutate(capacity.market.price = 150) %>%
-      select(supplysector, subsector, technology, year, is.dispatchable, capacity.market.price) ->
+      mutate(capacity.market.price = gas_CT_cost) %>%
+      select(supplysector, subsector, technology, year, capacity.market.price) ->
       L223.GlobalTechCost_Investment
 
     # ===========================================================================
     ## L223 GlobalTechCost_CapacityCreditCalulator  capacity credit calculator for non-dispatchable techs
     # ===========================================================================
     L223.GlobalTechCost_Investment %>%
-      filter(is.dispatchable == 0) %>%
+      filter(subsector %in% capacity_credit_calculator$subsector) %>%
       # currently need to create a blank column otherwise the xml structure will be incorrect
       mutate(capacity.credit.calculator = NA) %>%
       left_join_error_no_match(capacity_credit_calculator, by = "subsector") %>%
-      select(-is.dispatchable, -capacity.market.price) ->
-      L223.GlobalTechCost_CapacityCreditCalulator_WindSolar
-
-    # GITODO: We don't need capacity credit calculator for dispatchable technologies.
-    # temp: apply the same values for other technologies
-    L223.GlobalTechCost_Investment %>%
-      filter(is.dispatchable == 1) %>%
-      # currently need to create a blank column otherwise the xml structure will be incorrect
-      mutate(capacity.credit.calculator = NA) %>%
-      rename(subsector_temp = subsector) %>%
-      mutate(subsector = "wind") %>%
-      left_join_error_no_match(capacity_credit_calculator, by = "subsector") %>%
-      select(-is.dispatchable, -capacity.market.price, -subsector) %>%
-      rename(subsector = subsector_temp) ->
-      L223.GlobalTechCost_CapacityCreditCalulator_temp
-
-    L223.GlobalTechCost_CapacityCreditCalulator <- rbind(L223.GlobalTechCost_CapacityCreditCalulator_WindSolar,
-                                                         L223.GlobalTechCost_CapacityCreditCalulator_temp)
+      select(-capacity.market.price) ->
+      L223.GlobalTechCost_CapacityCreditCalulator
 
     # ===========================================================================
     ## L223 TechCapFac_Investment wind/solar capacity factor investment
