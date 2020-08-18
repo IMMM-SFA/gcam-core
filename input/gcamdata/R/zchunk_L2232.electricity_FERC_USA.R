@@ -75,6 +75,7 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
     L132.out_EJ_state_indchp_F <- get_data(all_data, "L132.out_EJ_state_indchp_F")
     L1232.out_EJ_sR_elec <- get_data(all_data, "L1232.out_EJ_sR_elec")
     L102.load_segments <- get_data(all_data, "L102.load_segments_gcamusa")
+
     # This chunk builds the electric sector model with demand resolved at the grid region level.
 
     # A vector of USA grid region names
@@ -160,10 +161,14 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
     # generation, cogeneration, ownuse, and consumption by all sectors
     # to calculate exports, imports, and net supply
 
-    # Generation by grid region
+    # Generation by grid region and segment
     L1232.out_EJ_sR_elec %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
-      select(grid_region, year, generation = value) ->
+      # join will multiply rows by 25 segments
+      # LJENM errors, so left_join() is used
+      left_join(L102.load_segments, by = "grid_region") %>%
+      mutate(generation = value * generation.fraction) %>%
+      select(grid_region, year, segment, generation) ->
       L2232.out_EJ_sR_elec
 
     # Cogeneration is not included in the grid region totals; need to add it here for balance
@@ -172,7 +177,12 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       left_join_error_no_match(select(states_subregions, state, grid_region), by = "state") %>%
       group_by(grid_region, year) %>%
       summarise(cogeneration = sum(value)) %>%
-      ungroup ->
+      ungroup %>%
+      # join will multiply rows by 25 segments
+      # LJENM errors, so left_join() is used
+      left_join(L102.load_segments, by = "grid_region") %>%
+      mutate(cogeneration = cogeneration * generation.fraction) %>%
+      select(grid_region, year, segment, cogeneration) ->
       L2232.out_EJ_sR_indchp_F
 
     # Calculate net own use in each grid region
@@ -185,27 +195,64 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       left_join_error_no_match(select(states_subregions, state, grid_region), by = "state") %>%
       group_by(grid_region, year) %>%
       summarise(ownuse = sum(net_ownuse)) %>%
-      ungroup ->
+      ungroup %>%
+      # join will multiply rows by 25 segments
+      # LJENM errors, so left_join() is used
+      left_join(L102.load_segments, by = "grid_region") %>%
+      mutate(ownuse = ownuse * generation.fraction) %>%
+      select(grid_region, year, segment, ownuse) ->
       L2232.net_EJ_sR_ownuse_elec
 
-    # Comsumption: the sum of all demands in each FERC region, equal to the input to the elect_td sectors
+    # Consumption: the sum of all demands in each FERC region, equal to the input to the elect_td sectors
     L126.in_EJ_state_td_elec %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
       left_join_error_no_match(select(states_subregions, state, grid_region), by = "state") %>%
       group_by(grid_region, year) %>%
       summarise(consumption = sum(value)) %>%
-      ungroup ->
+      ungroup %>%
+      # join will multiply rows by 25 segments
+      # LJENM errors, so left_join() is used
+      left_join(L102.load_segments, by = "grid_region") %>%
+      mutate(consumption = consumption * generation.fraction) %>%
+      select(grid_region, year, segment, consumption) ->
       L2232.in_EJ_sR_td_elec
 
-    # Complie all flows and calculate exports, imports and net supply
+    # Compile all flows and calculate exports, imports and net supply by segment
     L2232.TechShrwt_USAelec %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
-      left_join_error_no_match(L2232.out_EJ_sR_elec, by = c("grid_region", "year")) %>%
-      left_join_error_no_match(L2232.out_EJ_sR_indchp_F, by = c("grid_region", "year")) %>%
-      left_join_error_no_match(L2232.net_EJ_sR_ownuse_elec, by = c("grid_region", "year")) %>%
-      left_join_error_no_match(L2232.in_EJ_sR_td_elec, by = c("grid_region", "year")) %>%
+      # add in segment detail; join will multiply rows by 25 segments
+      # LJENM errors, so left_join() is used
+      left_join(L102.load_segments %>%
+                  select(grid_region, segment),
+                by = "grid_region") %>%
+      left_join_error_no_match(L2232.out_EJ_sR_elec, by = c("grid_region", "year", "segment")) %>%
+      left_join_error_no_match(L2232.out_EJ_sR_indchp_F, by = c("grid_region", "year", "segment")) %>%
+      left_join_error_no_match(L2232.net_EJ_sR_ownuse_elec, by = c("grid_region", "year", "segment")) %>%
+      left_join_error_no_match(L2232.in_EJ_sR_td_elec, by = c("grid_region", "year", "segment")) %>%
       # Calculate net exports: generation + cogeneration - ownuse - consumption
       mutate(net.exports = generation + cogeneration - ownuse - consumption,
+             # Split net exports into gross imports and exports:
+             # When net exports are positive, exports equal net exports, and imports are zero;
+             # When net exports are negative, imports equal minus net exports, and exports are zero
+             imports = pmax(0, -1 * net.exports),
+             exports = pmax(0, net.exports),
+             # Calculate consumption from domestic sources: total consumption minus gross imports
+             net.supply = consumption - imports) %>%
+      # test whether imports and exports balance out at segment level
+      group_by(year, segment) %>%
+      mutate(segment_exports = sum(exports),
+             segment_imports = sum(imports),
+             segment_net = segment_exports - segment_imports,
+             # calculate share of segment generation by grid region
+             seg_gen_share = generation / sum(generation),
+             # divide the trade imbalance among grid regions according to their generation shares
+             ownuse_adj = segment_net * seg_gen_share) %>%
+      ungroup() %>%
+      # adjust ownuse to balance out discrepancies in trade by load segment (minor adjustments)
+      # NOTE:  this will impact net ownuse coefficient
+      mutate(new_ownuse = ownuse + ownuse_adj) %>%
+      # recalculate imports & exports
+      mutate(net.exports = generation + cogeneration - new_ownuse - consumption,
              # Split net exports into gross imports and exports:
              # When net exports are positive, exports equal net exports, and imports are zero;
              # When net exports are negative, imports equal minus net exports, and exports are zero
@@ -221,6 +268,9 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
              share.weight.year = year,
              tech.share.weight = if_else(calOutputValue == 0, 0, 1)) %>%
       set_subsector_shrwt() %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_"),
+             technology = paste(technology, segment, sep = "_")) %>%
       select(LEVEL2_DATA_NAMES[["Production"]]) ->
       L2232.Production_exports_USAelec
 
@@ -300,13 +350,16 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
     # L2232.TechCoef_elecownuse_FERC: own use coefficients in the grid regions
     L2232.elec_flows_FERC %>%
       # Own use coefficients are total generation divided by total generation minus own use
-      mutate(ownuse_coef = (generation + cogeneration) / (generation + cogeneration - ownuse)) ->
+      mutate(ownuse_coef = (generation + cogeneration) / (generation + cogeneration - ownuse),
+             ownuse_coef = round(ownuse_coef, energy.DIGITS_COEFFICIENT)) ->
       L2232.elec_flows_FERC
 
     A232.FERCstructure %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       filter(supplysector == "electricity_net_ownuse") %>%
-      left_join(select(L2232.elec_flows_FERC, grid_region, year, coefficient = ownuse_coef),
+      # LJENM errors because RHS only contains MODEL_BASE_YEARS
+      # future years are filled with final base year values, below; left_join() is used
+      left_join(distinct(L2232.elec_flows_FERC, grid_region, year, coefficient = ownuse_coef),
                 by = c("region" = "grid_region", "year")) %>%
       group_by(region) %>%
       # Set future year own use coefficients the same as the base year coefficients
@@ -317,27 +370,42 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
 
     # L2232.Production_imports_FERC: calibrated electricity imports (from USA region)
     L2232.TechCoef_elec_FERC %>%
-      filter(year %in% MODEL_BASE_YEARS, market.name == gcam.USA_REGION) %>%
-      left_join_error_no_match(select(L2232.elec_flows_FERC, grid_region, year, imports),
-                               by = c("region" = "grid_region", "year")) %>%
+      filter(year %in% MODEL_BASE_YEARS,
+             market.name == gcam.USA_REGION) %>%
+      # join duplicates rows because each entry is multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(L2232.elec_flows_FERC %>%
+                  select(grid_region, segment, year, imports),
+                by = c("region" = "grid_region", "year")) %>%
       mutate(calOutputValue = round(imports, digits = energy.DIGITS_CALOUTPUT),
              share.weight.year = year,
              tech.share.weight = if_else(calOutputValue == 0, 0, 1)) %>%
       set_subsector_shrwt() %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_"),
+             technology = paste(technology, segment, sep = "_")) %>%
       select(LEVEL2_DATA_NAMES[["Production"]]) ->
       L2232.Production_imports_FERC
 
     # L2232.Production_elec_gen_FERC: calibrated net electricity generation (from within grid region)
     L2232.TechCoef_elec_FERC %>%
-      filter(year %in% MODEL_BASE_YEARS, market.name != gcam.USA_REGION) %>%
-      left_join_error_no_match(select(L2232.elec_flows_FERC, grid_region, year, net.supply),
-                               by = c("region" = "grid_region", "year")) %>%
+      filter(year %in% MODEL_BASE_YEARS,
+             market.name != gcam.USA_REGION) %>%
+      # join duplicates rows because each entry is multiplied by 25 load segments
+      # LJENM throws an error, so left_join() is used
+      left_join(L2232.elec_flows_FERC %>%
+                  select(grid_region, segment, year, net.supply),
+                by = c("region" = "grid_region", "year")) %>%
       mutate(calOutputValue = round(net.supply, digits = energy.DIGITS_CALOUTPUT),
              share.weight.year = year,
              tech.share.weight = if_else(calOutputValue == 0, 0, 1)) %>%
       set_subsector_shrwt() %>%
+      mutate(supplysector = paste(supplysector, segment, sep = "_"),
+             subsector = paste(subsector, segment, sep = "_"),
+             technology = paste(technology, segment, sep = "_")) %>%
       select(LEVEL2_DATA_NAMES[["Production"]]) ->
       L2232.Production_elec_gen_FERC
+
 
     # PART 3: THE STATES
     #-----------------------------------------------------------------------------
@@ -422,20 +490,6 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       select(-segment) ->
       L2232.TechCoef_USAelec
 
-    L2232.Production_exports_USAelec %>%
-      mutate(grid_region = gsub(" electricity trade", "", technology)) %>%
-      # join duplicates rows because electricity trade technologies are multiplied by 25 load segments
-      # LJENM throws an error, so left_join() is used
-      left_join(segStates %>%
-                  distinct(segment, grid_region, generation.fraction),
-                by = "grid_region") %>%
-      mutate(calOutputValue = calOutputValue * generation.fraction,
-             supplysector = paste(supplysector, segment, sep = "_"),
-             subsector = paste(subsector, segment, sep = "_"),
-             technology = paste(technology, segment, sep = "_")) %>%
-      select(-segment, -generation.fraction, -grid_region) ->
-      L2232.Production_exports_USAelec
-
     L2232.Supplysector_elec_FERC  %>%
       # join duplicates rows because each entry is multiplied by 25 load segments
       # LJENM throws an error, so left_join() is used
@@ -516,31 +570,6 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       select(-segment) ->
       L2232.TechCoef_elecownuse_FERC
 
-    L2232.Production_imports_FERC %>%
-      # join duplicates rows because each entry is multiplied by 25 load segments
-      # LJENM throws an error, so left_join() is used
-      left_join(segStates %>%
-                  distinct(grid_region, segment, generation.fraction),
-                by = c("region" = "grid_region")) %>%
-      mutate(calOutputValue = calOutputValue * generation.fraction,
-             supplysector = paste(supplysector, segment, sep = "_"),
-             subsector = paste(subsector, segment, sep = "_"),
-             technology = paste(technology, segment, sep = "_")) %>%
-      select(-segment, -generation.fraction)->
-      L2232.Production_imports_FERC
-
-    L2232.Production_elec_gen_FERC %>%
-      # join duplicates rows because each entry is multiplied by 25 load segments
-      # LJENM throws an error, so left_join() is used
-      left_join(segStates %>%
-                  distinct(grid_region, segment, generation.fraction),
-                by = c("region" = "grid_region")) %>%
-      mutate(calOutputValue = calOutputValue * generation.fraction,
-             supplysector = paste(supplysector, segment, sep = "_"),
-             subsector = paste(subsector, segment, sep = "_"),
-             technology = paste(technology, segment, sep = "_")) %>%
-      select(-segment, -generation.fraction) ->
-      L2232.Production_elec_gen_FERC
 
     # Produce outputs
     L2232.DeleteSupplysector_USAelec %>%

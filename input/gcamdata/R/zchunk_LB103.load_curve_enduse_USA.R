@@ -180,15 +180,35 @@ module_gcamusa_LB103.load_curve_enduse_USA <- function(command, ...) {
 
     # Calculate generation fraction
     L103.load_segments_sector_Comb %>%
-      group_by(grid_region,sector) %>%
-      mutate(sumGen=sum(generation),
-             generation.fraction = generation/sumGen) %>%
+      group_by(grid_region, sector) %>%
+      mutate(sumGen = sum(generation),
+             generation.fraction = generation / sumGen) %>%
       ungroup() %>%
-      select(-generation, -sumGen) %>%
       mutate(month = factor(month, levels = gcamusa.MONTH_ORDER),
              segment = factor(segment, levels = gcamusa.ELEC_LOAD_SEGMENT_ORDER)) %>%
-      select(-month) ->
+      # we need supply and demand load curves to match up, which they currently do not
+      # scale total segment demands to match generation by grid region
+      # calculate total segment generation
+      group_by(grid_region, segment) %>%
+      mutate(segment_gen = sum(generation)) %>%
+      ungroup() %>%
+      # calculate segment fraction of total generation
+      group_by(grid_region) %>%
+      mutate(L103_seg_frac = segment_gen / sum(generation)) %>%
+      ungroup() %>%
+      # join in L102 segments
+      left_join_error_no_match(L102.load_segments %>%
+                                 select(grid_region, segment, L102_seg_frac = generation.fraction),
+                               by = c("grid_region", "segment")) %>%
+      # scale generation by relative segment fractions
+      mutate(generation = generation * (L102_seg_frac / L103_seg_frac)) %>%
+      group_by(grid_region, sector) %>%
+      mutate(sumGen = sum(generation),
+             generation.fraction = generation / sumGen) %>%
+      ungroup() %>%
+      select(grid_region, sector, segment, hours, generation.fraction)->
       L103.load_segments_sector
+
 
     # Produce outputs
     L103.load_segments_sector %>%

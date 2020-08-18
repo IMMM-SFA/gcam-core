@@ -193,8 +193,8 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
       select(grid_region, segment, nontherm_LC) ->
       L2441.nonthermal_load_curve
 
-    # Since we will be circumventing the elect_td_bld sector for simplicity we need to adjust
-    # for the non-thermal technologies we will replace the one elect_td_bld with one for each
+    # Since we will be circumventing the elect_td_bld sector for simplicity we need to adjust.
+    # For the non-thermal technologies we will replace the one elect_td_bld with one for each
     # segment with the coefficients adjusted by the load curve which we calculate here.
     L2441.nonthermal_load_curve %>%
       mutate(minicam.energy.input = paste0("electricity domestic supply_", segment)) %>%
@@ -216,7 +216,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     # Downscale base service to segment
     L244.ThermalBaseService %>%
       # using left join as we expect the number of rows to change by the
-      # number of years in the model calibration years
+      # number of segments
       left_join(L2441.DD_segments_rel, by=c("region" = "state", "thermal.building.service.input" = "s2")) %>%
       mutate(thermal.building.service.input = s3,
              base.service = base.service * rel) %>%
@@ -228,13 +228,14 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     # between segments.  However, it typically also has "scale" mixed into the calibration
     # which we do not want here.  So we use an alternative calibration approach where we
     # have normalized the satiation demand function portion to be beween 0 and 1 where 0
-    # indicates to heating/cooling and 1 indicates heat/cool all the wat to the "set point"
+    # indicates no heating/cooling and 1 indicates heat/cool all the way to the "set point"
     # 100% of the time.  The rest of the scale calibration will be pulled into the coefficient
     # during calibration (i.e. only calibrating one parameter instead of two).
 
     # The assymptote value is then always 1
-    L244.ThermalServiceSatiation %>%
-      left_join_error_no_match(L2441.DD_segments_rel, ., by=c("state" = "region", "s2" = "thermal.building.service.input")) %>%
+    L2441.DD_segments_rel %>%
+      left_join_error_no_match(L244.ThermalServiceSatiation,
+                               by = c("state" = "region", "s2" = "thermal.building.service.input")) %>%
       rename(region = state) %>%
       mutate(thermal.building.service.input = s3,
              satiation.level = satiation.level * rel,
@@ -293,8 +294,9 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
       L2441.ThermalDefaultCoef
 
     # copy internal gains coefficient to new segmented thermal services
-    L244.Intgains_scalar %>%
-      left_join_error_no_match(L2441.DD_segments_rel, ., by=c("state" = "region", "s2" = "thermal.building.service.input")) %>%
+    L2441.DD_segments_rel %>%
+      left_join_error_no_match(L244.Intgains_scalar,
+                               by = c("state" = "region", "s2" = "thermal.building.service.input")) %>%
       rename(region = state) %>%
       mutate(thermal.building.service.input = s3,
              # TODO: internal gains when there should be no service?
@@ -408,21 +410,23 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
     L244.StubTechCalInput_bld %>%
       filter(supplysector %in% thermal_services) %>%
       # using left join as we are expanding by segments
-      left_join(L2441.DD_segments_rel, by=c("region" = "state", "supplysector" = "s2")) %>%
+      left_join(L2441.DD_segments_rel, by = c("region" = "state", "supplysector" = "s2")) %>%
       mutate(supplysector = s3,
              # need to update electricity input names, other fuels should not change
-             minicam.energy.input = if_else(minicam.energy.input == "elect_td_bld", paste0("electricity domestic supply_", segment), minicam.energy.input),
+             minicam.energy.input = if_else(minicam.energy.input == "elect_td_bld",
+                                            paste0("electricity domestic supply_", segment),
+                                            minicam.energy.input),
              # In principal just scale the value by the curve but the idea is make sure a
              # segment which was zero in the final historical year can have service in the
              # future. The idea here is the sector will be driven by zero demand so if we read
              # calibation values it will still calibrate the right share-weights AND not
              # produce incorrect total demands.
              # TODO: here originally use max, not sure why at some point changed into pmax
-             calibrated.value = calibrated.value * max(rel, 1e-10),
-             # subs.share.weight = if_else(calibrated.value == 0, 0, 1),
-             # tech.share.weight = subs.share.weight) %>%
-            subs.share.weight = 1,
-            tech.share.weight = if_else(calibrated.value == 0, 0, 1)) %>%
+             calibrated.value = calibrated.value * pmax(rel, 1e-10),
+             tech.share.weight = if_else(calibrated.value == 0, 0, 1)) %>%
+      group_by(region, supplysector, subsector, year, minicam.energy.input) %>%
+      mutate(subs.share.weight = max(tech.share.weight)) %>%
+      ungroup() %>%
       # Set the appropriate names and adjust the efficiency for losses given we are by passing
       # the elec_td sector.  Note, we use left_join as the non-electricity inputs will
       # be NA but that is ok since we don't need to update those.
