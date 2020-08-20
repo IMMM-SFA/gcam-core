@@ -88,6 +88,7 @@ bool DispatchSector::XMLDerivedClassParse( const string& aNodeName, const DOMNod
         DispatchSegment* currSeg = new DispatchSegment;
         currSeg->mName = XMLHelper<string>::getAttr( aNode, "name" );
         currSeg->mDemandSegmentName = XMLHelper<string>::getAttr( aNode, "demand-segment-name" );
+        currSeg->mInvestmentSegmentName = XMLHelper<string>::getAttr( aNode, "investment-segment-name" );
         currSeg->mHours = XMLHelper<double>::getAttr( aNode, "hours" );
         currSeg->mRelativeGen = XMLHelper<double>::getAttr( aNode, "relative-generation" );
         currSeg->mTotalGenFraction = XMLHelper<double>::getAttr( aNode, "generation-fraction" );
@@ -109,7 +110,7 @@ void DispatchSector::toInputXMLDerived( ostream& aOut, Tabs* aTabs ) const {
 
 void DispatchSector::toDebugXMLDerived( const int aPeriod, ostream& aOut, Tabs* aTabs ) const {
     toInputXMLDerived( aOut, aTabs );
-    XMLWriteElement( mNewCapacity, "new-capacity", aOut, aTabs );
+    //XMLWriteElement( mNewCapacity, "new-capacity", aOut, aTabs );
     XMLWriteElement( mExistingCapacity[ aPeriod ], "existing-capacity", aOut, aTabs );
     XMLWriteElement( mRequiredCapacity[ aPeriod ], "required-capacity", aOut, aTabs );
 	XMLWriteElement(mAggregateCapacity, "aggregate-capacity", aOut, aTabs);
@@ -132,14 +133,20 @@ void DispatchSector::completeInit( const IInfo* aRegionInfo,
     
     MarketDependencyFinder* depFinder = scenario->getMarketplace()->getDependencyFinder();
     if(mSubsectors.empty()) {
-    depFinder->addDependency( "capacity investment", mRegionName, "capacity investment", mRegionName );
+    //depFinder->addDependency( "capacity investment", mRegionName, "capacity investment", mRegionName );
         Marketplace* marketplace = scenario->getMarketplace();
+        sort( mDispatchSegments.begin(), mDispatchSegments.end(), [&]( DispatchSegment* aLHS, DispatchSegment* aRHS ) -> bool {
+            return aLHS->mRelativeGen < aRHS->mRelativeGen;
+        });
         set<string> demandSegmentNames;
         for(auto dispSegment : mDispatchSegments) {
             if(demandSegmentNames.find(dispSegment->mDemandSegmentName) == demandSegmentNames.end()) {
                 DemandSegment* newDmdSegment = new DemandSegment(dispSegment->mDemandSegmentName);
                 mDemandSegments.push_back(newDmdSegment);
                 demandSegmentNames.insert(dispSegment->mDemandSegmentName);
+            }
+            if(dispSegment->mInvestmentSegmentName != "") {
+                depFinder->addDependency(dispSegment->mInvestmentSegmentName, mRegionName, dispSegment->mInvestmentSegmentName, mRegionName);
             }
         }
         for(auto segment : mDemandSegments) {
@@ -298,72 +305,103 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         double totalElecDemand = 0.0;
         //if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod() ) {
             for( auto segment : mDemandSegments ) {
-                totalElecDemand += marketplace->getDemand( segment->mName, mRegionName, aPeriod );
+                totalElecDemand += std::max(marketplace->getDemand( segment->mName, mRegionName, aPeriod ), util::getVerySmallNumber());
             }
         //}
         auto sortedTechs = mAllTechs;
+        map<ITechnology*, double> techEnergyCostCache;
+        map<ITechnology*, double> techProd;
+        for( auto tech : mAllTechs ) {
+            auto techMarket = mAllTechMarketMap[ tech ];
+            techEnergyCostCache[ tech ] = tech->getEnergyCost( techMarket.second, techMarket.first, aPeriod );
+            techProd[ tech ] = 0.0;
+        }
         sort( sortedTechs.begin(), sortedTechs.end(), [&]( ITechnology* aLHS, ITechnology* aRHS ) -> bool {
+            /*
             auto lhsMarket = mAllTechMarketMap[ aLHS ];
             auto rhsMarket = mAllTechMarketMap[ aRHS ];
             return aLHS->getEnergyCost( lhsMarket.second, lhsMarket.first, aPeriod ) < aRHS->getEnergyCost( rhsMarket.second, rhsMarket.first, aPeriod );
+             */
+            return techEnergyCostCache[ aLHS ] < techEnergyCostCache[ aRHS ];
         });
-        
-        map<ITechnology*, double> techProd;
-        for( auto tech : sortedTechs ) {
-            techProd[ tech ] = 0.0;
-        }
         
         const double HOURS_IN_YEAR = 8760.0;
         const double RESERVE_FRACTION = 1.15;
         int currYear = scenario->getModeltime()->getper_to_yr( aPeriod );
-        double maxExistingCapacity = 0.0;
-        double maxRequiredCapacity = 0.0;
-        double capacityPrice = marketplace->getPrice( "capacity investment" , mRegionName, aPeriod );
+        double remainingHours = HOURS_IN_YEAR;
+        //double maxExistingCapacity = 0.0;
+        //double maxRequiredCapacity = 0.0;
+        double totalNewInvest = 0.0;
+        double capacityPrice = 2.5;//marketplace->getPrice( "capacity investment" , mRegionName, aPeriod );
         double avgCost = 0.0;
+        double actualProduction = 0.0;
         for( auto demandSegment : mDemandSegments ) {
                         const string segmentMarketName = demandSegment->mName;
         for( auto segment : mDispatchSegments ) {
             if(segment->mDemandSegmentName == segmentMarketName) {
-            double segmentDemand = marketplace->getDemand(segmentMarketName, mRegionName, aPeriod);
+                double segmentDemand = std::max(marketplace->getDemand(segmentMarketName, mRegionName, aPeriod), util::getVerySmallNumber());
             double remainingProduction = segmentDemand * segment->mTotalGenFraction;
             double segmentScaleFraction = segment->mHours / HOURS_IN_YEAR;
-            if( segment->mRelativeGen == 1.0 ) {
+            /*if( segment->mRelativeGen == 1.0 ) {
                 maxRequiredCapacity = ( remainingProduction / segmentScaleFraction ) * RESERVE_FRACTION;
-            }
+            }*/
             if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod() ) {
                 remainingProduction = totalElecDemand * 1.0 / mDemandSegments.size();
                 segmentScaleFraction = 1.0 / mDemandSegments.size();
             }
+                bool isInvestSegment = !segment->mInvestmentSegmentName.empty();
+                double investNewCost = isInvestSegment ? marketplace->getPrice(segment->mInvestmentSegmentName, mRegionName, aPeriod) : 0.0;
+                double currMaxInvestCap = ( remainingProduction / segmentScaleFraction ) * RESERVE_FRACTION;
+                double currExistCap = 0.0;
+
 
             for( auto tech : sortedTechs) {
                 auto techMarket = mAllTechMarketMap[ tech ];
                 tuple<ITechnology*, string, string> currSave = make_tuple( tech, segment->mName, techMarket.second );
-                double maxProduction = dynamic_cast<CapacityTechnology*>( tech )->tryDispatch( techMarket.second, techMarket.first, segment->mName, remainingProduction, segmentScaleFraction, aPeriod );
-                double currProduction = std::min( remainingProduction, maxProduction );
+                double maxProduction = dynamic_cast<CapacityTechnology*>( tech )->tryDispatch( techMarket.second, techMarket.first, segment->mName, remainingProduction, segmentScaleFraction, remainingHours / HOURS_IN_YEAR, techProd[ tech ], aPeriod );
+                double currProduction = std::max(std::min( remainingProduction, maxProduction ), 0.0);
                 mSaveTechCurve[ aPeriod ][currSave] = currProduction;
                 techProd[ tech ] += currProduction;
+                actualProduction += currProduction;
                 //bool wasRemainng = remainingProduction > 0.0;
                 remainingProduction -= currProduction;
                 /*if( wasRemainng && remainingProduction == 0.0 ) {
                     avgCost += tech->getEnergyCost( mRegionName, mName, aPeriod ) * segment.mHours;
                 }*/
-                avgCost += tech->getEnergyCost( mRegionName, mName, aPeriod ) * currProduction;
-                if( segment->mRelativeGen == 1.0 && tech->getYear() < currYear ) {
+                avgCost += techEnergyCostCache[ tech ] * currProduction;
+                /*if( segment->mRelativeGen == 1.0 && tech->getYear() < currYear ) {
                     maxExistingCapacity += maxProduction / segmentScaleFraction;
+                }*/
+                if( isInvestSegment && tech->getYear() < currYear /*&& tech->getCost(aPeriod) <= investNewCost*/) {
+                    currExistCap += dynamic_cast<CapacityTechnology*>( tech )->calcInvestmentCapacityScaleFactor( investNewCost, aPeriod ) * maxProduction / segmentScaleFraction;
                 }
             }
             if( remainingProduction != 0.0 ) {
                 //cout << "Remaining production in segment: " << remainingProduction << " in " << mRegionName << ", " << mName << ", " << segment.mName << endl;
                 //avgCost += sortedTechs.back()->getEnergyCost( mRegionName, mName, aPeriod ) * segment.mHours;
             }
+                if( isInvestSegment ) {
+                    /*if(mRegionName == "Texas grid") {
+                        cout << segment->getName() << " " << totalNewInvest << " " << currMaxInvestCap << " " << currExistCap << endl;
+                    }*/
+                    double currNewInvest = aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() ? std::max( currMaxInvestCap - currExistCap - totalNewInvest , 2 * util::getSmallNumber() ) : 0.0;
+                    totalNewInvest += currNewInvest;
+                    segment->getNewInvestment() = currNewInvest;
+                    marketplace->addToDemand( segment->mInvestmentSegmentName, mRegionName, segment->getNewInvestment(), aPeriod );
+                }
+                remainingHours -= segment->mHours;
 
             }
         }
         }
+        /*if(actualProduction != totalElecDemand) {
+            cout << actualProduction << " != " << totalElecDemand << " in " << mRegionName << endl;
+        }*/
         avgCost = avgCost / totalElecDemand + capacityPrice;
+        marketplace->setPrice( mName, mRegionName, avgCost, aPeriod );
         for( auto segment : mDemandSegments ) {
             segment->getCost() = avgCost;
-            const string segmentMarketName = /*mName+"_"+*/segment->mName;
+            const string segmentMarketName = segment->mName;
             marketplace->setPrice( segmentMarketName, mRegionName, avgCost, aPeriod );
         }
         //double remainingProduction = marketDemand;
@@ -381,8 +419,8 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         /*if( remainingProduction != 0.0 ) {
             //cout << "Remaining production: " << remainingProduction << " in " << mRegionName << ", " << mName << endl;
         }*/
-        mExistingCapacity = maxExistingCapacity;
-        mRequiredCapacity = maxRequiredCapacity;
+        /*mExistingCapacity = maxExistingCapacity;
+        mRequiredCapacity = maxRequiredCapacity;*/
 
         /*avgCost = ( marketDemand == 0.0 ? avgCost : avgCost / marketDemand )
             + marketplace->getPrice( "capacity investment" , mRegionName, aPeriod );
@@ -390,8 +428,8 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         mSupply = marketDemand;// - remainingProduction;
         marketplace->setPrice( mName, mRegionName, avgCost, aPeriod );
         marketplace->addToSupply( mName, mRegionName, mSupply, aPeriod );*/
-        mNewCapacity = aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() ? std::max( maxRequiredCapacity - maxExistingCapacity , 0.0 ) : 0.0;
-        marketplace->addToDemand( "capacity investment", mRegionName, mNewCapacity, aPeriod );
+        //mNewCapacity = aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() ? std::max( maxRequiredCapacity - maxExistingCapacity , 0.0 ) : 0.0;
+        //marketplace->addToDemand( "capacity investment", mRegionName, mNewCapacity, aPeriod );
     
 
 }

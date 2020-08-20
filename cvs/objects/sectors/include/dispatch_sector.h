@@ -113,12 +113,26 @@ protected:
     };
     
     class DispatchSegment : public INamed {
+    protected:
+        DEFINE_DATA(
+                    DEFINE_SUBCLASS_FAMILY( DispatchSegment ),
+                    
+                    /*DEFINE_VARIABLE( SIMPLE, "name", mName, std::string ),
+                     DEFINE_VARIABLE( SIMPLE, "hours", mHours, double),
+                     DEFINE_VARIABLE( SIMPLE, "relative-gen", mRelativeGen, double),
+                     DEFINE_VARIABLE( SIMPLE, "total-gen-fraction", mTotalGenFraction, double),*/
+                    DEFINE_VARIABLE( SIMPLE | STATE, "new-investment", mNewCapacity, Value)
+                    )
     public:
         virtual const std::string& getName() const {
             return mName;
         }
+        Value& getNewInvestment() {
+            return mNewCapacity;
+        }
         std::string mName;
         std::string mDemandSegmentName;
+        std::string mInvestmentSegmentName;
          double mHours;
          double mRelativeGen;
          double mTotalGenFraction;
@@ -137,13 +151,13 @@ protected:
 
         DEFINE_VARIABLE( CONTAINER, "demand-segment", mDemandSegments, std::vector<DemandSegment*> ),
                             
-        DEFINE_VARIABLE( SIMPLE, "dispatch-segment", mDispatchSegments, std::vector<DispatchSegment*> ),
+        DEFINE_VARIABLE( CONTAINER, "dispatch-segment", mDispatchSegments, std::vector<DispatchSegment*> ),
                             
         //! Helper to set supply = demand
-        DEFINE_VARIABLE( SIMPLE | STATE, "supply-state", mSupply, Value ),
+        DEFINE_VARIABLE( SIMPLE | STATE, "supply-state", mSupply, Value )
     
         //! New capacity to add
-        DEFINE_VARIABLE( SIMPLE | STATE, "new-capacity", mNewCapacity, Value )
+        //DEFINE_VARIABLE( SIMPLE | STATE, "new-capacity", mNewCapacity, Value )
     )
     
     std::vector<ITechnology*> mAllTechs;

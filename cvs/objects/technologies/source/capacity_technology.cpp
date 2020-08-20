@@ -112,6 +112,10 @@ bool CapacityTechnology::XMLDerivedClassParse(const string& aNodeName, const DOM
 		mCapacityMarketName = XMLHelper<string>::getValue(aCurrNode);
 		success = true;
 	}
+    else if( aNodeName == "min-capacity-factor" ) {
+        mMinCapFac = XMLHelper<double>::getValue( aCurrNode );
+        success = true;
+    }
 	return success;
 }
 
@@ -243,6 +247,20 @@ void CapacityTechnology::initCalc(const string& aRegionName,
 			aRegionName, 0, 1, aPeriod);
 	}
 
+
+    if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && mProductionState[ aPeriod - 1 ]->isOperating() && ( mOutputs[0]->getPhysicalOutput( aPeriod -1) / mCapacity) == 0.0 ) {
+        delete mProductionState[ aPeriod];
+        mProductionState[ aPeriod] = ProductionStateFactory::create(mYear, 0, mFixedOutput, 0.0, aPeriod).release();
+    }
+    else if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && !mProductionState[ aPeriod - 1 ]->isOperating() && mProductionState[ aPeriod ]->isOperating() ) {
+        delete mProductionState[ aPeriod];
+        mProductionState[ aPeriod] = ProductionStateFactory::create(mYear, 0, mFixedOutput, 0.0, aPeriod).release();
+    }
+}
+
+double CapacityTechnology::getEnergyCost( const string& aRegionName, const string& aSectorName, const int aPeriod ) const {
+    return Technology::getEnergyCost( aRegionName, aSectorName, aPeriod ) * mPMultiplier -
+        calcSecondaryValue(aRegionName, aPeriod);
 }
 
 /*! \brief Calculates the output of the technology.
@@ -284,8 +302,13 @@ double CapacityTechnology::tryDispatch( const string& aRegionName,
                                         const string& aDemandSegment,
                                         const double aVariableDemand,
                                         const double aSegmentScaleFactor,
+                                        const double aPercentRemainHours,
+                                        const double aPriorDispatch,
                                         const int aPeriod )
 {
+    if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && aPriorDispatch == 0.0 && aPercentRemainHours < ( mMinCapFac ) ) {
+        return 0.0;
+    }
     MarginalProfitCalculator marginalProfitCalc( this );
     double maxProduction = mProductionState[ aPeriod ]->calcProduction( aRegionName,
                                                                         aSectorName,
@@ -304,6 +327,21 @@ double CapacityTechnology::tryDispatch( const string& aRegionName,
     }
 
     return maxProduction * effectiveCapacityFactor / mCapacityFactor;
+}
+
+double CapacityTechnology::calcInvestmentCapacityScaleFactor( const double aNewInvestCost, const int aPeriod ) const {
+    const double mMaxShutdown = 1.0;
+    const double mSteepness = 10.0;
+    const double mMedianShutdownPoint = -0.1;
+    // Compute Shutdown factor using logistic S-curve.  ScaleFactor that is returned
+    // is actually the fraction not shut down, so it is 1.0 - the shutdown fraction.
+    double investCreditAdjCost = getCost(aPeriod) ;//+ 1.25;
+    double profitRate = std::max( (aNewInvestCost - investCreditAdjCost)/( fabs(investCreditAdjCost) + util::getVerySmallNumber() ), -1.0);
+    const double midPointToSteepness = pow( mMedianShutdownPoint + 1, mSteepness );
+    double scaleFactor = 1.0 - mMaxShutdown * ( midPointToSteepness /
+                                        ( midPointToSteepness + pow( profitRate + 1, mSteepness ) ) );
+    //cout << getName() << " " << getYear() << " " << aNewInvestCost << " " << investCreditAdjCost << " " << profitRate << " " << scaleFactor << endl;
+    return scaleFactor;
 }
 
 void CapacityTechnology::setProductionState( const int aPeriod ) {

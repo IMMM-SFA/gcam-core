@@ -74,6 +74,10 @@ public:
 		const Demographic* aDemographics,
 		PreviousPeriodInfo& aPrevPeriodInfo,
 		const int aPeriod);
+    
+    virtual double getEnergyCost( const std::string& aRegionName,
+                                  const std::string& aSectorName,
+                                  const int aPeriod ) const;
 
 	virtual void production(const std::string& aRegionName,
 		const std::string& aSectorName,
@@ -84,7 +88,10 @@ public:
     
     double tryDispatch( const std::string& aRegionName, const std::string& aSectorName,
                         const std::string& aDemandSegment, const double aVariableDemand,
-                        const double aSegmentScaleFactor, const int aPeriod );
+                        const double aSegmentScaleFactor, const double aPercentRemainHours,
+                        const double aPriorDispatch, const int aPeriod );
+    
+    double calcInvestmentCapacityScaleFactor( const double aNewInvestCost, const int aPeriod ) const;
     
     virtual double getCalibrationOutput( const bool aHasRequiredInput,
                                          const std::string& aRequiredInput,
@@ -120,8 +127,9 @@ protected:
         DEFINE_VARIABLE( SIMPLE, "segment-capacity-factor", mSegCapFac, std::map<std::string, double> ),
 
 		//! State value necessary to track tech output ration
-		DEFINE_VARIABLE(SIMPLE | STATE, "tech-output-ratio", mIntermitOutTechRatio, Value)
-
+		DEFINE_VARIABLE(SIMPLE | STATE, "tech-output-ratio", mIntermitOutTechRatio, Value),
+   
+        DEFINE_VARIABLE( SIMPLE , "min-capacity-factor", mMinCapFac, Value )
     )
 
 	virtual void toInputXMLDerived(std::ostream& out, Tabs* tabs) const;
