@@ -70,6 +70,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              FILE = "gcam-usa/A23.dispatch_globaltech_shrwt_additional",
              FILE = "gcam-usa/calibrated_techs_dispatch_usa",
              FILE = "gcam-usa/dispatch/capacity_credit_calculator",
+             FILE = "gcam-usa/dispatch/TechTrialMarket_mapping",
              "L120.RsrcCurves_EJ_R_offshore_wind_USA",
              "L120.RegCapFactor_offshore_wind_USA",
              "L120.GridCost_offshore_wind_USA"))
@@ -180,6 +181,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     A23.dispatch_globaltech_shrwt_additional <- get_data(all_data, "gcam-usa/A23.dispatch_globaltech_shrwt_additional")
     calibrated_techs_dispatch_usa <- get_data(all_data, "gcam-usa/calibrated_techs_dispatch_usa")
     capacity_credit_calculator <- get_data(all_data, "gcam-usa/dispatch/capacity_credit_calculator")
+    TechTrialMarket_mapping <- get_data(all_data, "gcam-usa/dispatch/TechTrialMarket_mapping")
 
     L120.RsrcCurves_EJ_R_offshore_wind_USA <- get_data(all_data, "L120.RsrcCurves_EJ_R_offshore_wind_USA")
     L120.RegCapFactor_offshore_wind_USA <- get_data(all_data, "L120.RegCapFactor_offshore_wind_USA")
@@ -547,8 +549,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # ===========================================================================
     ## L223.TechCoef_Investment_StateShare technology coefficients
     # ===========================================================================
-
-    # TODO: check whether here the technology is named as "new"
 
     L223.SubsectorShrwtFllt_Investment_StateShare %>%
       select(region, supplysector, subsector) %>%
@@ -982,11 +982,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechShrwt_Dispatch %>%
       filter(subsector %in% capacity_credit_calculator$subsector) %>%
       left_join_error_no_match(select(states_subregions, state, grid_region), by = c("region" = "state")) %>%
-      mutate(trial.market.name = subsector) %>%
-      # GITODO: Trial Market names should be read in through CSV. Ensure that they are read in
-      # only once in the datasystem and then copied to the Investment technologies as well.
-      # Note: Trial market Name = Wind/ SOlar; Capacity Market Name = Grid Region
-      mutate(capacity.market.name = grid_region) %>%
+      left_join_error_no_match(TechTrialMarket_mapping, by = c("region", "subsector")) %>%
       select(region, supplysector, subsector, technology, year, trial.market.name, capacity.market.name) ->
       L223.TechTrialMarket_Dispatch
 
@@ -994,10 +990,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.StubTechMarket_Investment %>%
       filter(subsector %in% capacity_credit_calculator$subsector) %>%
       left_join_error_no_match(select(states_subregions, state, grid_region), by = c("region" = "state")) %>%
-      # GITODO: Trial Market names should be read in through CSV. Ensure that they are read in
-      # only once in the datasystem and then copied to the Investment technologies as well.
-      mutate(trial.market.name = subsector) %>%
-      rename(technology = stub.technology)%>%
+      left_join_error_no_match(TechTrialMarket_mapping, by = c("region", "subsector")) %>%
+      rename(technology = stub.technology) %>%
       select(region, supplysector, subsector, technology, year, trial.market.name) ->
       L223.TechTrialMarket_Investment
 
@@ -1648,7 +1642,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set set trial market for renewables") %>%
       add_legacy_name("L223.TechTrialMarket_Dispatch (dispatch branch)") %>%
       same_precursors_as("L223.TechShrwt_Dispatch") %>%
-      add_precursors("gcam-usa/dispatch/capacity_credit_calculator") ->
+      add_precursors("gcam-usa/dispatch/capacity_credit_calculator",
+                     "gcam-usa/dispatch/TechTrialMarket_mapping") ->
       L223.TechTrialMarket_Dispatch
 
     L223.TechTrialMarket_Investment %>%
@@ -1657,7 +1652,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set set trial market for renewables") %>%
       add_legacy_name("L223.TechTrialMarket_Investment (dispatch branch)") %>%
       same_precursors_as("L223.StubTechMarket_Investment") %>%
-      add_precursors("gcam-usa/dispatch/capacity_credit_calculator") ->
+      add_precursors("gcam-usa/dispatch/capacity_credit_calculator",
+                     "gcam-usa/dispatch/TechTrialMarket_mapping") ->
       L223.TechTrialMarket_Investment
 
     L223.Sector_Dispatch_Grid %>%

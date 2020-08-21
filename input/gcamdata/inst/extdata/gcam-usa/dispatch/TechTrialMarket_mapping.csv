@@ -1,0 +1,109 @@
+# File: TechTrialMarket_mapping.csv
+# Title: create trial market for renewable technologies
+# Units: NA
+# Source: NA
+# Column types: cccc
+# ----------
+region,subsector,trial.market.name,capacity.market.name
+AK,wind,wind,Alaska grid
+AL,wind,wind,Southeast grid
+AR,wind,wind,Southeast grid
+AZ,wind,wind,Southwest grid
+CA,wind,wind,California grid
+CO,wind,wind,Southwest grid
+CT,wind,wind,New England grid
+DC,wind,wind,Mid-Atlantic grid
+DE,wind,wind,Mid-Atlantic grid
+FL,wind,wind,Florida grid
+GA,wind,wind,Southeast grid
+HI,wind,wind,Hawaii grid
+IA,wind,wind,Central Northwest grid
+ID,wind,wind,Northwest grid
+IL,wind,wind,Central Northeast grid
+IN,wind,wind,Central East grid
+KS,wind,wind,Central Southwest grid
+KY,wind,wind,Central East grid
+LA,wind,wind,Southeast grid
+MA,wind,wind,New England grid
+MD,wind,wind,Mid-Atlantic grid
+ME,wind,wind,New England grid
+MI,wind,wind,Central East grid
+MN,wind,wind,Central Northwest grid
+MO,wind,wind,Central Northeast grid
+MS,wind,wind,Southeast grid
+MT,wind,wind,Northwest grid
+NC,wind,wind,Southeast grid
+ND,wind,wind,Central Northwest grid
+NE,wind,wind,Central Northwest grid
+NH,wind,wind,New England grid
+NJ,wind,wind,Mid-Atlantic grid
+NM,wind,wind,Southwest grid
+NV,wind,wind,Northwest grid
+NY,wind,wind,New York grid
+OH,wind,wind,Central East grid
+OK,wind,wind,Central Southwest grid
+OR,wind,wind,Northwest grid
+PA,wind,wind,Mid-Atlantic grid
+RI,wind,wind,New England grid
+SC,wind,wind,Southeast grid
+SD,wind,wind,Central Northwest grid
+TN,wind,wind,Southeast grid
+TX,wind,wind,Texas grid
+UT,wind,wind,Northwest grid
+VA,wind,wind,Southeast grid
+VT,wind,wind,New England grid
+WA,wind,wind,Northwest grid
+WI,wind,wind,Central Northeast grid
+WV,wind,wind,Central East grid
+WY,wind,wind,Southwest grid
+AK,solar,solar,Alaska grid
+AL,solar,solar,Southeast grid
+AR,solar,solar,Southeast grid
+AZ,solar,solar,Southwest grid
+CA,solar,solar,California grid
+CO,solar,solar,Southwest grid
+CT,solar,solar,New England grid
+DC,solar,solar,Mid-Atlantic grid
+DE,solar,solar,Mid-Atlantic grid
+FL,solar,solar,Florida grid
+GA,solar,solar,Southeast grid
+HI,solar,solar,Hawaii grid
+IA,solar,solar,Central Northwest grid
+ID,solar,solar,Northwest grid
+IL,solar,solar,Central Northeast grid
+IN,solar,solar,Central East grid
+KS,solar,solar,Central Southwest grid
+KY,solar,solar,Central East grid
+LA,solar,solar,Southeast grid
+MA,solar,solar,New England grid
+MD,solar,solar,Mid-Atlantic grid
+ME,solar,solar,New England grid
+MI,solar,solar,Central East grid
+MN,solar,solar,Central Northwest grid
+MO,solar,solar,Central Northeast grid
+MS,solar,solar,Southeast grid
+MT,solar,solar,Northwest grid
+NC,solar,solar,Southeast grid
+ND,solar,solar,Central Northwest grid
+NE,solar,solar,Central Northwest grid
+NH,solar,solar,New England grid
+NJ,solar,solar,Mid-Atlantic grid
+NM,solar,solar,Southwest grid
+NV,solar,solar,Northwest grid
+NY,solar,solar,New York grid
+OH,solar,solar,Central East grid
+OK,solar,solar,Central Southwest grid
+OR,solar,solar,Northwest grid
+PA,solar,solar,Mid-Atlantic grid
+RI,solar,solar,New England grid
+SC,solar,solar,Southeast grid
+SD,solar,solar,Central Northwest grid
+TN,solar,solar,Southeast grid
+TX,solar,solar,Texas grid
+UT,solar,solar,Northwest grid
+VA,solar,solar,Southeast grid
+VT,solar,solar,New England grid
+WA,solar,solar,Northwest grid
+WI,solar,solar,Central Northeast grid
+WV,solar,solar,Central East grid
+WY,solar,solar,Southwest grid
