@@ -5123,7 +5123,7 @@ local:generate-sector-output-coefs(remove($inputNameQueue, 1), $currTree, $coefs
             </supplyDemandQuery>
             <supplyDemandQuery title="Electricity capacity by technology">
          <axis1 name="technology">technology</axis1>
-         <axis2 name="Year">technology[@year]</axis2>
+         <axis2 name="Year">capacity[@vintage]</axis2>
          <xPath buildList="true" dataName="capacity" group="false" sumAll="false">*[@type = 'sector' (: collapse :) and (@name='electricity')]//*[@type = 'technology']/capacity/node()</xPath>
          <comments/>
       </supplyDemandQuery>
