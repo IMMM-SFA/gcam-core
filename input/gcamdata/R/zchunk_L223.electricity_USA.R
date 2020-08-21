@@ -293,6 +293,17 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       mutate(market.name = if_else(minicam.energy.input %in% c(gcamusa.STATE_RENEWABLE_RESOURCES, "global solar resource"), region, "USA")) ->
       L223.StubTechMarket_Investment
 
+    # assign regional fuel markets if gcamusa.USE_REGIONAL_FUEL_MARKETS is TRUE
+    if(gcamusa.USE_REGIONAL_FUEL_MARKETS) {
+      L223.StubTechMarket_Investment %>%
+        left_join_error_no_match(states_subregions %>%
+                                   select(state, grid_region),
+                                 by = c("region" = "state")) %>%
+        mutate(market.name = if_else(minicam.energy.input %in% gcamusa.REGIONAL_FUEL_MARKETS, grid_region, market.name)) %>%
+        select(-grid_region) ->
+        L223.StubTechMarket_Investment
+    }
+
     # ===========================================================================
     ## L223 GlobalTechOMvar_Investment  OM fix investment
     # ===========================================================================
@@ -724,6 +735,17 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                                      c(gcamusa.STATE_RENEWABLE_RESOURCES, "global solar resource"), region, "USA")) ->
       L223.TechEff_Dispatch
 
+    # assign regional fuel markets if gcamusa.USE_REGIONAL_FUEL_MARKETS is TRUE
+    if(gcamusa.USE_REGIONAL_FUEL_MARKETS) {
+      L223.TechEff_Dispatch %>%
+        left_join_error_no_match(states_subregions %>%
+                                   select(state, grid_region),
+                                 by = c("region" = "state")) %>%
+        mutate(market.name = if_else(minicam.energy.input %in% gcamusa.REGIONAL_FUEL_MARKETS, grid_region, market.name)) %>%
+        select(-grid_region) ->
+        L223.TechEff_Dispatch
+    }
+
     # technology OM_fixed
     calibrated_techs_dispatch_usa %>%
       filter(sector == "electricity generation") %>%
@@ -973,6 +995,17 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       mutate(market.name = if_else(minicam.energy.input %in%
                                      c(gcamusa.STATE_RENEWABLE_RESOURCES, "global solar resource"), region, "USA")) ->
       L223.TechEff_Cal
+
+    # assign regional fuel markets if gcamusa.USE_REGIONAL_FUEL_MARKETS is TRUE
+    if(gcamusa.USE_REGIONAL_FUEL_MARKETS) {
+      L223.TechEff_Cal %>%
+        left_join_error_no_match(states_subregions %>%
+                                   select(state, grid_region),
+                                 by = c("region" = "state")) %>%
+        mutate(market.name = if_else(minicam.energy.input %in% gcamusa.REGIONAL_FUEL_MARKETS, grid_region, market.name)) %>%
+        select(-grid_region) ->
+        L223.TechEff_Cal
+    }
 
     # calibrated production for grid
     L123.out_EJ_state_elec_F_tech %>%

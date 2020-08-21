@@ -32,7 +32,7 @@ the generated outputs: \code{L223.Sector_Investment},
 \code{L223.TechCapFac_Dispatch}, \code{L223.TechCarbonCapture_Dispatch}, \code{L223.Production_Dispatch},
 \code{L223.TechEff_Cal}, \code{L223.Sector_Dispatch_Grid}, \code{L223.DispatchSectorCalProd},
 \code{L223.DispatchSectorDispatchSegments}, \code{L223.InterestRate_FERC}, \code{L223.Pop_FERC}, \code{L223.BaseGDP_FERC},
-\code{L223.LaborForceFillout_FERC}, \code{L223.TechCost_offshore_wind_Dispatch}.
+\code{L223.LaborForceFillout_FERC}, \code{L223.StubTechCost_offshore_wind_Investment}.
 The corresponding file in the
 original data system was \code{L223.electricity_USA.R} (gcam-usa level2 - dispatch branch).
 }
