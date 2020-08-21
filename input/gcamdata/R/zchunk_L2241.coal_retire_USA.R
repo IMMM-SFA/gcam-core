@@ -245,10 +245,16 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     # WC_NP - nameplate capacity
     # W_FOM - fixed O&M ($1987)
     # W_VOM - variable O&M ($1987)
+    # WCOMB_V - Variable Cost, Nox Comb Control  ($1987)
+    # W_DSIV - Variable Cost, DSI ($1987)
+    # W_FFV - Variable Cost, Fabric Filter ($1987)
+    # WSCR_V - Variable Cost, SCR ($1987)
+    # WSNCR_V - Variable Cost, SNCR ($1987)
     # WHRATE - heat rate
 
     REEDS_Plantfile %>%
-      select(T_PID, T_UID, EFDcd, ECPcd, WC_NP, TRFURB, W_SYR, W_RYR, W_FOM, W_VOM, WHRATE) %>%
+      select(T_PID, T_UID, WSTATE, EFDcd, ECPcd, WC_NP, TRFURB, W_SYR, W_RYR, W_FOM,
+             W_VOM, WCOMB_V, W_DSIV, W_FFV, WSCR_V, WSNCR_V, WHRATE) %>%
       # filter for plants not yet retired in 2020
       filter(W_RYR > 2020) %>%
       left_join_error_no_match(ECP_mapping %>%
@@ -260,15 +266,17 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              # filter out CCS plants
              EFDcd != "CAS") %>%
       # appears to be some duplicate identifiers, so summarise
-      group_by(T_PID, T_UID, EFDcd, ECPcd, TRFURB, W_SYR, W_RYR, W_FOM, W_VOM, WHRATE) %>%
+      group_by(T_PID, T_UID, WSTATE, EFDcd, ECPcd, TRFURB, W_SYR, W_RYR, W_FOM,
+               W_VOM, WCOMB_V, W_DSIV, W_FFV, WSCR_V, WSNCR_V, WHRATE) %>%
       summarise(WC_NP = sum(WC_NP)) %>%
       ungroup() %>%
       mutate(efficiency = CONV_KWH_BTU / WHRATE,
              OMF = W_FOM * gdp_deflator(1975, 1987),
-             OMV = W_VOM * gdp_deflator(1975, 1987),
+             OMV = (W_VOM + WCOMB_V + W_DSIV + W_FFV + WSCR_V + WSNCR_V) * gdp_deflator(1975, 1987),
              year = TRFURB - min(TRFURB)) %>%
       select(Plant.ID = T_PID,
              Unit.ID = T_UID,
+             region = WSTATE,
              Operating.Year = TRFURB,
              Refurb.Year = W_SYR,
              Planned.Retirement.Year = W_RYR,
@@ -276,7 +284,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              capacity = WC_NP,
              efficiency, OMF, OMV) %>%
       left_join_error_no_match(vintage_bins_mapping, by = "Operating.Year") %>%
-      group_by(vintage) %>%
+      group_by(region, vintage) %>%
       mutate(median_size = median(capacity),
              size = if_else(capacity >= median_size, "big", "small")) %>%
       ungroup() %>%
@@ -398,7 +406,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       # here use left_join becuase 13 units (mostly small plants that REEDS_coal has but not in eia_923)
       left_join(eia_923_gen, by = c("Plant.ID" = "Plant.Id", "Generator.ID" = "Generator.Id")) %>%
       filter(!is.na(generation_2018)) %>%
-      group_by(vintage.bin) %>%
+      group_by(region, vintage.bin) %>%
       summarise(efficiency_weighted = sum(efficiency * generation_2018) / sum(generation_2018),
                 OMV_weighted = sum(OMV * generation_2018) / sum(generation_2018)) %>%
       ungroup() %>%
@@ -415,8 +423,8 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
 
     # Create efficiency for coal vintage capacity technologies
     L2241.TechProd_coal_vintage_dispatch_dataframe %>%
-      left_join_error_no_match(REEDS_coal_Eff_OMvar %>% select(technology, efficiency_weighted),
-                               by = c("capacity.technology" = "technology")) %>%
+      left_join_error_no_match(REEDS_coal_Eff_OMvar %>% select(region, technology, efficiency_weighted),
+                               by = c("region", "capacity.technology" = "technology")) %>%
       rename(efficiency = efficiency_weighted) %>%
       # TODO: somehow update these as constants
       mutate(minicam.energy.input = "regional coal",
@@ -426,8 +434,8 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
 
     # Variable OM costs
     L2241.TechProd_coal_vintage_dispatch_dataframe %>%
-      left_join_error_no_match(REEDS_coal_Eff_OMvar %>% select(technology, OMV_weighted),
-                               by = c("capacity.technology" = "technology")) %>%
+      left_join_error_no_match(REEDS_coal_Eff_OMvar %>% select(region, technology, OMV_weighted),
+                               by = c("region", "capacity.technology" = "technology")) %>%
       rename(OM.var = OMV_weighted) %>%
       mutate(input.OM.var = "OM-var") %>%
       select(region, dispatch.sector, subsector, capacity.technology, year, input.OM.var, OM.var) ->
