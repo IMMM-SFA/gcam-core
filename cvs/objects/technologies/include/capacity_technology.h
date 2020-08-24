@@ -87,15 +87,11 @@ public:
 		const int aPeriod);
     
     double tryDispatch( const std::string& aRegionName, const std::string& aSectorName,
-                        const std::string& aDemandSegment, const double aVariableDemand,
+                        const std::string& aDemandSegment,
                         const double aSegmentScaleFactor, const double aPercentRemainHours,
-                        const double aPriorDispatch, const int aPeriod );
+                        const double aPriorDispatch, const int aPeriod ) const;
     
     double calcInvestmentCapacityScaleFactor( const double aNewInvestCost, const int aPeriod ) const;
-    
-    virtual double getCalibrationOutput( const bool aHasRequiredInput,
-                                         const std::string& aRequiredInput,
-                                         const int aPeriod ) const;
 
 	virtual void doInterpolations(const Technology* aPrevTech, const Technology* aNextTech);
 

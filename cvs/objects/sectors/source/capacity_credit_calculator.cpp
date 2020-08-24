@@ -176,17 +176,16 @@ double CapacityCreditCalculator::getCapacityCredit (const string& aRegion,
     // Preconditions
     assert( !aRegion.empty() );
     
-	double renewElecShare = std::min( SectorUtils::getTrialSupply( aRegion, aSector, aPeriod ), 1.0 );
-	double mCapacityCredit = 0; 
+    // ensure we get a valid (between zero and one) share back from the solver
+    double renewElecShare = std::max(std::min( SectorUtils::getTrialSupply( aRegion, aSector, aPeriod ), 1.0 ), 0.0);
 	
 	// Calculate the capacity credit at this share of the total.
-	
-	mCapacityCredit = mCapacityCreditMin + (mCapacityCreditMax - mCapacityCreditMin) * 1 / (1 + exp(mSteepness *(renewElecShare - mXmid)));
+	double capacityCredit = mCapacityCreditMin + (mCapacityCreditMax - mCapacityCreditMin) * 1 / (1 + exp(mSteepness *(renewElecShare - mXmid)));
 
 	// Capacity Credit must be between 0 and 1 inclusive.
-	assert(mCapacityCredit >= 0 && mCapacityCredit <= 1);
+	assert(capacityCredit >= 0 && capacityCredit <= 1);
 	
-	return mCapacityCredit;
+	return capacityCredit;
 }
     
 

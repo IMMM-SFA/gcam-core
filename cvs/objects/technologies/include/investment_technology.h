@@ -49,18 +49,17 @@
 
 #include <xercesc/dom/DOMNode.hpp>
 #include "technologies/include/technology.h"
-#include "util/base/include/value.h"
-#include "sectors/include/capacity_credit_calculator.h"
 
 // Forward declaration
 class Tabs;
+class CapacityCreditCalculator;
 
 class InvestmentTechnology : public Technology {
 	friend class XMLDBOutputter;
 public:
 	InvestmentTechnology(const std::string& aName,
 		const int aYear);
-	~InvestmentTechnology();
+	virtual ~InvestmentTechnology();
 	static const std::string& getXMLNameStatic();
 	InvestmentTechnology* clone() const;
 
@@ -98,10 +97,6 @@ protected:
     
     // Define data such that introspection utilities can process the data from this
     // subclass together with the data members of the parent classes.
-	
-	// DEFINE_DATA(
-	//	DEFINE_SUBCLASS_FAMILY(InvestmentTechnology),
-	
 	DEFINE_DATA_WITH_PARENT(
 		Technology,
 		//! A calculator which determines the capacity credit as a function of renewable share.
@@ -113,15 +108,9 @@ protected:
 		//! Name of trial market associated with this Investment Technology. This is read in only for intermittent-technologies
 		//! for which trial market calculations are performed in the CapacityTechnology class. The value read in here should be
 		//! equal to the value read in under the capacity technologies.
-		DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string),
-
-		DEFINE_VARIABLE(SIMPLE, "is-dispatchable", mIsDispatchable, bool)
-
-				
+		DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string)		
     )
 	
-	//! Variable to track capacity
-	// double mCapacity;
 	//! Variable to track capacity payments
 	double mCapacityPayment;
 

@@ -40,23 +40,14 @@
 
 #include "util/base/include/definitions.h"
 #include "technologies/include/investment_technology.h"
-//#include "emissions/include/aghg.h"
 #include "containers/include/scenario.h"
 #include "util/base/include/xml_helper.h"
-//#include "marketplace/include/marketplace.h"
-#include "containers/include/iinfo.h"
-#include "technologies/include/ical_data.h"
 #include "technologies/include/iproduction_state.h"
-#include "technologies/include/production_state_factory.h"
 #include "technologies/include/marginal_profit_calculator.h"
 #include "technologies/include/ioutput.h"
-#include "technologies/include/generic_output.h"
 #include "util/base/include/ivisitor.h"
 #include "functions/include/input_capital.h"
-#include "containers/include/market_dependency_finder.h"
-#include "sectors/include/sector_utils.h"
 #include "sectors/include/capacity_credit_calculator.h"
-//#include "sectors/include/dispatch_sector.h"
 
 using namespace std;
 using namespace xercesc;
@@ -72,8 +63,7 @@ InvestmentTechnology::InvestmentTechnology(const string& aName, const int aYear)
 Technology(aName, aYear)
 {
      mCapacityFactor = 0.1;
-	 mCapacityMarketPrice = 0; 
-	 mIsDispatchable = true;
+	 mCapacityMarketPrice = 0;
 	 mCapacityCreditCalculator = 0;
 }
 
@@ -86,7 +76,6 @@ Technology(aName, aYear)
 void InvestmentTechnology::copy(const InvestmentTechnology& aTech) {
     Technology::copy( aTech );
 	mCapacityMarketPrice = aTech.mCapacityMarketPrice;
-	mIsDispatchable = aTech.mIsDispatchable;
 	mTrialMarketName = aTech.mTrialMarketName;
 	
 	if (aTech.mCapacityCreditCalculator) {
@@ -108,16 +97,11 @@ bool InvestmentTechnology::XMLDerivedClassParse(const string& aNodeName, const D
         mCapacityMarketPrice = XMLHelper<double>::getValue( aCurrNode );
         success = true;
     }
-    else if( aNodeName == "is-dispatchable" ) {
-		mIsDispatchable = XMLHelper<bool>::getValue(aCurrNode);
-        success = true;
-    } 
-	//GI: Reading in parameters of the capacity-credit function. 
+	// Reading in parameters of the capacity-credit function.
 	else if (aNodeName == CapacityCreditCalculator::getXMLNameStatic()) {
 		parseSingleNode(aCurrNode, mCapacityCreditCalculator, new CapacityCreditCalculator);
 		success = true;
 	}
-
 	else if (aNodeName == "trial-market-name") {
 		mTrialMarketName = XMLHelper<string>::getValue(aCurrNode);
 		success = true;
@@ -125,12 +109,6 @@ bool InvestmentTechnology::XMLDerivedClassParse(const string& aNodeName, const D
 
 	return success;
 }
-
-//! write object to xml output stream
-//GI: I don't think we need this. Commenting for now. PP: Is that correct?
-//void InvestmentTechnology::toInputXMLDerived(ostream& aOut, Tabs* aTabs) const {
-//    XMLWriteElement(mCapacity, "capacity", aOut, aTabs);
-//}
 
 /*! \brief Get the XML node name for output to XML.
 *
@@ -171,9 +149,6 @@ void InvestmentTechnology::completeInit(const std::string& aRegionName,
 	const IInfo* aSubsectorInfo,
 	ILandAllocator* aLandAllocator)
 {
-	// Note: Technology::completeInit() loops through the outputs.
-	//       Therefore, if any of the outputs need the land allocator,
-	//       the call to Technology::completeInit() must come afterwards
 	Technology::completeInit(aRegionName, aSectorName, aSubsectorName, aSubsectorInfo,
 		aLandAllocator);
     
@@ -182,7 +157,7 @@ void InvestmentTechnology::completeInit(const std::string& aRegionName,
 	if (mCapacityFactor == 0.0) {
 		ILogger& mainLog = ILogger::getLogger("main_log");
 		mainLog.setLevel(ILogger::SEVERE);
-		mainLog << "Capacity factor not read in for investment- technology " << mName << ", " << mYear
+		mainLog << "Capacity factor not read in for " << getXMLName() << " " << mName << ", " << mYear
 			    << " in region " << aRegionName << " and sector " << aSectorName << endl;
 		//abort();
 	}
@@ -191,16 +166,16 @@ void InvestmentTechnology::completeInit(const std::string& aRegionName,
 	if (mCapacityMarketPrice == 0.0) {
 		ILogger& mainLog = ILogger::getLogger("main_log");
 		mainLog.setLevel(ILogger::NOTICE);
-		mainLog << "Investment Technology " << mName << " in sector " << aSectorName
+		mainLog << getXMLName() << " " << mName << " in sector " << aSectorName
 			<< " in region " << aRegionName
 			<< " in vintage " << mYear
 			<< " did not read in a capacity market price. Capacity payments will default to zero. " << endl;
 	}
 	
-	if (mTrialMarketName.empty() && !mCapacityCreditCalculator) {
+	if (!mTrialMarketName.empty() && !mCapacityCreditCalculator) {
 		ILogger& mainLog = ILogger::getLogger("main_log");
 		mainLog.setLevel(ILogger::NOTICE);
-		mainLog << "Investment Technology " << mName << " in sector " << aSectorName
+		mainLog << getXMLName() << " " << mName << " in sector " << aSectorName
 			<< " in region " << aRegionName
 			<< " did not read in a capacity credit calculator for a non-dispatchable technology. Default parameter values will be used" << endl;
 	}
@@ -231,10 +206,6 @@ void InvestmentTechnology::initCalc(const string& aRegionName,
 {
 	Technology::initCalc(aRegionName, aSectorName, aSubsectorInfo,
 		aDemographics, aPrevPeriodInfo, aPeriod);
-
-    if( aPeriod < (scenario->getModeltime()->getmaxper()-1) ) {
-        setProductionState( aPeriod + 1 );
-    }
 }
 
 /*! \brief Calculates the output of the technology.
@@ -300,19 +271,13 @@ void InvestmentTechnology::production(const string& aRegionName,
 void InvestmentTechnology::calcCost(const string& aRegionName,
 	const string& aSectorName,
 	const int aPeriod) {
+    
+    Technology::calcCost( aRegionName, aSectorName, aPeriod );
 	
 	// A Technology can only calculate costs if it is operating
    // Note that attempted to retrieve a cost when the technology is not
    // operating will cause an abort.
 	if (mProductionState[aPeriod]->isOperating()) {
-		// Note we now allow costs in any sector to be <= 0.  If,
-		// however, you are using the relative cost logit, costs will be
-		// clamped on the low end for market share purposes (not for
-		// other purposes, though).
-
-		double cost = getTotalInputCost(aRegionName, aSectorName, aPeriod) 
-			* mPMultiplier 
-			- calcSecondaryValue(aRegionName, aPeriod);
 
 	/*Obtain capacity payments in $/kW using the getCapacityPayment() method and levelize those to $/GJ using 
 	technology-specific capacity factors. 
@@ -330,13 +295,12 @@ void InvestmentTechnology::calcCost(const string& aRegionName,
 		
 		const double FCR = 0.13;
 
-		double CapacityPayment_USD_GJ = getCapacityPayment(aRegionName, aSectorName, aPeriod) 
+		double capacityPayment_USD_GJ = getCapacityPayment(aRegionName, aSectorName, aPeriod)
 																	* FCR / mCapacityFactor/ HOURS_PER_YEAR/ KWH_TO_GJ;
 		
-		// Adjust levelized costs with capacity payments. 
-		cost -= CapacityPayment_USD_GJ;
+		// Adjust levelized costs with capacity payments.
 		
-		mCosts[aPeriod] = cost;
+		mCosts[aPeriod] -= capacityPayment_USD_GJ;
 
 		assert(util::isValidNumber(mCosts[aPeriod]));
 	}

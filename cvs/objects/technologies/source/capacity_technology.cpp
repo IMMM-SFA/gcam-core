@@ -40,7 +40,6 @@
 
 #include "util/base/include/definitions.h"
 #include "technologies/include/capacity_technology.h"
-//#include "emissions/include/aghg.h"
 #include "containers/include/scenario.h"
 #include "util/base/include/xml_helper.h"
 #include "marketplace/include/marketplace.h"
@@ -171,9 +170,6 @@ void CapacityTechnology::completeInit(const std::string& aRegionName,
 	const IInfo* aSubsectorInfo,
 	ILandAllocator* aLandAllocator)
 {
-	// Note: Technology::completeInit() loops through the outputs.
-	//       Therefore, if any of the outputs need the land allocator,
-	//       the call to Technology::completeInit() must come afterwards
 	Technology::completeInit(aRegionName, aSectorName, aSubsectorName, aSubsectorInfo,
 		aLandAllocator);
     
@@ -258,20 +254,34 @@ void CapacityTechnology::initCalc(const string& aRegionName,
     }
 }
 
+/*!
+ * \brief The "energy" cost is the cost which will be used to determine dispatch order.
+ * \details The base class implementation already takes care of most of what we need,
+ *          to remove the capital and OM fixed costs.  However we also need to include
+ *          any costs associated with emissions etc thus we will tack those on here.
+ * \param aRegionName Containing region name.
+ * \param aSectorName Containing sector name.
+ * \param aPeriod The model period.
+ * \return The "energy" cost appropriate to use to determine dispatch.
+ */
 double CapacityTechnology::getEnergyCost( const string& aRegionName, const string& aSectorName, const int aPeriod ) const {
     return Technology::getEnergyCost( aRegionName, aSectorName, aPeriod ) * mPMultiplier -
         calcSecondaryValue(aRegionName, aPeriod);
 }
 
-/*! \brief Calculates the output of the technology.
-* \details Calculates the amount of current ag output based on the amount
-*          land and it's yield.
-* \param aRegionName Region name.
-* \param aSectorName Sector name, also the name of the product.
-* \param aVariableDemand Subsector demand for output.
-* \param aGDP Regional GDP container.
-* \param aPeriod Model period.
-*/
+/*!
+ * \brief Calculates the output of the technology.
+ * \details Note this specialization differs from the base class implementation
+ *          in that aVariableDemand will be used to drive demands and outputs of
+ *          this technology.  No further shutdown deciders or production state
+ *          adjustments will be made as the dispatch sector will have already taken
+ *          these into account when calculating this total annual amount to generate.
+ * \param aRegionName Region name.
+ * \param aSectorName Sector name, also the name of the product.
+ * \param aVariableDemand The actual amount of output to generate, without adjustment.
+ * \param aGDP Regional GDP container.
+ * \param aPeriod Model period.
+ */
 void CapacityTechnology::production(const string& aRegionName,
 	const string& aSectorName,
 	const double aVariableDemand,
@@ -279,36 +289,65 @@ void CapacityTechnology::production(const string& aRegionName,
 	const GDP* aGDP,
 	const int aPeriod)
 {
-	// The production is exactly the same as the technology except the variable demand
-	// is given in terms of capacity so we convert that to energy to drive
-	// Technology::production
     if( aFixedOutputScaleFactor == -1.0 ) {
-        double actualProduction = aVariableDemand;
         if( !mProductionState[ aPeriod ]->isOperating() ) {
             return;
         }
+        // the aVariableDemand is actually the total production to use to drive
+        // demands and outputs
+        double actualProduction = aVariableDemand;
         // Calculate input demand.
         mProductionFunction->calcDemand( mInputs, actualProduction, aRegionName, aSectorName,
                                         1, aPeriod, 0, mAlphaZero );
-        
+        // calculate outputs and emissions
         calcEmissionsAndOutputs( aRegionName, actualProduction, aGDP, aPeriod );
     } else if( aFixedOutputScaleFactor == -2.0 ) {
+        // TODO: just move this to a setCapacity method?
         mCapacity = aVariableDemand;
     }
 }
 
+/*!
+ * \brief Determine how much energy this technology could provide to meet demands in
+ *        the given dispatch segment.
+ * \details The load will be determined by the capacity that exists and will be adjusted
+ *          by the capacity factor, which may be dispatch segment specific.  In addition
+ *          some technologies may not be able to dispatch if they have yet to dispatch
+ *          in any of the lower segments and there are not enough remaining to be able
+ *          dispatch enough to make it above a minimum capacity factor parameter.
+ * \param aRegionName The region in which this technology exists.
+ * \param aSectorName The sector in which this technology exists.
+ * \param aDispatchSegment The name of the segment we are currently calculating the
+ *                         dispatch for.
+ * \param aSegmentScaleFactor To be able to convert between load and energy.
+ * \param aPercentRemainHours The number of hours yet to be dispatched.
+ * \param aPriorDispatch The energy which this technology has dispatched in lower
+ *                       dispatch segments.
+ * \param aPeriod The model period.
+ * \return The maximum energy this technology could provide to the given segment
+ *         if it were to dispatch.
+ */
 double CapacityTechnology::tryDispatch( const string& aRegionName,
                                         const string& aSectorName,
-                                        const string& aDemandSegment,
-                                        const double aVariableDemand,
+                                        const string& aDispatchSegment,
                                         const double aSegmentScaleFactor,
                                         const double aPercentRemainHours,
                                         const double aPriorDispatch,
-                                        const int aPeriod )
+                                        const int aPeriod ) const
 {
+    // First check if this technology has fallen below the minimum capacity factor
+    // in which case it will not be able to supply energy generation.  This would
+    // be the case if it has yet to dispatch in any of the lower segments and there
+    // are not enough remaining hours to make it above the minimum value.
+    // Note, this does not apply in calibration periods for simplicity.
     if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && aPriorDispatch == 0.0 && aPercentRemainHours < ( mMinCapFac ) ) {
         return 0.0;
     }
+    
+    // Calculate the amount of energy this technology could produce.
+    // Note retirement shotdown deciders may come into play here, however profit
+    // shutdowns deciders should not exist in mShutdownDeciders as that notion
+    // should be taken care of by the dispatch order.
     MarginalProfitCalculator marginalProfitCalc( this );
     double maxProduction = mProductionState[ aPeriod ]->calcProduction( aRegionName,
                                                                         aSectorName,
@@ -317,18 +356,36 @@ double CapacityTechnology::tryDispatch( const string& aRegionName,
                                                                         aSegmentScaleFactor,
                                                                         mShutdownDeciders,
                                                                         aPeriod );
+    // potentially make some adjustments to the capacity factor
     double effectiveCapacityFactor = mCapacityFactor;
-    auto segCapFac = mSegCapFac.find( aDemandSegment );
+    auto segCapFac = mSegCapFac.find( aDispatchSegment );
     if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod()) {
+        // in the calibration years we back out the effective capacity factor
+        // as the output and capacity are calibrated
         effectiveCapacityFactor = mCapacity == 0.0 ? 0.0 : mCalValue->getCalOutput() / mCapacity;
     }
     else if( segCapFac != mSegCapFac.end() ) {
+        // we have a segment specific capacity factor so use it instead of mCapacityFactor
         effectiveCapacityFactor = (*segCapFac).second;
     }
 
+    // adjust capacity factor in case any of the above applied
     return maxProduction * effectiveCapacityFactor / mCapacityFactor;
 }
 
+/*!
+ * \brief Calculate a scale factor for adjusting the amount of capacity available
+ *        in this technology for the purposes of determining how much new investment
+ *        should be made.
+ * \details We do not want to include a technology's capacity for consideration when
+ *          determining how much to invest if it is "cheaper" to invest in something
+ *          new than to operate this technology.  This method will be called for each
+ *          investment segment which each have their own average cost of new investment.
+ * \param aNewInvestment What is the average total cost cost to build something new in
+ *                       some investment segment.
+ * \param aPeriod The model period.
+ * \return A scale fraction which may be between zero and one.
+ */
 double CapacityTechnology::calcInvestmentCapacityScaleFactor( const double aNewInvestCost, const int aPeriod ) const {
     const double mMaxShutdown = 1.0;
     const double mSteepness = 10.0;
@@ -358,14 +415,6 @@ void CapacityTechnology::setProductionState( const int aPeriod ) {
     mProductionState[ aPeriod ] =
         ProductionStateFactory::create( mYear, mLifetimeYears, mFixedOutput,
                                    initialOutput, aPeriod ).release();
-}
-
-double CapacityTechnology::getCalibrationOutput( const bool aHasRequiredInput,
-                                                 const string& aRequiredInput,
-                                                 const int aPeriod ) const
-{
-    double techCalOutput = Technology::getCalibrationOutput( aHasRequiredInput, aRequiredInput, aPeriod );
-    return techCalOutput ;//== -1 ? techCalOutput : techCalOutput / mCapacityFactor;
 }
 
 void CapacityTechnology::doInterpolations(const Technology* aPrevTech, const Technology* aNextTech) {
@@ -404,14 +453,13 @@ void CapacityTechnology::acceptDerived( IVisitor* aVisitor, const int aPeriod ) 
  * \param aRegionName Name of region.
  * \param aSectorName Name of sector.
  * \param aPeriod Model period.
-	TODO: Account for retirements other than natural shutdowns (e.g. economic retirements) in capacity calculations.
  */
-double CapacityTechnology::getCapacity(	const const std::string& aRegionName,
+double CapacityTechnology::getCapacity(	const std::string& aRegionName,
 										const std::string& aSectorName,
 										const int aPeriod) const {
 	
 	if (mProductionState[aPeriod]->isOperating()) {
-		
+		// we need to adjust for any natural retirement shutdown deciders
 		MarginalProfitCalculator marginalProfitCalc(this);
 		double effectiveCapacity = mProductionState[aPeriod]->calcProduction(aRegionName,
 			aSectorName,
@@ -442,12 +490,15 @@ double CapacityTechnology::getCapacity(	const const std::string& aRegionName,
 void  CapacityTechnology::addCapacityShareToMarket( double aAggregateCapacity, 
 													const string& aRegionName, 
 													const string& aSectorName,
-													const int aPeriod) {
-if (!mTrialMarketName.empty()) {
-	mIntermitOutTechRatio = 0;
-	mIntermitOutTechRatio = getCapacity( aRegionName, aSectorName, aPeriod ) / aAggregateCapacity;
-	SectorUtils::addToTrialDemand(aRegionName, mTrialMarketName, mIntermitOutTechRatio, aPeriod);
-
-	
-}
+													const int aPeriod)
+{
+    // mTrialMarketName is only provided for intermittent capacity and we only
+    // need to update the market for them
+    if (!mTrialMarketName.empty()) {
+        // calculate the capacity share
+        mIntermitOutTechRatio = aAggregateCapacity == 0 ? 0.0 :
+            getCapacity( aRegionName, aSectorName, aPeriod ) / aAggregateCapacity;
+        // update the trial market
+        SectorUtils::addToTrialDemand(aRegionName, mTrialMarketName, mIntermitOutTechRatio, aPeriod);
+    }
 }
