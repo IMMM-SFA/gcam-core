@@ -47,6 +47,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.TechEff_Dispatch",
              "L223.TechOMvar_Dispatch",
              "L223.TechLifetime_Dispatch",
+             "L223.TechProfitShutdown_Dispatch",
              "L223.TechSCurve_Dispatch",
              "L223.TechCapFac_Dispatch",
              "L223.TechCarbonCapture_Dispatch",
@@ -127,6 +128,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.TechEff_Dispatch <- get_data(all_data, "L223.TechEff_Dispatch")
     L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch")
     L223.TechLifetime_Dispatch <- get_data(all_data, "L223.TechLifetime_Dispatch")
+    L223.TechProfitShutdown_Dispatch <- get_data(all_data, "L223.TechProfitShutdown_Dispatch")
     L223.TechSCurve_Dispatch <- get_data(all_data, "L223.TechSCurve_Dispatch")
     L223.TechCapFac_Dispatch <- get_data(all_data, "L223.TechCapFac_Dispatch")
     L223.TechCarbonCapture_Dispatch <- get_data(all_data, "L223.TechCarbonCapture_Dispatch")
@@ -189,7 +191,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.GlobalTechCapFac_Investment, "GlobalTechCapFac_investment", NULL) %>%
       add_xml_data(L223.TechCapFac_Investment, "TechCapFac", NULL) %>%
       add_xml_data(L223.GlobalTechCapture_Investment, "GlobalTechCapture_investment", NULL) %>%
-      add_xml_data(L223.GlobalTechCost_Investment, "GlobalTechCost_investment", NULL) %>%
+      add_xml_data(L223.GlobalTechCost_Investment, "GlobalTechCapital_investment", NULL) %>%
       add_xml_data(L223.GlobalTechCost_CapacityCreditCalulator, "GlobalTechCapacityCredit_investment", NULL) %>%
       add_logit_tables_xml(L223.Sector_Investment_StateShare, "Supplysector") %>%
       add_logit_tables_xml(L223.Subsector_Investment_StateShare, "SubsectorLogit") %>%
@@ -209,6 +211,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.TechEff_Dispatch, "TechEff") %>%
       add_xml_data(L223.TechOMvar_Dispatch, "TechOMvar") %>%
       add_xml_data(L223.TechLifetime_Dispatch, "TechLifetime") %>%
+      add_xml_data(L223.TechProfitShutdown_Dispatch %>% rename(stub.technology = technology), "StubTechProfitShutdown") %>%
       add_xml_data(L223.TechSCurve_Dispatch, "TechSCurve_dispatch", NULL) %>%
       add_xml_data(L223.TechCapFac_Dispatch, "TechCapFac", NULL) %>%
       add_xml_data(L223.TechCarbonCapture_Dispatch, "CarbonCapture") %>%
@@ -280,6 +283,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.TechEff_Dispatch",
                      "L223.TechOMvar_Dispatch",
                      "L223.TechLifetime_Dispatch",
+                     "L223.TechProfitShutdown_Dispatch",
                      "L223.TechSCurve_Dispatch",
                      "L223.TechCapFac_Dispatch",
                      "L223.TechCarbonCapture_Dispatch",

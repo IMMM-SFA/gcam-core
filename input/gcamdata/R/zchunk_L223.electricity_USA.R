@@ -110,6 +110,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              "L223.TechOMfixed_Dispatch",
              "L223.TechOMvar_Dispatch",
              "L223.TechLifetime_Dispatch",
+             "L223.TechProfitShutdown_Dispatch",
              "L223.TechSCurve_Dispatch",
              "L223.TechCapFac_Dispatch",
              "L223.TechCarbonCapture_Dispatch",
@@ -438,14 +439,20 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # capacity-market-price：the capital overnight cost of a gas CT in 1975USD/KW
     # use 2015 value
     gas_CT_cost <- A23.dispatch_globaltech_capital_additional$`2015`[A23.dispatch_globaltech_capital_additional$technology == "gas (CT)"]
+    L223.GlobalTechCapital_Investment %>%
+      filter(technology == "gas (CT)", year == MODEL_FINAL_BASE_YEAR, sector.name == gcamusa.ELEC_INV_NAMES[1]) %>%
+      mutate(input.capital = "capacity credit",
+             capital.overnight = -1.0 * capital.overnight) %>%
+      select(input.capital, capital.overnight, fixed.charge.rate) ->
+      gas_CT_cost
 
     calibrated_techs_dispatch_usa %>%
       filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
-      select(sector, supplysector, subsector, technology) %>%
+      select(sector.name = sector, supplysector, subsector, technology) %>%
       repeat_add_columns(tibble::tibble(year = MODEL_YEARS)) %>%
-      mutate(supplysector = sector) %>%
-      mutate(capacity.market.price = gas_CT_cost) %>%
-      select(supplysector, subsector, technology, year, capacity.market.price) ->
+      mutate(supplysector = sector,
+             input.capital = "capacity credit") %>%
+      left_join(gas_CT_cost, by = c("input.capital")) ->
       L223.GlobalTechCost_Investment
 
     # ===========================================================================
@@ -453,10 +460,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # ===========================================================================
     L223.GlobalTechCost_Investment %>%
       filter(subsector %in% capacity_credit_calculator$subsector) %>%
-      # currently need to create a blank column otherwise the xml structure will be incorrect
-      mutate(capacity.credit.calculator = NA) %>%
       left_join_error_no_match(capacity_credit_calculator, by = "subsector") %>%
-      select(-capacity.market.price) ->
+      select(-input.capital, -capital.overnight, -fixed.charge.rate) ->
       L223.GlobalTechCost_CapacityCreditCalulator
 
     # ===========================================================================
@@ -708,6 +713,17 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       rename(year = year_int) %>%
       write_to_all_states(c(LEVEL2_DATA_NAMES[["TechYr"]], "lifetime")) ->
       L223.TechLifetime_Dispatch
+
+    # Capacity technology profit shutdown which will actually be used during
+    # calculations to determine new investment only. The cost of building
+    # and operating new capacity compared to operating the existing and will
+    # discount that existing capacity towards the capacity reserve margin when
+    # it was cheaper to invest in new
+    L223.TechShrwt_Dispatch %>%
+      select(-share.weight) %>%
+      mutate(median.shutdown.point = gcamusa.ELEC_CAP_INV_MEDIAN,
+             profit.shutdown.steepness = gcamusa.ELEC_CAP_INV_STEEPNESS) ->
+      L223.TechProfitShutdown_Dispatch
 
     # technology S-Curve
     A23.globaltech_retirement %>%
@@ -1005,6 +1021,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechOMfixed_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
     L223.TechOMvar_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
     L223.TechLifetime_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
+    L223.TechProfitShutdown_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
     L223.TechSCurve_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
     L223.TechCapFac_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
     L223.Production_Dispatch %<>% filter(!(paste(region, subsector) %in% geo_states_noresource))
@@ -1021,6 +1038,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechOMfixed_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
     L223.TechOMvar_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
     L223.TechLifetime_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechProfitShutdown_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
     L223.TechCapFac_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
     L223.Production_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
     L223.TechCapFac_Investment %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
@@ -1041,6 +1059,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechOMfixed_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
     L223.TechOMvar_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
     L223.TechLifetime_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
+    L223.TechProfitShutdown_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
     L223.TechSCurve_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
     L223.Production_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
     L223.TechTrialMarket_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
@@ -1441,6 +1460,14 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "L120.GridCost_offshore_wind_USA") ->
       L223.TechLifetime_Dispatch
 
+    L223.TechProfitShutdown_Dispatch %>%
+      add_title("Dispatch technology capacity investment discount params") %>%
+      add_units("NA") %>%
+      add_comments("Profit shutdown param that are used to discount existing") %>%
+      add_comments("capacity in investment decisions.") %>%
+      add_precursors("gcam-usa/calibrated_techs_dispatch_usa") ->
+      L223.TechProfitShutdown_Dispatch
+
     L223.TechSCurve_Dispatch %>%
       add_title("Dispatch technology lifetime steepness and half.life for state") %>%
       add_units("unitless") %>%
@@ -1617,6 +1644,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                 L223.TechOMfixed_Dispatch,
                 L223.TechOMvar_Dispatch,
                 L223.TechLifetime_Dispatch,
+                L223.TechProfitShutdown_Dispatch,
                 L223.TechSCurve_Dispatch,
                 L223.TechCapFac_Dispatch,
                 L223.TechCarbonCapture_Dispatch,

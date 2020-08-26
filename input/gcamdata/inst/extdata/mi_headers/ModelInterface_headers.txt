@@ -805,7 +805,7 @@ GlobalTechCapFac_investment, global-technology-database/+{sector-name}location-i
 
 GlobalTechCapture_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, standard-capture-component/+remove-fraction, standard-capture-component/+storage-market, scenario, scenario/world, world/global-technology-database, period/standard-capture-component
 
-GlobalTechCapacityCredit_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, period/capacity-credit-calculator, capacity-credit-calculator/+steepness, capacity-credit-calculator/+x-mid, capacity-credit-calculator/+capacity-credit-max, capacity-credit-calculator/+capacity-credit-min, scenario, scenario/world, world/global-technology-database, period/{name=CO2}CO2
+GlobalTechCapacityCredit_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, capacity-credit-calculator/+steepness, capacity-credit-calculator/+x-mid, capacity-credit-calculator/+capacity-credit-max, capacity-credit-calculator/+capacity-credit-min, scenario, scenario/world, world/global-technology-database, period/capacity-credit-calculator
 
 
 EQUIV_TABLE,NODE_EQUIVALENCE

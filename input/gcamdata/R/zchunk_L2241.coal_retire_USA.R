@@ -31,6 +31,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              FILE = "gcam-usa/dispatch/ECP_mapping",
              FILE = "gcam-usa/EIA_923_generator_gen_fuel_2018",
              FILE = "gcam-usa/dispatch/coal_vintage_bins",
+             FILE = "gcam-usa/A23.dispatch_capacitytech_min_cap_fac",
              "L123.out_EJ_state_elec_F_tech",
              "L123.in_EJ_state_elec_F_tech",
              "L223.CapacityTech",
@@ -48,6 +49,8 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              "L2241.CapacityTech_coal_vintage_dispatch_gcamusa",
              "L2241.TechEff_coal_vintage_dispatch_gcamusa",
              "L2241.TechOMvar_coal_vintage_dispatch_gcamusa",
+             "L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa",
+             "L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa",
              "L2241.TechShrwt_coal_vintage_dispatch_gcamusa",
              "L2241.TechSCurve_coal_vintage_dispatch_gcamusa",
              "L2241.TechCapFac_coalret_vintage_dispatch_gcamusa",
@@ -67,7 +70,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       median_size <- size <- vintage.bin <- generation <- Retirement.Year <- cap.lifetime <- State <-
       generation.share.vintage <- capacity.share.vintage <- subsector <- technology.new <-
       steepness <- half.life <- Plant.Id <- Generator.Id <- generation_2018 <- Net.Generation.Year.To.Date <-
-      efficiency_weighted <- OMV_weighted <- NULL
+      efficiency_weighted <- OMV_weighted <- min.capacity.factor <- NULL
 
     # Load required inputs
     states_subregions <- get_data(all_data, "gcam-usa/states_subregions")
@@ -78,6 +81,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     ECP_mapping <- get_data(all_data, "gcam-usa/dispatch/ECP_mapping")
     eia_923_data_2018 <- get_data(all_data, "gcam-usa/EIA_923_generator_gen_fuel_2018")
     vintage_bins_mapping <- get_data(all_data, "gcam-usa/dispatch/coal_vintage_bins")
+    A23.dispatch_capacitytech_min_cap_fac <- get_data(all_data, "gcam-usa/A23.dispatch_capacitytech_min_cap_fac")
 
     L123.out_EJ_state_elec_F_tech <- get_data(all_data, "L123.out_EJ_state_elec_F_tech")
     L123.in_EJ_state_elec_F_tech <- get_data(all_data, "L123.in_EJ_state_elec_F_tech")
@@ -433,6 +437,24 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       select(region, dispatch.sector, subsector, capacity.technology, year, input.OM.var, OM.var) ->
       L2241.TechOMvar_coal_vintage_dispatch_gcamusa
 
+    # Create teable to read in min capacity factor
+    bind_rows(L2241.TechOMvar_coal_vintage_dispatch_gcamusa,
+              # not really needed but to avoid some errors messages add them
+              L2241.TechOMvar_elec_coalret_dispatch_gcamusa) %>%
+      mutate(technology = gsub("_.*$", "", capacity.technology)) %>%
+      select(-input.OM.var, -OM.var) %>%
+      left_join_error_no_match(select(A23.dispatch_capacitytech_min_cap_fac, technology, min.capacity.factor),
+                               by = c("technology")) %>%
+      select(-technology) ->
+      L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa
+
+    # Create table to read in capacity investment discount params
+    L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa %>%
+      select(-min.capacity.factor) %>%
+      mutate(median.shutdown.point = gcamusa.ELEC_CAP_INV_MEDIAN,
+             profit.shutdown.steepness = gcamusa.ELEC_CAP_INV_STEEPNESS) ->
+      L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa
+
     # Create table to read in shareweights in future years
     L2241.TechProd_coal_vintage_dispatch_dataframe %>%
       mutate(share.weight = 0) %>%
@@ -586,6 +608,25 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
                      "L223.TechOMvar_Dispatch") ->
       L2241.TechOMvar_elec_coalret_dispatch_gcamusa
 
+    L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa %>%
+      add_title("Capacity technology minimum capacity factor") %>%
+      add_units("Unitless") %>%
+      add_comments("Technologies will not be allowed to dispatch when it's capacity factor") %>%
+      add_comments("would fall below this minimum value.") %>%
+      add_precursors("gcam-usa/A23.dispatch_capacitytech_min_cap_fac",
+                     "gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
+                     "L123.out_EJ_state_elec_F_tech") ->
+      L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa
+
+    L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa %>%
+      add_title("Dispatch technology capacity investment discount params") %>%
+      add_units("NA") %>%
+      add_comments("Profit shutdown param that are used to discount existing") %>%
+      add_comments("capacity in investment decisions.") %>%
+      add_precursors("gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
+                     "L123.out_EJ_state_elec_F_tech") ->
+      L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa
+
     L2241.TechProd_coal_vintage_dispatch_gcamusa %>%
       add_title("Calibration outputs for slow_retire conventional coal electricity plants by detailed vintage and state") %>%
       add_units("EJ") %>%
@@ -687,6 +728,8 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
                 L2241.CapacityTech_coal_vintage_dispatch_gcamusa,
                 L2241.TechEff_coal_vintage_dispatch_gcamusa,
                 L2241.TechOMvar_coal_vintage_dispatch_gcamusa,
+                L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa,
+                L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa,
                 L2241.TechShrwt_coal_vintage_dispatch_gcamusa,
                 L2241.TechSCurve_coal_vintage_dispatch_gcamusa,
                 L2241.TechCapFac_coalret_vintage_dispatch_gcamusa,
