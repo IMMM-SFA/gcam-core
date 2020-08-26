@@ -48,7 +48,7 @@
 #include "sectors/include/supply_sector.h"
 #include "containers/include/iactivity.h"
 
-class ITechnology;
+class CapacityTechnology;
 class FilterStep;
 
 /*!
@@ -163,11 +163,11 @@ protected:
     )
     
     //! The set of active technologies which will be dispatched
-    std::vector<ITechnology*> mAllTechs;
+    std::vector<CapacityTechnology*> mAllTechs;
     
     //! A mapping of technologies to the markets in which they actually live in case
     //! this dispatch sector is pulling technologies across states for instance.
-    std::map<ITechnology*, std::pair<std::string, std::string> > mAllTechMarketMap;
+    std::map<CapacityTechnology*, std::pair<std::string, std::string> > mAllTechMarketMap;
     
     //! A flag to help identify if this instance of DispatchSector only needs to gather
     //! new capacity.
@@ -178,7 +178,7 @@ protected:
     bool mDoDispatchCapacity;
 
     //! Save detailed technology dispatch information for reporting
-    objects::PeriodVector<std::map<std::tuple<ITechnology*, std::string, std::string>, double> > mSaveTechCurve;
+    objects::PeriodVector<std::map<std::tuple<CapacityTechnology*, std::string, std::string>, double> > mSaveTechCurve;
 
 private:
     void setFixedDemandsToMarket( const int aPeriod ) const;

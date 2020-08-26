@@ -228,13 +228,6 @@ public:
     virtual double getCO2EmissionsCoefficient( const std::string& aGHGName,
                                              const int aPeriod ) const;
 
-    virtual void tabulateFixedQuantity( const std::string& aRegionName,
-                                        const double aFixedOutput,
-                                        const bool aIsInvestmentPeriod,
-                                        const int aPeriod );
-
-    virtual void scaleCalibrationQuantity( const double aScaleFactor );
-
     virtual double getCalibrationQuantity( const int aPeriod ) const;
 
     virtual double getPriceElasticity( const int aPeriod ) const;

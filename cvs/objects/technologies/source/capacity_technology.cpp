@@ -50,6 +50,8 @@
 #include "technologies/include/marginal_profit_calculator.h"
 #include "technologies/include/ioutput.h"
 #include "technologies/include/generic_output.h"
+#include "technologies/include/ishutdown_decider.h"
+#include "technologies/include/profit_shutdown_decider.h"
 #include "util/base/include/ivisitor.h"
 #include "containers/include/market_dependency_finder.h"
 #include "sectors/include/sector_utils.h"
@@ -65,9 +67,10 @@ extern Scenario* scenario;
 * \param aYear Technology year.
 */
 CapacityTechnology::CapacityTechnology(const string& aName, const int aYear) :
-Technology(aName, aYear)
+Technology(aName, aYear),
+mMinCapFac( 0.0 ),
+mInvestScaleDecider( 0 )
 {
-    mCapacityFactor = 0.1;
 }
 
 /*!
@@ -78,10 +81,11 @@ Technology(aName, aYear)
 */
 void CapacityTechnology::copy(const CapacityTechnology& aTech) {
     Technology::copy( aTech );
-	mCapacityFactor = aTech.mCapacityFactor; 
+    mCapacity = aTech.mCapacity;
 	mSegCapFac = aTech.mSegCapFac;
 	mTrialMarketName = aTech.mTrialMarketName;
 	mCapacityMarketName = aTech.mCapacityMarketName;
+    mMinCapFac = aTech.mMinCapFac;
 }
 
 // ! Destructor
@@ -95,8 +99,6 @@ bool CapacityTechnology::XMLDerivedClassParse(const string& aNodeName, const DOM
         mCapacity = XMLHelper<double>::getValue( aCurrNode );
         success = true;
     }
-
-
     else if( aNodeName == "segment-capacity-factor" ) {
         string segmentName = XMLHelper<string>::getAttr( aCurrNode, "name" );
         double segCapFac = XMLHelper<double>::getValue( aCurrNode );
@@ -116,11 +118,6 @@ bool CapacityTechnology::XMLDerivedClassParse(const string& aNodeName, const DOM
         success = true;
     }
 	return success;
-}
-
-//! write object to xml output stream
-void CapacityTechnology::toInputXMLDerived(ostream& aOut, Tabs* aTabs) const {
-    XMLWriteElement(mCapacity, "capacity", aOut, aTabs);
 }
 
 //! write object to xml output stream
@@ -176,8 +173,36 @@ void CapacityTechnology::completeInit(const std::string& aRegionName,
     // replace the primary output with a generic output (does not add supply to market)
     delete mOutputs[ 0 ];
     mOutputs[ 0 ] = new GenericOutput( aSectorName );
-    
+    // we must call initTechVintageVector again now that we have changed the primary
+    // output to ensure it gets its arrays sized correctly
     initTechVintageVector();
+    
+    // pull out the profit shutdown decider from mShutdownDeciders as we don't want
+    // them used in tryDispatch but do want to use it for calcInvestmentCapacityScaleFactor
+    for( auto shutdownIter = mShutdownDeciders.begin(); shutdownIter != mShutdownDeciders.end(); ) {
+        if( (*shutdownIter)->isSameType( ProfitShutdownDecider::getXMLNameStatic() ) ) {
+            if( mInvestScaleDecider ) {
+                ILogger& mainLog = ILogger::getLogger("main_log");
+                mainLog.setLevel(ILogger::WARNING);
+                    mainLog << "Multiple profit shutdown deciders found for " << mName << ", " << mYear
+                            << " in region " << aRegionName << " and sector " << aSectorName << endl;
+            }
+            // move the profit shutdown decider out of the mShutdownDeciders and into mInvestScaleDecider
+            delete mInvestScaleDecider;
+            mInvestScaleDecider = *shutdownIter;
+            shutdownIter = mShutdownDeciders.erase( shutdownIter );
+        }
+        else {
+            ++shutdownIter;
+        }
+    }
+    if( !mInvestScaleDecider ) {
+        ILogger& mainLog = ILogger::getLogger("main_log");
+        mainLog.setLevel(ILogger::SEVERE);
+        mainLog << "No profit shutdown deciders available for capacity investment scale calculation in "
+                << mName << ", " << mYear << " in region " << aRegionName << " and sector " << aSectorName << endl;
+        abort();
+    }
 
 	// Make some tests for bad inputs
 	if (mCapacityFactor == 0.0) {
@@ -185,7 +210,7 @@ void CapacityTechnology::completeInit(const std::string& aRegionName,
 		mainLog.setLevel(ILogger::SEVERE);
 		mainLog << "Capacity factor not set for technology " << mName << ", " << mYear
 			    << " in region " << aRegionName << " and sector " << aSectorName << endl;
-		//abort();
+		abort();
 	}
 
 	if (!mTrialMarketName.empty() && mCapacityMarketName.empty()) {
@@ -198,28 +223,26 @@ void CapacityTechnology::completeInit(const std::string& aRegionName,
 		mCapacityMarketName = aRegionName;
 	}
 
-	if (!mTrialMarketName.empty()) {
-		// Create Trial Market if trial-market-name has been read in. 
-		SectorUtils::createTrialSupplyMarket(aRegionName, mTrialMarketName, mTechnologyInfo.get(), mCapacityMarketName);
-		
-		// Also create trial market associated with the capacity market name (typically read in as the containing grid region). This
-		// will make sure that regions associated with a capacity market would see the same intermittent capacity shares and hence
-		// capacity payments. In future, this would also help us ensure that regions associated with a capacity market see the same
-		// capacity market price. 
-		SectorUtils::createTrialSupplyMarket(mCapacityMarketName, mTrialMarketName, mTechnologyInfo.get(), mCapacityMarketName);
-		
-		// Add to dependency relationships to keep track of.  
-		MarketDependencyFinder* depFinder = scenario->getMarketplace()->getDependencyFinder();
-		depFinder->addDependency(aSectorName, aRegionName,
-			SectorUtils::getTrialMarketName(mTrialMarketName),
-			aRegionName);
-	
-		depFinder->addDependency(aSectorName, mCapacityMarketName,
-			SectorUtils::getTrialMarketName(mTrialMarketName),
-			mCapacityMarketName);
-
-	
-		}
+    if (!mTrialMarketName.empty()) {
+        // Create Trial Market if trial-market-name has been read in.
+        SectorUtils::createTrialSupplyMarket(aRegionName, mTrialMarketName, mTechnologyInfo.get(), mCapacityMarketName);
+        
+        // Also create trial market associated with the capacity market name (typically read in as the containing grid region). This
+        // will make sure that regions associated with a capacity market would see the same intermittent capacity shares and hence
+        // capacity payments. In future, this would also help us ensure that regions associated with a capacity market see the same
+        // capacity market price.
+        SectorUtils::createTrialSupplyMarket(mCapacityMarketName, mTrialMarketName, mTechnologyInfo.get(), mCapacityMarketName);
+        
+        // Add to dependency relationships to keep track of.
+        MarketDependencyFinder* depFinder = scenario->getMarketplace()->getDependencyFinder();
+        depFinder->addDependency(aSectorName, aRegionName,
+                                 SectorUtils::getTrialMarketName(mTrialMarketName),
+                                 aRegionName);
+        
+        depFinder->addDependency(aSectorName, mCapacityMarketName,
+                                 SectorUtils::getTrialMarketName(mTrialMarketName),
+                                 mCapacityMarketName);
+    }
 }
 
 void CapacityTechnology::initCalc(const string& aRegionName,
@@ -232,10 +255,6 @@ void CapacityTechnology::initCalc(const string& aRegionName,
 	Technology::initCalc(aRegionName, aSectorName, aSubsectorInfo,
 		aDemographics, aPrevPeriodInfo, aPeriod);
 
-    if( aPeriod < (scenario->getModeltime()->getmaxper()-1) ) {
-        setProductionState( aPeriod + 1 );
-    }
-
 	if (!mTrialMarketName.empty()) {
 		// The renewable trial market is a share calculation so we can give the
 		// solver some additional hints that the range should be between 0 and 1.
@@ -244,11 +263,21 @@ void CapacityTechnology::initCalc(const string& aRegionName,
 	}
 
 
-    if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && mProductionState[ aPeriod - 1 ]->isOperating() && ( mOutputs[0]->getPhysicalOutput( aPeriod -1) / mCapacity) == 0.0 ) {
+    // We are assuming that a technology that wasn't dispatched at all should get
+    // permenently retired in the next period.  This is performed here where we
+    // reset the production state with lifetime years of zero if there was no production
+    // in the previous year when it could have operated.
+    if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() &&
+        mProductionState[ aPeriod - 1 ]->isOperating() && ( mOutputs[0]->getPhysicalOutput( aPeriod -1) ) == 0.0 )
+    {
         delete mProductionState[ aPeriod];
         mProductionState[ aPeriod] = ProductionStateFactory::create(mYear, 0, mFixedOutput, 0.0, aPeriod).release();
     }
-    else if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && !mProductionState[ aPeriod - 1 ]->isOperating() && mProductionState[ aPeriod ]->isOperating() ) {
+    // In addition we need to check if a technology got prematurely retired last period
+    // then it stays retired.
+    else if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() &&
+            !mProductionState[ aPeriod - 1 ]->isOperating() && mProductionState[ aPeriod ]->isOperating() )
+    {
         delete mProductionState[ aPeriod];
         mProductionState[ aPeriod] = ProductionStateFactory::create(mYear, 0, mFixedOutput, 0.0, aPeriod).release();
     }
@@ -283,28 +312,23 @@ double CapacityTechnology::getEnergyCost( const string& aRegionName, const strin
  * \param aPeriod Model period.
  */
 void CapacityTechnology::production(const string& aRegionName,
-	const string& aSectorName,
-	const double aVariableDemand,
-	const double aFixedOutputScaleFactor,
-	const GDP* aGDP,
-	const int aPeriod)
+                                    const string& aSectorName,
+                                    const double aVariableDemand,
+                                    const double aFixedOutputScaleFactor,
+                                    const GDP* aGDP,
+                                    const int aPeriod)
 {
-    if( aFixedOutputScaleFactor == -1.0 ) {
-        if( !mProductionState[ aPeriod ]->isOperating() ) {
-            return;
-        }
-        // the aVariableDemand is actually the total production to use to drive
-        // demands and outputs
-        double actualProduction = aVariableDemand;
-        // Calculate input demand.
-        mProductionFunction->calcDemand( mInputs, actualProduction, aRegionName, aSectorName,
-                                        1, aPeriod, 0, mAlphaZero );
-        // calculate outputs and emissions
-        calcEmissionsAndOutputs( aRegionName, actualProduction, aGDP, aPeriod );
-    } else if( aFixedOutputScaleFactor == -2.0 ) {
-        // TODO: just move this to a setCapacity method?
-        mCapacity = aVariableDemand;
+    if( !mProductionState[ aPeriod ]->isOperating() ) {
+        return;
     }
+    // the aVariableDemand is actually the total production to use to drive
+    // demands and outputs
+    double actualProduction = aVariableDemand;
+    // Calculate input demand.
+    mProductionFunction->calcDemand( mInputs, actualProduction, aRegionName, aSectorName,
+                                    1, aPeriod, 0, mAlphaZero );
+    // calculate outputs and emissions
+    calcEmissionsAndOutputs( aRegionName, actualProduction, aGDP, aPeriod );
 }
 
 /*!
@@ -351,13 +375,13 @@ double CapacityTechnology::tryDispatch( const string& aRegionName,
     MarginalProfitCalculator marginalProfitCalc( this );
     double maxProduction = mProductionState[ aPeriod ]->calcProduction( aRegionName,
                                                                         aSectorName,
-                                                                        mCapacity * mCapacityFactor * aSegmentScaleFactor,
+                                                                        mCapacity * aSegmentScaleFactor,
                                                                         &marginalProfitCalc,
                                                                         aSegmentScaleFactor,
                                                                         mShutdownDeciders,
                                                                         aPeriod );
-    // potentially make some adjustments to the capacity factor
-    double effectiveCapacityFactor = mCapacityFactor;
+    // determine the appropriate capacity factor to apply
+    double effectiveCapacityFactor;
     auto segCapFac = mSegCapFac.find( aDispatchSegment );
     if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod()) {
         // in the calibration years we back out the effective capacity factor
@@ -365,12 +389,16 @@ double CapacityTechnology::tryDispatch( const string& aRegionName,
         effectiveCapacityFactor = mCapacity == 0.0 ? 0.0 : mCalValue->getCalOutput() / mCapacity;
     }
     else if( segCapFac != mSegCapFac.end() ) {
-        // we have a segment specific capacity factor so use it instead of mCapacityFactor
+        // we have a segment specific capacity factor so use it
         effectiveCapacityFactor = (*segCapFac).second;
     }
+    else {
+        // this technology has the same capacity factor regardless of segment
+        effectiveCapacityFactor = mCapacityFactor;
+    }
 
-    // adjust capacity factor in case any of the above applied
-    return maxProduction * effectiveCapacityFactor / mCapacityFactor;
+    // adjust the max production by the appropriate capacity factor
+    return maxProduction * effectiveCapacityFactor;
 }
 
 /*!
@@ -381,26 +409,31 @@ double CapacityTechnology::tryDispatch( const string& aRegionName,
  *          determining how much to invest if it is "cheaper" to invest in something
  *          new than to operate this technology.  This method will be called for each
  *          investment segment which each have their own average cost of new investment.
+ * \param aRegionName The region in which this technology exists.
+ * \param aSectorName The sector in which this technology exists.
  * \param aNewInvestment What is the average total cost cost to build something new in
  *                       some investment segment.
  * \param aPeriod The model period.
  * \return A scale fraction which may be between zero and one.
  */
-double CapacityTechnology::calcInvestmentCapacityScaleFactor( const double aNewInvestCost, const int aPeriod ) const {
-    const double mMaxShutdown = 1.0;
-    const double mSteepness = 10.0;
-    const double mMedianShutdownPoint = -0.1;
-    // Compute Shutdown factor using logistic S-curve.  ScaleFactor that is returned
-    // is actually the fraction not shut down, so it is 1.0 - the shutdown fraction.
+double CapacityTechnology::calcInvestmentCapacityScaleFactor( const string& aRegionName,
+                                                              const string& aSectorName,
+                                                              const double aNewInvestCost,
+                                                              const int aPeriod ) const
+{
+    // the "profit rate" is calculated as the percentage difference between the cost
+    // of operating new investment and the cost of operating this technology
     double investCreditAdjCost = getCost(aPeriod) ;//+ 1.25;
     double profitRate = std::max( (aNewInvestCost - investCreditAdjCost)/( fabs(investCreditAdjCost) + util::getVerySmallNumber() ), -1.0);
-    const double midPointToSteepness = pow( mMedianShutdownPoint + 1, mSteepness );
-    double scaleFactor = 1.0 - mMaxShutdown * ( midPointToSteepness /
-                                        ( midPointToSteepness + pow( profitRate + 1, mSteepness ) ) );
-    //cout << getName() << " " << getYear() << " " << aNewInvestCost << " " << investCreditAdjCost << " " << profitRate << " " << scaleFactor << endl;
-    return scaleFactor;
+    // use an instance of the profit shutdown decider to do the actual scale calculation
+    return mInvestScaleDecider->calcShutdownCoef( 0, profitRate, aRegionName, aSectorName, mYear, aPeriod );
 }
 
+/*!
+ * \brief The production state is mostly the same as the base Technology implementation
+ *        except instead of using output we set the capacity as the "initial output".
+ * \param aPeriod The model period.
+ */
 void CapacityTechnology::setProductionState( const int aPeriod ) {
     // Check that the state for this period has not already been initialized.
     // Note that this is the case when the same scenario is run multiple times
@@ -410,7 +443,8 @@ void CapacityTechnology::setProductionState( const int aPeriod ) {
         delete mProductionState[ aPeriod ];
     }
     
-    double initialOutput = mCapacity * mCapacityFactor;
+    // use capacity instead of the output in the first year
+    double initialOutput = mCapacity;
     
     mProductionState[ aPeriod ] =
         ProductionStateFactory::create( mYear, mLifetimeYears, mFixedOutput,
@@ -439,6 +473,26 @@ void CapacityTechnology::acceptDerived( IVisitor* aVisitor, const int aPeriod ) 
     aVisitor->startVisitCapacityTechnology( this, aPeriod );
     // End the derived class visit.
     aVisitor->endVisitCapacityTechnology( this, aPeriod );
+}
+
+/*!
+ * \brief Set the capacity of new vintage technologies.
+ * \details The collecting capacity across investment sectors will be handled by
+ *          the DispatchSector and it will use this method to set the value.  Note
+ *          capacity may only be set for new investment only, otherwise it will be
+ *          ignored and a warning generated.
+ * \param aCapacity The capacity value to set.
+ * \param aPeriod The model period.
+ */
+void CapacityTechnology::setCapacity( const double aCapacity, const int aPeriod ) {
+    if( mProductionState[ aPeriod ]->isNewInvestment() ) {
+        mCapacity = aCapacity;
+    }
+    else {
+        ILogger& mainLog = ILogger::getLogger("main_log");
+        mainLog.setLevel(ILogger::WARNING);
+        mainLog << "Ignoring setCapacity for non-new investment tech: " << mName << ", " << mYear << endl;
+    }
 }
 
 /*!

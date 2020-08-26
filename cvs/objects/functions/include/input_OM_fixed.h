@@ -133,13 +133,6 @@ public:
     void setCoefficient( const double aCoefficient,
                          const int aPeriod );
 
-    void tabulateFixedQuantity( const std::string& aRegionName,
-                                const double aFixedOutput,
-                                const bool aIsInvestmentPeriod,
-                                const int aPeriod );
-
-    virtual void scaleCalibrationQuantity( const double aScaleFactor );
-
     virtual double getCalibrationQuantity( const int aPeriod ) const;
 
     bool hasTypeFlag( const int aTypeFlag ) const;
@@ -176,14 +169,7 @@ protected:
         DEFINE_VARIABLE( SIMPLE, "tech-change", mTechChange, Value ),
         
         //! Variable O&M cost.
-        DEFINE_VARIABLE( SIMPLE, "OM-fixed", mOMFixed, Value ),
-        
-        //! Calculated value for the levelized cost of capital.
-        DEFINE_VARIABLE( SIMPLE, "levelized-OM-fixed", mLevelizedOMFixedCost, Value ),
-        
-        //! Technology capacity factor.
-        // TODO: create one in technology and use that instead.
-        DEFINE_VARIABLE( SIMPLE, "capacity-factor", mCapacityFactor, double )
+        DEFINE_VARIABLE( SIMPLE, "OM-fixed", mOMFixed, Value )
     )
     
     void copy( const InputOMFixed& aOther );
@@ -192,7 +178,7 @@ private:
     const static std::string XML_REPORTING_NAME; //!< tag name for reporting xml db 
 
     // Function to calculate the levelized fixed O&M cost.
-    double calcLevelizedOMFixedCost( void ) const;
+    double calcLevelizedOMFixedCost( const double aCapacityFactor ) const;
 
 };
 

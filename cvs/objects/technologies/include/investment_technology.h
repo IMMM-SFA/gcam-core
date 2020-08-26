@@ -86,10 +86,6 @@ public:
 	virtual void calcCost(const std::string& aRegionName,
 		const std::string& aSectorName,
 		const int aPeriod);
-    
-    virtual double getCapacityPayment(const std::string& aRegionName,
-		const std::string& aSectorName,
-		const int aPeriod);
 
 	virtual void doInterpolations(const Technology* aPrevTech, const Technology* aNextTech);
 
@@ -102,26 +98,19 @@ protected:
 		//! A calculator which determines the capacity credit as a function of renewable share.
 		DEFINE_VARIABLE(CONTAINER, "capacity-credit-calculator", mCapacityCreditCalculator, CapacityCreditCalculator*),
 
-		//! The capacity market price for this technology.
-		DEFINE_VARIABLE(SIMPLE, "capacity-market-price", mCapacityMarketPrice, double),
-
 		//! Name of trial market associated with this Investment Technology. This is read in only for intermittent-technologies
 		//! for which trial market calculations are performed in the CapacityTechnology class. The value read in here should be
 		//! equal to the value read in under the capacity technologies.
 		DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string)		
     )
-	
-	//! Variable to track capacity payments
-	double mCapacityPayment;
+    
+    //! pointer to the capacity credit input
+    std::vector<IInput*>::iterator mCapacityCreditInput;
 
-
-	//virtual void toInputXMLDerived(std::ostream& out, Tabs* tabs) const;
 	virtual void toDebugXMLDerived(const int period, std::ostream& out, Tabs* tabs) const;
 	virtual bool XMLDerivedClassParse(const std::string& nodeName, const xercesc::DOMNode* curr);
-	//virtual void acceptDerived(IVisitor* aVisitor, const int aPeriod) const;
 	virtual const std::string& getXMLName() const;
     void copy( const InvestmentTechnology& aOther );
-  //  virtual void setProductionState( const int aPeriod );
     virtual void acceptDerived( IVisitor* aVisitor, const int aPeriod ) const; 
 };
 

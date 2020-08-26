@@ -130,13 +130,6 @@ public:
     void setCoefficient( const double aCoefficient,
                          const int aPeriod );
 
-    void tabulateFixedQuantity( const std::string& aRegionName,
-                                const double aFixedOutput,
-                                const bool aIsInvestmentPeriod,
-                                const int aPeriod );
-
-    virtual void scaleCalibrationQuantity( const double aScaleFactor );
-
     virtual double getCalibrationQuantity( const int aPeriod ) const;
 
     bool hasTypeFlag( const int aTypeFlag ) const;

@@ -322,9 +322,8 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
                     // for this technology in getCapHelper.mTotalCapacity
                     doGetCap.startFilter( scenario );
                 }
-                // we are using -2.0 to signal to the CapacityTechnology to set the
-                // new investment capacity
-                tech->production( mRegionName, mName, getCapHelper.mTotalCapacity, -2.0, 0, aPeriod );
+                // set the new investment capacity
+                tech->setCapacity( getCapHelper.mTotalCapacity, aPeriod );
             }
         }
         // clean up memory from the GCAMFusion query
@@ -353,8 +352,8 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         // we will also cache the costs so that we do not need to re-calculate them
         // over and over again
         auto sortedTechs = mAllTechs;
-        map<ITechnology*, double> techEnergyCostCache;
-        map<ITechnology*, double> techProd;
+        map<CapacityTechnology*, double> techEnergyCostCache;
+        map<CapacityTechnology*, double> techProd;
         for( auto tech : mAllTechs ) {
             auto techMarket = mAllTechMarketMap[ tech ];
             // Calcualte the "energy" costs which is really just subtracting off
@@ -367,7 +366,7 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         }
         // sort technologies from lowest "energy" cost to highest so that we can
         // dispatch in that order
-        sort( sortedTechs.begin(), sortedTechs.end(), [&]( ITechnology* aLHS, ITechnology* aRHS ) -> bool {
+        sort( sortedTechs.begin(), sortedTechs.end(), [&]( CapacityTechnology* aLHS, CapacityTechnology* aRHS ) -> bool {
             return techEnergyCostCache[ aLHS ] < techEnergyCostCache[ aRHS ];
         });
         
@@ -420,7 +419,7 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
                     for( auto tech : sortedTechs) {
                         auto techMarket = mAllTechMarketMap[ tech ];
                         // so we can save dispatch by region + dispatch sector + technology
-                        tuple<ITechnology*, string, string> currSave = make_tuple( tech, segment->mName, techMarket.second );
+                        tuple<CapacityTechnology*, string, string> currSave = make_tuple( tech, segment->mName, techMarket.second );
                         
                         // Ask the technology technology how much energy it _could_ provide
                         // to fill the remaining demand.  This will depend on how much capacity
@@ -428,13 +427,13 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
                         // such as for wind and solar), as well as how hours are left to dispatch as
                         // some capacity may have a minimum capacity factor below which it can no
                         // operate at all.
-                        double maxProduction = dynamic_cast<CapacityTechnology*>( tech )->tryDispatch( techMarket.second,
-                                                                                                       techMarket.first,
-                                                                                                       segment->mName,
-                                                                                                       segmentScaleFraction,
-                                                                                                       remainingHours / HOURS_IN_YEAR,
-                                                                                                       techProd[ tech ],
-                                                                                                       aPeriod );
+                        double maxProduction = tech->tryDispatch( techMarket.second,
+                                                                  techMarket.first,
+                                                                  segment->mName,
+                                                                  segmentScaleFraction,
+                                                                  remainingHours / HOURS_IN_YEAR,
+                                                                  techProd[ tech ],
+                                                                  aPeriod );
                         
                         // remove the generation from this tech from the remaining
                         // the actual generation may be different than the maxProduction
@@ -449,7 +448,8 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
                         // calculate the amount of existing capacity available in this
                         // segment to determine how much new investment may need to be made
                         if( isInvestSegment && tech->getYear() < currYear ) {
-                            currExistCap += dynamic_cast<CapacityTechnology*>( tech )->calcInvestmentCapacityScaleFactor( investNewCost, aPeriod ) * maxProduction / segmentScaleFraction;
+                            currExistCap += tech->calcInvestmentCapacityScaleFactor( techMarket.second, techMarket.first, investNewCost, aPeriod )
+                                * maxProduction / segmentScaleFraction;
                         }
                     }
                     
@@ -490,7 +490,7 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         for( auto currProd : techProd ) {
             auto tech = currProd.first;
             auto techMarket = mAllTechMarketMap[ tech ];
-            tech->production( techMarket.second, techMarket.first, currProd.second, -1.0, aGDP, aPeriod );
+            tech->production( techMarket.second, techMarket.first, currProd.second, 1.0, aGDP, aPeriod );
         }
         
         // TODO: the following is assuming the market name for the capacity credits
@@ -511,7 +511,7 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         // add the capacity shares of intermittent (i.e. non-dispatchable technologies)
         // to the trial market using aggregate capacity as calculated for the entire grid region.
         for (auto tech : mAllTechs) {
-            dynamic_cast<CapacityTechnology*>(tech)->addCapacityShareToMarket(aggregateCapacity, mRegionName, mName, aPeriod);
+            tech->addCapacityShareToMarket(aggregateCapacity, mRegionName, mName, aPeriod);
         }
     }
 }
@@ -529,8 +529,17 @@ template<>
 void DispatchSector::GetOpertingTechs::processData<ITechnologyContainer*>( ITechnologyContainer*& aData ) {
     for( auto iter = aData->getVintageBegin( mPeriod ); iter != aData->getVintageEnd( mPeriod); ++iter ) {
         if( (*iter).second->isOperating( mPeriod ) /*&& ( (*iter).second->isFixedOutputTechnology( mPeriod ) || (*iter).second->getShareWeight() > 0.0 )*/ ) {
-            mParent->mAllTechs.push_back( (*iter).second );
-            mParent->mAllTechMarketMap[ (*iter).second ] = make_pair( *mGenSectorName, *mRegionName );
+            CapacityTechnology* currTech = dynamic_cast<CapacityTechnology*>( (*iter).second );
+            if( !currTech ) {
+                ILogger& mainLog = ILogger::getLogger("main_log");
+                mainLog.setLevel(ILogger::SEVERE);
+                mainLog << mParent->getXMLName() << " " << mParent->mName << " found technology that is not of type CapacityTechnology "
+                    << " in region " << *mRegionName << " and sector " << *mGenSectorName
+                    << ": " << (*iter).second->getName() << ", year: " << (*iter).second->getYear() << endl;
+                abort();
+            }
+            mParent->mAllTechs.push_back( currTech );
+            mParent->mAllTechMarketMap[ currTech ] = make_pair( *mGenSectorName, *mRegionName );
         }
     }
 }
@@ -564,7 +573,7 @@ double DispatchSector::calcAggregateCapacity(const int aPeriod) const {
         auto techMarketIter = mAllTechMarketMap.find( tech );
         assert( techMarketIter != mAllTechMarketMap.end() );
         auto techMarket = (*techMarketIter).second;
-        double capacity = dynamic_cast<CapacityTechnology*>(tech)->getCapacity(techMarket.second, techMarket.first, aPeriod);
+        double capacity = tech->getCapacity(techMarket.second, techMarket.first, aPeriod);
         aggregateCapacity += capacity;
     }
     return aggregateCapacity;

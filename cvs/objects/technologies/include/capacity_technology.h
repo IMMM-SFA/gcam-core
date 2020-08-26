@@ -91,13 +91,15 @@ public:
                         const double aSegmentScaleFactor, const double aPercentRemainHours,
                         const double aPriorDispatch, const int aPeriod ) const;
     
-    double calcInvestmentCapacityScaleFactor( const double aNewInvestCost, const int aPeriod ) const;
+    double calcInvestmentCapacityScaleFactor( const std::string& aRegionName, const std::string& aSectorName,
+                                              const double aNewInvestCost, const int aPeriod ) const;
 
 	virtual void doInterpolations(const Technology* aPrevTech, const Technology* aNextTech);
+    
+    void setCapacity( const double aCapacity, const int aPeriod );
 
-	virtual double getCapacity(	const std::string& aRegionName,
-													const std::string& aSectorName, 
-													const int aPeriod ) const;
+	double getCapacity(	const std::string& aRegionName, const std::string& aSectorName,
+						const int aPeriod ) const;
 
 	virtual void  addCapacityShareToMarket(double aAggregateCapacity,
 		const std::string& aRegionName,
@@ -125,13 +127,18 @@ protected:
 		//! State value necessary to track tech output ration
 		DEFINE_VARIABLE(SIMPLE | STATE, "tech-output-ratio", mIntermitOutTechRatio, Value),
    
-        DEFINE_VARIABLE( SIMPLE , "min-capacity-factor", mMinCapFac, Value )
+        //! A minimum capacity factor where if the capacity factor would be below
+        //! this value the technology would no longer be able to dispatch.
+        DEFINE_VARIABLE( SIMPLE , "min-capacity-factor", mMinCapFac, Value ),
+                            
+        //! We pull out any profit shutdown deciders from Technology::mShutdownDeciders
+        //! as they should not be considered during tryDispatch and they will be used
+        //! for calcInvestmentCapacityScaleFactor
+        DEFINE_VARIABLE( CONTAINER, "investment-scale-factor", mInvestScaleDecider, IShutdownDecider* )
     )
 
-	virtual void toInputXMLDerived(std::ostream& out, Tabs* tabs) const;
 	virtual void toDebugXMLDerived(const int period, std::ostream& out, Tabs* tabs) const;
 	virtual bool XMLDerivedClassParse(const std::string& nodeName, const xercesc::DOMNode* curr);
-	//virtual void acceptDerived(IVisitor* aVisitor, const int aPeriod) const;
 	virtual const std::string& getXMLName() const;
     void copy( const CapacityTechnology& aOther );
     virtual void setProductionState( const int aPeriod );

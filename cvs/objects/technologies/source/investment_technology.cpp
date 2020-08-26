@@ -45,6 +45,7 @@
 #include "technologies/include/iproduction_state.h"
 #include "technologies/include/marginal_profit_calculator.h"
 #include "technologies/include/ioutput.h"
+#include "functions/include/iinput.h"
 #include "util/base/include/ivisitor.h"
 #include "functions/include/input_capital.h"
 #include "sectors/include/capacity_credit_calculator.h"
@@ -60,11 +61,9 @@ extern Scenario* scenario;
 * \param aYear Technology year.
 */
 InvestmentTechnology::InvestmentTechnology(const string& aName, const int aYear) :
-Technology(aName, aYear)
+Technology(aName, aYear),
+mCapacityCreditCalculator( 0 )
 {
-     mCapacityFactor = 0.1;
-	 mCapacityMarketPrice = 0;
-	 mCapacityCreditCalculator = 0;
 }
 
 /*!
@@ -75,7 +74,6 @@ Technology(aName, aYear)
 */
 void InvestmentTechnology::copy(const InvestmentTechnology& aTech) {
     Technology::copy( aTech );
-	mCapacityMarketPrice = aTech.mCapacityMarketPrice;
 	mTrialMarketName = aTech.mTrialMarketName;
 	
 	if (aTech.mCapacityCreditCalculator) {
@@ -93,12 +91,8 @@ InvestmentTechnology::~InvestmentTechnology() {
 //! Parses any input variables specific to derived classes
 bool InvestmentTechnology::XMLDerivedClassParse(const string& aNodeName, const DOMNode* aCurrNode) {
     bool success = false;
-    if( aNodeName == "capacity-market-price" ) {
-        mCapacityMarketPrice = XMLHelper<double>::getValue( aCurrNode );
-        success = true;
-    }
 	// Reading in parameters of the capacity-credit function.
-	else if (aNodeName == CapacityCreditCalculator::getXMLNameStatic()) {
+	if (aNodeName == CapacityCreditCalculator::getXMLNameStatic()) {
 		parseSingleNode(aCurrNode, mCapacityCreditCalculator, new CapacityCreditCalculator);
 		success = true;
 	}
@@ -152,6 +146,15 @@ void InvestmentTechnology::completeInit(const std::string& aRegionName,
 	Technology::completeInit(aRegionName, aSectorName, aSubsectorName, aSubsectorInfo,
 		aLandAllocator);
     
+    // find the capacity credit input
+    const string CAPACITY_CREDIT_NAME = "capacity credit";
+    mCapacityCreditInput = mInputs.end();
+    for( InputSetIterator iter = mInputs.begin(); mCapacityCreditInput == mInputs.end() && iter != mInputs.end(); ++iter ) {
+        if( (*iter)->getName() == CAPACITY_CREDIT_NAME ) {
+            mCapacityCreditInput = iter;
+        }
+    }
+    
 	// Make some tests for bad inputs
 	
 	if (mCapacityFactor == 0.0) {
@@ -159,17 +162,17 @@ void InvestmentTechnology::completeInit(const std::string& aRegionName,
 		mainLog.setLevel(ILogger::SEVERE);
 		mainLog << "Capacity factor not read in for " << getXMLName() << " " << mName << ", " << mYear
 			    << " in region " << aRegionName << " and sector " << aSectorName << endl;
-		//abort();
+		abort();
 	}
 
 	// If capacity-market-price has not been read in then throw error.
-	if (mCapacityMarketPrice == 0.0) {
+	if (mCapacityCreditInput == mInputs.end()) {
 		ILogger& mainLog = ILogger::getLogger("main_log");
 		mainLog.setLevel(ILogger::NOTICE);
 		mainLog << getXMLName() << " " << mName << " in sector " << aSectorName
 			<< " in region " << aRegionName
 			<< " in vintage " << mYear
-			<< " did not read in a capacity market price. Capacity payments will default to zero. " << endl;
+			<< " did not read in a capacity credit price." << endl;
 	}
 	
 	if (!mTrialMarketName.empty() && !mCapacityCreditCalculator) {
@@ -186,12 +189,7 @@ void InvestmentTechnology::completeInit(const std::string& aRegionName,
 //! write object to xml debugging output stream
 void InvestmentTechnology::toDebugXMLDerived(const int aPeriod, ostream& aOut, Tabs* aTabs) const
 {
-	XMLWriteElement(mCapacityMarketPrice, "capacity-market-price", aOut, aTabs);
 	XMLWriteElement(mTrialMarketName, "trial-market-name", aOut, aTabs);
-	
-	if (mCapacityPayment) {
-		XMLWriteElement(mCapacityPayment, "capacity-payment", aOut, aTabs);
-	}
 	if (mCapacityCreditCalculator) {
 			mCapacityCreditCalculator->toDebugXML(aPeriod, aOut, aTabs);
 	}
@@ -269,89 +267,20 @@ void InvestmentTechnology::production(const string& aRegionName,
 */
 
 void InvestmentTechnology::calcCost(const string& aRegionName,
-	const string& aSectorName,
-	const int aPeriod) {
+                                    const string& aSectorName,
+                                    const int aPeriod)
+{
+    
+    if( mProductionState[aPeriod]->isOperating() && mCapacityCreditCalculator && mCapacityCreditInput != mInputs.end() ) {
+        // For intermittent technologies, the method calls the CapacityCreditCalculator::getCapacityCredit method
+        // which is used to calculate the capacity credit (same as capacityPaymentFraction, 0-1) as a function of renewable share
+        // in the capacity market (typically grid region).
+        double capacityCreditAdj = mCapacityCreditCalculator->getCapacityCredit( aRegionName, mTrialMarketName, aPeriod );
+        (*mCapacityCreditInput)->setCoefficient( capacityCreditAdj, aPeriod );
+    }
     
     Technology::calcCost( aRegionName, aSectorName, aPeriod );
-	
-	// A Technology can only calculate costs if it is operating
-   // Note that attempted to retrieve a cost when the technology is not
-   // operating will cause an abort.
-	if (mProductionState[aPeriod]->isOperating()) {
-
-	/*Obtain capacity payments in $/kW using the getCapacityPayment() method and levelize those to $/GJ using 
-	technology-specific capacity factors. 
-	TODO: DO these calculations as part of the input-capital class*/
-
-		// Initialize a constant to convert GJ to kWh
-		const double KWH_TO_GJ = 0.0036;
-		
-		// Initialize a constant for number of hours in a year.
-		const int HOURS_PER_YEAR = 8760;
-		
-		// Initialize a constant for the fixed charge out rate or capital recovery factor.
-		// Assuming an FCR of 0.13 which is prevalent in GCAM. 
-		// Ideally we want to use the FCR that's being read in in the input-capital object but that's complicated.
-		
-		const double FCR = 0.13;
-
-		double capacityPayment_USD_GJ = getCapacityPayment(aRegionName, aSectorName, aPeriod)
-																	* FCR / mCapacityFactor/ HOURS_PER_YEAR/ KWH_TO_GJ;
-		
-		// Adjust levelized costs with capacity payments.
-		
-		mCosts[aPeriod] -= capacityPayment_USD_GJ;
-
-		assert(util::isValidNumber(mCosts[aPeriod]));
-	}
-	
-	
 }
-		  
-
-/*!
- * \brief The InvestmentTechnology::getCapacityPayment method returns the capacity payments to be deducted from 
-			technology costs. The units are in $/kW..
- * \details For dispatchable technologies, capacity payment is equal to the capacity market price. 
-			FOr intermittent technologies, the method calls the CapacityCreditCalculator::getCapacityCredit method 
-			which is used to calculate the capacity credit (same as capacityPaymentFraction, 0-1) as a function of renewable share 
-			in the capacity market (typically grid region).
-* \param aRegion Name of the containing region.
- * \param aSector The name of the sector for which capacity credits are being calculated.
- * \param aPeriod Model period.
- * \return Capacity Payments in $/kW.
- NOTE:  PP sugested reading in capacity-market-price within the InputCapital class. But that might confuse users - especially 
-		if we were to read it in as  "capital-overnight". Instead, GI thinks it might just be simpler and more intuitive to 
-		either: i.) create a new input class or ii.) just read in capacity - market - price along with the investment - technology 
-		object and include it in the costs within the calcCost() method. For now, GI started along second option above.
- */
-
-
-double InvestmentTechnology::getCapacityPayment(const string& aRegionName,
-	const string& aSectorName,
-	const int aPeriod) {
-
-	if (mTrialMarketName.empty()) {
-		mCapacityPayment = mCapacityMarketPrice;
-	}
-		
-	else {
-		
-		
-
-		double capacityPaymentFraction = dynamic_cast<CapacityCreditCalculator*>(mCapacityCreditCalculator)->getCapacityCredit(aRegionName, 
-																										  mTrialMarketName, 
-																										  aPeriod);
-		mCapacityPayment = mCapacityMarketPrice * capacityPaymentFraction;
-
-		
-			}
-		   	
-	return mCapacityPayment;
-}
-
-
-
 
 void InvestmentTechnology::doInterpolations(const Technology* aPrevTech, const Technology* aNextTech) {
 	Technology::doInterpolations(aPrevTech, aNextTech);
