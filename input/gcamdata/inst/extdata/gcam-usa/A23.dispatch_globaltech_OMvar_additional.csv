@@ -7,8 +7,7 @@
 # Column types: ccccnnnnnnnc
 # ----------
 supplysector,subsector,technology,input.OM.var,1971,1990,2005,2010,2015,improvement.max,improvement.rate,improvement.shadow.technology
-electricity,gas,gas (CT),OM-var,1.47,1.47,1.47,1.239308049,1.239308049,0.75,0.01,
-electricity,refined liquids,refined liquids (CT),OM-var,1.47,1.47,1.47,1.239308049,1.239308049,0.75,0.01,
-electricity,gas,gas (steam),OM-var,1.47,1.47,1.47,1.239308049,1.239308049,0.75,0.01,
-electricity,refined liquids,refined liquids (steam),OM-var,1.47,1.47,1.47,1.239308049,1.239308049,0.75,0.01,
-
+electricity,gas,gas (CT),OM-var,1.97007682,1.97007682,1.97007682,1.97007682,1.97007682,1,0,
+electricity,refined liquids,refined liquids (CT),OM-var,1.97007682,1.97007682,1.97007682,1.97007682,1.97007682,1,0,
+electricity,gas,gas (steam),OM-var,1.97007682,1.97007682,1.97007682,1.97007682,1.97007682,1,0,
+electricity,refined liquids,refined liquids (steam),OM-var,1.97007682,1.97007682,1.97007682,1.97007682,1.97007682,1,0,
