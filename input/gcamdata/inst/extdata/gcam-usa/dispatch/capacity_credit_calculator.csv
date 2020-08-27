@@ -1,0 +1,9 @@
+# File: capacity_credit_calculator.csv
+# Title: map capacity credit parameters for nondispatchable technologies
+# Units: NA
+# Source: NA
+# Column types: cnnnn
+# ----------
+subsector,steepness,x.mid,Cmax,Cmin
+solar,40,0.075,0.4,0.05
+wind,40,0.075,0.15,0.15

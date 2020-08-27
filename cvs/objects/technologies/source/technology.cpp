@@ -141,7 +141,7 @@ void Technology::copy( const Technology& techIn ) {
     mFixedOutput = techIn.mFixedOutput;
     mAlphaZero = techIn.mAlphaZero;
     mCapacityFactor = techIn.mCapacityFactor;
-    mTotalHack = techIn.mTotalHack;
+   
 
     // Copy the input vector.
     for( vector<IInput*>::const_iterator iter = techIn.mInputs.begin(); iter != techIn.mInputs.end(); ++iter ) {
@@ -218,7 +218,7 @@ void Technology::init()
     mFixedOutput = -1;
     mAlphaZero = 1;
     mCapacityFactor = 1;
-    mTotalHack = false;
+   
 }
 
 bool Technology::isSameType( const string& aType ) const {
@@ -260,10 +260,8 @@ bool Technology::XMLParse( const DOMNode* node )
         else if( nodeName == "capacity-factor" ) {
             mCapacityFactor = XMLHelper<double>::getValue( curr );
         }
-        else if( nodeName == "total-hack" ) {
-            mTotalHack = XMLHelper<bool>::getValue( curr );
-        }
-        else if( InputFactory::isOfType( nodeName ) ) {
+
+		else if( InputFactory::isOfType( nodeName ) ) {
             parseContainerNode( curr, mInputs, InputFactory::create( nodeName ).release() );
         }
         else if( CaptureComponentFactory::isOfType( nodeName ) ) {
@@ -949,18 +947,15 @@ void Technology::production( const string& aRegionName,
                                                      aFixedOutputScaleFactor,
                                                      mShutdownDeciders,
                                                      aPeriod );
-    if(mTotalHack) {
-        mOutputs[0]->setPhysicalOutput( primaryOutput, aRegionName, mCaptureComponent, aPeriod );
-    }
-    else {
-
+   
+	
     // Calculate input demand.
     mProductionFunction->calcDemand( mInputs, primaryOutput, aRegionName, aSectorName,
                                      1, aPeriod, 0, mAlphaZero );
 
     calcEmissionsAndOutputs( aRegionName, primaryOutput, aGDP, aPeriod );
     }
-}
+
 
 /*!
  * \brief Calculate the emissions, primary and secondary outputs for the

@@ -92,6 +92,8 @@ public:
     virtual bool isSameType( const std::string& aType ) const;
 
     virtual const std::string& getName() const;
+    
+    static const std::string& getXMLNameStatic();
 
     virtual bool XMLParse( const xercesc::DOMNode* aNode );
 
@@ -110,8 +112,6 @@ protected:
     ProfitShutdownDecider();
     
     void copy( const ProfitShutdownDecider& aOther );
-
-    static const std::string& getXMLNameStatic();
 
     // Define data such that introspection utilities can process the data from this
     // subclass together with the data members of the parent classes.

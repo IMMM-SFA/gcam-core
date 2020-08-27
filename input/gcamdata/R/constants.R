@@ -758,6 +758,12 @@ gcamusa.ELEC_INV_MARGIN <- 0.2
 # given as a credit / subsidy (with the intermittent techs getting a reduced credit).
 gcamusa.ELEC_DEFAULT_RE_CC <- -2.5
 
+# profit shutdown params used in capacity technologies to discount capacity when determining
+# the scale of new investment by comparing the cost of building and operating new capacity
+# compared to operating the existing
+gcamusa.ELEC_CAP_INV_STEEPNESS <- 10.0
+gcamusa.ELEC_CAP_INV_MEDIAN <- -0.1
+
 # Time shift conditions ======================================================================
 # Uncomment these lines to run under 'timeshift' conditions
 # # HISTORICAL_YEARS <- 1971:2005       # normally 1971:2010

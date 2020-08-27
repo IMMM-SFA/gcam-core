@@ -54,7 +54,6 @@
     <ProjectName>objects-main</ProjectName>
     <ProjectGuid>{C6E84727-E04B-48EC-B119-EE4A2C0DB34B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -72,7 +71,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - LAPACK|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -102,6 +101,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -383,7 +383,7 @@
     </ClCompile>
     <Link>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\..\..\libs\xercesc\lib;..\..\..\..\libs\java\lib;..\..\..\..\libs\boost-lib\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\libs\boost-lib\bin.v2\libs\filesystem\build\msvc-14.1\release\address-model-64\link-static\threading-multi;..\..\..\..\libs\xercesc\lib;..\..\..\..\libs\java\lib;..\..\..\..\libs\boost-lib\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -628,6 +628,7 @@
     <ClCompile Include="..\..\sectors\source\ag_supply_sector.cpp" />
     <ClCompile Include="..\..\sectors\source\ag_supply_subsector.cpp" />
     <ClCompile Include="..\..\sectors\source\backup_calculator_factory.cpp" />
+    <ClCompile Include="..\..\sectors\source\capacity_credit_calculator.cpp" />
     <ClCompile Include="..\..\sectors\source\capacity_limit_backup_calculator.cpp" />
     <ClCompile Include="..\..\sectors\source\CSP_backup_calculator.cpp" />
     <ClCompile Include="..\..\sectors\source\dispatch_sector.cpp" />
@@ -701,6 +702,7 @@
     <ClCompile Include="..\..\technologies\source\global_technology_database.cpp" />
     <ClCompile Include="..\..\technologies\source\intermittent_technology.cpp" />
     <ClCompile Include="..\..\technologies\source\internal_gains.cpp" />
+    <ClCompile Include="..\..\technologies\source\investment_technology.cpp" />
     <ClCompile Include="..\..\technologies\source\marginal_profit_calculator.cpp" />
     <ClCompile Include="..\..\technologies\source\non_energy_use_capture_component.cpp" />
     <ClCompile Include="..\..\technologies\source\nuke_fuel_technology.cpp" />
@@ -956,6 +958,7 @@
     <ClInclude Include="..\..\sectors\include\ag_supply_sector.h" />
     <ClInclude Include="..\..\sectors\include\ag_supply_subsector.h" />
     <ClInclude Include="..\..\sectors\include\backup_calculator_factory.h" />
+    <ClInclude Include="..\..\sectors\include\capacity_credit_calculator.h" />
     <ClInclude Include="..\..\sectors\include\capacity_limit_backup_calculator.h" />
     <ClInclude Include="..\..\sectors\include\CSP_backup_calculator.h" />
     <ClInclude Include="..\..\sectors\include\dispatch_sector.h" />
@@ -1044,6 +1047,7 @@
     <ClInclude Include="..\..\technologies\include\input_factory.h" />
     <ClInclude Include="..\..\technologies\include\intermittent_technology.h" />
     <ClInclude Include="..\..\technologies\include\internal_gains.h" />
+    <ClInclude Include="..\..\technologies\include\investment_technology.h" />
     <ClInclude Include="..\..\technologies\include\ioutput.h" />
     <ClInclude Include="..\..\technologies\include\iproduction_state.h" />
     <ClInclude Include="..\..\technologies\include\ishutdown_decider.h" />

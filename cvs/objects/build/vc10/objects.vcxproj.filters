@@ -1073,11 +1073,17 @@
     <ClCompile Include="..\..\sectors\source\nesting_subsector.cpp">
       <Filter>Source Files\sectors</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\sectors\source\dispatch_sector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\technologies\source\capacity_technology.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\technology</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sectors\source\dispatch_sector.cpp">
+      <Filter>Source Files\sectors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sectors\source\capacity_credit_calculator.cpp">
+      <Filter>Source Files\sectors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\technologies\source\investment_technology.cpp">
+      <Filter>Source Files\technology</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2213,10 +2219,16 @@
       <Filter>Header Files\sectors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\sectors\include\dispatch_sector.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\sectors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\technologies\include\capacity_technology.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\technologies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sectors\include\capacity_credit_calculator.h">
+      <Filter>Header Files\sectors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\technologies\include\investment_technology.h">
+      <Filter>Header Files\technologies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

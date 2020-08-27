@@ -265,17 +265,6 @@ public:
 		return 0;
 	}
 
-    virtual void tabulateFixedQuantity( const std::string& aRegionName,
-                                        const double aFixedOutput,
-                                        const bool aIsInvestmentPeriod,
-                                        const int aPeriod )
-	{
-	}
-
-    virtual void scaleCalibrationQuantity( const double aScaleFactor )
-	{
-	}
-
     virtual double getCalibrationQuantity( const int aPeriod ) const
 	{
 		return 0;

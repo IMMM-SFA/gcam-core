@@ -240,13 +240,6 @@ public:
         return -1;
     }
 
-    virtual void tabulateFixedQuantity( const std::string& aRegionName,
-                                        const double aFixedOutput,
-                                        const bool aIsInvestmentPeriod,
-                                        const int aPeriod ) {}
-
-    virtual void scaleCalibrationQuantity( const double aScaleFactor ) {}
-
     virtual double getPriceElasticity( const int aPeriod ) const {return 0;}
 
     virtual double getIncomeElasticity( const int aPeriod ) const {return 0;}

@@ -932,34 +932,38 @@ void XMLDBOutputter::endVisitTranTechnology( const TranTechnology* aTranTechnolo
     // do nothing
 }
 
-void XMLDBOutputter::startVisitCapacityTechnology( const CapacityTechnology* aTechnology, const int aPeriod ) {
-    // startVisitCapacityTechnology gets visited after startVisitTechnology which implies
-    // mBufferStack.top() is the child buffer for technology
-    writeItemToBuffer( aTechnology->mCapacity, "capacity",
-                      *mBufferStack.top(), mTabs.get(), -1, "EJ-capacity" );
-    
-    const Modeltime* modeltime = scenario->getModeltime();
-    map<string, string> attrs;
-    double maxPer = aPeriod == -1 ? modeltime->getmaxper() -1 : aPeriod;
-    for( int i = 0; i <= maxPer; ++i ) {
-        // isTechnologyOperating will crash for sgm so avoid calling it
-        if( aPeriod != -1 && !isTechnologyOperating( i ) ){
-            continue;
-        }
-        
-        int currYear = modeltime->getper_to_yr( i );
-        attrs[ "vintage" ] = util::toString( currYear );
-        // Avoid writing zeros to save space.
-        // Write price paid for input.
-        double currValue;
-        currValue = aTechnology->mCosts[ i ];
-        if( !objects::isEqual<double>( currValue, 0.0 ) ) {
-            attrs[ "unit" ] = "1975$/GJ";
-            XMLWriteElementWithAttributes( currValue, "operating-cost", *mBufferStack.top(),
-                                          mTabs.get(), attrs );
-        }
-    }
+void XMLDBOutputter::startVisitCapacityTechnology(const CapacityTechnology* aTechnology, const int aPeriod) {
+	// startVisitCapacityTechnology gets visited after startVisitTechnology which implies
+	// mBufferStack.top() is the child buffer for technology
+	const Modeltime* modeltime = scenario->getModeltime();
+	map<string, string> attrs;
+	double maxPer = aPeriod == -1 ? modeltime->getmaxper() - 1 : aPeriod;
+	for (int i = 0; i <= maxPer; ++i) {
+		// isTechnologyOperating will crash for sgm so avoid calling it
+		if (aPeriod != -1 && !isTechnologyOperating(i)) {
+			continue;
+		}
+		int currYear = modeltime->getper_to_yr(i);
+		attrs["vintage"] = util::toString(currYear);
+		// Avoid writing zeros to save space.
+		// Write price paid for input.
+		double currValue;
+		currValue = aTechnology->mCosts[i];
+		if (!objects::isEqual<double>(currValue, 0.0)) {
+			attrs["unit"] = "1975$/GJ";
+			XMLWriteElementWithAttributes(currValue, "operating-cost", *mBufferStack.top(),
+				mTabs.get(), attrs);
+		}
+		currValue = aTechnology->getCapacity(mCurrentRegion, mCurrentSector, i);
+		
+		if (!objects::isEqual<double>(currValue, 0.0)) {
+			attrs["unit"] = "EJ-capacity";
+			XMLWriteElementWithAttributes(currValue, "capacity", *mBufferStack.top(),
+				mTabs.get(), attrs);
+		}
+	}
 }
+
 
 void XMLDBOutputter::startVisitMiniCAMInput( const MiniCAMInput* aInput, const int aPeriod ) {
     // we use startVisitInput to write out the generic input information, however

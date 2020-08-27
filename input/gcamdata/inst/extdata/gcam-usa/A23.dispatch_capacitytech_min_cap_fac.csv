@@ -1,0 +1,17 @@
+# File: A23.dispatch_capacitytech_min_cap_fac.csv
+# Title: Minimum capacity factor below which these techs can not dispatch
+# Units: %
+# Source: Assumption
+# Column types: cccn
+# ----------
+supplysector,subsector,technology,min.capacity.factor
+electricity,coal,coal (conv pul),0.2
+electricity,coal,coal (IGCC),0.2
+electricity,biomass,biomass (conv),0.2
+electricity,nuclear,Gen_II_LWR,0.2
+electricity,coal,coal (conv pul CCS),0.2
+electricity,coal,coal (IGCC CCS),0.2
+electricity,biomass,biomass (conv CCS),0.2
+electricity,biomass,biomass (IGCC),0.2
+electricity,biomass,biomass (IGCC CCS),0.2
+electricity,nuclear,Gen_III,0.2

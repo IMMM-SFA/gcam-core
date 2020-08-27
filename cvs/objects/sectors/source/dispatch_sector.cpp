@@ -55,7 +55,6 @@
 #include "util/logger/include/ilogger.h"
 #include "util/base/include/gcam_fusion.hpp"
 #include "util/base/include/gcam_data_containers.h"
-#include "sectors/include/sector_utils.h" // delete
 
 using namespace std;
 using namespace xercesc;
@@ -87,6 +86,7 @@ bool DispatchSector::XMLDerivedClassParse( const string& aNodeName, const DOMNod
         DispatchSegment* currSeg = new DispatchSegment;
         currSeg->mName = XMLHelper<string>::getAttr( aNode, "name" );
         currSeg->mDemandSegmentName = XMLHelper<string>::getAttr( aNode, "demand-segment-name" );
+        currSeg->mInvestmentSegmentName = XMLHelper<string>::getAttr( aNode, "investment-segment-name" );
         currSeg->mHours = XMLHelper<double>::getAttr( aNode, "hours" );
         currSeg->mRelativeGen = XMLHelper<double>::getAttr( aNode, "relative-generation" );
         currSeg->mTotalGenFraction = XMLHelper<double>::getAttr( aNode, "generation-fraction" );
@@ -98,21 +98,10 @@ bool DispatchSector::XMLDerivedClassParse( const string& aNodeName, const DOMNod
     return didParse;
 }
 
-void DispatchSector::toInputXMLDerived( ostream& aOut, Tabs* aTabs ) const {
-    //XMLWriteElement( mMarginalRevenueSector, "marginal-revenue-sector", aOut, aTabs );
-    //XMLWriteElementCheckDefault( mMarginalRevenueMarket, "marginal-revenue-market", aOut, aTabs, mRegionName );
-    for( auto genSector : mGenSectors ) {
-        XMLWriteElement( genSector.second, "generation-sector", aOut, aTabs, 0, genSector.first );
-    }
-}
-
 void DispatchSector::toDebugXMLDerived( const int aPeriod, ostream& aOut, Tabs* aTabs ) const {
-    toInputXMLDerived( aOut, aTabs );
-    XMLWriteElement( mNewCapacity, "new-capacity", aOut, aTabs );
-    XMLWriteElement( mExistingCapacity[ aPeriod ], "existing-capacity", aOut, aTabs );
-    XMLWriteElement( mRequiredCapacity[ aPeriod ], "required-capacity", aOut, aTabs );
+	XMLWriteElement(calcAggregateCapacity(aPeriod), "aggregate-capacity", aOut, aTabs);
+    map<string, string> attrs;
     for(auto techSegIt : mSaveTechCurve[ aPeriod ] ) {
-        map<string, string> attrs;
         attrs["segment"] = get<1>(techSegIt.first);
         attrs["tech-name"] = get<0>(techSegIt.first)->getName();
         attrs["tech-year"] = util::toString(get<0>(techSegIt.first)->getYear());
@@ -125,21 +114,44 @@ void DispatchSector::completeInit( const IInfo* aRegionInfo,
                                       ILandAllocator* aLandAllocator )
 {
     // always force trial markets
-    //mUseTrialMarkets = mSubsectors.empty();
     SupplySector::completeInit( aRegionInfo, aLandAllocator );
     
     MarketDependencyFinder* depFinder = scenario->getMarketplace()->getDependencyFinder();
     if(mSubsectors.empty()) {
-    depFinder->addDependency( "capacity investment", mRegionName, "capacity investment", mRegionName );
+        // This instance of DispatchSector will be responsible for dispatching and operating
+        // capacity.
         Marketplace* marketplace = scenario->getMarketplace();
+        
+        // We would like to sort the dispatch segments from the least load to the highest
+        // load as this will be useful when calculating capacity investment so that we can
+        // carry forward investment decisions from lower segments, such as baseload, and take
+        // them into account when calculating for upper segments.
+        sort( mDispatchSegments.begin(), mDispatchSegments.end(), [&]( DispatchSegment* aLHS, DispatchSegment* aRHS ) -> bool {
+            return aLHS->mRelativeGen < aRHS->mRelativeGen;
+        });
+        
         set<string> demandSegmentNames;
         for(auto dispSegment : mDispatchSegments) {
+            // Find the unique set of demand segment market names which can be found
+            // by checking the values in the dispatch segments
             if(demandSegmentNames.find(dispSegment->mDemandSegmentName) == demandSegmentNames.end()) {
                 DemandSegment* newDmdSegment = new DemandSegment(dispSegment->mDemandSegmentName);
                 mDemandSegments.push_back(newDmdSegment);
                 demandSegmentNames.insert(dispSegment->mDemandSegmentName);
             }
+            
+            // If this dispatch segment is a marker for an investment segment we
+            // should include a dependency on that investment segment name and force
+            // it to create trial markets as there is a circular dependency in that
+            // we need to have already gathered new investment to do dispatch but
+            // we need to dispatch to know how much new investment we will need.
+            if(dispSegment->mInvestmentSegmentName != "") {
+                depFinder->addDependency(dispSegment->mInvestmentSegmentName, mRegionName, dispSegment->mInvestmentSegmentName, mRegionName);
+            }
         }
+        
+        // We need to create the markets for the demand segments as no other object
+        // will have done that
         for(auto segment : mDemandSegments) {
             const string segmentMarketName = segment->mName;
             bool isNew = marketplace->createMarket( mRegionName, mRegionName, segmentMarketName, IMarketType::NORMAL);
@@ -148,20 +160,24 @@ void DispatchSector::completeInit( const IInfo* aRegionInfo,
                 marketInfo->setString( "price-unit", mPriceUnit );
                 marketInfo->setString( "output-unit", mOutputUnit );
 
+                // force trial markets as there will be circular dependencies due to
+                // cogen
                 depFinder->addDependency( segmentMarketName, mRegionName, segmentMarketName, mRegionName );
+                // the market is just used to pass demands, there is no actual activity
+                // behind it so just put a dummy activity as a place holder
                 depFinder->resolveActivityToDependency( mRegionName, segmentMarketName,
                                                        new DummyActivity(), new DummyActivity() );
-                //depFinder->copyDependencies( mName, mRegionName, segmentMarketName, mRegionName );
+                // finally associate this dispatch sector as a dependent on the demand segment market
                 depFinder->addDependency( segmentMarketName, mRegionName, mName, mRegionName );
             }
         }
     }
     else {
+        // This instance of DispatchSector is responsible for gathering capacity so we
+        // will need to add dependencies on the investment sectors so they can distribute
+        // new investments to the technologies before this class gathers the capacity
         for( auto genSector : mGenSectors ) {
             depFinder->addDependency( genSector.first, genSector.second, mName, mRegionName, false );
-            /*if(mSubsectors.empty()) {
-             depFinder->copyDependencies( genSector.first, genSector.second, mName, mRegionName );
-             }*/
         }
     }
 }
@@ -190,6 +206,11 @@ void DispatchSector::setMarket() {
     }
 }
 
+/*!
+ * \brief A predicate for GCAMFusion queries that just checks string equality
+ *        but it compares it against a reference.  We do this so we can create
+ *        the query one time but execute it over a list of strings to check.
+ */
 class StringEqualsRef : public AMatchesValue {
 public:
     StringEqualsRef( const std::string& aStr ):mStr( aStr ) {}
@@ -207,6 +228,10 @@ void DispatchSector::initCalc( NationalAccount* aNationalAccount,
 {
     SupplySector::initCalc( aNationalAccount, aDemographics, aPeriod );
     
+    // TODO: we are currently using the fact that the subector is empty to determine
+    // if this instance of dispatch sector is going to calculate the dispatch or
+    // just gather capacity.  This works for GCAM-USA but when we use it in the
+    // global model it may not be correct.
     if( mSubsectors.empty() ) {
         mDoGatherCapacity = false;
         mDoDispatchCapacity = true;
@@ -217,22 +242,32 @@ void DispatchSector::initCalc( NationalAccount* aNationalAccount,
     }
     
     mAllTechs.clear();
+    mAllTechMarketMap.clear();
     GetOpertingTechs getTechs;
     getTechs.mParent = this;
     getTechs.mPeriod = aPeriod;
+    vector<FilterStep*> getCapSteps;
     if( mDoGatherCapacity ) {
+        // If we are just gather techs we will just get the instances of the new vintage
+        // capacity technologies in this sector which we will update with the capacity
+        // investment during supply
         getTechs.mGenSectorName = &mName;
         getTechs.mRegionName = &mRegionName;
-        GCAMFusion<GetOpertingTechs> gatherTechs( getTechs, parseFilterString( "subsector/technology" ) );
+        getCapSteps = parseFilterString( "subsector/technology" );
+        GCAMFusion<GetOpertingTechs> gatherTechs( getTechs, getCapSteps );
         gatherTechs.startFilter( this );
     }
     else {
+        // if this instance is doing dispatch we need to get a reference to the capacity
+        // technologies to dispatch which may live in some separate region / sector
         string currRegion;
         string currSector;
         getTechs.mGenSectorName = &currSector;
         getTechs.mRegionName = &currRegion;
-        vector<FilterStep*> getCapSteps;
         getCapSteps.push_back( new FilterStep( "world" ) );
+        // note the StringEqualsRef
+        // this is so we can create the query one and re-use it as we loop over
+        // region / sectors from which to gather technologies
         getCapSteps.push_back( new FilterStep( "region", new NamedFilter( new StringEqualsRef( currRegion ) ) ) );
         getCapSteps.push_back( new FilterStep( "sector", new NamedFilter( new StringEqualsRef( currSector ) ) ) );
         getCapSteps.push_back( new FilterStep( "subsector" ) );
@@ -243,26 +278,29 @@ void DispatchSector::initCalc( NationalAccount* aNationalAccount,
             currSector = genSector.first;
             gatherTechs.startFilter( scenario );
         }
-        for( auto filterStep : getCapSteps ) {
-            delete filterStep;
-        }
     }
-    
-    //std::cout << "Found techs: " << mAllTechs.size() << endl;
+    // clean up memory from the GCAMFusion query
+    for( auto filterStep : getCapSteps ) {
+        delete filterStep;
+    }
 }
 
 void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
     Marketplace* marketplace = scenario->getMarketplace();
-    // demand for the good produced by this Sector
-    //double marketDemand = max( marketplace->getDemand( "electricity", mRegionName, aPeriod ), 0.0 );
     
     if( mDoGatherCapacity && aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() ) {
+        // this instance needs to gather new capacity investments
+        // we use a GCAMFusion to query the technologies in the investment sectors
+        // and collect new capacity investments by technology
         int year = scenario->getModeltime()->getper_to_yr( aPeriod );
         string currRegion;
         string currSector;
         string currTech;
         vector<FilterStep*> getCapSteps;
         getCapSteps.push_back( new FilterStep( "world" ) );
+        // note the StringEqualsRef
+        // this is so we can create the query one and re-use it as we loop over
+        // region / sectors from which to gather capacity
         getCapSteps.push_back( new FilterStep( "region", new NamedFilter( new StringEqualsRef( currRegion ) ) ) );
         getCapSteps.push_back( new FilterStep( "sector", new NamedFilter( new StringEqualsRef( currSector ) ) ) );
         getCapSteps.push_back( new FilterStep( "subsector" ) );
@@ -271,122 +309,210 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         GetCapacityHelper getCapHelper;
         getCapHelper.mPeriod = aPeriod;
         GCAMFusion<GetCapacityHelper> doGetCap( getCapHelper, getCapSteps );
+        // gather capacity by technology
         for( auto tech : mAllTechs ) {
             getCapHelper.mTotalCapacity = 0;
             currTech = tech->getName();
             if( tech->isNewInvestment( aPeriod ) ) {
+                // and collapse accross investment segment
                 for( auto genSector: mGenSectors ) {
                     currRegion = genSector.second;
                     currSector = genSector.first;
+                    // this will run the query and store the total new investment
+                    // for this technology in getCapHelper.mTotalCapacity
                     doGetCap.startFilter( scenario );
                 }
-                tech->production( mRegionName, mName, getCapHelper.mTotalCapacity, -2.0, 0, aPeriod );
+                // set the new investment capacity
+                tech->setCapacity( getCapHelper.mTotalCapacity, aPeriod );
             }
         }
+        // clean up memory from the GCAMFusion query
         for( auto filterStep : getCapSteps ) {
             delete filterStep;
         }
+
+	
     }
     
 
     if( mDoDispatchCapacity ) {
-        double totalElecDemand = 0.0;
-        //if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod() ) {
-            for( auto segment : mDemandSegments ) {
-                totalElecDemand += marketplace->getDemand( segment->mName, mRegionName, aPeriod );
-            }
-        //}
-        auto sortedTechs = mAllTechs;
-        sort( sortedTechs.begin(), sortedTechs.end(), [&]( ITechnology* aLHS, ITechnology* aRHS ) -> bool {
-            auto lhsMarket = mAllTechMarketMap[ aLHS ];
-            auto rhsMarket = mAllTechMarketMap[ aRHS ];
-            return aLHS->getEnergyCost( lhsMarket.second, lhsMarket.first, aPeriod ) < aRHS->getEnergyCost( rhsMarket.second, rhsMarket.first, aPeriod );
-        });
+		// this instance will actually dispatch the capacity technologies
         
-        map<ITechnology*, double> techProd;
-        for( auto tech : sortedTechs ) {
+        // calculate the total electricity demand which will be needed during calibration
+        // or to calculate the total average average cost of electricity
+        double totalElecDemand = 0.0;
+        for( auto segment : mDemandSegments ) {
+            // guard against negative demands
+            // TODO: use 0.0 or util::getVerySmallNumber?  The later was put in as a test
+            // to help with solving but is it really necessary?
+            totalElecDemand += std::max(marketplace->getDemand( segment->mName, mRegionName, aPeriod ), util::getVerySmallNumber());
+        }
+        
+        // sort the technologies by energy cost
+        // we will also cache the costs so that we do not need to re-calculate them
+        // over and over again
+        auto sortedTechs = mAllTechs;
+        map<CapacityTechnology*, double> techEnergyCostCache;
+        map<CapacityTechnology*, double> techProd;
+        for( auto tech : mAllTechs ) {
+            auto techMarket = mAllTechMarketMap[ tech ];
+            // Calcualte the "energy" costs which is really just subtracting off
+            // the capital and OM_Fixed.  Note, the CapacityTechnology also tacks
+            // on GHG costs as well.
+            // save to avoid recalculating the costs again
+            techEnergyCostCache[ tech ] = tech->getEnergyCost( techMarket.second, techMarket.first, aPeriod );
+            // initialize production by tech to zero
             techProd[ tech ] = 0.0;
         }
+        // sort technologies from lowest "energy" cost to highest so that we can
+        // dispatch in that order
+        sort( sortedTechs.begin(), sortedTechs.end(), [&]( CapacityTechnology* aLHS, CapacityTechnology* aRHS ) -> bool {
+            return techEnergyCostCache[ aLHS ] < techEnergyCostCache[ aRHS ];
+        });
         
         const double HOURS_IN_YEAR = 8760.0;
         const double RESERVE_FRACTION = 1.15;
         int currYear = scenario->getModeltime()->getper_to_yr( aPeriod );
-        double maxExistingCapacity = 0.0;
-        double maxRequiredCapacity = 0.0;
-        double capacityPrice = marketplace->getPrice( "capacity investment" , mRegionName, aPeriod );
+        double remainingHours = HOURS_IN_YEAR;
+        double totalNewInvest = 0.0;
+        double capacityPrice = 2.5;//marketplace->getPrice( "capacity investment" , mRegionName, aPeriod );
         double avgCost = 0.0;
+        
+        // loop over each demand segment and figure out the how much electricity
+        // was demanded
         for( auto demandSegment : mDemandSegments ) {
-                        const string segmentMarketName = demandSegment->mName;
-        for( auto segment : mDispatchSegments ) {
-            if(segment->mDemandSegmentName == segmentMarketName) {
-            double segmentDemand = marketplace->getDemand(segmentMarketName, mRegionName, aPeriod);
-            double remainingProduction = segmentDemand * segment->mTotalGenFraction;
-            double segmentScaleFraction = segment->mHours / HOURS_IN_YEAR;
-            if( segment->mRelativeGen == 1.0 ) {
-                maxRequiredCapacity = ( remainingProduction / segmentScaleFraction ) * RESERVE_FRACTION;
-            }
-            if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod() ) {
-                remainingProduction = totalElecDemand * 1.0 / mDemandSegments.size();
-                segmentScaleFraction = 1.0 / mDemandSegments.size();
-            }
+            const string segmentMarketName = demandSegment->mName;
+            // TODO: use 0.0 or util::getVerySmallNumber?  The later was put in as a test
+            // to help with solving but is it really necessary?
+            double segmentDemand = std::max(marketplace->getDemand(segmentMarketName, mRegionName, aPeriod), util::getVerySmallNumber());
+            // loop over each dispatch segment in this demand segment and dispatch
+            // the technologies for each one
+            for( auto segment : mDispatchSegments ) {
+                if(segment->mDemandSegmentName == segmentMarketName) {
+                    // initialize the amount of energy we need to dispatch to the total
+                    // times the fraction which is provided by this dispatch segment
+                    double remainingProduction = segmentDemand * segment->mTotalGenFraction;
+                    // we can use this segmentScaleFraction to convert to load which
+                    // we will need asking the technologies capacity can they provide
+                    // to supply this energy
+                    double segmentScaleFraction = segment->mHours / HOURS_IN_YEAR;
+                    
+                    // NOTE: we do not actually have calibration information about technology
+                    // dispatch order.  Instead we simply rescale ALL dispatch segments to be
+                    // equal and the technologies will be using a calibrated total capacity
+                    // factor.  Thus in *total* we will be able to match historical values
+                    if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod() ) {
+                        remainingProduction = totalElecDemand * 1.0 / mDemandSegments.size();
+                        segmentScaleFraction = 1.0 / mDemandSegments.size();
+                    }
+                    
+                    // If this dispatch segment was tagged as a marker segment for
+                    // an investment segment we will need to calculate how much new
+                    // capacity we want to invest in which is dependent on the price
+                    // of investing in brand new capacity in that investment segment.
+                    bool isInvestSegment = !segment->mInvestmentSegmentName.empty();
+                    double investNewCost = isInvestSegment ? marketplace->getPrice(segment->mInvestmentSegmentName, mRegionName, aPeriod) : 0.0;
+                    double currMaxInvestCap = ( remainingProduction / segmentScaleFraction ) * RESERVE_FRACTION;
+                    double currExistCap = 0.0;
 
-            for( auto tech : sortedTechs) {
-                auto techMarket = mAllTechMarketMap[ tech ];
-                tuple<ITechnology*, string, string> currSave = make_tuple( tech, segment->mName, techMarket.second );
-                double maxProduction = dynamic_cast<CapacityTechnology*>( tech )->tryDispatch( techMarket.second, techMarket.first, segment->mName, remainingProduction, segmentScaleFraction, aPeriod );
-                double currProduction = std::min( remainingProduction, maxProduction );
-                mSaveTechCurve[ aPeriod ][currSave] = currProduction;
-                techProd[ tech ] += currProduction;
-                //bool wasRemainng = remainingProduction > 0.0;
-                remainingProduction -= currProduction;
-                /*if( wasRemainng && remainingProduction == 0.0 ) {
-                    avgCost += tech->getEnergyCost( mRegionName, mName, aPeriod ) * segment.mHours;
-                }*/
-                avgCost += tech->getEnergyCost( mRegionName, mName, aPeriod ) * currProduction;
-                if( segment->mRelativeGen == 1.0 && tech->getYear() < currYear ) {
-                    maxExistingCapacity += maxProduction / segmentScaleFraction;
+                    // do the dispatch
+                    for( auto tech : sortedTechs) {
+                        auto techMarket = mAllTechMarketMap[ tech ];
+                        // so we can save dispatch by region + dispatch sector + technology
+                        tuple<CapacityTechnology*, string, string> currSave = make_tuple( tech, segment->mName, techMarket.second );
+                        
+                        // Ask the technology technology how much energy it _could_ provide
+                        // to fill the remaining demand.  This will depend on how much capacity
+                        // there is, it's capacity factor (which may vary depending on the segment
+                        // such as for wind and solar), as well as how hours are left to dispatch as
+                        // some capacity may have a minimum capacity factor below which it can no
+                        // operate at all.
+                        double maxProduction = tech->tryDispatch( techMarket.second,
+                                                                  techMarket.first,
+                                                                  segment->mName,
+                                                                  segmentScaleFraction,
+                                                                  remainingHours / HOURS_IN_YEAR,
+                                                                  techProd[ tech ],
+                                                                  aPeriod );
+                        
+                        // remove the generation from this tech from the remaining
+                        // the actual generation may be different than the maxProduction
+                        // if there was less remaining generation require
+                        double currProduction = std::max(std::min( remainingProduction, maxProduction ), 0.0);
+                        mSaveTechCurve[ aPeriod ][currSave] = currProduction;
+                        techProd[ tech ] += currProduction;
+                        remainingProduction -= currProduction;
+                        // we are calculating the cost as the weighted average across all segments
+                        avgCost += techEnergyCostCache[ tech ] * currProduction;
+
+                        // calculate the amount of existing capacity available in this
+                        // segment to determine how much new investment may need to be made
+                        if( isInvestSegment && tech->getYear() < currYear ) {
+                            currExistCap += tech->calcInvestmentCapacityScaleFactor( techMarket.second, techMarket.first, investNewCost, aPeriod )
+                                * maxProduction / segmentScaleFraction;
+                        }
+                    }
+                    
+                    // TODO: some error checking to ensure there was enough capacity to meet demand
+                    /*if( remainingProduction != 0.0 ) {
+                        cout << "Remaining production in segment: " << remainingProduction << " in " << mRegionName << ", " << mName << ", " << segment.mName << endl;
+                    }*/
+                    
+                    // now that we have looped all of the technologies we can update the
+                    // market on how much new investment may be needed
+                    if( isInvestSegment ) {
+                        // TODO: right now it helps solution if we don't set an absolute zero
+                        // for new investment to ensure the trial market doesn't get stuck as
+                        // unsolvable
+                        double currNewInvest = aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() ? std::max( currMaxInvestCap - currExistCap - totalNewInvest , 2 * util::getSmallNumber() ) : 0.0;
+                        totalNewInvest += currNewInvest;
+                        segment->getNewInvestment() = currNewInvest;
+                        marketplace->addToDemand( segment->mInvestmentSegmentName, mRegionName, segment->getNewInvestment(), aPeriod );
+                    }
+                    remainingHours -= segment->mHours;
+
                 }
             }
-            if( remainingProduction != 0.0 ) {
-                //cout << "Remaining production in segment: " << remainingProduction << " in " << mRegionName << ", " << mName << ", " << segment.mName << endl;
-                //avgCost += sortedTechs.back()->getEnergyCost( mRegionName, mName, aPeriod ) * segment.mHours;
-            }
-
-            }
         }
-        }
+        // calculate the average cost and add on the capacity investment cost
         avgCost = avgCost / totalElecDemand + capacityPrice;
+        marketplace->setPrice( mName, mRegionName, avgCost, aPeriod );
+        // right now we are assuming the same price in all demand segments
+        // this is mostly because we can't calibrate it
         for( auto segment : mDemandSegments ) {
-            segment->getCost() = avgCost;
-            const string segmentMarketName = /*mName+"_"+*/segment->mName;
+            const string segmentMarketName = segment->mName;
             marketplace->setPrice( segmentMarketName, mRegionName, avgCost, aPeriod );
         }
-        //double remainingProduction = marketDemand;
+        
+        // now that we have the total annual production for each technology we can
+        // operate them using the normal equations to calculate input demands and
+        // emissions
         for( auto currProd : techProd ) {
             auto tech = currProd.first;
             auto techMarket = mAllTechMarketMap[ tech ];
-            tech->production( techMarket.second, techMarket.first, currProd.second, -1.0, aGDP, aPeriod );
-            double currTechOutput = tech->getOutput( aPeriod );
-            //avgCost += currTechOutput * tech->getEnergyCost( techMarket.second, techMarket.first, aPeriod );
-            if( !util::isEqual(currTechOutput, currProd.second) ) {
-                cout << tech->getName() << ", " << tech->getYear() << " -> from seg: " << currProd.second << " production: " << currTechOutput << endl;
-            }
-            //remainingProduction -= currTechOutput;
+            tech->production( techMarket.second, techMarket.first, currProd.second, 1.0, aGDP, aPeriod );
         }
-        /*if( remainingProduction != 0.0 ) {
-            //cout << "Remaining production: " << remainingProduction << " in " << mRegionName << ", " << mName << endl;
-        }*/
-        mExistingCapacity = maxExistingCapacity;
-        mRequiredCapacity = maxRequiredCapacity;
-
-        /*avgCost = ( marketDemand == 0.0 ? avgCost : avgCost / marketDemand )
-            + marketplace->getPrice( "capacity investment" , mRegionName, aPeriod );
-        //cout << mRegionName << " Avg cost: " << avgCost << endl;
-        mSupply = marketDemand;// - remainingProduction;
-        marketplace->setPrice( mName, mRegionName, avgCost, aPeriod );
-        marketplace->addToSupply( mName, mRegionName, mSupply, aPeriod );*/
-        mNewCapacity = aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() ? std::max( maxRequiredCapacity - maxExistingCapacity , 0.0 ) : 0.0;
-        marketplace->addToDemand( "capacity investment", mRegionName, mNewCapacity, aPeriod );
+        
+        // TODO: the following is assuming the market name for the capacity credits
+        // is the grid region.  We could potentially make it more flexible with some
+        // modest complication of this code.
+        
+        // Next we perform Trial Market Calculations for Capacity Credits.
+        // Typically, we want all regions (states) within a containing grid region
+        // to see the same capacity market price and capacity payments based on share
+        // of renewables in that grid region. Hence, we begin by aggregating capacity
+        // in the grid region (that is, when mDoDispatchCapacity = True).
+        
+        // Aggregating capacity across all capacity technologies for capacity credits
+        // calculations to be done in CapacityTechnology and InvestmentTechnology classes.
+        double aggregateCapacity = calcAggregateCapacity(aPeriod);
+	
+        // Calling the CapacityTechnology::addCapacityShareToMarket method which will
+        // add the capacity shares of intermittent (i.e. non-dispatchable technologies)
+        // to the trial market using aggregate capacity as calculated for the entire grid region.
+        for (auto tech : mAllTechs) {
+            tech->addCapacityShareToMarket(aggregateCapacity, mRegionName, mName, aPeriod);
+        }
     }
 }
 
@@ -402,9 +528,19 @@ void DispatchSector::GetOpertingTechs::processData( DataType& aData ) {
 template<>
 void DispatchSector::GetOpertingTechs::processData<ITechnologyContainer*>( ITechnologyContainer*& aData ) {
     for( auto iter = aData->getVintageBegin( mPeriod ); iter != aData->getVintageEnd( mPeriod); ++iter ) {
-        if( (*iter).second->isOperating( mPeriod ) /*&& ( (*iter).second->isFixedOutputTechnology( mPeriod ) || (*iter).second->getShareWeight() > 0.0 )*/ ) {
-            mParent->mAllTechs.push_back( (*iter).second );
-            mParent->mAllTechMarketMap[ (*iter).second ] = make_pair( *mGenSectorName, *mRegionName );
+        if( (*iter).second->isOperating( mPeriod ) ) {
+            CapacityTechnology* currTech = dynamic_cast<CapacityTechnology*>( (*iter).second );
+            if( !currTech ) {
+                ILogger& mainLog = ILogger::getLogger("main_log");
+                mainLog.setLevel(ILogger::SEVERE);
+                mainLog << mParent->getXMLName() << " " << mParent->mName
+                    << " found technology that is not of type CapacityTechnology "
+                    << " in region " << *mRegionName << " and sector " << *mGenSectorName
+                    << ": " << (*iter).second->getName() << ", year: " << (*iter).second->getYear() << endl;
+                abort();
+            }
+            mParent->mAllTechs.push_back( currTech );
+            mParent->mAllTechMarketMap[ currTech ] = make_pair( *mGenSectorName, *mRegionName );
         }
     }
 }
@@ -418,3 +554,29 @@ template<>
 void DispatchSector::GetCapacityHelper::processData<ITechnology*>( ITechnology*& aData ) {
     mTotalCapacity += aData->getOutput( mPeriod ) / aData->getCapacityFactor();
 }
+
+
+/*!
+ * \brief The calcAggregateCapacity method aggregates capacity across all capacity-technology vintages.
+ * \details We use mAllTechs member variable which contains all capacity-technologies by vintage from the dispatch sector
+ *		    to loop through all capacity technology vintages. This method is called in the DispactchSector::Supply method to
+ *          add capacity shares of intermittent (i.e. non-dispatchable) technologies to the trial market. This method
+ *          calls the CapacityTechnology::getCapacity() method which accounts only for natural retirements.
+ *          Note that we used "AggregateCapacity" since "TotalCapacity" corresponds to capacity
+ *          of a single technology summed across investment segments.
+ * \param aPeriod Model period.
+ * \return aggregate capacity which is the total capacity of all capacity vintages within the containing sector. This includes natural
+ *							retirements.
+ */
+double DispatchSector::calcAggregateCapacity(const int aPeriod) const {
+    double aggregateCapacity = 0;
+    for (auto tech : mAllTechs) {
+        auto techMarketIter = mAllTechMarketMap.find( tech );
+        assert( techMarketIter != mAllTechMarketMap.end() );
+        auto techMarket = (*techMarketIter).second;
+        double capacity = tech->getCapacity(techMarket.second, techMarket.first, aPeriod);
+        aggregateCapacity += capacity;
+    }
+    return aggregateCapacity;
+}
+

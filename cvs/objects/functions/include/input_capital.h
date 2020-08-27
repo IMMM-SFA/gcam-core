@@ -133,13 +133,6 @@ public:
     void setCoefficient( const double aCoefficient,
                          const int aPeriod );
 
-    void tabulateFixedQuantity( const std::string& aRegionName,
-                                const double aFixedOutput,
-                                const bool aIsInvestmentPeriod,
-                                const int aPeriod );
-
-    virtual void scaleCalibrationQuantity( const double aScaleFactor );
-
     virtual double getCalibrationQuantity( const int aPeriod ) const;
 
     bool hasTypeFlag( const int aTypeFlag ) const;
@@ -170,7 +163,7 @@ protected:
         //! Coefficient for production or demand function. Coefficients are not
         // read in and are initialized to 1, but can increase over time with
         // technical change.
-        DEFINE_VARIABLE( ARRAY, "adjusted-coef", mAdjustedCoefficients, objects::TechVintageVector<Value> ),
+        DEFINE_VARIABLE( ARRAY | STATE, "adjusted-coef", mAdjustedCoefficients, objects::TechVintageVector<Value> ),
         
         //! Input specific technical change.
         DEFINE_VARIABLE( SIMPLE, "tech-change", mTechChange, Value ),
@@ -180,18 +173,7 @@ protected:
         
         //! Fixed charge rate for levelizing capital.
         // TODO: this should come from the capital market.
-        DEFINE_VARIABLE( SIMPLE, "fixed-charge-rate", mFixedChargeRate, double ),
-        
-        //! Lifetime of capital that may be different from lifetime of technology.
-        // This is a Value object so as to include units.
-        DEFINE_VARIABLE( SIMPLE, "lifetime-capital", mLifetimeCapital, Value ),
-        
-        //! Calculated value for the levelized cost of capital.
-        DEFINE_VARIABLE( SIMPLE, "levelized-capital-cost", mLevelizedCapitalCost, Value ),
-        
-        //! Technology capacity factor.
-        // TODO: create one in technology and use that instead.
-        DEFINE_VARIABLE( SIMPLE, "capacity-factor", mCapacityFactor, double )
+        DEFINE_VARIABLE( SIMPLE, "fixed-charge-rate", mFixedChargeRate, double )
     )
     
     void copy( const InputCapital& aOther );
@@ -200,7 +182,7 @@ private:
     const static std::string XML_REPORTING_NAME; //!< tag name for reporting xml db 
 
     // Function to calculate levelized capital costs.
-    double calcLevelizedCapitalCost( void ) const;
+    double calcLevelizedCapitalCost( const double aCapacityFactor ) const;
 
 };
 

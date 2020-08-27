@@ -28,36 +28,33 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.TechCapFac_Investment",
              "L223.GlobalTechCapture_Investment",
              "L223.GlobalTechCost_Investment",
-             "L223.GlobalTechHack_Investment",
+             "L223.GlobalTechCost_CapacityCreditCalulator",
              "L223.Sector_Investment_StateShare",
              "L223.Subsector_Investment_StateShare",
              "L223.SubsectorShrwtFllt_Investment_StateShare",
              "L223.TechCoef_Investment_StateShare",
+             "L223.TechPmult_Investment_StateShare",
              "L223.TechShrwt_Investment_StateShare",
-             "L223.Sector_Investment_LoadCurve",
-             "L223.SectorUseTrialMarket_Investment_LoadCurve",
-             "L223.SubsectorLogit_Investment_LoadCurve",
-             "L223.SubsectorShrwtFllt_Investment_LoadCurve",
-             "L223.TechShrwt_Investment_LoadCurve",
-             "L223.TechCoef_Investment_LoadCurve",
-             "L223.TechPMult_Investment_LoadCurve",
-             "L223.TechCost_Investment_LoadCurve",
              "L223.DispatchSector",
              "L223.Sector_Dispatch",
              "L223.SubsectorLogit_Dispatch",
              "L223.SubsectorShrwtFllt_Dispatch",
              "L223.CapacityTech_FutureTechs",
              "L223.CapacityTechSegmentCapFac",
+             "L223.CapacityTechMinCapFac",
              "L223.CapacityTech",
              "L223.TechShrwt_Dispatch",
              "L223.TechEff_Dispatch",
              "L223.TechOMvar_Dispatch",
              "L223.TechLifetime_Dispatch",
+             "L223.TechProfitShutdown_Dispatch",
              "L223.TechSCurve_Dispatch",
              "L223.TechCapFac_Dispatch",
              "L223.TechCarbonCapture_Dispatch",
              "L223.Production_Dispatch",
              "L223.TechEff_Cal",
+             "L223.TechTrialMarket_Dispatch",
+             "L223.TechTrialMarket_Investment",
              "L223.Sector_Dispatch_Grid",
              "L223.DispatchSectorCalProd",
              "L223.DispatchSectorDispatchSegments",
@@ -110,20 +107,13 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.TechCapFac_Investment <- get_data(all_data, "L223.TechCapFac_Investment")
     L223.GlobalTechCapture_Investment <- get_data(all_data, "L223.GlobalTechCapture_Investment")
     L223.GlobalTechCost_Investment <- get_data(all_data, "L223.GlobalTechCost_Investment")
-    L223.GlobalTechHack_Investment <- get_data(all_data, "L223.GlobalTechHack_Investment")
+    L223.GlobalTechCost_CapacityCreditCalulator <- get_data(all_data, "L223.GlobalTechCost_CapacityCreditCalulator")
     L223.Sector_Investment_StateShare <- get_data(all_data, "L223.Sector_Investment_StateShare")
     L223.Subsector_Investment_StateShare <- get_data(all_data, "L223.Subsector_Investment_StateShare")
     L223.SubsectorShrwtFllt_Investment_StateShare <- get_data(all_data, "L223.SubsectorShrwtFllt_Investment_StateShare")
     L223.TechCoef_Investment_StateShare <- get_data(all_data, "L223.TechCoef_Investment_StateShare")
+    L223.TechPmult_Investment_StateShare <- get_data(all_data, "L223.TechPmult_Investment_StateShare")
     L223.TechShrwt_Investment_StateShare <- get_data(all_data, "L223.TechShrwt_Investment_StateShare")
-    L223.Sector_Investment_LoadCurve <- get_data(all_data, "L223.Sector_Investment_LoadCurve")
-    L223.SectorUseTrialMarket_Investment_LoadCurve <- get_data(all_data, "L223.SectorUseTrialMarket_Investment_LoadCurve")
-    L223.SubsectorLogit_Investment_LoadCurve <- get_data(all_data, "L223.SubsectorLogit_Investment_LoadCurve")
-    L223.SubsectorShrwtFllt_Investment_LoadCurve <- get_data(all_data, "L223.SubsectorShrwtFllt_Investment_LoadCurve")
-    L223.TechShrwt_Investment_LoadCurve <- get_data(all_data, "L223.TechShrwt_Investment_LoadCurve")
-    L223.TechCoef_Investment_LoadCurve <- get_data(all_data, "L223.TechCoef_Investment_LoadCurve")
-    L223.TechPMult_Investment_LoadCurve <- get_data(all_data, "L223.TechPMult_Investment_LoadCurve")
-    L223.TechCost_Investment_LoadCurve <- get_data(all_data, "L223.TechCost_Investment_LoadCurve")
     L223.DispatchSector <- get_data(all_data, "L223.DispatchSector")
     L223.Sector_Dispatch <- get_data(all_data, "L223.Sector_Dispatch")
     L223.SubsectorLogit_Dispatch <- get_data(all_data, "L223.SubsectorLogit_Dispatch")
@@ -131,17 +121,21 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.CapacityTech_FutureTechs <- get_data(all_data, "L223.CapacityTech_FutureTechs") %>%
       rename(dispatch.sector = supplysector, capacity.technology = technology)
     L223.CapacityTechSegmentCapFac <- get_data(all_data, "L223.CapacityTechSegmentCapFac")
+    L223.CapacityTechMinCapFac <- get_data(all_data, "L223.CapacityTechMinCapFac")
     L223.CapacityTech <- get_data(all_data, "L223.CapacityTech") %>%
       rename(dispatch.sector = supplysector, capacity.technology = technology)
     L223.TechShrwt_Dispatch <- get_data(all_data, "L223.TechShrwt_Dispatch")
     L223.TechEff_Dispatch <- get_data(all_data, "L223.TechEff_Dispatch")
     L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch")
     L223.TechLifetime_Dispatch <- get_data(all_data, "L223.TechLifetime_Dispatch")
+    L223.TechProfitShutdown_Dispatch <- get_data(all_data, "L223.TechProfitShutdown_Dispatch")
     L223.TechSCurve_Dispatch <- get_data(all_data, "L223.TechSCurve_Dispatch")
     L223.TechCapFac_Dispatch <- get_data(all_data, "L223.TechCapFac_Dispatch")
     L223.TechCarbonCapture_Dispatch <- get_data(all_data, "L223.TechCarbonCapture_Dispatch")
     L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
     L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
+    L223.TechTrialMarket_Dispatch <- get_data(all_data, "L223.TechTrialMarket_Dispatch")
+    L223.TechTrialMarket_Investment <- get_data(all_data, "L223.TechTrialMarket_Investment")
     L223.Sector_Dispatch_Grid <- get_data(all_data, "L223.Sector_Dispatch_Grid")
     L223.DispatchSectorCalProd <- get_data(all_data, "L223.DispatchSectorCalProd")
     L223.DispatchSectorDispatchSegments <- get_data(all_data, "L223.DispatchSectorDispatchSegments")
@@ -188,46 +182,46 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.SubsectorInterp_Investment, "SubsectorInterp") %>%
       add_xml_data(L223.SubsectorInterpTo_Investment, "SubsectorInterpTo") %>%
       add_xml_data(L223.StubTech_Investment, "StubTech") %>%
-      add_xml_data(L223.GlobalTechEff_Investment, "GlobalTechEff", NULL) %>%
+      add_xml_data(L223.GlobalTechEff_Investment, "GlobalTechEff_investment", NULL) %>%
       add_xml_data(L223.StubTechMarket_Investment, "StubTechMarket") %>%
-      add_xml_data(L223.GlobalTechOMfixed_Investment, "GlobalTechOMfixed") %>%
-      add_xml_data(L223.GlobalTechOMvar_Investment, "GlobalTechOMvar") %>%
-      add_xml_data(L223.GlobalTechCapital_Investment, "GlobalTechCapital") %>%
-      add_xml_data(L223.GlobalTechShrwt_Investment, "GlobalTechShrwt", NULL) %>%
-      add_xml_data(L223.GlobalTechCapFac_Investment, "GlobalTechCapFac", NULL) %>%
+      add_xml_data(L223.GlobalTechOMfixed_Investment, "GlobalTechOMfixed_investment", NULL) %>%
+      add_xml_data(L223.GlobalTechOMvar_Investment, "GlobalTechOMvar_investment", NULL) %>%
+      add_xml_data(L223.GlobalTechCapital_Investment, "GlobalTechCapital_investment", NULL) %>%
+      add_xml_data(L223.GlobalTechShrwt_Investment, "GlobalTechShrwt_investment", NULL) %>%
+      add_xml_data(L223.GlobalTechCapFac_Investment, "GlobalTechCapFac_investment", NULL) %>%
       add_xml_data(L223.TechCapFac_Investment, "TechCapFac", NULL) %>%
-      add_xml_data(L223.GlobalTechCapture_Investment, "GlobalTechCapture", NULL) %>%
-      add_xml_data(L223.GlobalTechCost_Investment, "GlobalTechCost", NULL) %>%
-      add_xml_data(L223.GlobalTechHack_Investment, "GlobalTechHack", NULL) %>%
+      add_xml_data(L223.GlobalTechCapture_Investment, "GlobalTechCapture_investment", NULL) %>%
+      add_xml_data(L223.GlobalTechCost_Investment, "GlobalTechCapital_investment", NULL) %>%
+      add_xml_data(L223.GlobalTechCost_CapacityCreditCalulator, "GlobalTechCapacityCredit_investment", NULL) %>%
       add_logit_tables_xml(L223.Sector_Investment_StateShare, "Supplysector") %>%
       add_logit_tables_xml(L223.Subsector_Investment_StateShare, "SubsectorLogit") %>%
       add_xml_data(L223.SubsectorShrwtFllt_Investment_StateShare, "SubsectorShrwtFllt") %>%
       add_xml_data(L223.TechCoef_Investment_StateShare, "TechCoef") %>%
+      add_xml_data(L223.TechPmult_Investment_StateShare, "TechPmult") %>%
       add_xml_data(L223.TechShrwt_Investment_StateShare, "TechShrwt") %>%
-      add_logit_tables_xml(L223.Sector_Investment_LoadCurve, "Supplysector") %>%
-      add_xml_data(L223.SectorUseTrialMarket_Investment_LoadCurve, "SectorUseTrialMarket") %>%
-      add_logit_tables_xml(L223.SubsectorLogit_Investment_LoadCurve, "SubsectorLogit") %>%
-      add_xml_data(L223.SubsectorShrwtFllt_Investment_LoadCurve, "SubsectorShrwtFllt") %>%
-      add_xml_data(L223.TechShrwt_Investment_LoadCurve, "TechShrwt") %>%
-      add_xml_data(L223.TechCoef_Investment_LoadCurve, "TechCoef") %>%
-      add_xml_data(L223.TechPMult_Investment_LoadCurve, "TechPMultDispatch", NULL) %>%
-      add_xml_data(L223.TechCost_Investment_LoadCurve, "TechCost") %>%
       add_xml_data(L223.DispatchSector, "DispatchSector", NULL) %>%
       add_logit_tables_xml(L223.Sector_Dispatch, "Supplysector") %>%
       add_logit_tables_xml(L223.SubsectorLogit_Dispatch, "SubsectorLogit") %>%
       add_xml_data(L223.SubsectorShrwtFllt_Dispatch, "SubsectorShrwtFllt") %>%
       add_xml_data(L223.CapacityTech_FutureTechs, "CapacityTech") %>%
       add_xml_data(L223.CapacityTechSegmentCapFac, "CapacityTechSegmentCapFac", NULL) %>%
+      add_xml_data(L223.CapacityTechMinCapFac, "CapacityTechMinCapFac", NULL) %>%
       add_xml_data(L223.CapacityTech, "CapacityTech") %>%
       add_xml_data(L223.TechShrwt_Dispatch, "TechShrwt") %>%
       add_xml_data(L223.TechEff_Dispatch, "TechEff") %>%
       add_xml_data(L223.TechOMvar_Dispatch, "TechOMvar") %>%
       add_xml_data(L223.TechLifetime_Dispatch, "TechLifetime") %>%
+      add_xml_data(L223.TechProfitShutdown_Dispatch %>% rename(stub.technology = technology), "StubTechProfitShutdown") %>%
       add_xml_data(L223.TechSCurve_Dispatch, "TechSCurve_dispatch", NULL) %>%
       add_xml_data(L223.TechCapFac_Dispatch, "TechCapFac", NULL) %>%
       add_xml_data(L223.TechCarbonCapture_Dispatch, "CarbonCapture") %>%
       add_xml_data(L223.Production_Dispatch, "Production", NULL) %>%
       add_xml_data(L223.TechEff_Cal, "TechEff") %>%
+      add_xml_data(L223.TechTrialMarket_Dispatch, "TechTrial_dispatch", NULL) %>%
+      #GITODO: Note the TechTrial_investment variable is StubTech.
+      # May need to change vriable name to L223.StubTechTrial_Investment.
+      # And header name to StubTechTrialMarket
+      add_xml_data(L223.TechTrialMarket_Investment, "TechTrial_investment", NULL) %>%
       add_logit_tables_xml(L223.Sector_Dispatch_Grid, "Supplysector") %>%
       add_xml_data(L223.DispatchSectorCalProd, "DispatchSectorCalProd", NULL) %>%
       add_xml_data(L223.DispatchSectorDispatchSegments, "DispatchSectorDispatchSegments", NULL) %>%
@@ -270,36 +264,33 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.TechCapFac_Investment",
                      "L223.GlobalTechCapture_Investment",
                      "L223.GlobalTechCost_Investment",
-                     "L223.GlobalTechHack_Investment",
+                     "L223.GlobalTechCost_CapacityCreditCalulator",
                      "L223.Sector_Investment_StateShare",
                      "L223.Subsector_Investment_StateShare",
                      "L223.SubsectorShrwtFllt_Investment_StateShare",
                      "L223.TechCoef_Investment_StateShare",
+                     "L223.TechPmult_Investment_StateShare",
                      "L223.TechShrwt_Investment_StateShare",
-                     "L223.Sector_Investment_LoadCurve",
-                     "L223.SectorUseTrialMarket_Investment_LoadCurve",
-                     "L223.SubsectorLogit_Investment_LoadCurve",
-                     "L223.SubsectorShrwtFllt_Investment_LoadCurve",
-                     "L223.TechShrwt_Investment_LoadCurve",
-                     "L223.TechCoef_Investment_LoadCurve",
-                     "L223.TechPMult_Investment_LoadCurve",
-                     "L223.TechCost_Investment_LoadCurve",
                      "L223.DispatchSector",
                      "L223.Sector_Dispatch",
                      "L223.SubsectorLogit_Dispatch",
                      "L223.SubsectorShrwtFllt_Dispatch",
                      "L223.CapacityTech_FutureTechs",
                      "L223.CapacityTechSegmentCapFac",
+                     "L223.CapacityTechMinCapFac",
                      "L223.CapacityTech",
                      "L223.TechShrwt_Dispatch",
                      "L223.TechEff_Dispatch",
                      "L223.TechOMvar_Dispatch",
                      "L223.TechLifetime_Dispatch",
+                     "L223.TechProfitShutdown_Dispatch",
                      "L223.TechSCurve_Dispatch",
                      "L223.TechCapFac_Dispatch",
                      "L223.TechCarbonCapture_Dispatch",
                      "L223.Production_Dispatch",
                      "L223.TechEff_Cal",
+                     "L223.TechTrialMarket_Dispatch",
+                     "L223.TechTrialMarket_Investment",
                      "L223.Sector_Dispatch_Grid",
                      "L223.DispatchSectorCalProd",
                      "L223.DispatchSectorDispatchSegments",

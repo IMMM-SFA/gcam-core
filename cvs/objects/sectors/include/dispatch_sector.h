@@ -48,7 +48,7 @@
 #include "sectors/include/supply_sector.h"
 #include "containers/include/iactivity.h"
 
-class ITechnology;
+class CapacityTechnology;
 class FilterStep;
 
 /*!
@@ -80,45 +80,66 @@ public:
 protected:
     virtual bool XMLDerivedClassParse( const std::string& nodeName, const xercesc::DOMNode* curr );
 
-    virtual void toInputXMLDerived( std::ostream& aOut, Tabs* aTabs ) const;
-
     virtual void toDebugXMLDerived( const int period, std::ostream& aOut, Tabs* aTabs ) const;
     
     virtual void setMarket();
     
+    double calcAggregateCapacity( const int aPeriod ) const;
+    
+    /*!
+     * \brief A helper class to identify the demand side segment market names.
+     * \todo We don't really need this as a class anymore
+     */
     class DemandSegment : public INamed {
     protected:
         DEFINE_DATA(
-                    DEFINE_SUBCLASS_FAMILY( DemandSegment ),
-                    
-                    /*DEFINE_VARIABLE( SIMPLE, "name", mName, std::string ),
-                    DEFINE_VARIABLE( SIMPLE, "hours", mHours, double),
-                    DEFINE_VARIABLE( SIMPLE, "relative-gen", mRelativeGen, double),
-                    DEFINE_VARIABLE( SIMPLE, "total-gen-fraction", mTotalGenFraction, double),*/
-                    DEFINE_VARIABLE( SIMPLE | STATE, "segment-cost", mCost, Value)
-                    )
+            DEFINE_SUBCLASS_FAMILY( DemandSegment )
+        )
         
     public:
         DemandSegment( const std::string& aName ):mName( aName ) {}
         virtual const std::string& getName() const {
             return mName;
         }
-        Value& getCost() {
-            return mCost;
-        }
         std::string mName;
     };
     
+    /*!
+     * \brief A class to help organize all the dispatch segment parameters together.
+     * \details Ideally this would be a struct but we need to make it a GCAM fusion
+     *          aware class as the new investment quantity needs to be declared STATE.
+     */
     class DispatchSegment : public INamed {
+    protected:
+        DEFINE_DATA(
+            DEFINE_SUBCLASS_FAMILY( DispatchSegment ),
+            
+            //! Helper to be able to add the quantity of new investment into the market
+            DEFINE_VARIABLE( SIMPLE | STATE, "new-investment", mNewCapacity, Value)
+        )
     public:
+        //! getName accessor as expected by GCAM fusion
         virtual const std::string& getName() const {
             return mName;
         }
+        //! accessor to the protected new capacity member variables
+        Value& getNewInvestment() {
+            return mNewCapacity;
+        }
+        //! The name of this dispatch segment
         std::string mName;
+        //! Mapping to the demand segment that this dispatch segment falls under
         std::string mDemandSegmentName;
-         double mHours;
-         double mRelativeGen;
-         double mTotalGenFraction;
+        //! If not empty this dispatch sector is a marker for calculating new investment
+        //! in the investment sector named here.
+        std::string mInvestmentSegmentName;
+        //! The number of hours in this segment
+        double mHours;
+        //! The relative relative load of this segment to superpeak
+        double mRelativeGen;
+        //! The fraction of energy that makes this dispatch segment fills of the
+        //! total energy in mDemandSegmentName
+        double mTotalGenFraction;
     };
     
     // Define data such that introspection utilities can process the data from this
@@ -132,32 +153,40 @@ protected:
         //! The load generation curve sectors mapped to percent energy coef
         DEFINE_VARIABLE( SIMPLE, "generation-sector", mGenSectors, std::vector<std::pair<std::string, std::string> > ),
 
+        //! A list of the demand segment market names from which the consumers of
+        //! electricity will log their demands
         DEFINE_VARIABLE( CONTAINER, "demand-segment", mDemandSegments, std::vector<DemandSegment*> ),
-                            
-        DEFINE_VARIABLE( SIMPLE, "dispatch-segment", mDispatchSegments, std::vector<DispatchSegment*> ),
-                            
-        //! Helper to set supply = demand
-        DEFINE_VARIABLE( SIMPLE | STATE, "supply-state", mSupply, Value ),
-    
-        //! New capacity to add
-        DEFINE_VARIABLE( SIMPLE | STATE, "new-capacity", mNewCapacity, Value )
+           
+        //! The dispatch segments which will map onto the demand segments to generate
+        //! the demanded electricity
+        DEFINE_VARIABLE( CONTAINER, "dispatch-segment", mDispatchSegments, std::vector<DispatchSegment*> )
     )
     
-    std::vector<ITechnology*> mAllTechs;
+    //! The set of active technologies which will be dispatched
+    std::vector<CapacityTechnology*> mAllTechs;
     
-    std::map<ITechnology*, std::pair<std::string, std::string> > mAllTechMarketMap;
+    //! A mapping of technologies to the markets in which they actually live in case
+    //! this dispatch sector is pulling technologies across states for instance.
+    std::map<CapacityTechnology*, std::pair<std::string, std::string> > mAllTechMarketMap;
     
+    //! A flag to help identify if this instance of DispatchSector only needs to gather
+    //! new capacity.
     bool mDoGatherCapacity;
     
+    //! A flag to help identify if this instance of DispatchSector only needs to calculate
+    //! the dispatch.
     bool mDoDispatchCapacity;
-    
-    objects::PeriodVector<double> mExistingCapacity;
-    objects::PeriodVector<double> mRequiredCapacity;
-    objects::PeriodVector<std::map<std::tuple<ITechnology*, std::string, std::string>, double> > mSaveTechCurve;
+
+    //! Save detailed technology dispatch information for reporting
+    objects::PeriodVector<std::map<std::tuple<CapacityTechnology*, std::string, std::string>, double> > mSaveTechCurve;
 
 private:
     void setFixedDemandsToMarket( const int aPeriod ) const;
     
+    /*!
+     * \brief A GCAMFusion helper to collect technologies from the given region and
+     *        sector.
+     */
     struct GetOpertingTechs {
         DispatchSector* mParent;
         std::string* mRegionName;
@@ -167,6 +196,10 @@ private:
         void processData( DataType& aData );
     };
     
+    /*!
+     * \brief A GCAMFusion helper to collect new capacity across some investment
+     *        sectors.
+     */
     struct GetCapacityHelper {
         int mPeriod;
         

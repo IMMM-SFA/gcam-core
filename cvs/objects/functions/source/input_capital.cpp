@@ -100,8 +100,6 @@ void InputCapital::copy( const InputCapital& aOther ) {
     mTechChange = aOther.mTechChange;
     mCapitalOvernight = aOther.mCapitalOvernight;
     mFixedChargeRate = aOther.mFixedChargeRate;
-    mLifetimeCapital = aOther.mLifetimeCapital;
-    mCapacityFactor = aOther.mCapacityFactor;
     
     // calculated parameters are not copied.
 }
@@ -147,10 +145,6 @@ void InputCapital::XMLParse( const xercesc::DOMNode* node ) {
         if ( nodeName == "capital-overnight" ) {
             mCapitalOvernight = XMLHelper<Value>::getValue( curr );
         }
-        // Capital lifetime may be different from technology lifetime.
-        else if( nodeName == "lifetime-capital" ){
-            mLifetimeCapital = XMLHelper<Value>::getValue( curr );
-        }
         else if( nodeName == "fixed-charge-rate" ){
             mFixedChargeRate = XMLHelper<double>::getValue( curr );
         }
@@ -171,11 +165,8 @@ void InputCapital::toDebugXML( const int aPeriod,
                                Tabs* aTabs ) const
 {
     XMLWriteOpeningTag ( getXMLNameStatic(), aOut, aTabs, mName );
-    XMLWriteElement( mLevelizedCapitalCost, "levelized-capital-cost", aOut, aTabs );
     XMLWriteElement( mCapitalOvernight, "capital-overnight", aOut, aTabs );
-    XMLWriteElement( mLifetimeCapital, "lifetime-capital", aOut, aTabs );
     XMLWriteElement( mFixedChargeRate, "mFixedChargeRate", aOut, aTabs );
-    XMLWriteElement( mCapacityFactor, "capacity-factor", aOut, aTabs );
     XMLWriteElement( mTechChange, "tech-change", aOut, aTabs );
     XMLWriteElement( mAdjustedCosts[ aPeriod ], "adjusted-cost", aOut, aTabs );
     XMLWriteElement( mAdjustedCoefficients[ aPeriod ], "adjusted-coef", aOut, aTabs );
@@ -191,34 +182,34 @@ void InputCapital::completeInit( const string& aRegionName,
     
     // technology capacity factor
     // capacity factor needed before levelized cost calculation
-    mCapacityFactor = aTechInfo->getDouble("tech-capacity-factor", true);
+    double capacityFactor = aTechInfo->getDouble("tech-capacity-factor", true);
                                            
     // completeInit() is called for each technology for each period
     // so levelized capital cost calculation is done here.
 
-    mLevelizedCapitalCost = calcLevelizedCapitalCost();
+    double levelizedCapitalCost = calcLevelizedCapitalCost( capacityFactor );
     
     // Initialize the adjusted costs in all periods to the base calculate
     // levelized capital cost.
     // These costs may be adjusted by the Technology, for instance for capture
     // penalties.
-    fill( mAdjustedCosts.begin(), mAdjustedCosts.end(), mLevelizedCapitalCost );
+    fill( mAdjustedCosts.begin(), mAdjustedCosts.end(), levelizedCapitalCost );
 }
 
 /** Calculate the levelizd capital cost.
  *
- * \param void 
+ * \param aCapacityFactor The capacity factor to levelize with.
  * \return Levelized capital costs.
  * \author Sonny Kim
  */
-double InputCapital::calcLevelizedCapitalCost( void ) const
+double InputCapital::calcLevelizedCapitalCost( const double aCapacityFactor ) const
 {
     // TODO: Use more detailed approach for calculating levelized
     // capital cost that includes number of years for construction.
     // TODO: Get interest/discount rate from capital market.
     // TODO: Use Value class for units conversion.
     double levelizedCapitalCost = 
-	mFixedChargeRate * mCapitalOvernight / ( FunctionUtils::HOURS_PER_YEAR() * mCapacityFactor * FunctionUtils::GJ_PER_KWH() );
+        mFixedChargeRate * mCapitalOvernight / ( FunctionUtils::HOURS_PER_YEAR() * aCapacityFactor * FunctionUtils::GJ_PER_KWH() );
 
     return levelizedCapitalCost; // 1975$/GJ
 }
@@ -279,17 +270,6 @@ void InputCapital::setCoefficient( const double aCoefficient,
     mAdjustedCoefficients[ aPeriod ] = aCoefficient;
 }
 
-void InputCapital::tabulateFixedQuantity( const string& aRegionName,
-                                          const double aFixedOutput,
-                                          const bool aIsInvestmentPeriod,
-                                          const int aPeriod )
-{
-}
-
-void InputCapital::scaleCalibrationQuantity( const double aScaleFactor ){
-    // Capital cost inputs are not calibrated.
-}
-
 double InputCapital::getCalibrationQuantity( const int aPeriod ) const
 {
     // Capital cost inputs are not calibrated.
@@ -337,15 +317,4 @@ void InputCapital::doInterpolations( const int aYear, const int aPreviousYear,
     mCapitalOvernight = util::linearInterpolateY( aYear, aPreviousYear, aNextYear,
                                                   prevCapInput->mCapitalOvernight,
                                                   nextCapInput->mCapitalOvernight );
-    mLifetimeCapital = util::linearInterpolateY( aYear, aPreviousYear, aNextYear,
-                                                 prevCapInput->mLifetimeCapital,
-                                                 nextCapInput->mLifetimeCapital );
-    mLevelizedCapitalCost = util::linearInterpolateY( aYear, aPreviousYear, aNextYear,
-                                                      prevCapInput->mLevelizedCapitalCost,
-                                                      nextCapInput->mLevelizedCapitalCost );
-    
-    // interplate capacity factor
-    mCapacityFactor = util::linearInterpolateY( aYear, aPreviousYear, aNextYear,
-                                                prevCapInput->mCapacityFactor,
-                                                nextCapInput->mCapacityFactor );
 }

@@ -251,17 +251,6 @@ void InputOMVar::setCoefficient( const double aCoefficient,
     mAdjustedCoefficients[ aPeriod ] = aCoefficient;
 }
 
-void InputOMVar::tabulateFixedQuantity( const string& aRegionName,
-                                        const double aFixedOutput,
-                                        const bool aIsInvestmentPeriod,
-                                        const int aPeriod )
-{
-}
-
-void InputOMVar::scaleCalibrationQuantity( const double aScaleFactor ){
-    // Capital cost inputs are not calibrated.
-}
-
 double InputOMVar::getCalibrationQuantity( const int aPeriod ) const
 {
     // Capital cost inputs are not calibrated.

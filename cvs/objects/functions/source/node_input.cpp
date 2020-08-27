@@ -731,18 +731,6 @@ double NodeInput::getCO2EmissionsCoefficient( const std::string& aGHGName,
     return 0;
 }
 
-void NodeInput::tabulateFixedQuantity( const std::string& aRegionName,
-                                        const double aFixedOutput,
-                                        const bool aIsInvestmentPeriod,
-                                        const int aPeriod )
-{
-    // TODO:
-}
-
-void NodeInput::scaleCalibrationQuantity( const double aScaleFactor ) {
-    // TODO:
-}
-
 double NodeInput::getCalibrationQuantity( const int aPeriod ) const {
     // TODO:
     return 0;

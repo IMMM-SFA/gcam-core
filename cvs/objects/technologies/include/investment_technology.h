@@ -1,5 +1,5 @@
-#ifndef _CAPACITY_TECHNOLOGY_H_
-#define _CAPACITY_TECHNOLOGY_H_
+#ifndef _INVESTMENT_TECHNOLOGY_H_
+#define _INVESTMENT_TECHNOLOGY_H_
 #if defined(_MSC_VER)
 #pragma once
 #endif
@@ -39,12 +39,12 @@
 
 
 /*!
-* \file capacity_technology.h
+* \file investment_technology.h
 * \ingroup Objects
-* \brief The CapacityTechnology class header file.
+* \brief The InvestmentTechnology class header file.
 * \details TODO:
 *
-* \author Pralit Patel, Gokul Iyer
+* \author Gokul Iyer, Pralit Patel
 */
 
 #include <xercesc/dom/DOMNode.hpp>
@@ -52,15 +52,16 @@
 
 // Forward declaration
 class Tabs;
+class CapacityCreditCalculator;
 
-class CapacityTechnology : public Technology {
+class InvestmentTechnology : public Technology {
     friend class XMLDBOutputter;
 public:
-    CapacityTechnology(const std::string& aName,
+    InvestmentTechnology(const std::string& aName,
         const int aYear);
-    ~CapacityTechnology();
+    virtual ~InvestmentTechnology();
     static const std::string& getXMLNameStatic();
-    CapacityTechnology* clone() const;
+    InvestmentTechnology* clone() const;
 
     virtual void completeInit(const std::string& aRegionName,
         const std::string& aSectorName,
@@ -74,10 +75,6 @@ public:
         const Demographic* aDemographics,
         PreviousPeriodInfo& aPrevPeriodInfo,
         const int aPeriod);
-    
-    virtual double getEnergyCost( const std::string& aRegionName,
-                                  const std::string& aSectorName,
-                                  const int aPeriod ) const;
 
     virtual void production(const std::string& aRegionName,
         const std::string& aSectorName,
@@ -86,25 +83,11 @@ public:
         const GDP* aGDP,
         const int aPeriod);
     
-    double tryDispatch( const std::string& aRegionName, const std::string& aSectorName,
-                        const std::string& aDemandSegment,
-                        const double aSegmentScaleFactor, const double aPercentRemainHours,
-                        const double aPriorDispatch, const int aPeriod ) const;
-    
-    double calcInvestmentCapacityScaleFactor( const std::string& aRegionName, const std::string& aSectorName,
-                                              const double aNewInvestCost, const int aPeriod ) const;
-
-    virtual void doInterpolations(const Technology* aPrevTech, const Technology* aNextTech);
-    
-    void setCapacity( const double aCapacity, const int aPeriod );
-
-    double getCapacity(    const std::string& aRegionName, const std::string& aSectorName,
-                        const int aPeriod ) const;
-
-    virtual void  addCapacityShareToMarket(double aAggregateCapacity,
-        const std::string& aRegionName,
+    virtual void calcCost(const std::string& aRegionName,
         const std::string& aSectorName,
         const int aPeriod);
+
+    virtual void doInterpolations(const Technology* aPrevTech, const Technology* aNextTech);
 
 protected:
     
@@ -112,38 +95,24 @@ protected:
     // subclass together with the data members of the parent classes.
     DEFINE_DATA_WITH_PARENT(
         Technology,
+        //! A calculator which determines the capacity credit as a function of renewable share.
+        DEFINE_VARIABLE(CONTAINER, "capacity-credit-calculator", mCapacityCreditCalculator, CapacityCreditCalculator*),
 
-        //! Name of trial market associated with this Capacity Technology.
-        DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string),
-
-        //! Name of capacity market associated with this Capacity Technology.
-        DEFINE_VARIABLE(SIMPLE, "capacity-market-name", mCapacityMarketName, std::string),
-
-        //! The capacity for this technology.
-        DEFINE_VARIABLE( SIMPLE | STATE, "capacity", mCapacity, Value ),
-                            
-        DEFINE_VARIABLE( SIMPLE, "segment-capacity-factor", mSegCapFac, std::map<std::string, double> ),
-
-        //! State value necessary to track tech output ration
-        DEFINE_VARIABLE(SIMPLE | STATE, "tech-output-ratio", mIntermitOutTechRatio, Value),
-   
-        //! A minimum capacity factor where if the capacity factor would be below
-        //! this value the technology would no longer be able to dispatch.
-        DEFINE_VARIABLE( SIMPLE , "min-capacity-factor", mMinCapFac, Value ),
-                            
-        //! We pull out any profit shutdown deciders from Technology::mShutdownDeciders
-        //! as they should not be considered during tryDispatch and they will be used
-        //! for calcInvestmentCapacityScaleFactor
-        DEFINE_VARIABLE( CONTAINER, "investment-scale-factor", mInvestScaleDecider, IShutdownDecider* )
+        //! Name of trial market associated with this Investment Technology. This is read in only for intermittent-technologies
+        //! for which trial market calculations are performed in the CapacityTechnology class. The value read in here should be
+        //! equal to the value read in under the capacity technologies.
+        DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string)        
     )
+    
+    //! pointer to the capacity credit input
+    std::vector<IInput*>::iterator mCapacityCreditInput;
 
     virtual void toDebugXMLDerived(const int period, std::ostream& out, Tabs* tabs) const;
     virtual bool XMLDerivedClassParse(const std::string& nodeName, const xercesc::DOMNode* curr);
     virtual const std::string& getXMLName() const;
-    void copy( const CapacityTechnology& aOther );
-    virtual void setProductionState( const int aPeriod );
+    void copy( const InvestmentTechnology& aOther );
     virtual void acceptDerived( IVisitor* aVisitor, const int aPeriod ) const; 
 };
 
-#endif // _CAPACITY_TECHNOLOGY_H_
+#endif // _INVESTMENT_TECHNOLOGY_H_
 

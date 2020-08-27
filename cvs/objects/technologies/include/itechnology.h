@@ -79,6 +79,7 @@ class PassThroughTechnology;
 class UnmanagedLandTechnology;
 class ResourceReserveTechnology;
 class CapacityTechnology;
+class InvestmentTechnology;
 class EmptyTechnology;
 
 /*!
@@ -221,6 +222,8 @@ public:
     
     virtual void initTechVintageVector() { }
 
+	//virtual double getCapacity(const int aPeriod) const = 0;
+
     protected:
 
     virtual double getTotalInputCost( const std::string& aRegionName,
@@ -234,7 +237,7 @@ public:
         DEFINE_SUBCLASS_FAMILY( ITechnology, Technology, DefaultTechnology, IntermittentTechnology,
                                 WindTechnology, SolarTechnology, NukeFuelTechnology, TranTechnology,
                                 AgProductionTechnology, PassThroughTechnology, UnmanagedLandTechnology,
-                                ResourceReserveTechnology, CapacityTechnology, EmptyTechnology )
+                                ResourceReserveTechnology, CapacityTechnology, EmptyTechnology, InvestmentTechnology )
     )
 };
 
