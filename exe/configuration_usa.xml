@@ -109,10 +109,20 @@
 		<Value name = "USA_regional_bio">../input/gcamdata/xml/regional_biomass_USA.xml</Value>
 -->
 
+        <Value name = "coal_vintage">../input/gcamdata/xml/coal_retire_vintage_USA.xml</Value>
+        <Value name = "USA_regional_bio">./force_trade_solve.xml</Value>
+        <Value name = "USA_regional_bio">./no_export_seg.xml</Value>
+        <Value name = "USA_regional_bio">./del_dc_pv.xml</Value>
+
+        <!--
+        <Value name = "USA_regional_bio">./carbon_tax_100_5.xml</Value>
+        <Value name = "USA_regional_bio">../input/policy/states_policy_global.xml</Value>
+-->
+
 	</ScenarioComponents>
 	<Strings>
 		<Value name="scenarioName">GCAM-USA_Ref</Value>
-		<Value name="debug-region">USA</Value>
+		<Value name="debug-region">TX</Value>
 		<Value name="MAGICC-input-dir">../input/magicc/inputs</Value>
 		<Value name="MAGICC-output-dir">../output</Value>
 		<Value name="AbatedGasForCostCurves">CO2</Value>
