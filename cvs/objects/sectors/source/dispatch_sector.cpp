@@ -528,12 +528,13 @@ void DispatchSector::GetOpertingTechs::processData( DataType& aData ) {
 template<>
 void DispatchSector::GetOpertingTechs::processData<ITechnologyContainer*>( ITechnologyContainer*& aData ) {
     for( auto iter = aData->getVintageBegin( mPeriod ); iter != aData->getVintageEnd( mPeriod); ++iter ) {
-        if( (*iter).second->isOperating( mPeriod ) /*&& ( (*iter).second->isFixedOutputTechnology( mPeriod ) || (*iter).second->getShareWeight() > 0.0 )*/ ) {
+        if( (*iter).second->isOperating( mPeriod ) ) {
             CapacityTechnology* currTech = dynamic_cast<CapacityTechnology*>( (*iter).second );
             if( !currTech ) {
                 ILogger& mainLog = ILogger::getLogger("main_log");
                 mainLog.setLevel(ILogger::SEVERE);
-                mainLog << mParent->getXMLName() << " " << mParent->mName << " found technology that is not of type CapacityTechnology "
+                mainLog << mParent->getXMLName() << " " << mParent->mName
+                    << " found technology that is not of type CapacityTechnology "
                     << " in region " << *mRegionName << " and sector " << *mGenSectorName
                     << ": " << (*iter).second->getName() << ", year: " << (*iter).second->getYear() << endl;
                 abort();
@@ -557,15 +558,15 @@ void DispatchSector::GetCapacityHelper::processData<ITechnology*>( ITechnology*&
 
 /*!
  * \brief The calcAggregateCapacity method aggregates capacity across all capacity-technology vintages.
- * \details We use mAllTechs member variable which contains all capacity-technologies by vintage from the dispatch sector 
-			to loop through all capacity technology vintages. This method is called in the DispactchSector::Supply method to 
-			add capacity shares of intermittent (i.e. non-dispatchable) technologies to the trial market. This method
-			calls the CapacityTechnology::getCapacity() method which accounts only for natural retirements. 
-			Note that we used "AggregateCapacity" since "TotalCapacity" corresponds to capacity 
-			of a single technology summed across investment segments.
+ * \details We use mAllTechs member variable which contains all capacity-technologies by vintage from the dispatch sector
+ *		    to loop through all capacity technology vintages. This method is called in the DispactchSector::Supply method to
+ *          add capacity shares of intermittent (i.e. non-dispatchable) technologies to the trial market. This method
+ *          calls the CapacityTechnology::getCapacity() method which accounts only for natural retirements.
+ *          Note that we used "AggregateCapacity" since "TotalCapacity" corresponds to capacity
+ *          of a single technology summed across investment segments.
  * \param aPeriod Model period.
  * \return aggregate capacity which is the total capacity of all capacity vintages within the containing sector. This includes natural
-								retirements.
+ *							retirements.
  */
 double DispatchSector::calcAggregateCapacity(const int aPeriod) const {
     double aggregateCapacity = 0;

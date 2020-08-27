@@ -60,7 +60,7 @@ using namespace xercesc;
  */
 CapacityCreditCalculator::CapacityCreditCalculator()
 {
-     mCapacityCreditMax = 0.4;
+    mCapacityCreditMax = 0.4;
     mCapacityCreditMin = 0.15;
     mSteepness = 40.0;
     mXmid = 0.075;
@@ -115,11 +115,11 @@ bool CapacityCreditCalculator::XMLParse( const xercesc::DOMNode* node ){
         }
         const string nodeName = XMLHelper<string>::safeTranscode( curr->getNodeName() );
         if( nodeName == "capacity-credit-max" ){
-			mCapacityCreditMax = XMLHelper<double>::getValue( curr );
+            mCapacityCreditMax = XMLHelper<double>::getValue( curr );
             // TODO: Correct values above 1 or below 0. Need completeInit.
         }
         else if( nodeName == "capacity-credit-min" ) {
-			mCapacityCreditMin = XMLHelper<double>::getValue( curr );
+            mCapacityCreditMin = XMLHelper<double>::getValue( curr );
         }
         else if( nodeName == "steepness" ) {
             mSteepness = XMLHelper<double>::getValue( curr );
@@ -159,7 +159,7 @@ void CapacityCreditCalculator::initCalc( const IInfo* aTechInfo ) {
  * \brief Calculate the capacity credit for the intermittent resource within the
  *        electricity sector.
  * \details Calculates the capacity credit (or capacity value; 0-1) as a function of 
-			share of capacity of the intermittent resource within
+ *          share of capacity of the intermittent resource within
  *          the electricity sector. This is determined using trial values for
  *          the intermittent technologies and electricity sector capacity. 
  * \param aRegion Name of the containing region.
@@ -167,25 +167,22 @@ void CapacityCreditCalculator::initCalc( const IInfo* aTechInfo ) {
  * \param aPeriod Model period.
  * \return Capacity credit.
  */
-
 double CapacityCreditCalculator::getCapacityCredit (const string& aRegion,
-													const string& aSector,
-													const int aPeriod)
+                                                    const string& aSector,
+                                                    const int aPeriod)
    
-	{
+{
     // Preconditions
     assert( !aRegion.empty() );
     
     // ensure we get a valid (between zero and one) share back from the solver
     double renewElecShare = std::max(std::min( SectorUtils::getTrialSupply( aRegion, aSector, aPeriod ), 1.0 ), 0.0);
-	
-	// Calculate the capacity credit at this share of the total.
-	double capacityCredit = mCapacityCreditMin + (mCapacityCreditMax - mCapacityCreditMin) * 1 / (1 + exp(mSteepness *(renewElecShare - mXmid)));
-
-	// Capacity Credit must be between 0 and 1 inclusive.
-	assert(capacityCredit >= 0 && capacityCredit <= 1);
-	
-	return capacityCredit;
-}
     
+    // Calculate the capacity credit at this share of the total.
+    double capacityCredit = mCapacityCreditMin + (mCapacityCreditMax - mCapacityCreditMin) * 1 / (1 + exp(mSteepness *(renewElecShare - mXmid)));
 
+    // Capacity Credit must be between 0 and 1 inclusive.
+    assert(capacityCredit >= 0 && capacityCredit <= 1);
+    
+    return capacityCredit;
+}

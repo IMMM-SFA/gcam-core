@@ -82,9 +82,9 @@ mInvestScaleDecider( 0 )
 void CapacityTechnology::copy(const CapacityTechnology& aTech) {
     Technology::copy( aTech );
     mCapacity = aTech.mCapacity;
-	mSegCapFac = aTech.mSegCapFac;
-	mTrialMarketName = aTech.mTrialMarketName;
-	mCapacityMarketName = aTech.mCapacityMarketName;
+    mSegCapFac = aTech.mSegCapFac;
+    mTrialMarketName = aTech.mTrialMarketName;
+    mCapacityMarketName = aTech.mCapacityMarketName;
     mMinCapFac = aTech.mMinCapFac;
 }
 
@@ -105,27 +105,27 @@ bool CapacityTechnology::XMLDerivedClassParse(const string& aNodeName, const DOM
         mSegCapFac[ segmentName ] = segCapFac;
         success = true;
     }
-	else if (aNodeName == "trial-market-name") {
-		mTrialMarketName = XMLHelper<string>::getValue(aCurrNode);
-		success = true;
-	}
-	else if (aNodeName == "capacity-market-name") {
-		mCapacityMarketName = XMLHelper<string>::getValue(aCurrNode);
-		success = true;
-	}
+    else if (aNodeName == "trial-market-name") {
+        mTrialMarketName = XMLHelper<string>::getValue(aCurrNode);
+        success = true;
+    }
+    else if (aNodeName == "capacity-market-name") {
+        mCapacityMarketName = XMLHelper<string>::getValue(aCurrNode);
+        success = true;
+    }
     else if( aNodeName == "min-capacity-factor" ) {
         mMinCapFac = XMLHelper<double>::getValue( aCurrNode );
         success = true;
     }
-	return success;
+    return success;
 }
 
 //! write object to xml output stream
 void CapacityTechnology::toDebugXMLDerived(const int aPeriod, ostream& aOut, Tabs* aTabs) const {
-	XMLWriteElement(mCapacity, "capacity", aOut, aTabs);
-	XMLWriteElement(mTrialMarketName, "trial-market-name", aOut, aTabs);
-	XMLWriteElement(mCapacityMarketName, "capacity-market-name", aOut, aTabs);
-	XMLWriteElement(mIntermitOutTechRatio, "intermittent-capacity-ratio", aOut, aTabs);
+    XMLWriteElement(mCapacity, "capacity", aOut, aTabs);
+    XMLWriteElement(mTrialMarketName, "trial-market-name", aOut, aTabs);
+    XMLWriteElement(mCapacityMarketName, "capacity-market-name", aOut, aTabs);
+    XMLWriteElement(mIntermitOutTechRatio, "intermittent-capacity-ratio", aOut, aTabs);
 }
 
 /*! \brief Get the XML node name for output to XML.
@@ -137,7 +137,7 @@ void CapacityTechnology::toDebugXMLDerived(const int aPeriod, ostream& aOut, Tab
 * \return The constant XML_NAME.
 */
 const string& CapacityTechnology::getXMLName() const {
-	return getXMLNameStatic();
+    return getXMLNameStatic();
 }
 
 /*! \brief Get the XML node name in static form for comparison when parsing XML.
@@ -150,8 +150,8 @@ const string& CapacityTechnology::getXMLName() const {
 * \return The constant XML_NAME as a static.
 */
 const string& CapacityTechnology::getXMLNameStatic() {
-	const static string XML_NAME = "capacity-technology";
-	return XML_NAME;
+    const static string XML_NAME = "capacity-technology";
+    return XML_NAME;
 }
 
 //! Clone Function. Returns a deep copy of the current technology.
@@ -162,13 +162,13 @@ CapacityTechnology* CapacityTechnology::clone() const {
 }
 
 void CapacityTechnology::completeInit(const std::string& aRegionName,
-	const std::string& aSectorName,
-	const std::string& aSubsectorName,
-	const IInfo* aSubsectorInfo,
-	ILandAllocator* aLandAllocator)
+    const std::string& aSectorName,
+    const std::string& aSubsectorName,
+    const IInfo* aSubsectorInfo,
+    ILandAllocator* aLandAllocator)
 {
-	Technology::completeInit(aRegionName, aSectorName, aSubsectorName, aSubsectorInfo,
-		aLandAllocator);
+    Technology::completeInit(aRegionName, aSectorName, aSubsectorName, aSubsectorInfo,
+        aLandAllocator);
     
     // replace the primary output with a generic output (does not add supply to market)
     delete mOutputs[ 0 ];
@@ -204,24 +204,24 @@ void CapacityTechnology::completeInit(const std::string& aRegionName,
         abort();
     }
 
-	// Make some tests for bad inputs
-	if (mCapacityFactor == 0.0) {
-		ILogger& mainLog = ILogger::getLogger("main_log");
-		mainLog.setLevel(ILogger::SEVERE);
-		mainLog << "Capacity factor not set for technology " << mName << ", " << mYear
-			    << " in region " << aRegionName << " and sector " << aSectorName << endl;
-		abort();
-	}
+    // Make some tests for bad inputs
+    if (mCapacityFactor == 0.0) {
+        ILogger& mainLog = ILogger::getLogger("main_log");
+        mainLog.setLevel(ILogger::SEVERE);
+        mainLog << "Capacity factor not set for technology " << mName << ", " << mYear
+                << " in region " << aRegionName << " and sector " << aSectorName << endl;
+        abort();
+    }
 
-	if (!mTrialMarketName.empty() && mCapacityMarketName.empty()) {
-		ILogger& mainLog = ILogger::getLogger("main_log");
-		mainLog.setLevel(ILogger::WARNING);
-		mainLog << "Capacity market name not read in while trial market name is read in " << mName << ", " << mYear
-			<< " in region " << aRegionName << " and sector " << aSectorName
-			<< "Capacity market name will default to region name" << endl;
+    if (!mTrialMarketName.empty() && mCapacityMarketName.empty()) {
+        ILogger& mainLog = ILogger::getLogger("main_log");
+        mainLog.setLevel(ILogger::WARNING);
+        mainLog << "Capacity market name not read in while trial market name is read in " << mName << ", " << mYear
+            << " in region " << aRegionName << " and sector " << aSectorName
+            << "Capacity market name will default to region name" << endl;
 
-		mCapacityMarketName = aRegionName;
-	}
+        mCapacityMarketName = aRegionName;
+    }
 
     if (!mTrialMarketName.empty()) {
         // Create Trial Market if trial-market-name has been read in.
@@ -246,21 +246,21 @@ void CapacityTechnology::completeInit(const std::string& aRegionName,
 }
 
 void CapacityTechnology::initCalc(const string& aRegionName,
-	const string& aSectorName,
-	const IInfo* aSubsectorInfo,
-	const Demographic* aDemographics,
-	PreviousPeriodInfo& aPrevPeriodInfo,
-	const int aPeriod)
+    const string& aSectorName,
+    const IInfo* aSubsectorInfo,
+    const Demographic* aDemographics,
+    PreviousPeriodInfo& aPrevPeriodInfo,
+    const int aPeriod)
 {
-	Technology::initCalc(aRegionName, aSectorName, aSubsectorInfo,
-		aDemographics, aPrevPeriodInfo, aPeriod);
+    Technology::initCalc(aRegionName, aSectorName, aSubsectorInfo,
+        aDemographics, aPrevPeriodInfo, aPeriod);
 
-	if (!mTrialMarketName.empty()) {
-		// The renewable trial market is a share calculation so we can give the
-		// solver some additional hints that the range should be between 0 and 1.
-		SectorUtils::setSupplyBehaviorBounds(SectorUtils::getTrialMarketName(mTrialMarketName),
-			aRegionName, 0, 1, aPeriod);
-	}
+    if (!mTrialMarketName.empty()) {
+        // The renewable trial market is a share calculation so we can give the
+        // solver some additional hints that the range should be between 0 and 1.
+        SectorUtils::setSupplyBehaviorBounds(SectorUtils::getTrialMarketName(mTrialMarketName),
+            aRegionName, 0, 1, aPeriod);
+    }
 
 
     // We are assuming that a technology that wasn't dispatched at all should get
@@ -452,20 +452,20 @@ void CapacityTechnology::setProductionState( const int aPeriod ) {
 }
 
 void CapacityTechnology::doInterpolations(const Technology* aPrevTech, const Technology* aNextTech) {
-	Technology::doInterpolations(aPrevTech, aNextTech);
+    Technology::doInterpolations(aPrevTech, aNextTech);
 
-	const CapacityTechnology* prevTech = static_cast<const CapacityTechnology*> (aPrevTech);
-	const CapacityTechnology* nextTech = static_cast<const CapacityTechnology*> (aNextTech);
+    const CapacityTechnology* prevTech = static_cast<const CapacityTechnology*> (aPrevTech);
+    const CapacityTechnology* nextTech = static_cast<const CapacityTechnology*> (aNextTech);
 
-	/*!
-	* \pre We were given a valid previous ag production technology.
-	*/
-	assert(prevTech);
+    /*!
+    * \pre We were given a valid previous ag production technology.
+    */
+    assert(prevTech);
 
-	/*!
-	* \pre We were given a valid next ag production technology.
-	*/
-	assert(nextTech);
+    /*!
+    * \pre We were given a valid next ag production technology.
+    */
+    assert(nextTech);
 }
 
 void CapacityTechnology::acceptDerived( IVisitor* aVisitor, const int aPeriod ) const {
@@ -496,55 +496,56 @@ void CapacityTechnology::setCapacity( const double aCapacity, const int aPeriod 
 }
 
 /*!
- * \brief The getCapacity() method returns mCapacity which corresponds to the capacities of  capacity-technology vintages. 
- * \details In other words, this variable contains the capacity of a capacity-technology vintage (typically summed across all investment segments.) 
-			It is noteworthy that the mCapacity is not exactly capacity in GW terms but instead, it corresponds to generation divided by 
-			capacity factor. The capacity factors used for this calculation correspond to investment-segment-specific capacity factors. 
-			Also note that mCapacity does not include retirement functions in it. So this variable represents total capacity without retirements.
-			Retirements are handled in the calacultion of maxProduction under the CapacityTechnology::tryDispatch() method
-			using the calcProduction() method which is replicated here to account for retirements. For now, this method considers
-			only natural retirements. 
+ * \brief The getCapacity() method returns mCapacity which corresponds to the capacities of  capacity-technology vintages.
+ * \details In other words, this variable contains the capacity of a capacity-technology vintage (typically summed across all investment segments.)
+ *          It is noteworthy that the mCapacity is not exactly capacity in GW terms but instead, it corresponds to generation divided by
+ *          capacity factor. The capacity factors used for this calculation correspond to investment-segment-specific capacity factors.
+ *          Also note that mCapacity does not include retirement functions in it. So this variable represents total capacity without retirements.
+ *          Retirements are handled in the calacultion of maxProduction under the CapacityTechnology::tryDispatch() method
+ *          using the calcProduction() method which is replicated here to account for retirements. For now, this method considers
+ *          only natural retirements.
  * \param aRegionName Name of region.
  * \param aSectorName Name of sector.
  * \param aPeriod Model period.
  */
-double CapacityTechnology::getCapacity(	const std::string& aRegionName,
-										const std::string& aSectorName,
-										const int aPeriod) const {
-	
-	if (mProductionState[aPeriod]->isOperating()) {
-		// we need to adjust for any natural retirement shutdown deciders
-		MarginalProfitCalculator marginalProfitCalc(this);
-		double effectiveCapacity = mProductionState[aPeriod]->calcProduction(aRegionName,
-			aSectorName,
-			mCapacity,
-			&marginalProfitCalc,
-			1.0,
-			mShutdownDeciders,
-			aPeriod);
-		return effectiveCapacity;
-	}
-	else {
-		return 0.0;
-	}
-
+double CapacityTechnology::getCapacity(const std::string& aRegionName,
+                                       const std::string& aSectorName,
+                                       const int aPeriod) const
+{
+    
+    if (mProductionState[aPeriod]->isOperating()) {
+        // we need to adjust for any natural retirement shutdown deciders
+        MarginalProfitCalculator marginalProfitCalc(this);
+        double effectiveCapacity = mProductionState[aPeriod]->calcProduction(aRegionName,
+                                                                             aSectorName,
+                                                                             mCapacity,
+                                                                             &marginalProfitCalc,
+                                                                             1.0,
+                                                                             mShutdownDeciders,
+                                                                             aPeriod);
+        return effectiveCapacity;
+    }
+    else {
+        return 0.0;
+    }
+    
 }
 
 
 /*!
  * \brief Add share of an intermittent capacity technology to trial market for capacity credit calculations.
  * \details Calculates the share of intermittent capacity  by first checking if a trial-market-name has been read in.
-			It uses the argument aAggregateCapacity for the share calculations. This needs to be passed on during the function call.
-			Note that DispatchSector::calcAggregateCapacity() method performs the aggregate capacity calculations.
+ *          It uses the argument aAggregateCapacity for the share calculations. This needs to be passed on during the function call.
+ *          Note that DispatchSector::calcAggregateCapacity() method performs the aggregate capacity calculations.
  * \param aAggregateCapacity Aggregate capacity of all capacity technology vintages in the containing sector.
  * \param aRegionName The name of the region.
  * \param aPeriod Model period.
  */
 
 void  CapacityTechnology::addCapacityShareToMarket( double aAggregateCapacity, 
-													const string& aRegionName, 
-													const string& aSectorName,
-													const int aPeriod)
+                                                    const string& aRegionName, 
+                                                    const string& aSectorName,
+                                                    const int aPeriod)
 {
     // mTrialMarketName is only provided for intermittent capacity and we only
     // need to update the market for them

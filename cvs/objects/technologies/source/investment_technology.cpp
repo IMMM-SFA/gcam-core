@@ -74,34 +74,34 @@ mCapacityCreditCalculator( 0 )
 */
 void InvestmentTechnology::copy(const InvestmentTechnology& aTech) {
     Technology::copy( aTech );
-	mTrialMarketName = aTech.mTrialMarketName;
-	
-	if (aTech.mCapacityCreditCalculator) {
-		delete mCapacityCreditCalculator;
-		mCapacityCreditCalculator = aTech.mCapacityCreditCalculator->clone();
-	}
+    mTrialMarketName = aTech.mTrialMarketName;
+    
+    if (aTech.mCapacityCreditCalculator) {
+        delete mCapacityCreditCalculator;
+        mCapacityCreditCalculator = aTech.mCapacityCreditCalculator->clone();
+    }
 
 }
 
 // ! Destructor
 InvestmentTechnology::~InvestmentTechnology() {
-	delete mCapacityCreditCalculator; 
+    delete mCapacityCreditCalculator; 
 }
 
 //! Parses any input variables specific to derived classes
 bool InvestmentTechnology::XMLDerivedClassParse(const string& aNodeName, const DOMNode* aCurrNode) {
     bool success = false;
-	// Reading in parameters of the capacity-credit function.
-	if (aNodeName == CapacityCreditCalculator::getXMLNameStatic()) {
-		parseSingleNode(aCurrNode, mCapacityCreditCalculator, new CapacityCreditCalculator);
-		success = true;
-	}
-	else if (aNodeName == "trial-market-name") {
-		mTrialMarketName = XMLHelper<string>::getValue(aCurrNode);
-		success = true;
-	} 
+    // Reading in parameters of the capacity-credit function.
+    if (aNodeName == CapacityCreditCalculator::getXMLNameStatic()) {
+        parseSingleNode(aCurrNode, mCapacityCreditCalculator, new CapacityCreditCalculator);
+        success = true;
+    }
+    else if (aNodeName == "trial-market-name") {
+        mTrialMarketName = XMLHelper<string>::getValue(aCurrNode);
+        success = true;
+    } 
 
-	return success;
+    return success;
 }
 
 /*! \brief Get the XML node name for output to XML.
@@ -113,7 +113,7 @@ bool InvestmentTechnology::XMLDerivedClassParse(const string& aNodeName, const D
 * \return The constant XML_NAME.
 */
 const string& InvestmentTechnology::getXMLName() const {
-	return getXMLNameStatic();
+    return getXMLNameStatic();
 }
 
 /*! \brief Get the XML node name in static form for comparison when parsing XML.
@@ -126,8 +126,8 @@ const string& InvestmentTechnology::getXMLName() const {
 * \return The constant XML_NAME as a static.
 */
 const string& InvestmentTechnology::getXMLNameStatic() {
-	const static string XML_NAME = "investment-technology";
-	return XML_NAME;
+    const static string XML_NAME = "investment-technology";
+    return XML_NAME;
 }
 
 //! Clone Function. Returns a deep copy of the current technology.
@@ -138,13 +138,13 @@ InvestmentTechnology* InvestmentTechnology::clone() const {
 }
 
 void InvestmentTechnology::completeInit(const std::string& aRegionName,
-	const std::string& aSectorName,
-	const std::string& aSubsectorName,
-	const IInfo* aSubsectorInfo,
-	ILandAllocator* aLandAllocator)
+    const std::string& aSectorName,
+    const std::string& aSubsectorName,
+    const IInfo* aSubsectorInfo,
+    ILandAllocator* aLandAllocator)
 {
-	Technology::completeInit(aRegionName, aSectorName, aSubsectorName, aSubsectorInfo,
-		aLandAllocator);
+    Technology::completeInit(aRegionName, aSectorName, aSubsectorName, aSubsectorInfo,
+        aLandAllocator);
     
     // find the capacity credit input
     const string CAPACITY_CREDIT_NAME = "capacity credit";
@@ -155,117 +155,121 @@ void InvestmentTechnology::completeInit(const std::string& aRegionName,
         }
     }
     
-	// Make some tests for bad inputs
-	
-	if (mCapacityFactor == 0.0) {
-		ILogger& mainLog = ILogger::getLogger("main_log");
-		mainLog.setLevel(ILogger::SEVERE);
-		mainLog << "Capacity factor not read in for " << getXMLName() << " " << mName << ", " << mYear
-			    << " in region " << aRegionName << " and sector " << aSectorName << endl;
-		abort();
-	}
+    // Make some tests for bad inputs
+    
+    if (mCapacityFactor == 0.0) {
+        ILogger& mainLog = ILogger::getLogger("main_log");
+        mainLog.setLevel(ILogger::SEVERE);
+        mainLog << "Capacity factor not read in for " << getXMLName() << " " << mName << ", " << mYear
+                << " in region " << aRegionName << " and sector " << aSectorName << endl;
+        abort();
+    }
 
-	// If capacity-market-price has not been read in then throw error.
-	if (mCapacityCreditInput == mInputs.end()) {
-		ILogger& mainLog = ILogger::getLogger("main_log");
-		mainLog.setLevel(ILogger::NOTICE);
-		mainLog << getXMLName() << " " << mName << " in sector " << aSectorName
-			<< " in region " << aRegionName
-			<< " in vintage " << mYear
-			<< " did not read in a capacity credit price." << endl;
-	}
-	
-	if (!mTrialMarketName.empty() && !mCapacityCreditCalculator) {
-		ILogger& mainLog = ILogger::getLogger("main_log");
-		mainLog.setLevel(ILogger::NOTICE);
-		mainLog << getXMLName() << " " << mName << " in sector " << aSectorName
-			<< " in region " << aRegionName
-			<< " did not read in a capacity credit calculator for a non-dispatchable technology. Default parameter values will be used" << endl;
-	}
+    // If capacity-market-price has not been read in then throw error.
+    if (mCapacityCreditInput == mInputs.end()) {
+        ILogger& mainLog = ILogger::getLogger("main_log");
+        mainLog.setLevel(ILogger::NOTICE);
+        mainLog << getXMLName() << " " << mName << " in sector " << aSectorName
+            << " in region " << aRegionName
+            << " in vintage " << mYear
+            << " did not read in a capacity credit price." << endl;
+    }
+    
+    if (!mTrialMarketName.empty() && !mCapacityCreditCalculator) {
+        ILogger& mainLog = ILogger::getLogger("main_log");
+        mainLog.setLevel(ILogger::NOTICE);
+        mainLog << getXMLName() << " " << mName << " in sector " << aSectorName
+            << " in region " << aRegionName
+            << " did not read in a capacity credit calculator for a non-dispatchable technology. Default parameter values will be used" << endl;
+    }
 
-		
+        
 }
 
 //! write object to xml debugging output stream
 void InvestmentTechnology::toDebugXMLDerived(const int aPeriod, ostream& aOut, Tabs* aTabs) const
 {
-	XMLWriteElement(mTrialMarketName, "trial-market-name", aOut, aTabs);
-	if (mCapacityCreditCalculator) {
-			mCapacityCreditCalculator->toDebugXML(aPeriod, aOut, aTabs);
-	}
+    XMLWriteElement(mTrialMarketName, "trial-market-name", aOut, aTabs);
+    if (mCapacityCreditCalculator) {
+            mCapacityCreditCalculator->toDebugXML(aPeriod, aOut, aTabs);
+    }
 }
 
 void InvestmentTechnology::initCalc(const string& aRegionName,
-	const string& aSectorName,
-	const IInfo* aSubsectorInfo,
-	const Demographic* aDemographics,
-	PreviousPeriodInfo& aPrevPeriodInfo,
-	const int aPeriod)
+    const string& aSectorName,
+    const IInfo* aSubsectorInfo,
+    const Demographic* aDemographics,
+    PreviousPeriodInfo& aPrevPeriodInfo,
+    const int aPeriod)
 {
-	Technology::initCalc(aRegionName, aSectorName, aSubsectorInfo,
-		aDemographics, aPrevPeriodInfo, aPeriod);
+    Technology::initCalc(aRegionName, aSectorName, aSubsectorInfo,
+        aDemographics, aPrevPeriodInfo, aPeriod);
 }
 
-/*! \brief Calculates the output of the technology.
-* \details Calculates the amount of capacity output (in energy terms) based on fuel input and efficiency. 
-			Also do not calculate inputs and emissions (since that will be done in the CapacityTechnology class)
-* \param aRegionName Region name.
-* \param aSectorName Sector name, also the name of the product.
-* \param aVariableDemand Subsector demand for output.
-* \param aGDP Regional GDP container.
-* \param aPeriod Model period.
-*/
+/*!
+ * \brief Calculates the output of the technology.
+ * \details Calculates the amount of capacity output (in energy terms) based on fuel input and efficiency.
+ *          Also do not calculate inputs and emissions (since that will be done in the CapacityTechnology class)
+ * \param aRegionName Region name.
+ * \param aSectorName Sector name, also the name of the product.
+ * \param aVariableDemand Subsector demand for output.
+ * \param aGDP Regional GDP container.
+ * \param aPeriod Model period.
+ */
 void InvestmentTechnology::production(const string& aRegionName,
-	const string& aSectorName,
-	const double aVariableDemand,
-	const double aFixedOutputScaleFactor,
-	const GDP* aGDP,
-	const int aPeriod)
+    const string& aSectorName,
+    const double aVariableDemand,
+    const double aFixedOutputScaleFactor,
+    const GDP* aGDP,
+    const int aPeriod)
 {
-	// Can't have a scale factor and positive demand.
-	assert(aFixedOutputScaleFactor == 1 || aVariableDemand == 0);
+    // Can't have a scale factor and positive demand.
+    assert(aFixedOutputScaleFactor == 1 || aVariableDemand == 0);
 
-	// Can't have negative variable demand.
-	assert(aVariableDemand >= 0 && util::isValidNumber(aVariableDemand));
+    // Can't have negative variable demand.
+    assert(aVariableDemand >= 0 && util::isValidNumber(aVariableDemand));
 
-	// Check for positive variable demand and positive fixed output.
-	assert(mFixedOutput == IProductionState::fixedOutputDefault() || util::isEqual(aVariableDemand, 0.0));
+    // Check for positive variable demand and positive fixed output.
+    assert(mFixedOutput == IProductionState::fixedOutputDefault() || util::isEqual(aVariableDemand, 0.0));
 
-	// Check that a state has been created for the period.
-	assert(mProductionState[aPeriod]);
+    // Check that a state has been created for the period.
+    assert(mProductionState[aPeriod]);
 
-	// Early exit optimization to avoid running through the demand function and
-	// emissions calculations for non-operating technologies.
-	if (!mProductionState[aPeriod]->isOperating()) {
-		return;
-	}
+    // Early exit optimization to avoid running through the demand function and
+    // emissions calculations for non-operating technologies.
+    if (!mProductionState[aPeriod]->isOperating()) {
+        return;
+    }
 
-	// Construct a marginal profit calculator. This allows the calculation of 
-	// marginal profits to be lazy.
-	MarginalProfitCalculator marginalProfitCalc(this);
+    // Construct a marginal profit calculator. This allows the calculation of 
+    // marginal profits to be lazy.
+    MarginalProfitCalculator marginalProfitCalc(this);
 
-	// Use the production state to determine output.
-	double primaryOutput =
-		mProductionState[aPeriod]->calcProduction(aRegionName,
-			aSectorName,
-			aVariableDemand,
-			&marginalProfitCalc,
-			aFixedOutputScaleFactor,
-			mShutdownDeciders,
-			aPeriod);
+    // Use the production state to determine output.
+    double primaryOutput =
+        mProductionState[aPeriod]->calcProduction(aRegionName,
+            aSectorName,
+            aVariableDemand,
+            &marginalProfitCalc,
+            aFixedOutputScaleFactor,
+            mShutdownDeciders,
+            aPeriod);
 
-		// An InvestmentTechnology object should not contribute to energy inputs and/or emissions.  
-	mOutputs[0]->setPhysicalOutput(primaryOutput, aRegionName, mCaptureComponent, aPeriod);
+        // An InvestmentTechnology object should not contribute to energy inputs and/or emissions.  
+    mOutputs[0]->setPhysicalOutput(primaryOutput, aRegionName, mCaptureComponent, aPeriod);
 
 
 }
   
-/*!Applying capacity payments to levelized costs of investment technologies. 
-	The CapacityCreditCalculator:: getCapacityPayment method is called to apply the payment to the levelized costs 
-	of the investment-technology (which is in turn used for logit calculations). 
-	Note that ideally we should be applying this to the capital-overnight component but that could be messy.
-*/
-
+/*!
+ * \brief Adjust capacity payments before calculating the cost of the technology.
+ * \details The CapacityCreditCalculator:: getCapacityPayment method is called to
+ *          adjust the coefficient on the capacity credit input before using the
+ *          base class method to do the cost calculation.
+ * \param aRegionName Region name.
+ * \param aSectorName Sector name, also the name of the product.
+ * \param aPeriod The model period.
+ */
 void InvestmentTechnology::calcCost(const string& aRegionName,
                                     const string& aSectorName,
                                     const int aPeriod)
@@ -283,18 +287,18 @@ void InvestmentTechnology::calcCost(const string& aRegionName,
 }
 
 void InvestmentTechnology::doInterpolations(const Technology* aPrevTech, const Technology* aNextTech) {
-	Technology::doInterpolations(aPrevTech, aNextTech);
+    Technology::doInterpolations(aPrevTech, aNextTech);
 
-	const InvestmentTechnology* prevTech = static_cast<const InvestmentTechnology*> (aPrevTech);
-	const InvestmentTechnology* nextTech = static_cast<const InvestmentTechnology*> (aNextTech);
+    const InvestmentTechnology* prevTech = static_cast<const InvestmentTechnology*> (aPrevTech);
+    const InvestmentTechnology* nextTech = static_cast<const InvestmentTechnology*> (aNextTech);
 
-	//	 \pre We were given a valid previous InvestmentTechnology object.
-	
-	assert(prevTech);
+    //     \pre We were given a valid previous InvestmentTechnology object.
+    
+    assert(prevTech);
 
-	// \pre We were given a valid next InvestmentTechnology object.
-	
-	assert(nextTech);
+    // \pre We were given a valid next InvestmentTechnology object.
+    
+    assert(nextTech);
 }
 
 void InvestmentTechnology::acceptDerived( IVisitor* aVisitor, const int aPeriod ) const {

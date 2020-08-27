@@ -45,25 +45,27 @@
  */
 
 #include <string>
-#include "sectors/include/ibackup_calculator.h"
+
+#include "util/base/include/data_definition_util.h"
 
 // Forward declaration
 class IInfo;
+class Tabs;
 
 /*!
  * \ingroup Objects
  * \brief The Capacity credit calculator for intermittent technologies.
  * \details Calculates the capacity credit (or capacity value; 0-1) as a function of 
-			share of capacity of the intermittent resource within
+ *          share of capacity of the intermittent resource within
  *          the electricity sector. 
  *
  *          functional form of capacity credit as a function of renewshare is
  *          
  *          mCapacityCredit = mCapacityCreditMin + (mCapacityCreditMax - mCapacityCreditMin) * 1/ (1+ exp(mSteepness *(renewElecShare-mXmid)))
  *                  where  mCapacityCreditMin is the minimum capacity credit (defaults to 0.15)
- *							mCapacityCreditMax is the maximum capcity credit (defaults to 0.4)
- 							mSteepness and mXmid are shape parameters
- *                          mXmid is the value of the share at which mCapacityCredit = 0.5*(mCapacityCreditMax - mCapacityCreditMin)
+ *                         mCapacityCreditMax is the maximum capcity credit (defaults to 0.4)
+ *                         mSteepness and mXmid are shape parameters
+ *                         mXmid is the value of the share at which mCapacityCredit = 0.5*(mCapacityCreditMax - mCapacityCreditMin)
  *                                
  *
  *         
@@ -74,14 +76,15 @@ class IInfo;
  *          - Attributes: None
  *          - Elements:
  *              - \c capacity-credit-min CapacityCreditCalculator::mCapacityCreditMin
-				- \c capacity-credit-max CapacityCreditCalculator::mCapacityCreditMax
- *				- \c steepness CapacityCreditCalculator::mSteepness
- 				- \c x-mid CapacityCreditCalculator::mXmid
-				
-				* \author Gokul Iyer, Pralit Patel
+ *              - \c capacity-credit-max CapacityCreditCalculator::mCapacityCreditMax
+ *              - \c steepness CapacityCreditCalculator::mSteepness
+ *              - \c x-mid CapacityCreditCalculator::mXmid
+ *
+ * \author Gokul Iyer, Pralit Patel
  */
-class CapacityCreditCalculator{
+class CapacityCreditCalculator {
 public:
+    CapacityCreditCalculator();
     virtual CapacityCreditCalculator* clone() const;
     virtual bool isSameType( const std::string& aType ) const;
     virtual const std::string& getName() const;
@@ -90,22 +93,17 @@ public:
     virtual void initCalc( const IInfo* aTechInfo );
     
     virtual double getCapacityCredit(const std::string& aRegion,
-																const std::string& aSector,
-																const int aPeriod) ;
-	
-	static const std::string& getXMLNameStatic();
-
-	CapacityCreditCalculator();
-  
+                                     const std::string& aSector,
+                                     const int aPeriod);
+    
+    static const std::string& getXMLNameStatic();
+ 
 protected:
-	
-	   
-
-       
+      
     // Define data such that introspection utilities can process the data from this
     // subclass together with the data members of the parent classes.
-	DEFINE_DATA(
-		DEFINE_SUBCLASS_FAMILY( CapacityCreditCalculator ),
+    DEFINE_DATA(
+        DEFINE_SUBCLASS_FAMILY( CapacityCreditCalculator ),
 
         //! Parameter for maximum value of capacity credit
         DEFINE_VARIABLE( SIMPLE, "capacity-credit-max", mCapacityCreditMax, double ),

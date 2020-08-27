@@ -54,37 +54,37 @@
 class Tabs;
 
 class CapacityTechnology : public Technology {
-	friend class XMLDBOutputter;
+    friend class XMLDBOutputter;
 public:
-	CapacityTechnology(const std::string& aName,
-		const int aYear);
-	~CapacityTechnology();
-	static const std::string& getXMLNameStatic();
-	CapacityTechnology* clone() const;
+    CapacityTechnology(const std::string& aName,
+        const int aYear);
+    ~CapacityTechnology();
+    static const std::string& getXMLNameStatic();
+    CapacityTechnology* clone() const;
 
-	virtual void completeInit(const std::string& aRegionName,
-		const std::string& aSectorName,
-		const std::string& aSubsectorName,
-		const IInfo* aSubsectorIInfo,
-		ILandAllocator* aLandAllocator);
+    virtual void completeInit(const std::string& aRegionName,
+        const std::string& aSectorName,
+        const std::string& aSubsectorName,
+        const IInfo* aSubsectorIInfo,
+        ILandAllocator* aLandAllocator);
 
-	virtual void initCalc(const std::string& aRegionName,
-		const std::string& aSectorName,
-		const IInfo* aSubsectorInfo,
-		const Demographic* aDemographics,
-		PreviousPeriodInfo& aPrevPeriodInfo,
-		const int aPeriod);
+    virtual void initCalc(const std::string& aRegionName,
+        const std::string& aSectorName,
+        const IInfo* aSubsectorInfo,
+        const Demographic* aDemographics,
+        PreviousPeriodInfo& aPrevPeriodInfo,
+        const int aPeriod);
     
     virtual double getEnergyCost( const std::string& aRegionName,
                                   const std::string& aSectorName,
                                   const int aPeriod ) const;
 
-	virtual void production(const std::string& aRegionName,
-		const std::string& aSectorName,
-		double aVariableDemand,
-		double aFixedOutputScaleFactor,
-		const GDP* aGDP,
-		const int aPeriod);
+    virtual void production(const std::string& aRegionName,
+        const std::string& aSectorName,
+        double aVariableDemand,
+        double aFixedOutputScaleFactor,
+        const GDP* aGDP,
+        const int aPeriod);
     
     double tryDispatch( const std::string& aRegionName, const std::string& aSectorName,
                         const std::string& aDemandSegment,
@@ -94,17 +94,17 @@ public:
     double calcInvestmentCapacityScaleFactor( const std::string& aRegionName, const std::string& aSectorName,
                                               const double aNewInvestCost, const int aPeriod ) const;
 
-	virtual void doInterpolations(const Technology* aPrevTech, const Technology* aNextTech);
+    virtual void doInterpolations(const Technology* aPrevTech, const Technology* aNextTech);
     
     void setCapacity( const double aCapacity, const int aPeriod );
 
-	double getCapacity(	const std::string& aRegionName, const std::string& aSectorName,
-						const int aPeriod ) const;
+    double getCapacity(    const std::string& aRegionName, const std::string& aSectorName,
+                        const int aPeriod ) const;
 
-	virtual void  addCapacityShareToMarket(double aAggregateCapacity,
-		const std::string& aRegionName,
-		const std::string& aSectorName,
-		const int aPeriod);
+    virtual void  addCapacityShareToMarket(double aAggregateCapacity,
+        const std::string& aRegionName,
+        const std::string& aSectorName,
+        const int aPeriod);
 
 protected:
     
@@ -113,19 +113,19 @@ protected:
     DEFINE_DATA_WITH_PARENT(
         Technology,
 
-		//! Name of trial market associated with this Capacity Technology.
-		DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string),
+        //! Name of trial market associated with this Capacity Technology.
+        DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string),
 
-		//! Name of capacity market associated with this Capacity Technology.
-		DEFINE_VARIABLE(SIMPLE, "capacity-market-name", mCapacityMarketName, std::string),
+        //! Name of capacity market associated with this Capacity Technology.
+        DEFINE_VARIABLE(SIMPLE, "capacity-market-name", mCapacityMarketName, std::string),
 
         //! The capacity for this technology.
         DEFINE_VARIABLE( SIMPLE | STATE, "capacity", mCapacity, Value ),
                             
         DEFINE_VARIABLE( SIMPLE, "segment-capacity-factor", mSegCapFac, std::map<std::string, double> ),
 
-		//! State value necessary to track tech output ration
-		DEFINE_VARIABLE(SIMPLE | STATE, "tech-output-ratio", mIntermitOutTechRatio, Value),
+        //! State value necessary to track tech output ration
+        DEFINE_VARIABLE(SIMPLE | STATE, "tech-output-ratio", mIntermitOutTechRatio, Value),
    
         //! A minimum capacity factor where if the capacity factor would be below
         //! this value the technology would no longer be able to dispatch.
@@ -137,9 +137,9 @@ protected:
         DEFINE_VARIABLE( CONTAINER, "investment-scale-factor", mInvestScaleDecider, IShutdownDecider* )
     )
 
-	virtual void toDebugXMLDerived(const int period, std::ostream& out, Tabs* tabs) const;
-	virtual bool XMLDerivedClassParse(const std::string& nodeName, const xercesc::DOMNode* curr);
-	virtual const std::string& getXMLName() const;
+    virtual void toDebugXMLDerived(const int period, std::ostream& out, Tabs* tabs) const;
+    virtual bool XMLDerivedClassParse(const std::string& nodeName, const xercesc::DOMNode* curr);
+    virtual const std::string& getXMLName() const;
     void copy( const CapacityTechnology& aOther );
     virtual void setProductionState( const int aPeriod );
     virtual void acceptDerived( IVisitor* aVisitor, const int aPeriod ) const; 

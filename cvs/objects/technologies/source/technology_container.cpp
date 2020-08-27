@@ -203,7 +203,6 @@ bool TechnologyContainer::createAndParseVintage( const DOMNode* aNode, const str
 		else if (aTechType == CapacityTechnology::getXMLNameStatic()) {
 			newVintage = new CapacityTechnology(mName, techYear);
 		}
-		
 		else if (aTechType == InvestmentTechnology::getXMLNameStatic()) {
 			newVintage = new InvestmentTechnology(mName, techYear);
 		}
@@ -617,7 +616,7 @@ void TechnologyContainer::interpolateShareWeights( const int aPeriod ) {
         if( period > modeltime->getFinalCalibrationPeriod() && !techShareWeights[ period ].isInited() ) {
             ILogger& mainLog = ILogger::getLogger( "main_log" );
             mainLog.setLevel( ILogger::ERROR );
-            mainLog << "Found uninitialized share weight in tech: " << mName 
+            mainLog << "Found uninitialized share weight in tech: " << mName
                 << " in period " << aPeriod << endl;
             abort();
         }
