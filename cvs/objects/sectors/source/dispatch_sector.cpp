@@ -76,10 +76,7 @@ const string& DispatchSector::getXMLNameStatic() {
 
 bool DispatchSector::XMLDerivedClassParse( const string& aNodeName, const DOMNode* aNode ) {
     bool didParse = true;
-    if( aNodeName == "cal-production" ) {
-        XMLHelper<double>::insertValueIntoVector( aNode, mCalProduction, scenario->getModeltime() );
-    }
-    else if( aNodeName == "generation-sector" ) {
+    if( aNodeName == "generation-sector" ) {
         mGenSectors.push_back(make_pair( XMLHelper<string>::getAttr( aNode, "name" ), XMLHelper<string>::getAttr( aNode, "market" ) ) );
     }
     else if( aNodeName == "dispatch-segment" ) {

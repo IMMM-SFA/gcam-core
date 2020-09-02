@@ -46,10 +46,8 @@
 #include <map>
 #include <vector>
 #include "sectors/include/supply_sector.h"
-#include "containers/include/iactivity.h"
 
 class CapacityTechnology;
-class FilterStep;
 
 /*!
  * \ingroup Objects
@@ -147,9 +145,6 @@ protected:
     DEFINE_DATA_WITH_PARENT(
         SupplySector,
         
-        //! The calibration capacity values
-        DEFINE_VARIABLE( ARRAY, "cal-production", mCalProduction, objects::PeriodVector<double> ),
-                            
         //! The load generation curve sectors mapped to percent energy coef
         DEFINE_VARIABLE( SIMPLE, "generation-sector", mGenSectors, std::vector<std::pair<std::string, std::string> > ),
 

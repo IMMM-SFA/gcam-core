@@ -116,8 +116,8 @@ module_gcamusa_batch_regional_biomass_USA_xml <- function(command, ...) {
       add_xml_data(L2261.StubTechMarket_en_USA, "StubTechMarket") %>%
       # add_xml_data(L2261.StubTechMarket_elecS_USA, "StubTechMarket") %>%
       add_xml_data(L2261.StubTechMarket_Investment_USA, "StubTechMarket") %>%
-      add_xml_data(L2261.TechEff_Dispatch_USA, "TechEff_dispatch", NULL) %>%
-      add_xml_data(L2261.TechEff_Cal_USA, "TechEff_dispatch", NULL) %>%
+      add_xml_data(L2261.TechEff_Dispatch_USA, "TechEff") %>%
+      add_xml_data(L2261.TechEff_Cal_USA, "TechEff") %>%
       add_xml_data(L2261.StubTechMarket_ind_USA, "StubTechMarket") %>%
       add_xml_data(L2261.StubTechMarket_cement_USA, "StubTechMarket") %>%
       add_xml_data(L2261.StubTechMarket_bld_USA, "StubTechMarket") %>%
