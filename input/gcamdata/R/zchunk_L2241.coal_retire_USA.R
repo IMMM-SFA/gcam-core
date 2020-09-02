@@ -295,7 +295,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              capacity = WC_NP,
              efficiency, OMF, OMV) %>%
       left_join_error_no_match(vintage_bins_mapping, by = "Operating.Year") %>%
-      mutate(size = if_else(capacity >= 500, ">= 500 MW", "< 500 MW"),
+      mutate(size = if_else(capacity >= 500, "over500MW", "under500MW"),
              vintage.bin = paste0(vintage, "_", size)) ->
       REEDS_coal
 
