@@ -158,7 +158,9 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
                                       calOutput_OLD * retire_frac),
              tech.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
       mutate(share.weight.year = year) %>%
-      mutate(subs.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
+      group_by(region, supplysector, subsector, year) %>%
+      mutate(subs.share.weight = if_else(sum(calOutputValue) > 0, 1, 0)) %>%
+      ungroup() %>%
       select(LEVEL2_DATA_NAMES[["Production"]]) ->
       L2241.TechProd_elec_coalret_dispatch_gcamusa
 
@@ -244,6 +246,12 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     # W_RYR - retirement year
     # WC_NP - nameplate capacity
     # W_FOM - fixed O&M ($1987)
+    # WCOMB_F - Fixed Cost, Nox Comb Control  ($1987)
+    # W_DSIF - Fixed Cost, DSI ($1987)
+    # W_FFF - Fixed Cost, Fabric Filter ($1987)
+    # WSCR_F - Fixed Cost, SCR ($1987)
+    # WSNCR_F - Fixed Cost, SNCR ($1987)
+    # W_CAPAD - Annual Investment in Capital Addtions (1987$/MW)
     # W_VOM - variable O&M ($1987)
     # WCOMB_V - Variable Cost, Nox Comb Control  ($1987)
     # W_DSIV - Variable Cost, DSI ($1987)
@@ -253,8 +261,9 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     # WHRATE - heat rate
 
     REEDS_Plantfile %>%
-      select(T_PID, T_UID, WSTATE, EFDcd, ECPcd, WC_NP, TRFURB, W_SYR, W_RYR, W_FOM,
-             W_VOM, WCOMB_V, W_DSIV, W_FFV, WSCR_V, WSNCR_V, WHRATE) %>%
+      select(T_PID, T_UID, WSTATE, EFDcd, ECPcd, WC_NP, TRFURB, W_SYR, W_RYR, WHRATE,
+             W_FOM, WCOMB_F, W_DSIF, W_FFF, WSCR_F, WSNCR_F, W_CAPAD,
+             W_VOM, WCOMB_V, W_DSIV, W_FFV, WSCR_V, WSNCR_V) %>%
       # filter for plants not yet retired in 2020
       filter(W_RYR > 2020) %>%
       left_join_error_no_match(ECP_mapping %>%
@@ -266,12 +275,14 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              # filter out CCS plants
              EFDcd != "CAS") %>%
       # appears to be some duplicate identifiers, so summarise
-      group_by(T_PID, T_UID, WSTATE, EFDcd, ECPcd, TRFURB, W_SYR, W_RYR, W_FOM,
-               W_VOM, WCOMB_V, W_DSIV, W_FFV, WSCR_V, WSNCR_V, WHRATE) %>%
+      group_by(T_PID, T_UID, WSTATE, EFDcd, ECPcd, TRFURB, W_SYR, W_RYR, WHRATE,
+               W_FOM, WCOMB_F, W_DSIF, W_FFF, WSCR_F, WSNCR_F, W_CAPAD,
+               W_VOM, WCOMB_V, W_DSIV, W_FFV, WSCR_V, WSNCR_V) %>%
       summarise(WC_NP = sum(WC_NP)) %>%
       ungroup() %>%
       mutate(efficiency = CONV_KWH_BTU / WHRATE,
-             OMF = W_FOM * gdp_deflator(1975, 1987),
+             # have to sum across a number of components to get complete fixed / variable O&M costs
+             OMF = (W_FOM + WCOMB_F + W_DSIF + W_FFF + WSCR_F + WSNCR_F + W_CAPAD) * gdp_deflator(1975, 1987),
              OMV = (W_VOM + WCOMB_V + W_DSIV + W_FFV + WSCR_V + WSNCR_V) * gdp_deflator(1975, 1987),
              year = TRFURB - min(TRFURB)) %>%
       select(Plant.ID = T_PID,
@@ -284,14 +295,11 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              capacity = WC_NP,
              efficiency, OMF, OMV) %>%
       left_join_error_no_match(vintage_bins_mapping, by = "Operating.Year") %>%
-      group_by(region, vintage) %>%
-      mutate(median_size = median(capacity),
-             size = if_else(capacity >= median_size, "big", "small")) %>%
-      ungroup() %>%
-      mutate(vintage.bin = paste0(vintage, "_", size))->
+      mutate(size = if_else(capacity >= 500, ">= 500 MW", "< 500 MW"),
+             vintage.bin = paste0(vintage, "_", size)) ->
       REEDS_coal
 
-    # obtain state-shares of generation and capacity in 2018 ()
+    # Obtain state-shares of generation and capacity in 2018
     REEDS_coal %>%
       # Obtain unit/generator-level generation in 2015 from generator-level generation data in Form 923.
       # 13 units are missing geneation data in eia_923_data_2018.  LJENM throws error; use left_join for now
@@ -434,7 +442,8 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
 
     # Variable OM costs
     L2241.TechProd_coal_vintage_dispatch_dataframe %>%
-      left_join_error_no_match(REEDS_coal_Eff_OMvar %>% select(region, technology, OMV_weighted),
+      left_join_error_no_match(REEDS_coal_Eff_OMvar %>%
+                                 select(region, technology, OMV_weighted),
                                by = c("region", "technology")) %>%
       rename(OM.var = OMV_weighted) %>%
       mutate(input.OM.var = "OM-var") %>%
@@ -465,6 +474,8 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
 
     # Create table to read in shareweights in future years
     L2241.TechProd_coal_vintage_dispatch_dataframe %>%
+      select(-year) %>%
+      repeat_add_columns(tibble::tibble(year = MODEL_FUTURE_YEARS)) %>%
       mutate(share.weight = 0) %>%
       select(LEVEL2_DATA_NAMES[['TechShrwt']]) ->
       L2241.TechShrwt_coal_vintage_dispatch_gcamusa
