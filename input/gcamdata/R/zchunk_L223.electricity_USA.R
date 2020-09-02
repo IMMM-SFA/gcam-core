@@ -22,7 +22,7 @@
 #' \code{L223.SubsectorLogit_Dispatch}, \code{L223.SubsectorShrwtFllt_Dispatch}, \code{L223.CapacityTech_FutureTechs},
 #' \code{L223.TechOMvar_Dispatch}, \code{L223.TechLifetime_Dispatch}, \code{L223.TechSCurve_Dispatch},
 #' \code{L223.TechCapFac_Dispatch}, \code{L223.TechCarbonCapture_Dispatch}, \code{L223.Production_Dispatch},
-#' \code{L223.TechEff_Cal}, \code{L223.TechTrialMarket_Dispatch},\code{L223.TechTrialMarket_Investment}, \code{L223.Sector_Dispatch_Grid}, \code{L223.DispatchSectorCalProd},
+#' \code{L223.TechEff_Cal}, \code{L223.TechTrialMarket_Dispatch},\code{L223.TechTrialMarket_Investment}, \code{L223.Sector_Dispatch_Grid},
 #' \code{L223.DispatchSectorDispatchSegments}, \code{L223.InterestRate_FERC}, \code{L223.Pop_FERC}, \code{L223.BaseGDP_FERC},
 #' \code{L223.LaborForceFillout_FERC}, \code{L223.StubTechCost_offshore_wind_Investment}.
 #' The corresponding file in the
@@ -80,6 +80,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              "L223.SubsectorInterp_Investment",
              "L223.SubsectorInterpTo_Investment",
              "L223.StubTech_Investment",
+             "L233.GlobalInvestTech_Investment",
              "L223.GlobalTechEff_Investment",
              "L223.StubTechMarket_Investment",
              "L223.GlobalTechOMfixed_Investment",
@@ -119,7 +120,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              "L223.TechTrialMarket_Dispatch",
              "L223.TechTrialMarket_Investment",
              "L223.Sector_Dispatch_Grid",
-             "L223.DispatchSectorCalProd",
              "L223.DispatchSectorDispatchSegments",
              "L223.InterestRate_FERC",
              "L223.Pop_FERC",
@@ -272,13 +272,21 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       nest(-sector) %>%
       mutate(data = lapply(data, fill_exp_decay_extrapolate, MODEL_YEARS)) %>%
       unnest() %>%
-      mutate(supplysector = sector) %>%
+      mutate(sector.name = sector) %>%
       select(-sector) %>%
-      rename(efficiency = value) %>%
+      rename(subsector.name = subsector,
+             efficiency = value) %>%
       mutate(year = as.integer(year)) %>%
       filter(year %in% MODEL_YEARS) %>%
-      select(supplysector, subsector, technology, year, minicam.energy.input, efficiency) ->
+      select(LEVEL2_DATA_NAMES[['GlobalTechEff']]) ->
       L223.GlobalTechEff_Investment
+
+    # Create a complete list of all global investment-technologies
+    L223.GlobalTechEff_Investment %>%
+      rename(invest.technology = technology) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalInvestTech"]]) %>%
+      distinct() ->
+      L233.GlobalInvestTech_Investment
 
     # ===========================================================================
     ## L223 StubTechMarket_Investment
@@ -287,7 +295,9 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # built market names into L223.StubTechMarket_Investment
     L223.GlobalTechEff_Investment %>%
       select(-efficiency) %>%
-      rename(stub.technology = technology) %>%
+      rename(supplysector = sector.name,
+             subsector = subsector.name,
+             stub.technology = technology) %>%
       mutate(market.name = "temp") %>%
       write_to_all_states(LEVEL2_DATA_NAMES[["StubTechMarket"]]) %>%
       mutate(market.name = if_else(minicam.energy.input %in% c(gcamusa.STATE_RENEWABLE_RESOURCES, "global solar resource"), region, "USA")) ->
@@ -322,7 +332,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       rename(OM.fixed = value) %>%
       mutate(year = as.integer(year)) %>%
       filter(year %in% MODEL_YEARS) %>%
-      select(sector.name, subsector.name, technology, year, input.OM.fixed, OM.fixed) ->
+      select(LEVEL2_DATA_NAMES[['GlobalTechOMfixed']]) ->
       L223.GlobalTechOMfixed_Investment
 
     # ===========================================================================
@@ -345,7 +355,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       rename(OM.var = value) %>%
       mutate(year = as.integer(year)) %>%
       filter(year %in% MODEL_YEARS) %>%
-      select(sector.name, subsector.name, technology, year, input.OM.var, OM.var) ->
+      select(LEVEL2_DATA_NAMES[['GlobalTechOMvar']]) ->
       L223.GlobalTechOMvar_Investment
 
     # ===========================================================================
@@ -367,7 +377,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       rename(capital.overnight = value) %>%
       mutate(year = as.integer(year)) %>%
       filter(year %in% MODEL_YEARS) %>%
-      select(sector.name, subsector.name, technology, year, input.capital, capital.overnight, fixed.charge.rate) ->
+      select(LEVEL2_DATA_NAMES[['GlobalTechCapital']]) ->
       L223.GlobalTechCapital_Investment
 
     # ===========================================================================
@@ -380,11 +390,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                                by = c("supplysector", "subsector", "technology")) %>%
       gather(key="year", value="share.weight", -sector, -supplysector, -subsector, -technology) %>%
       complete(nesting(sector, supplysector, subsector, technology), year = c(year, MODEL_YEARS)) %>%
-      mutate(supplysector = sector) %>%
-      select(-sector) %>%
+      rename(sector.name = sector,
+             subsector.name = subsector) %>%
+      select(-supplysector) %>%
       distinct() %>%
       mutate(year = as.integer(year)) %>%
-      group_by(supplysector, subsector, technology) %>%
+      group_by(sector.name, subsector.name, technology) %>%
       mutate(share.weight = approx_fun(year, share.weight)) %>%
       ungroup() %>%
       filter(year %in% MODEL_YEARS) ->
@@ -417,8 +428,9 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                    select(sector, supplysector, subsector, technology),
                  by=c("sector", "technology")) %>%
       repeat_add_columns(tibble::tibble(year = MODEL_YEARS)) %>%
-      mutate(supplysector = sector) %>%
-      select(supplysector, subsector, technology, year, capacity.factor) ->
+      rename(sector.name = sector,
+             subsector.name = subsector) %>%
+      select(LEVEL2_DATA_NAMES[['GlobalTechCapFac']]) ->
       L223.GlobalTechCapFac_Investment
 
     # ===========================================================================
@@ -432,11 +444,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       left_join_error_no_match(A23.globaltech_co2capture, by = c("supplysector", "subsector", "technology")) %>%
       gather(key="year", value="remove.fraction", -sector, -supplysector, -subsector, -technology) %>%
       complete(nesting(sector, supplysector, subsector, technology), year = c(year, MODEL_FUTURE_YEARS)) %>%
-      mutate(supplysector = sector) %>%
-      select(-sector) %>%
+      rename(sector.name = sector,
+             subsector.name = subsector) %>%
+      select(-supplysector) %>%
       distinct() %>%
       mutate(year = as.integer(year)) %>%
-      group_by(supplysector, subsector, technology) %>%
+      group_by(sector.name, subsector.name, technology) %>%
       mutate(remove.fraction = approx_fun(year, remove.fraction)) %>%
       ungroup() %>%
       filter(year %in% MODEL_FUTURE_YEARS) %>%
@@ -448,31 +461,29 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # ===========================================================================
 
     # capacity-market-price：the capital overnight cost of a gas CT in 1975USD/KW
-    # use 2015 value
-    gas_CT_cost <- A23.dispatch_globaltech_capital_additional$`2015`[A23.dispatch_globaltech_capital_additional$technology == "gas (CT)"]
     L223.GlobalTechCapital_Investment %>%
-      filter(technology == "gas (CT)", year == MODEL_FINAL_BASE_YEAR, sector.name == gcamusa.ELEC_INV_NAMES[1]) %>%
+      filter(technology == "gas (CT)", sector.name == gcamusa.ELEC_INV_NAMES[1]) %>%
       mutate(input.capital = "capacity credit",
              capital.overnight = -1.0 * capital.overnight) %>%
-      select(input.capital, capital.overnight, fixed.charge.rate) ->
+      select(year, input.capital, capital.overnight, fixed.charge.rate) ->
       gas_CT_cost
 
     calibrated_techs_dispatch_usa %>%
       filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
-      select(sector.name = sector, supplysector, subsector, technology) %>%
+      select(sector.name = sector, subsector.name = subsector, technology) %>%
       repeat_add_columns(tibble::tibble(year = MODEL_YEARS)) %>%
-      mutate(supplysector = sector,
-             input.capital = "capacity credit") %>%
-      left_join(gas_CT_cost, by = c("input.capital")) ->
+      mutate(input.capital = "capacity credit") %>%
+      left_join(gas_CT_cost, by = c("year", "input.capital")) ->
       L223.GlobalTechCost_Investment
 
     # ===========================================================================
     ## L223 GlobalTechCost_CapacityCreditCalulator  capacity credit calculator for non-dispatchable techs
     # ===========================================================================
     L223.GlobalTechCost_Investment %>%
-      filter(subsector %in% capacity_credit_calculator$subsector) %>%
-      left_join_error_no_match(capacity_credit_calculator, by = "subsector") %>%
-      select(-input.capital, -capital.overnight, -fixed.charge.rate) ->
+      filter(subsector.name %in% capacity_credit_calculator$subsector) %>%
+      left_join_error_no_match(capacity_credit_calculator, by = c("subsector.name" = "subsector")) %>%
+      rename(invest.technology = technology) %>%
+      select(LEVEL2_DATA_NAMES[['GlobalInvestTechCapacityCredit']]) ->
       L223.GlobalTechCost_CapacityCreditCalulator
 
     # ===========================================================================
@@ -499,6 +510,15 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       mutate(supplysector = sector) %>%
       select(region, supplysector, subsector, technology, year, capacity.factor) ->
       L223.TechCapFac_Investment
+
+    # investment technology use trial at grid level
+    L223.StubTechMarket_Investment %>%
+      filter(subsector %in% capacity_credit_calculator$subsector) %>%
+      left_join_error_no_match(select(states_subregions, state, grid_region), by = c("region" = "state")) %>%
+      left_join_error_no_match(TechTrialMarket_mapping, by = c("region", "subsector")) %>%
+      rename(invest.technology = stub.technology) %>%
+      select(LEVEL2_DATA_NAMES[['InvestTechTrialMktName']]) ->
+      L223.TechTrialMarket_Investment
 
     # ===========================================================================
     ## L223 Sector_Investment_StateShare investment sharing sectors at the grid region
@@ -763,12 +783,14 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       filter(sector == "electricity generation") %>%
       select(supplysector, subsector, technology, capacity.factor) %>%
       expand(., ., year = MODEL_YEARS) %>%
-      write_to_all_states(c(LEVEL2_DATA_NAMES[["TechYr"]], "capacity.factor")) ->
+      write_to_all_states(LEVEL2_DATA_NAMES[["TechCapFac"]]) ->
       L223.TechCapFac_Dispatch
 
     # technology capacity
     L223.TechCapFac_Dispatch %>%
-      rename(capacity = capacity.factor) %>%
+      rename(dispatch.sector = supplysector,
+             capacity.technology = technology,
+             capacity = capacity.factor) %>%
       mutate(capacity = 0.0 ) ->
       L223.CapacityTech_FutureTechs
 
@@ -798,13 +820,16 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       # future, not including it helps keep the size of the XML down
       filter((technology == "hydro" & year == MODEL_FINAL_BASE_YEAR) |
                (technology != "hydro" & year >= MODEL_FINAL_BASE_YEAR)) %>%
-      select(region, supplysector, subsector, technology, year, segment, capacity.factor) ->
+      rename(dispatch.sector = supplysector,
+             capacity.technology = technology) %>%
+      select(LEVEL2_DATA_NAMES[['CapacityTechSegmentCapFac']]) ->
       L223.CapacityTechSegmentCapFac
 
     A23.dispatch_capacitytech_min_cap_fac %>%
       expand(., ., year = MODEL_YEARS) %>%
-      #write_to_all_states(LEVEL2_DATA_NAMES[["CapacityTechMinCapFac"]]) ->
-      write_to_all_states(c(LEVEL2_DATA_NAMES[["TechYr"]], "min.capacity.factor")) ->
+      rename(dispatch.sector = supplysector,
+             capacity.technology = technology) %>%
+      write_to_all_states(LEVEL2_DATA_NAMES[["CapacityTechMinCapFac"]]) ->
       L223.CapacityTechMinCapFac
 
     # carbon storage market and remove.fraction
@@ -839,16 +864,16 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # dispatch sector
     L223.Sector_Dispatch %>%
       select(region, supplysector) %>%
-      rename(dispatchsector = supplysector) %>%
-      expand(., ., generation_sector = gcamusa.ELEC_INV_NAMES) %>%
-      mutate(generation_sector_market = region) %>%
+      rename(dispatch.sector = supplysector) %>%
+      expand(., ., generation.sector = gcamusa.ELEC_INV_NAMES) %>%
+      mutate(generation.sector.market = region) %>%
       bind_rows(
         states_subregions %>%
           select(state, grid_region) %>%
           rename(region = grid_region) %>%
-          rename(generation_sector_market = state) %>%
-          mutate(dispatchsector = "electricity") %>%
-          mutate(generation_sector = "electricity")
+          rename(generation.sector.market = state) %>%
+          mutate(dispatch.sector = "electricity") %>%
+          mutate(generation.sector = "electricity")
       ) ->
       L223.DispatchSector
 
@@ -922,7 +947,9 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                                  select(-minicam.energy.input, -secondary.output),
                                by=c("gcam_fuel" = "fuel", "elec_tech" = "elec_tech")) %>%
       rename(region = state) %>%
-      select(region, supplysector, subsector, technology, year, capacity) ->
+      rename(dispatch.sector = supplysector,
+             capacity.technology = technology) %>%
+      select(LEVEL2_DATA_NAMES[['CapacityTech']]) ->
       L223.CapacityTech
 
     # calibrated output for electricity technology
@@ -983,33 +1010,15 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
         L223.TechEff_Cal
     }
 
-    # calibrated production for grid
-    L123.out_EJ_state_elec_F_tech %>%
-      left_join_error_no_match(select(states_subregions, state, grid_region), by = "state") %>%
-      filter(year %in% MODEL_YEARS) %>%
-      mutate(dispatchsector = "electricity") %>%
-      select(grid_region, dispatchsector, year, value) %>%
-      group_by(grid_region, dispatchsector, year) %>%
-      summarize(cal_production = sum(value)) %>%
-      ungroup() ->
-      L223.DispatchSectorCalProd
-
     # capacity technology use trail market at grid level
     L223.TechShrwt_Dispatch %>%
       filter(subsector %in% capacity_credit_calculator$subsector) %>%
       left_join_error_no_match(select(states_subregions, state, grid_region), by = c("region" = "state")) %>%
       left_join_error_no_match(TechTrialMarket_mapping, by = c("region", "subsector")) %>%
-      select(region, supplysector, subsector, technology, year, trial.market.name, capacity.market.name) ->
+      rename(dispatch.sector = supplysector,
+             capacity.technology = technology) %>%
+      select(LEVEL2_DATA_NAMES[['CapacityTechTrialMktName']]) ->
       L223.TechTrialMarket_Dispatch
-
-    # investment technology use trial at grid level
-    L223.StubTechMarket_Investment %>%
-      filter(subsector %in% capacity_credit_calculator$subsector) %>%
-      left_join_error_no_match(select(states_subregions, state, grid_region), by = c("region" = "state")) %>%
-      left_join_error_no_match(TechTrialMarket_mapping, by = c("region", "subsector")) %>%
-      rename(technology = stub.technology) %>%
-      select(region, supplysector, subsector, technology, year, trial.market.name) ->
-      L223.TechTrialMarket_Investment
 
     # Socioeconomic information in the electricity grid regions (required for GCAM to run with these regions)
 
@@ -1062,10 +1071,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # Remove CSP option from states that do not have potential
     L223.StubTech_Investment %<>% filter(!(paste(region, stub.technology) %in% csp_states_noresource))
     L223.StubTechMarket_Investment %<>% filter(!(paste(region, stub.technology) %in% csp_states_noresource))
-    L223.CapacityTech %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
-    L223.CapacityTech_FutureTechs %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
-    L223.CapacityTechSegmentCapFac %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
-    L223.CapacityTechMinCapFac %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.CapacityTech %<>% filter(!(paste(region, capacity.technology) %in% csp_states_noresource))
+    L223.CapacityTech_FutureTechs %<>% filter(!(paste(region, capacity.technology) %in% csp_states_noresource))
+    L223.CapacityTechSegmentCapFac %<>% filter(!(paste(region, capacity.technology) %in% csp_states_noresource))
+    L223.CapacityTechMinCapFac %<>% filter(!(paste(region, capacity.technology) %in% csp_states_noresource))
     L223.TechShrwt_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
     L223.TechEff_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
     L223.TechOMfixed_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
@@ -1075,8 +1084,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechCapFac_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
     L223.Production_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
     L223.TechCapFac_Investment %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
-    L223.TechTrialMarket_Dispatch %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
-    L223.TechTrialMarket_Investment %<>% filter(!(paste(region, technology) %in% csp_states_noresource))
+    L223.TechTrialMarket_Dispatch %<>% filter(!(paste(region, capacity.technology) %in% csp_states_noresource))
+    L223.TechTrialMarket_Investment %<>% filter(!(paste(region, invest.technology) %in% csp_states_noresource))
 
     # Modifications for offshore wind
     # Remove states with no offshore wind resources
@@ -1084,9 +1093,9 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
 
     L223.StubTech_Investment %<>% filter(region %in% offshore_wind_states | stub.technology != "wind_offshore")
     L223.StubTechMarket_Investment %<>% filter(region %in% offshore_wind_states | stub.technology != "wind_offshore")
-    L223.CapacityTech_FutureTechs %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
-    L223.CapacityTechSegmentCapFac %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
-    L223.CapacityTechMinCapFac %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
+    L223.CapacityTech_FutureTechs %<>% filter(region %in% offshore_wind_states | capacity.technology != "wind_offshore")
+    L223.CapacityTechSegmentCapFac %<>% filter(region %in% offshore_wind_states | capacity.technology != "wind_offshore")
+    L223.CapacityTechMinCapFac %<>% filter(region %in% offshore_wind_states | capacity.technology != "wind_offshore")
     L223.TechShrwt_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
     L223.TechEff_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
     L223.TechOMfixed_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
@@ -1095,8 +1104,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechProfitShutdown_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
     L223.TechSCurve_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
     L223.Production_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
-    L223.TechTrialMarket_Dispatch %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
-    L223.TechTrialMarket_Investment %<>% filter(region %in% offshore_wind_states | technology != "wind_offshore")
+    L223.TechTrialMarket_Dispatch %<>% filter(region %in% offshore_wind_states | capacity.technology != "wind_offshore")
+    L223.TechTrialMarket_Investment %<>% filter(region %in% offshore_wind_states | invest.technology != "wind_offshore")
 
     L223.TechCapFac_Dispatch %>%
       filter(technology == "wind_offshore",
@@ -1179,6 +1188,13 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "L120.RegCapFactor_offshore_wind_USA",
                      "L120.GridCost_offshore_wind_USA") ->
       L223.StubTech_Investment
+
+    L233.GlobalInvestTech_Investment %>%
+      add_title("List of all investment-technology to create") %>%
+      add_units("NA") %>%
+      add_comments("Mostly used to set the proper XML tags") %>%
+      add_precursors("gcam-usa/calibrated_techs_dispatch_usa") ->
+      L233.GlobalInvestTech_Investment
 
     L223.GlobalTechEff_Investment %>%
       add_title("Investment technology efficiency") %>%
@@ -1592,14 +1608,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       same_precursors_as("L223.Sector_Dispatch_Grid") ->
       L223.Sector_Dispatch_Grid
 
-    L223.DispatchSectorCalProd %>%
-      add_title("Dispatch dispatchsector (electricity) calibrated production for grid") %>%
-      add_units("unitless") %>%
-      add_comments("Set dispatchsector (electricity) calibrated production for grid") %>%
-      add_legacy_name("L223.DispatchSectorCalProd (dispatch branch)") %>%
-      add_precursors("L123.out_EJ_state_elec_F_tech") ->
-      L223.DispatchSectorCalProd
-
     L223.DispatchSectorDispatchSegments %>%
       add_title("Dispatch dispatch.sector (electricity) relative generation and fraction for grid") %>%
       add_units("unitless") %>%
@@ -1646,6 +1654,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                 L223.SubsectorShrwt_Investment,
                 L223.SubsectorInterpTo_Investment,
                 L223.StubTech_Investment,
+                L233.GlobalInvestTech_Investment,
                 L223.GlobalTechEff_Investment,
                 L223.StubTechMarket_Investment,
                 L223.GlobalTechOMfixed_Investment,
@@ -1685,7 +1694,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                 L223.TechTrialMarket_Dispatch,
                 L223.TechTrialMarket_Investment,
                 L223.Sector_Dispatch_Grid,
-                L223.DispatchSectorCalProd,
                 L223.DispatchSectorDispatchSegments,
                 L223.InterestRate_FERC,
                 L223.Pop_FERC,

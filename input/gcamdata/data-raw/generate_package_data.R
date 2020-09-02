@@ -86,6 +86,8 @@ generate_level2_data_names <- function() {
   level2_data_names[["ElecReserve"]] <- c("region", "supplysector", "electricity.reserve.margin", "average.grid.capacity.factor")
   level2_data_names[["SectorUseTrialMarket"]] <- c("region", "supplysector", "use.trial.market")
   level2_data_names[["DeleteSupplysector"]] <- c("region", "supplysector")
+  level2_data_names[["DispatchSector"]] <- c("region", "dispatch.sector", "generation.sector", "generation.sector.market")
+  level2_data_names[["DispatchSectorDispatchSegments"]] <- c("region", "dispatch.sector", "segment", "hours", "relative.generation", "generation.fraction", "demand.segment.name", "invest.segment")
 
   # Subsectors
   level2_data_names[["Subsector"]] <- c("region", "supplysector", "subsector")
@@ -115,6 +117,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["Tech"]] <- c("region", "supplysector", "subsector", "technology")
   level2_data_names[["TechInterp"]] <- c(level2_data_names[["Tech"]], "apply.to", "from.year", "to.year", "interpolation.function")
   level2_data_names[["TechInterpTo"]] <- c(level2_data_names[["Tech"]], "apply.to", "from.year", "to.year", "to.value", "interpolation.function")
+  level2_data_names[["TechAvail"]] <- c(level2_data_names[["Tech"]], "initial.available.year", "final.available.year")
   level2_data_names[["TechYr"]] <- c(level2_data_names[["Tech"]], "year")
   level2_data_names[["Production"]] <- c(level2_data_names[["TechYr"]], "calOutputValue", "share.weight.year", "subs.share.weight", "tech.share.weight")
   level2_data_names[["TechShrwt"]] <- c(level2_data_names[["TechYr"]], "share.weight")
@@ -124,6 +127,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["TechEff"]] <- c(level2_data_names[["TechYr"]], "minicam.energy.input", "efficiency", "market.name")
   level2_data_names[["TechCost"]] <- c(level2_data_names[["TechYr"]], "minicam.non.energy.input", "input.cost")
   level2_data_names[["TechPmult"]] <- c(level2_data_names[["TechYr"]], "pMult")
+  level2_data_names[["TechInputPmult"]] <- c(level2_data_names[["TechYr"]], "minicam.energy.input", "price.unit.conversion")
   level2_data_names[["CarbonCapture"]] <- c(level2_data_names[["TechYr"]], "storage.market", "remove.fraction")
   level2_data_names[["ImportTech"]] <- c(level2_data_names[["TechYr"]]) #indicates a renewable input; nothing is specified in the table however
   level2_data_names[["TechCapital"]] <- c(level2_data_names[["TechYr"]], "input.capital", "capital.overnight", "fixed.charge.rate")
@@ -133,6 +137,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["TechFixOut"]] <- c(level2_data_names[["TechYr"]], "fixedOutput")
   level2_data_names[["TechIntGainOutputRatio"]] <- c("region", "supplysector", "subsector", "technology", "year", "internal.gains.output.ratio", "internal.gains.market.name")
   level2_data_names[["TechLifetime"]] <- c(level2_data_names[["TechYr"]], "lifetime")
+  level2_data_names[["TechCapFac"]] <- c(level2_data_names[["TechYr"]], "capacity.factor")
   level2_data_names[["TechSecOut"]] <- c(level2_data_names[["TechYr"]], "secondary.output", "output.ratio")
   level2_data_names[["TechSecOutPMult"]] <- c(level2_data_names[["TechSecOut"]], "pMultiplier")
   level2_data_names[["PassThroughTech"]] <- c(level2_data_names[["Subsector"]], "pass.through.technology")
@@ -143,6 +148,12 @@ generate_level2_data_names <- function() {
   level2_data_names[["ResReserveTechLifetime"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "lifetime")
   level2_data_names[["ResReserveTechProfitShutdown"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "median.shutdown.point", "profit.shutdown.steepness")
   level2_data_names[["ResReserveTechDeclinePhase"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "decline.phase.percent")
+  level2_data_names[["CapacityTech"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "capacity")
+  level2_data_names[["CapacityTechMinCapFac"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "min.capacity.factor")
+  level2_data_names[["CapacityTechSegmentCapFac"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "segment", "capacity.factor")
+  level2_data_names[["CapacityTechTrialMktName"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "trial.market.name", "capacity.market.name")
+  level2_data_names[["CapacityTechInputPMult"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "minicam.energy.input", "price.unit.conversion")
+  level2_data_names[["InvestTechTrialMktName"]] <- c(level2_data_names[["Subsector"]], "invest.technology", "year", "trial.market.name")
 
   # Global technologies
   level2_data_names[["GlobalTech"]] <- c("sector.name", "subsector.name", "technology")
@@ -199,6 +210,8 @@ generate_level2_data_names <- function() {
   level2_data_names[["GlobalTechCTaxInput"]] <- c(level2_data_names[["GlobalTechYr"]], "ctax.input", "fuel.C.coef")
   level2_data_names[["DeleteGlobalTechInput"]] <- level2_data_names[["GlobalTechInput"]]
   level2_data_names[["GlobalIntTechCost"]] <- c("sector.name", "subsector.name", "intermittent.technology", "year", "minicam.non.energy.input", "input.cost")
+  level2_data_names[["GlobalInvestTech"]] <- c("sector.name", "subsector.name", "invest.technology")
+  level2_data_names[["GlobalInvestTechCapacityCredit"]] <- c(level2_data_names[["GlobalInvestTech"]], "year", "steepness", "x.mid", "Cmax", "Cmin")
 
   # Stub technologies
   level2_data_names[["StubTech"]] <- c("region", "supplysector", "subsector", "stub.technology")
@@ -240,6 +253,8 @@ generate_level2_data_names <- function() {
   level2_data_names[["StubTechProfitShutdown"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "median.shutdown.point", "profit.shutdown.steepness")
   level2_data_names[["DeleteStubTechMinicamEnergyInput"]] <- c(level2_data_names[["StubTechYr"]], "minicam.energy.input")
   level2_data_names[["StubTechEffFlag"]] <- c(level2_data_names[["StubTechYr"]], "minicam.energy.input", "efficiency", "market.name", "flag")
+  level2_data_names[["StubTechDeleteSecOut"]] <- c(level2_data_names[["StubTechYr"]], "secondary.output")
+  level2_data_names[["StubTechFromSector"]] <- c(level2_data_names[["StubTech"]], "from.sector")
 
   # Agricultural sectors, subsectors, and technologies
   level2_data_names[["AgSupplySector"]] <- c("region", "AgSupplySector", "output.unit", "input.unit", "price.unit", "calPrice", "market", "logit.year.fillout", "logit.exponent")
@@ -292,6 +307,8 @@ generate_level2_data_names <- function() {
   level2_data_names[["ThermalBaseService"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "thermal.building.service.input", "year", "base.service")
   level2_data_names[["ThermalServiceSatiation"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "thermal.building.service.input", "satiation.level")
   level2_data_names[["ThermalServiceSatiationAdder"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "thermal.building.service.input", "satiation.adder")
+  level2_data_names[["ThermalServiceCalSatiationValue"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "thermal.building.service.input", "cal.satiation.value")
+  level2_data_names[["ThermalServiceCoef"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "thermal.building.service.input", "coefficient")
   level2_data_names[["Intgains_scalar"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "thermal.building.service.input", "internal.gains.scalar")
   level2_data_names[["HDDCDD"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "thermal.building.service.input", "year", "degree.days")
   level2_data_names[["GenericBaseService"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "building.service.input", "year", "base.service")
@@ -423,16 +440,6 @@ generate_level2_data_names <- function() {
   level2_data_names[["PortfolioStdConstraint"]] <- c("region", "policy.portfolio.standard", "market", "policyType", "year", "constraint")
   level2_data_names[["PortfolioStdMinPrice"]] <- c("region", "policy.portfolio.standard", "min.price")
   level2_data_names[["PortfolioStdMaxPrice"]] <- c("region", "policy.portfolio.standard", "max.price")
-
-  # Dispatch
-  level2_data_names[["CapacityTech"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "capacity")
-  level2_data_names[["CapacityTechAvail"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "initial.available.year", "final.available.year")
-  level2_data_names[["TechEff_dispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "minicam.energy.input", "efficiency", "market.name")
-  level2_data_names[["Production_dispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "calOutputValue", "share.weight.year", "subs.share.weight", "tech.share.weight")
-  level2_data_names[["TechSCurve_dispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "lifetime", "steepness", "half.life")
-  level2_data_names[["TechOMvar_dispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "input.OM.var", "OM.var")
-  level2_data_names[["TechShrwt_dispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "share.weight")
-  level2_data_names[["TechCapFac_dispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "capacity.factor")
 
   level2_data_names
 }

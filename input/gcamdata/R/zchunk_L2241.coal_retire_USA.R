@@ -159,13 +159,12 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              tech.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
       mutate(share.weight.year = year) %>%
       mutate(subs.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
-      rename(dispatch.sector = supplysector, capacity.technology = technology) %>%
-      select(LEVEL2_DATA_NAMES[["Production_dispatch"]]) ->
+      select(LEVEL2_DATA_NAMES[["Production"]]) ->
       L2241.TechProd_elec_coalret_dispatch_gcamusa
 
     # L2241.CapacityTech_elec_coalret_dispatch_gcamusa: existing capacity for conventional coal electricity plants by U.S. state
     L223.CapacityTech %>%
-      filter(technology == "coal (conv pul)" & year == MODEL_FINAL_BASE_YEAR) %>%
+      filter(capacity.technology == "coal (conv pul)" & year == MODEL_FINAL_BASE_YEAR) %>%
       select(region, capacity) ->
       L223.total_coal_capacity
 
@@ -192,18 +191,17 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              year == MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(L223.TechEff_Cal,
                                by = c("region", "supplysector", "subsector", "current.tech" = "technology", "year")) %>%
-      rename(dispatch.sector = supplysector, capacity.technology = technology) %>%
-      arrange(region, capacity.technology, year) %>%
-      select(LEVEL2_DATA_NAMES[["TechEff_dispatch"]]) ->
+      arrange(region, technology, year) %>%
+      select(LEVEL2_DATA_NAMES[["TechEff"]]) ->
       L2241.TechEff_elec_coalret_dispatch_gcamusa
 
     # Create a table to read in s-curve retirement parameters for the new technologies
     # L2241.TechSCurve_elec_coalret_dispatch_gcamusa:  s-curve shutdown decider for historic U.S. conventional coal electricity plants
     # Note that this updates s-curve retirement parameters for both the existing technologies and the new "retire_2020" technologies
     L2241.TechProd_elec_coalret_dispatch_gcamusa %>%
-      select(region, dispatch.sector, subsector, capacity.technology, year) %>%
+      select(region, supplysector, subsector, technology, year) %>%
       left_join_error_no_match(A23.elec_tech_coal_retire_SCurve_dispatch,
-                               by = c("capacity.technology" = "technology")) ->
+                               by = c("technology")) ->
       L2241.TechSCurve_elec_coalret_dispatch_gcamusa
 
     # Prepare a table for capacity technologies with all states and final base year
@@ -219,8 +217,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     L2241.elec_USA_coalret %>%
       filter(region %in% L123.total_coal_gen$region) %>%
       mutate(share.weight = gcamusa.DEFAULT_SHAREWEIGHT) %>%
-      rename(dispatch.sector = supplysector, capacity.technology = technology) %>%
-      select(LEVEL2_DATA_NAMES[["TechShrwt_dispatch"]]) ->
+      select(LEVEL2_DATA_NAMES[["TechShrwt"]]) ->
       L2241.TechShrwt_elec_coalret_dispatch_gcamusa
 
     # OM varible costs
@@ -229,8 +226,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       filter(region %in% L123.total_coal_gen$region) %>%
       left_join_error_no_match(L223.TechOMvar_Dispatch,
                                by = c("region", "supplysector", "subsector", "current.tech" = "technology", "year")) %>%
-      rename(dispatch.sector = supplysector, capacity.technology = technology) %>%
-      select(LEVEL2_DATA_NAMES[["TechOMvar_dispatch"]]) ->
+      select(LEVEL2_DATA_NAMES[["TechOMvar"]]) ->
       L2241.TechOMvar_elec_coalret_dispatch_gcamusa
 
 
@@ -373,22 +369,22 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       left_join(L2241.TechProd_elec_coalret_dispatch_gcamusa %>%
                   filter(subsector == "coal",
                          year == MODEL_FINAL_BASE_YEAR,
-                         !grepl("retire", capacity.technology)),
+                         !grepl("retire", technology)),
                 by = "region") %>%
       filter(!is.na(calOutputValue), calOutputValue != 0) %>%
       mutate(calOutputValue = calOutputValue * generation.share.vintage,
              # Create new technologies. Naming the variable as technology.new so that we can use technology as reference later
-             capacity.technology = paste(capacity.technology, vintage.bin, sep = "_"),
+             technology = paste(technology, vintage.bin, sep = "_"),
              year = MODEL_FINAL_BASE_YEAR, share.weight.year = MODEL_FINAL_BASE_YEAR,
              subs.share.weight = gcamusa.DEFAULT_SHAREWEIGHT,
              tech.share.weight = gcamusa.DEFAULT_SHAREWEIGHT) %>%
       # Select variables. For now, include lifetime and vintage.bin as well. We'll remove it later
-      select(LEVEL2_DATA_NAMES[["Production_dispatch"]], lifetime, vintage.bin) ->
+      select(LEVEL2_DATA_NAMES[["Production"]], lifetime, vintage.bin) ->
       L2241.TechProd_coal_vintage_dispatch_gcamusa
 
     # Create a table to read in S-curve parameters for vintage bin techs by state
     L2241.TechProd_coal_vintage_dispatch_gcamusa %>%
-      select(region, dispatch.sector, subsector, capacity.technology, year, lifetime) %>%
+      select(region, supplysector, subsector, technology, year, lifetime) %>%
       mutate(steepness = gcamusa.COAL_RETIRE_STEEPNESS,
              half.life = round(lifetime * (gcamusa.AVG_COAL_PLANT_HALFLIFE / gcamusa.AVG_COAL_PLANT_LIFETIME), 0)) ->
       L2241.TechSCurve_coal_vintage_dispatch_gcamusa
@@ -420,7 +416,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
 
     # Create a basic strucure with common variables
     L2241.TechProd_coal_vintage_dispatch_gcamusa %>%
-      select(region, dispatch.sector, subsector, capacity.technology, year) %>%
+      select(region, supplysector, subsector, technology, year) %>%
       unique() %>%
       filter(year == MODEL_FINAL_BASE_YEAR) ->
       L2241.TechProd_coal_vintage_dispatch_dataframe
@@ -428,50 +424,54 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     # Create efficiency for coal vintage capacity technologies
     L2241.TechProd_coal_vintage_dispatch_dataframe %>%
       left_join_error_no_match(REEDS_coal_Eff_OMvar %>% select(region, technology, efficiency_weighted),
-                               by = c("region", "capacity.technology" = "technology")) %>%
+                               by = c("region", "technology")) %>%
       rename(efficiency = efficiency_weighted) %>%
       # TODO: somehow update these as constants
       mutate(minicam.energy.input = "regional coal",
              market.name = "USA") %>%
-      select(LEVEL2_DATA_NAMES[["TechEff_dispatch"]]) ->
+      select(LEVEL2_DATA_NAMES[["TechEff"]]) ->
       L2241.TechEff_coal_vintage_dispatch_gcamusa
 
     # Variable OM costs
     L2241.TechProd_coal_vintage_dispatch_dataframe %>%
       left_join_error_no_match(REEDS_coal_Eff_OMvar %>% select(region, technology, OMV_weighted),
-                               by = c("region", "capacity.technology" = "technology")) %>%
+                               by = c("region", "technology")) %>%
       rename(OM.var = OMV_weighted) %>%
       mutate(input.OM.var = "OM-var") %>%
-      select(region, dispatch.sector, subsector, capacity.technology, year, input.OM.var, OM.var) ->
+      select(LEVEL2_DATA_NAMES[['TechOMvar']]) ->
       L2241.TechOMvar_coal_vintage_dispatch_gcamusa
 
     # Create teable to read in min capacity factor
     bind_rows(L2241.TechOMvar_coal_vintage_dispatch_gcamusa,
-              # not really needed but to avoid some errors messages add them
+              # not really needed but to avoid some errors messages in the model add them
               L2241.TechOMvar_elec_coalret_dispatch_gcamusa) %>%
-      mutate(technology = gsub("_.*$", "", capacity.technology)) %>%
+      mutate(technology.match = gsub("_.*$", "", technology)) %>%
       select(-input.OM.var, -OM.var) %>%
       left_join_error_no_match(select(A23.dispatch_capacitytech_min_cap_fac, technology, min.capacity.factor),
-                               by = c("technology")) %>%
-      select(-technology) ->
+                               by = c("technology.match" = "technology")) %>%
+      select(-technology.match) %>%
+      rename(dispatch.sector = supplysector,
+             capacity.technology = technology) ->
       L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa
 
     # Create table to read in capacity investment discount params
     L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa %>%
       select(-min.capacity.factor) %>%
       mutate(median.shutdown.point = gcamusa.ELEC_CAP_INV_MEDIAN,
-             profit.shutdown.steepness = gcamusa.ELEC_CAP_INV_STEEPNESS) ->
+             profit.shutdown.steepness = gcamusa.ELEC_CAP_INV_STEEPNESS) %>%
+      rename(supplysector = dispatch.sector,
+             technology = capacity.technology) ->
       L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa
 
     # Create table to read in shareweights in future years
     L2241.TechProd_coal_vintage_dispatch_dataframe %>%
       mutate(share.weight = 0) %>%
-      select(region, dispatch.sector, subsector, capacity.technology, year, share.weight) ->
+      select(LEVEL2_DATA_NAMES[['TechShrwt']]) ->
       L2241.TechShrwt_coal_vintage_dispatch_gcamusa
 
     # Clean up coal vintage production table
     L2241.TechProd_coal_vintage_dispatch_gcamusa %>%
-      select(LEVEL2_DATA_NAMES[["Production_dispatch"]]) %>%
+      select(LEVEL2_DATA_NAMES[["Production"]]) %>%
       mutate(share.weight.year = year) %>%
       # Read in zero caloutputvalue for other base years
       replace_na(list(calOutputValue = 0, subs.share.weight = 1, tech.share.weight = 0)) ->
@@ -479,11 +479,11 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
 
     # Read in zero calOutputValue for final base year for existing coal conv pul technology
     L2241.TechProd_elec_coalret_dispatch_gcamusa %>%
-      filter(capacity.technology == "coal (conv pul)") %>%
+      filter(technology == "coal (conv pul)") %>%
       mutate(calOutputValue = 0, tech.share.weight = 0) %>%
-      select(LEVEL2_DATA_NAMES[["Production_dispatch"]]) %>%
+      select(LEVEL2_DATA_NAMES[["Production"]]) %>%
       bind_rows(L2241.TechProd_coal_vintage_dispatch_gcamusa) %>%
-      arrange(region, capacity.technology, year) ->
+      arrange(region, technology, year) ->
       L2241.TechProd_coal_vintage_dispatch_gcamusa
 
     # Table with technology capacity factors
@@ -491,12 +491,14 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       select(-capacity) %>%
       # remove default coal (conv pul) technology - CF assumptions already exist for this tech
       anti_join(A23.elec_tech_mapping_coal_retire_dispatch, by = c("capacity.technology" = "current.tech")) %>%
+      rename(supplysector = dispatch.sector,
+             technology = capacity.technology) %>%
       bind_rows(L2241.TechProd_coal_vintage_dispatch_dataframe) %>%
       filter(year == MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(L223.TechCapFac_Dispatch %>%
                                  semi_join(A23.elec_tech_coal_retire_SCurve_dispatch, by = "technology") %>%
                                  select(-technology),
-                               by = c("region", "dispatch.sector" = "supplysector", "subsector", "year" )) ->
+                               by = c("region", "supplysector", "subsector", "year" )) ->
       L2241.TechCapFac_coalret_vintage_dispatch_gcamusa
 
     # Table specifying that these techs are only available in 2015
@@ -510,20 +512,20 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
 
     # total production
     L2241.TechProd_elec_coalret_dispatch_gcamusa %>%
-      filter(capacity.technology == "coal (conv pul)_retire2020") %>%
+      filter(technology == "coal (conv pul)_retire2020") %>%
       bind_rows(L2241.TechProd_coal_vintage_dispatch_gcamusa %>%
-                  filter(capacity.technology != "coal (conv pul)")) -> L2241.total_production
+                  filter(technology != "coal (conv pul)")) -> L2241.total_production
 
     # current efficiency assumption
     L2241.TechEff_elec_coalret_dispatch_gcamusa %>%
-      filter(capacity.technology == "coal (conv pul)_retire2020") %>%
+      filter(technology == "coal (conv pul)_retire2020") %>%
       bind_rows(L2241.TechEff_coal_vintage_dispatch_gcamusa %>%
-                  filter(capacity.technology != "coal (conv pul)")) -> L2241.efficiency_unadjusted
+                  filter(technology != "coal (conv pul)")) -> L2241.efficiency_unadjusted
 
     # calculate the corresponding enengy input for coal based on unadjusted efficiency
     L2241.total_production %>%
       left_join_error_no_match(L2241.efficiency_unadjusted,
-                               by = c("region", "dispatch.sector", "subsector", "capacity.technology", "year")) %>%
+                               by = c("region", "supplysector", "subsector", "technology", "year")) %>%
       mutate(calInputValue = calOutputValue / efficiency) %>%
       group_by(region) %>%
       summarise(calInputValue = sum(calInputValue)) %>%

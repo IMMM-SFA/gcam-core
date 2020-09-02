@@ -290,9 +290,9 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
     # add pMul = 0.01 for capacity-technology wind resource
     L223.TechEff_Dispatch %>%
       filter(grepl("wind", technology )) %>%
-      mutate(pMultiplier = 0.01) %>%
+      mutate(price.unit.conversion = 0.01) %>%
       select(region, supplysector, subsector, technology, year,
-             minicam.energy.input, pMultiplier, market.name) -> L2237.TechPmult_dispatch_wind_reeds_USA
+             minicam.energy.input, price.unit.conversion, market.name) -> L2237.TechPmult_dispatch_wind_reeds_USA
 
     # ===================================================
     # Produce outputs

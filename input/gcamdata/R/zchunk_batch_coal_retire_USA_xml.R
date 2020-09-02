@@ -62,25 +62,23 @@ module_gcamusa_batch_coal_retire_USA_xml <- function(command, ...) {
     create_xml("coal_retire_vintage_USA.xml") %>%
       add_node_equiv_xml("sector") %>%
       add_node_equiv_xml("technology") %>%
-      add_xml_data(L2241.TechProd_elec_coalret_dispatch_gcamusa, "Production_dispatch") %>%
       add_xml_data(L2241.CapacityTech_elec_coalret_dispatch_gcamusa, "CapacityTech") %>%
-      add_xml_data(L2241.TechEff_elec_coalret_dispatch_gcamusa, "TechEff_dispatch") %>%
-      add_xml_data(L2241.TechSCurve_elec_coalret_dispatch_gcamusa, "TechSCurve_dispatch") %>%
-      add_xml_data(L2241.TechShrwt_elec_coalret_dispatch_gcamusa, "TechShrwt_dispatch") %>%
-      add_xml_data(L2241.TechOMvar_elec_coalret_dispatch_gcamusa, "TechOMvar_dispatch") %>%
+      add_xml_data(L2241.TechProd_elec_coalret_dispatch_gcamusa, "Production") %>%
+      add_xml_data(L2241.TechEff_elec_coalret_dispatch_gcamusa, "TechEff") %>%
+      add_xml_data(L2241.TechSCurve_elec_coalret_dispatch_gcamusa, "TechSCurve") %>%
+      add_xml_data(L2241.TechShrwt_elec_coalret_dispatch_gcamusa, "TechShrwt") %>%
+      add_xml_data(L2241.TechOMvar_elec_coalret_dispatch_gcamusa, "TechOMvar") %>%
       # coal vintage
-      add_xml_data(L2241.TechProd_coal_vintage_dispatch_gcamusa, "Production_dispatch") %>%
       add_xml_data(L2241.CapacityTech_coal_vintage_dispatch_gcamusa, "CapacityTech") %>%
-      add_xml_data(L2241.TechEff_coal_vintage_dispatch_gcamusa, "TechEff_dispatch") %>%
-      add_xml_data(L2241.TechOMvar_coal_vintage_dispatch_gcamusa, "TechOMvar_dispatch") %>%
-      add_xml_data(L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa, "CapacityTechMinCapFac", NULL) %>%
-      add_xml_data(rename(L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa,
-                          supplysector = dispatch.sector,
-                          stub.technology = capacity.technology), "StubTechProfitShutdown") %>%
-      add_xml_data(L2241.TechShrwt_coal_vintage_dispatch_gcamusa, "TechShrwt_dispatch") %>%
-      add_xml_data(L2241.TechSCurve_coal_vintage_dispatch_gcamusa, "TechSCurve_dispatch") %>%
-      add_xml_data(L2241.TechCapFac_coalret_vintage_dispatch_gcamusa, "TechCapFac_dispatch") %>%
-      add_xml_data(L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa, "CapacityTechAvail") %>%
+      add_xml_data(L2241.TechShrwt_coal_vintage_dispatch_gcamusa, "TechShrwt") %>%
+      add_xml_data(L2241.TechProd_coal_vintage_dispatch_gcamusa, "Production") %>%
+      add_xml_data(L2241.TechEff_coal_vintage_dispatch_gcamusa, "TechEff") %>%
+      add_xml_data(L2241.TechOMvar_coal_vintage_dispatch_gcamusa, "TechOMvar") %>%
+      add_xml_data(L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa, "CapacityTechMinCapFac") %>%
+      add_xml_data(rename(L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa, stub.technology = technology), "StubTechProfitShutdown") %>%
+      add_xml_data(L2241.TechSCurve_coal_vintage_dispatch_gcamusa, "TechSCurve") %>%
+      add_xml_data(L2241.TechCapFac_coalret_vintage_dispatch_gcamusa, "TechCapFac") %>%
+      add_xml_data(L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa, "TechAvail") %>%
       add_precursors("L2241.TechProd_elec_coalret_dispatch_gcamusa",
                      "L2241.CapacityTech_elec_coalret_dispatch_gcamusa",
                      "L2241.TechEff_elec_coalret_dispatch_gcamusa",

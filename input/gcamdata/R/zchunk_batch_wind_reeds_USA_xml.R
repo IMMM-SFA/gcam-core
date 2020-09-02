@@ -35,8 +35,10 @@ module_gcamusa_batch_wind_reeds_USA_xml <- function(command, ...) {
     create_xml("wind_reeds_USA.xml") %>%
       add_xml_data(L2237.SmthRenewRsrcCurves_wind_reeds_USA, "SmthRenewRsrcCurves") %>%
       add_xml_data(L2237.SmthRenewRsrcTechChange_wind_reeds_USA, "SmthRenewRsrcTechChange") %>%
-      add_xml_data(L2237.StubTechCost_wind_reeds_USA, "StubTechCost", NULL) %>%
-      add_xml_data(L2237.TechPmult_dispatch_wind_reeds_USA, "CapacityTechPMultDispatch", NULL) %>%
+      add_xml_data(rename(L2237.StubTechCost_wind_reeds_USA, stub.technology = technology), "StubTechCost") %>%
+      add_xml_data(rename(L2237.TechPmult_dispatch_wind_reeds_USA,
+                          dispatch.sector = supplysector,
+                          capacity.technology = technology), "CapacityTechInputPMult") %>%
       add_node_equiv_xml("resource") %>%
       add_node_equiv_xml("subresource") %>%
       add_xml_data(L2237.ResTechShrwt_wind_reeds_USA, "ResTechShrwt") %>%

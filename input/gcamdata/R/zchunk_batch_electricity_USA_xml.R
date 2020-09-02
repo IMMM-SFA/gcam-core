@@ -18,6 +18,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.SubsectorInterp_Investment",
              "L223.SubsectorInterpTo_Investment",
              "L223.StubTech_Investment",
+             "L233.GlobalInvestTech_Investment",
              "L223.GlobalTechEff_Investment",
              "L223.StubTechMarket_Investment",
              "L223.GlobalTechOMfixed_Investment",
@@ -56,7 +57,6 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.TechTrialMarket_Dispatch",
              "L223.TechTrialMarket_Investment",
              "L223.Sector_Dispatch_Grid",
-             "L223.DispatchSectorCalProd",
              "L223.DispatchSectorDispatchSegments",
              "L223.InterestRate_FERC",
              "L223.StubTechCost_offshore_wind_Investment",
@@ -87,7 +87,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-    passthrough.sector <- technology <- share.weight <- NULL # silence package check notes
+    stub.technology <- technology <- NULL # silence package check notes
 
     # Load required inputs
 
@@ -97,6 +97,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.SubsectorInterp_Investment <- get_data(all_data, "L223.SubsectorInterp_Investment")
     L223.SubsectorInterpTo_Investment <- get_data(all_data, "L223.SubsectorInterpTo_Investment")
     L223.StubTech_Investment <- get_data(all_data, "L223.StubTech_Investment")
+    L233.GlobalInvestTech_Investment <- get_data(all_data, "L233.GlobalInvestTech_Investment")
     L223.GlobalTechEff_Investment <- get_data(all_data, "L223.GlobalTechEff_Investment")
     L223.StubTechMarket_Investment <- get_data(all_data, "L223.StubTechMarket_Investment")
     L223.GlobalTechOMfixed_Investment <- get_data(all_data, "L223.GlobalTechOMfixed_Investment")
@@ -118,12 +119,10 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.Sector_Dispatch <- get_data(all_data, "L223.Sector_Dispatch")
     L223.SubsectorLogit_Dispatch <- get_data(all_data, "L223.SubsectorLogit_Dispatch")
     L223.SubsectorShrwtFllt_Dispatch <- get_data(all_data, "L223.SubsectorShrwtFllt_Dispatch")
-    L223.CapacityTech_FutureTechs <- get_data(all_data, "L223.CapacityTech_FutureTechs") %>%
-      rename(dispatch.sector = supplysector, capacity.technology = technology)
+    L223.CapacityTech_FutureTechs <- get_data(all_data, "L223.CapacityTech_FutureTechs")
     L223.CapacityTechSegmentCapFac <- get_data(all_data, "L223.CapacityTechSegmentCapFac")
     L223.CapacityTechMinCapFac <- get_data(all_data, "L223.CapacityTechMinCapFac")
-    L223.CapacityTech <- get_data(all_data, "L223.CapacityTech") %>%
-      rename(dispatch.sector = supplysector, capacity.technology = technology)
+    L223.CapacityTech <- get_data(all_data, "L223.CapacityTech")
     L223.TechShrwt_Dispatch <- get_data(all_data, "L223.TechShrwt_Dispatch")
     L223.TechEff_Dispatch <- get_data(all_data, "L223.TechEff_Dispatch")
     L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch")
@@ -137,7 +136,6 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.TechTrialMarket_Dispatch <- get_data(all_data, "L223.TechTrialMarket_Dispatch")
     L223.TechTrialMarket_Investment <- get_data(all_data, "L223.TechTrialMarket_Investment")
     L223.Sector_Dispatch_Grid <- get_data(all_data, "L223.Sector_Dispatch_Grid")
-    L223.DispatchSectorCalProd <- get_data(all_data, "L223.DispatchSectorCalProd")
     L223.DispatchSectorDispatchSegments <- get_data(all_data, "L223.DispatchSectorDispatchSegments")
     L223.InterestRate_FERC <- get_data(all_data, "L223.InterestRate_FERC")
     L223.Pop_FERC <- get_data(all_data, "L223.Pop_FERC")
@@ -167,9 +165,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
 
     # ===================================================
     # Rename tibble columns to match the L2 data names.
-    # L223.PassthroughSector_elec_USA <- rename(L223.PassthroughSector_elec_USA, pass.through.sector = passthrough.sector)
-    # L223.PassthroughTech_elec_FERC  <- rename(L223.PassthroughTech_elec_FERC, pass.through.technology = technology)
-    # L223.StubTechProd_elec_USA      <- rename(L223.StubTechProd_elec_USA, tech.share.weight = share.weight)
+    L223.TechProfitShutdown_Dispatch %<>% rename(stub.technology = technology)
 
 
     # Produce outputs
@@ -182,49 +178,46 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.SubsectorInterp_Investment, "SubsectorInterp") %>%
       add_xml_data(L223.SubsectorInterpTo_Investment, "SubsectorInterpTo") %>%
       add_xml_data(L223.StubTech_Investment, "StubTech") %>%
-      add_xml_data(L223.GlobalTechEff_Investment, "GlobalTechEff_investment", NULL) %>%
+      add_xml_data(L233.GlobalInvestTech_Investment, "GlobalInvestTech") %>%
+      add_xml_data(L223.GlobalTechEff_Investment, "GlobalTechEff") %>%
       add_xml_data(L223.StubTechMarket_Investment, "StubTechMarket") %>%
-      add_xml_data(L223.GlobalTechOMfixed_Investment, "GlobalTechOMfixed_investment", NULL) %>%
-      add_xml_data(L223.GlobalTechOMvar_Investment, "GlobalTechOMvar_investment", NULL) %>%
-      add_xml_data(L223.GlobalTechCapital_Investment, "GlobalTechCapital_investment", NULL) %>%
-      add_xml_data(L223.GlobalTechShrwt_Investment, "GlobalTechShrwt_investment", NULL) %>%
-      add_xml_data(L223.GlobalTechCapFac_Investment, "GlobalTechCapFac_investment", NULL) %>%
-      add_xml_data(L223.TechCapFac_Investment, "TechCapFac", NULL) %>%
-      add_xml_data(L223.GlobalTechCapture_Investment, "GlobalTechCapture_investment", NULL) %>%
-      add_xml_data(L223.GlobalTechCost_Investment, "GlobalTechCapital_investment", NULL) %>%
-      add_xml_data(L223.GlobalTechCost_CapacityCreditCalulator, "GlobalTechCapacityCredit_investment", NULL) %>%
+      add_xml_data(L223.GlobalTechOMfixed_Investment, "GlobalTechOMfixed") %>%
+      add_xml_data(L223.GlobalTechOMvar_Investment, "GlobalTechOMvar") %>%
+      add_xml_data(L223.GlobalTechCapital_Investment, "GlobalTechCapital") %>%
+      add_xml_data(L223.GlobalTechShrwt_Investment, "GlobalTechShrwt") %>%
+      add_xml_data(L223.GlobalTechCapFac_Investment, "GlobalTechCapFac") %>%
+      add_xml_data(L223.TechCapFac_Investment, "TechCapFac") %>%
+      add_xml_data(L223.GlobalTechCapture_Investment, "GlobalTechCapture") %>%
+      add_xml_data(L223.GlobalTechCost_Investment, "GlobalTechCapital") %>%
+      add_xml_data(L223.GlobalTechCost_CapacityCreditCalulator, "GlobalInvestTechCapacityCredit") %>%
+      add_xml_data(L223.TechTrialMarket_Investment, "InvestTechTrialMktName") %>%
       add_logit_tables_xml(L223.Sector_Investment_StateShare, "Supplysector") %>%
       add_logit_tables_xml(L223.Subsector_Investment_StateShare, "SubsectorLogit") %>%
       add_xml_data(L223.SubsectorShrwtFllt_Investment_StateShare, "SubsectorShrwtFllt") %>%
       add_xml_data(L223.TechCoef_Investment_StateShare, "TechCoef") %>%
       add_xml_data(L223.TechPmult_Investment_StateShare, "TechPmult") %>%
       add_xml_data(L223.TechShrwt_Investment_StateShare, "TechShrwt") %>%
-      add_xml_data(L223.DispatchSector, "DispatchSector", NULL) %>%
+      add_xml_data(L223.DispatchSector, "DispatchSector") %>%
       add_logit_tables_xml(L223.Sector_Dispatch, "Supplysector") %>%
       add_logit_tables_xml(L223.SubsectorLogit_Dispatch, "SubsectorLogit") %>%
       add_xml_data(L223.SubsectorShrwtFllt_Dispatch, "SubsectorShrwtFllt") %>%
       add_xml_data(L223.CapacityTech_FutureTechs, "CapacityTech") %>%
-      add_xml_data(L223.CapacityTechSegmentCapFac, "CapacityTechSegmentCapFac", NULL) %>%
-      add_xml_data(L223.CapacityTechMinCapFac, "CapacityTechMinCapFac", NULL) %>%
+      add_xml_data(L223.CapacityTechSegmentCapFac, "CapacityTechSegmentCapFac") %>%
+      add_xml_data(L223.CapacityTechMinCapFac, "CapacityTechMinCapFac") %>%
       add_xml_data(L223.CapacityTech, "CapacityTech") %>%
       add_xml_data(L223.TechShrwt_Dispatch, "TechShrwt") %>%
       add_xml_data(L223.TechEff_Dispatch, "TechEff") %>%
       add_xml_data(L223.TechOMvar_Dispatch, "TechOMvar") %>%
       add_xml_data(L223.TechLifetime_Dispatch, "TechLifetime") %>%
-      add_xml_data(L223.TechProfitShutdown_Dispatch %>% rename(stub.technology = technology), "StubTechProfitShutdown") %>%
-      add_xml_data(L223.TechSCurve_Dispatch, "TechSCurve_dispatch", NULL) %>%
-      add_xml_data(L223.TechCapFac_Dispatch, "TechCapFac", NULL) %>%
+      add_xml_data(L223.TechProfitShutdown_Dispatch, "StubTechProfitShutdown") %>%
+      add_xml_data(L223.TechSCurve_Dispatch, "TechSCurve") %>%
+      add_xml_data(L223.TechCapFac_Dispatch, "TechCapFac") %>%
       add_xml_data(L223.TechCarbonCapture_Dispatch, "CarbonCapture") %>%
-      add_xml_data(L223.Production_Dispatch, "Production", NULL) %>%
+      add_xml_data(L223.Production_Dispatch, "Production") %>%
       add_xml_data(L223.TechEff_Cal, "TechEff") %>%
-      add_xml_data(L223.TechTrialMarket_Dispatch, "TechTrial_dispatch", NULL) %>%
-      #GITODO: Note the TechTrial_investment variable is StubTech.
-      # May need to change vriable name to L223.StubTechTrial_Investment.
-      # And header name to StubTechTrialMarket
-      add_xml_data(L223.TechTrialMarket_Investment, "TechTrial_investment", NULL) %>%
+      add_xml_data(L223.TechTrialMarket_Dispatch, "CapacityTechTrialMktName") %>%
       add_logit_tables_xml(L223.Sector_Dispatch_Grid, "Supplysector") %>%
-      add_xml_data(L223.DispatchSectorCalProd, "DispatchSectorCalProd", NULL) %>%
-      add_xml_data(L223.DispatchSectorDispatchSegments, "DispatchSectorDispatchSegments", NULL) %>%
+      add_xml_data(L223.DispatchSectorDispatchSegments, "DispatchSectorDispatchSegments") %>%
       add_xml_data(L223.InterestRate_FERC, "InterestRate") %>%
       add_xml_data(L223.Pop_FERC, "Pop") %>%
       add_xml_data(L223.BaseGDP_FERC, "BaseGDP") %>%
@@ -254,6 +247,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.SubsectorInterp_Investment",
                      "L223.SubsectorInterpTo_Investment",
                      "L223.StubTech_Investment",
+                     "L233.GlobalInvestTech_Investment",
                      "L223.GlobalTechEff_Investment",
                      "L223.StubTechMarket_Investment",
                      "L223.GlobalTechOMfixed_Investment",
@@ -292,7 +286,6 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.TechTrialMarket_Dispatch",
                      "L223.TechTrialMarket_Investment",
                      "L223.Sector_Dispatch_Grid",
-                     "L223.DispatchSectorCalProd",
                      "L223.DispatchSectorDispatchSegments",
                      "L223.InterestRate_FERC",
                      "L223.Pop_FERC",

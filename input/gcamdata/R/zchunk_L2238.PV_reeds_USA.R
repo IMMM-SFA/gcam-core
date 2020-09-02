@@ -428,12 +428,9 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
       filter(region %in% states_list_curve,
              grepl("PV", technology )) %>%
       mutate(minicam.energy.input = "PV_resource",
-             market.name = region,
-             pMultiplier = 0.01,
-             # Hard code in type "Resource" for intermittent technology resource input only
-             flag = "Resource") %>%
+             price.unit.conversion = 0.01) %>%
       select(region, supplysector, subsector, technology, year,
-             minicam.energy.input, pMultiplier, market.name, flag) -> L2238.StubTechPmultFlag_dispatch_PV_reeds_USA
+             minicam.energy.input, price.unit.conversion) -> L2238.StubTechPmultFlag_dispatch_PV_reeds_USA
 
     # Copying tech change to all states and filtering out only the contiguous states
     L2238.RenewRsrcTechChange_PV_reeds_USA <- write_to_all_states(L2238.PV_curve_tech_change, c("region", "year","tech.change"))

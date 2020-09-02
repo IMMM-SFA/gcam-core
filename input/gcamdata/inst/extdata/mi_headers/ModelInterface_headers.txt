@@ -142,6 +142,10 @@ ElecReserve,world/+{name}region,region/+{name}supplysector,{name=electricity-res
 
 PassThroughSector, world/+{name}region, region/+{name}pass-through-sector, pass-through-sector/+marginal-revenue-sector, pass-through-sector/+marginal-revenue-market, scenario, scenario/world
 
+DispatchSector, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}generation-sector, dispatch-sector/+{market}generation-sector, scenario, scenario/world
+
+DispatchSectorDispatchSegments, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}dispatch-segment, dispatch-sector/+{hours}dispatch-segment, dispatch-sector/+{relative-generation}dispatch-segment, dispatch-sector/+{generation-fraction}dispatch-segment, dispatch-sector/+{demand-segment-name}dispatch-segment, dispatch-sector/+{investment-segment-name}dispatch-segment, scenario, scenario/world
+
 
 #####, SUBSECTOR
 
@@ -216,6 +220,8 @@ TechCost, world/+{name}region, region/+{name}supplysector, supplysector/+{name}s
 
 TechPmult, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+pMultiplier, scenario, scenario/world
 
+TechInputPmult, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+{name}minicam-non-energy-input, minicam-non-energy-input/+price-unit-conversion, scenario, scenario/world
+
 TechCapital, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+{name}input-capital, input-capital/+capital-overnight, input-capital/+fixed-charge-rate, input-capital/+capacity-factor, scenario, scenario/world, period/{name=CO2}CO2
 
 TechShrwt, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+share-weight, scenario, scenario/world, period/{name=CO2}CO2
@@ -246,8 +252,23 @@ TechInterp, world/+{name}region, region/+{name}supplysector, supplysector/+{name
 
 TechInterpTo, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{apply-to}interpolation-rule, technology/+{from-year}interpolation-rule, technology/+{to-year}interpolation-rule, interpolation-rule/+to-value, interpolation-rule/+{name}interpolation-function, scenario, scenario/world
 
-TechSCurve, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+lifetime, s-curve-shutdown-decider/+steepness, s-curve-shutdown-decider/+half-life, scenario, scenario/world, period/s-curve-shutdown-decider
+TechAvail, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+initial-available-year, technology/+final-available-year, scenario, scenario/world
 
+TechSCurve, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+lifetime, s-curve-shutdown-decider/+steepness, s-curve-shutdown-decider/+half-life, scenario, scenario/world, period/{name=s-curve}s-curve-shutdown-decider
+
+TechCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+capacity-factor, scenario, scenario/world
+
+CapacityTech, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+capacity, scenario, scenario/world
+
+CapacityTechMinCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+min-capacity-factor, scenario, scenario/world
+
+CapacityTechSegmentCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name}segment-capacity-factor, period/+segment-capacity-factor, scenario, scenario/world
+
+CapacityTechTrialMktName, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+trial-market-name, period/+capacity-market-name, scenario, scenario/world
+
+CapacityTechInputPMult, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name}minicam-energy-input, minicam-energy-input/+price-unit-conversion, scenario, scenario/world
+
+InvestTechTrialMktName, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+trial-market-name, scenario, scenario/world
 
 
 #####, GLOBAL TECHNOLOGY
@@ -303,6 +324,9 @@ GlobalTechCTaxInput,global-technology-database/+{sector-name}location-info, glob
 
 DeleteGlobalTechInput, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}technology, technology/+{year}period, period/+{name;delete=1}minicam-energy-input, scenario, scenario/world, world/global-technology-database
 
+GlobalInvestTech, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, scenario, scenario/world, world/global-technology-database
+
+GlobalInvestTechCapacityCredit, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, capacity-credit-calculator/+steepness, capacity-credit-calculator/+x-mid, capacity-credit-calculator/+capacity-credit-max, capacity-credit-calculator/+capacity-credit-min, scenario, scenario/world, world/global-technology-database, period/capacity-credit-calculator
 
 #####, GLOBAL INTERMITTENT TECHNOLOGY
 
@@ -413,6 +437,11 @@ StubTechLifetime, world/+{name}region, region/+{name}supplysector, supplysector/
 
 StubTechProfitShutdown, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, profit-shutdown-decider/+median-shutdown-point, profit-shutdown-decider/+steepness, scenario, scenario/world, period/{name=profit}profit-shutdown-decider
 
+StubTechDeleteSecOut, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name;delete=1}secondary-output, scenario, scenario/world
+
+StubTechFromSector, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, subsector/+{from-sector}stub-technology, scenario, scenario/world
+
+
 #####, STUB TRANSPORTATION TECHNOLOGY
 
 
@@ -475,6 +504,10 @@ GenericServiceSatiation, world/+{name}region, region/+{name}gcam-consumer, gcam-
 ThermalServiceSatiation, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}thermal-building-service-input, satiation-demand-function/+satiation-level, scenario, scenario/world, thermal-building-service-input/satiation-demand-function
 
 ThermalServiceSatiationAdder, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}thermal-building-service-input, satiation-demand-function/+satiation-adder, scenario, scenario/world, thermal-building-service-input/satiation-demand-function
+
+ThermalServiceCalSatiationValue, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}thermal-building-service-input, thermal-building-service-input/+cal-satiation-value, scenario, scenario/world
+
+ThermalServiceCoef, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}thermal-building-service-input, thermal-building-service-input/+coefficient, scenario, scenario/world
 
 GenericServiceTechChange, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}building-service-input, building-service-input/+{year;fillout=1}tech-change, building-service-input/+tech-change, scenario, scenario/world
 
@@ -739,73 +772,6 @@ TrnInputEmissCoeff, world/+{name}region, region/+{name;nocreate=1}supplysector, 
 
 LinearCtrlInc, world/+{name}region, region/+{name;nocreate=1}supplysector, supplysector/+{name;nocreate=1}tranSubsector, tranSubsector/+{name;nocreate=1}stub-technology, stub-technology/+{year}period, period/+{name}Non-CO2, Non-CO2/+{name}linear-control, linear-control/+start-year, linear-control/+end-year, linear-control/+final-emissions-coefficient, linear-control/allow-ef-increase, scenario, scenario/world
 
-TechCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+capacity-factor, scenario, scenario/world
-
-GlobalTechHack,global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}technology, technology/+{year}period, period/+total-hack, scenario, scenario/world, world/global-technology-database
-
-DispatchSector, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}generation-sector, dispatch-sector/+{market}generation-sector, scenario, scenario/world
-
-DispatchSectorCalProd, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{year}cal-production, dispatch-sector/+cal-production, scenario, scenario/world
-
-DispatchSectorDispatchSegments, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}dispatch-segment, dispatch-sector/+{hours}dispatch-segment, dispatch-sector/+{relative-generation}dispatch-segment, dispatch-sector/+{generation-fraction}dispatch-segment, dispatch-sector/+{demand-segment-name}dispatch-segment, dispatch-sector/+{investment-segment-name}dispatch-segment, scenario, scenario/world
-
-CapacityTech, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+capacity, scenario, scenario/world
-
-CapacityTechAvail, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+initial-available-year, capacity-technology/+final-available-year, scenario, scenario/world
-
-CapacityTechMinCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+min-capacity-factor, scenario, scenario/world
-
-CapacityTechSegmentCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name}segment-capacity-factor, period/+segment-capacity-factor, scenario, scenario/world
-
-TechSCurve_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+lifetime, s-curve-shutdown-decider/+steepness, s-curve-shutdown-decider/+half-life, scenario, scenario/world, period/{name=s-curve}s-curve-shutdown-decider 
-
-TechPMultDispatch, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+{name}minicam-energy-input, minicam-energy-input/+price-unit-conversion, scenario, scenario/world, period/{name=CO2}CO2
-
-CapacityTechPMultDispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name}minicam-energy-input, minicam-energy-input/+price-unit-conversion, minicam-energy-input/+market-name, scenario, scenario/world
-
-StubTechEffFlag_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name}minicam-energy-input, minicam-energy-input/+efficiency, minicam-energy-input/+market-name, minicam-energy-input/+flag, scenario, scenario/world
-
-DeleteStubTechMinicamEnergyInput_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name;delete=1}minicam-energy-input, scenario, scenario/world
-
-TechEff_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name}minicam-energy-input, minicam-energy-input/+efficiency, minicam-energy-input/+market-name, scenario, scenario/world, period/{name=CO2}CO2
-
-StubTechDeleteSecOut, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name;delete=1}secondary-output, scenario, scenario/world
-
-ThermalServiceCalSatiationValue, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}thermal-building-service-input, thermal-building-service-input/+cal-satiation-value, scenario, scenario/world
-
-ThermalServiceCoef, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}thermal-building-service-input, thermal-building-service-input/+coefficient, scenario, scenario/world
-
-StubTechFromSector, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, subsector/+{from-sector}stub-technology, scenario, scenario/world
-
-Production_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, CalDataOutput/+calOutputValue, subsector/+{year}share-weight, subsector/+share-weight, period/+share-weight, period/CalDataOutput, scenario, scenario/world
-
-TechOMvar_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name}input-OM-var, input-OM-var/+OM-var, scenario, scenario/world
-
-TechShrwt_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+share-weight, scenario, scenario/world, period/{name=CO2}CO2
-
-TechCapFac_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+capacity-factor, scenario, scenario/world
-
-TechTrial_dispatch, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+trial-market-name, period/+capacity-market-name, scenario, scenario/world
-
-TechTrial_investment, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+trial-market-name, scenario, scenario/world
-
-GlobalTechCost_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, period/+capacity-market-price, scenario, scenario/world, world/global-technology-database, period/{name=CO2}CO2
-
-GlobalTechEff_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, period/+{name}minicam-energy-input, minicam-energy-input/+efficiency, scenario, scenario/world, world/global-technology-database, period/{name=CO2}CO2
-
-GlobalTechOMfixed_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, period/+{name}input-OM-fixed, input-OM-fixed/+OM-fixed, scenario, scenario/world, world/global-technology-database
-
-GlobalTechOMvar_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, period/+{name}input-OM-var, input-OM-var/+OM-var, scenario, scenario/world, world/global-technology-database
-
-GlobalTechCapital_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, period/+{name}input-capital, input-capital/+capital-overnight, input-capital/+fixed-charge-rate, scenario, scenario/world, world/global-technology-database
-
-GlobalTechShrwt_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, period/+share-weight, scenario, scenario/world, world/global-technology-database, period/{name=CO2}CO2
-
-GlobalTechCapFac_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, period/+capacity-factor, scenario, scenario/world, world/global-technology-database
-
-GlobalTechCapture_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, standard-capture-component/+remove-fraction, standard-capture-component/+storage-market, scenario, scenario/world, world/global-technology-database, period/standard-capture-component
-
-GlobalTechCapacityCredit_investment, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, capacity-credit-calculator/+steepness, capacity-credit-calculator/+x-mid, capacity-credit-calculator/+capacity-credit-max, capacity-credit-calculator/+capacity-credit-min, scenario, scenario/world, world/global-technology-database, period/capacity-credit-calculator
 
 
 EQUIV_TABLE,NODE_EQUIVALENCE
