@@ -24,6 +24,8 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
              FILE = 'gcam-usa/reeds_wind_curve_capacity',
              FILE = 'gcam-usa/reeds_wind_curve_CF_avg',
              FILE = 'gcam-usa/reeds_wind_curve_grid_cost',
+             FILE = 'gcam-usa/A23.elecS_tech_mapping_cool',
+             FILE = "gcam-usa/A10.renewable_resource_delete",
              'L223.TechCapFac_Investment',
              'L223.TechEff_Dispatch',
              'L223.GlobalTechCapital_Investment',
@@ -44,6 +46,8 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
     reeds_wind_curve_capacity <- get_data(all_data, 'gcam-usa/reeds_wind_curve_capacity')
     reeds_wind_curve_CF_avg <- get_data(all_data, 'gcam-usa/reeds_wind_curve_CF_avg')
     reeds_wind_curve_grid_cost <- get_data(all_data, 'gcam-usa/reeds_wind_curve_grid_cost')
+    A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool")
+    A10.renewable_resource_delete <- get_data(all_data, "gcam-usa/A10.renewable_resource_delete")
     L223.TechCapFac_Investment <- get_data(all_data, 'L223.TechCapFac_Investment')
     L223.TechEff_Dispatch <- get_data(all_data, 'L223.TechEff_Dispatch')
     L223.GlobalTechCapital_Investment <- get_data(all_data, 'L223.GlobalTechCapital_Investment')
@@ -60,7 +64,7 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
       tech.change <- Wind.Type <- bin <- cost <- grid.cost <- Region <- renewresource <-
       smooth.renewable.subresource <- year.fillout <- capacity.factor <- input.cost <-
       capital.tech.change.period <- tech.change.period <- time.change <-
-      subresource <- NULL
+      subresource <- technology <- subsector_1 <- to.technology <- NULL
 
     # ===================================================
     # Data Processing
@@ -255,7 +259,11 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
              smooth.renewable.subresource = "onshore wind resource",
              year.fillout = min(MODEL_YEARS)) %>%
       select(region = State, renewresource, smooth.renewable.subresource, year.fillout,
-             maxSubResource, mid.price, curve.exponent) -> L2237.SmthRenewRsrcCurves_wind_reeds_USA
+             maxSubResource, mid.price, curve.exponent) %>%
+      # Wind power is assumed to be infeasible in DC. Thus, it should not be assigned "onshore wind resource".
+      # Use anti_join to remove it from the table.
+      anti_join(A10.renewable_resource_delete, by = c("region", "renewresource" = "resource_elec_subsector")) ->
+      L2237.SmthRenewRsrcCurves_wind_reeds_USA
 
     # Copying tech change to all states and filtering out only the contiguous states
     L2237.SmthRenewRsrcTechChange_wind_reeds_USA <- write_to_all_states(L2237.wind_curve_tech_change, c("region", "year", "tech.change"))
@@ -263,8 +271,12 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
       filter(region %in% states_list) %>%
       mutate(renewresource = "onshore wind resource",
              smooth.renewable.subresource = "onshore wind resource") %>%
-      select(region,renewresource, smooth.renewable.subresource, year.fillout = year,
-             techChange = tech.change) -> L2237.SmthRenewRsrcTechChange_wind_reeds_USA
+      select(region, renewresource, smooth.renewable.subresource, year.fillout = year,
+             techChange = tech.change) %>%
+      # Wind power is assumed to be infeasible in DC. Thus, it should not be assigned "onshore wind resource".
+      # Use anti_join to remove it from the table.
+      anti_join(A10.renewable_resource_delete, by = c("region", "renewresource" = "resource_elec_subsector")) ->
+      L2237.SmthRenewRsrcTechChange_wind_reeds_USA
 
     # Reading the grid connection cost as a state-level non-energy cost adder
     L223.TechCapFac_Investment %>%
@@ -287,6 +299,24 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["ResTechShrwt"]]) ->
       L2237.ResTechShrwt_wind_reeds_USA
 
+    # # To account for new nesting-subsector structure and to add cooling technologies, we must expand certain outputs
+    # add_cooling_techs <- function(data){
+    #   data_new <- data %>%
+    #     left_join(A23.elecS_tech_mapping_cool,
+    #               by=c("stub.technology"="Electric.sector.technology",
+    #                    "supplysector"="Electric.sector","subsector")) %>%
+    #     select(-technology,-subsector_1)%>%
+    #     rename(technology = to.technology,
+    #            subsector0 = subsector,
+    #            subsector = stub.technology)%>%
+    #     mutate(technology = if_else(subsector=="wind_base",subsector,technology)) %>%
+    #     arrange(region,year)
+    #   return(data_new)
+    # }
+    #
+    # L2237.StubTechCapFactor_wind_reeds_USA <- add_cooling_techs(L2237.StubTechCapFactor_wind_reeds_USA)
+    # L2237.StubTechCost_wind_reeds_USA <- add_cooling_techs(L2237.StubTechCost_wind_reeds_USA)
+
     # add pMul = 0.01 for capacity-technology wind resource
     L223.TechEff_Dispatch %>%
       filter(grepl("wind", technology )) %>%
@@ -305,6 +335,7 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
       add_precursors('gcam-usa/reeds_regions_states',
                      'gcam-usa/reeds_wind_curve_capacity',
                      'gcam-usa/reeds_wind_curve_CF_avg',
+                     'gcam-usa/A10.renewable_resource_delete',
                      'L223.GlobalTechCapital_Investment',
                      'L223.GlobalIntTechCapital_elec',
                      'L223.GlobalIntTechOMfixed_elec') ->
@@ -315,7 +346,8 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
       add_units("unitless") %>%
       add_comments("Technological change in the supply curve is related to assumed improvements in capital cost") %>%
       add_legacy_name("L2237.SmthRenewRsrcTechChange_wind_USA_reeds") %>%
-      add_precursors('L223.GlobalTechCapital_Investment',
+      add_precursors('gcam-usa/A10.renewable_resource_delete',
+                     'L223.GlobalTechCapital_Investment',
                      'L223.GlobalIntTechCapital_elec',
                      'L223.GlobalIntTechOMfixed_elec') ->
       L2237.SmthRenewRsrcTechChange_wind_reeds_USA
@@ -328,6 +360,7 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
       add_precursors('gcam-usa/reeds_regions_states',
                      'gcam-usa/reeds_wind_curve_CF_avg',
                      'gcam-usa/reeds_wind_curve_grid_cost',
+                     'gcam-usa/A23.elecS_tech_mapping_cool',
                      'L223.TechCapFac_Investment',
                      'L223.GlobalIntTechCapital_elec') ->
       L2237.StubTechCost_wind_reeds_USA

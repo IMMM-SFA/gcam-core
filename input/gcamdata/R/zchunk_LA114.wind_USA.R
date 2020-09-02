@@ -29,20 +29,22 @@ module_gcamusa_LA114.wind <- function(command, ...) {
              "L114.CapacityFactor_wind_state_segment_gcamusa"))
   } else if(command == driver.MAKE) {
 
+    # silence package check
     technology <- year <- state <- sector <- capacity_factor <- fuel <- value <- base_cost <-
-      region <- hour <- date <- Region <- State <- segment <- month <- day_night <- NULL  # silence package check.
+      region <- hour <- date <- Region <- State <- segment <- month <- day_night <- NULL
 
     all_data <- list(...)[[1]]
 
     # Load required inputs
-
-    us_state_wind <- get_data(all_data, "gcam-usa/us_state_wind")
+    us_state_wind <- get_data(all_data, "gcam-usa/us_state_wind", strip_attributes = TRUE)
     A23.globaltech_capital <- get_data(all_data, "energy/A23.globaltech_capital")
     A23.globaltech_OMfixed <- get_data(all_data, "energy/A23.globaltech_OMfixed")
     A23.globaltech_OMvar <- get_data(all_data, "energy/A23.globaltech_OMvar")
     L102.date_load_curve_mapping_S <- get_data(all_data, "L102.date_load_curve_mapping_S_gcamusa")
     wind_cf_raw <- get_data(all_data, "gcam-usa/dispatch/wind_CFt")
     ReEDS_region_mapping_raw <- get_data(all_data, "gcam-usa/reeds_regions_states")
+
+
     # ===================================================
 
     if(is.null(wind_cf_raw)) {

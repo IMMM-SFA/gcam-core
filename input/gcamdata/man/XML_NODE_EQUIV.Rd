@@ -6,8 +6,12 @@
 \title{A list of XML tag equivalence classes so that the ModelInterface when converting
 data to XML can treat tags in the same class as the same when enabled, thus not
 requiring multiple headers for instance to read in a share-weight into a technology
+<<<<<<< HEAD
 intermittent-technology or tranTechnology.
 YO Feb 2020 added dispatch sector and technology names into "sector" and "technology"}
+=======
+intermittent-technology or tranTechnology.}
+>>>>>>> master
 \format{An object of class \code{list} of length 8.}
 \usage{
 XML_NODE_EQUIV

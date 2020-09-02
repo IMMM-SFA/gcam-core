@@ -38,6 +38,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     return(c(FILE = "gcam-usa/states_subregions",
              FILE = "gcam-usa/NREL_us_re_technical_potential",
              FILE = "energy/A23.globaltech_eff",
+             FILE = "gcam-usa/A10.renewable_resource_delete",
              FILE = "energy/A23.globaltech_OMfixed",
              FILE = "energy/A23.globaltech_OMvar",
              FILE = "energy/A23.globaltech_capital",
@@ -138,9 +139,9 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       capacity.factor <- scaler <- capacity.factor.capital <- . <- CFmax <- grid.cost <- NULL  # silence package check notes
 
     # Load required inputs
-    states_subregions <- get_data(all_data, "gcam-usa/states_subregions")
+    states_subregions <- get_data(all_data, "gcam-usa/states_subregions", strip_attributes = TRUE)
     NREL_us_re_technical_potential <- get_data(all_data, "gcam-usa/NREL_us_re_technical_potential")
-
+    A10.renewable_resource_delete <- get_data(all_data, "gcam-usa/A10.renewable_resource_delete")
     A23.globaltech_eff <- get_data(all_data, "energy/A23.globaltech_eff")
     A23.globaltech_OMfixed <- get_data(all_data, "energy/A23.globaltech_OMfixed")
     A23.globaltech_OMvar <- get_data(all_data, "energy/A23.globaltech_OMvar")
@@ -177,7 +178,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     calibrated_techs_dispatch_usa <- get_data(all_data, "gcam-usa/calibrated_techs_dispatch_usa")
     capacity_credit_calculator <- get_data(all_data, "gcam-usa/dispatch/capacity_credit_calculator")
     TechTrialMarket_mapping <- get_data(all_data, "gcam-usa/dispatch/TechTrialMarket_mapping")
-
     L120.RsrcCurves_EJ_R_offshore_wind_USA <- get_data(all_data, "L120.RsrcCurves_EJ_R_offshore_wind_USA")
     L120.RegCapFactor_offshore_wind_USA <- get_data(all_data, "L120.RegCapFactor_offshore_wind_USA")
     L120.GridCost_offshore_wind_USA <- get_data(all_data, "L120.GridCost_offshore_wind_USA")
@@ -460,7 +460,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     ## L223 GlobalTechCost_Investment  capacity credit investment
     # ===========================================================================
 
-    # capacity-market-price：the capital overnight cost of a gas CT in 1975USD/KW
+    # capacity-market-price:the capital overnight cost of a gas CT in 1975USD/KW
     L223.GlobalTechCapital_Investment %>%
       filter(technology == "gas (CT)", sector.name == gcamusa.ELEC_INV_NAMES[1]) %>%
       mutate(input.capital = "capacity credit",
@@ -479,6 +479,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # ===========================================================================
     ## L223 GlobalTechCost_CapacityCreditCalulator  capacity credit calculator for non-dispatchable techs
     # ===========================================================================
+
     L223.GlobalTechCost_Investment %>%
       filter(subsector.name %in% capacity_credit_calculator$subsector) %>%
       left_join_error_no_match(capacity_credit_calculator, by = c("subsector.name" = "subsector")) %>%
@@ -637,13 +638,23 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(supplysector, subsector) %>%
       distinct() %>%
       mutate(logit.exponent = -3, logit.type = NA) %>%
-      write_to_all_states(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], "logit.type")) ->
+      write_to_all_states(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], "logit.type")) %>%
+      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+      # Use anti_join to remove them from the table.
+      anti_join(A10.renewable_resource_delete,
+                by = c("region", "subsector" = "resource_elec_subsector"))->
       L223.SubsectorLogit_Dispatch
 
     # subsector shareweight
     L223.SubsectorLogit_Dispatch %>%
       select(region, supplysector, subsector) %>%
-      mutate(year.fillout = MODEL_YEARS[1], share.weight = 1) ->
+      mutate(year.fillout = MODEL_YEARS[1], share.weight = 1) %>%
+      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+      # Use anti_join to remove them from the table.
+      anti_join(A10.renewable_resource_delete,
+                by = c("region", "subsector" = "resource_elec_subsector")) ->
       L223.SubsectorShrwtFllt_Dispatch
 
     # technolgoy shareweight
@@ -652,7 +663,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(supplysector, subsector, technology) %>%
       repeat_add_columns(tibble::tibble(year = MODEL_YEARS)) %>%
       mutate(share.weight = gcamusa.DEFAULT_SHAREWEIGHT) %>%
-      write_to_all_states(LEVEL2_DATA_NAMES[["TechShrwt"]]) ->
+      write_to_all_states(LEVEL2_DATA_NAMES[["TechShrwt"]]) %>%
+      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+      # Use anti_join to remove them from the table.
+      anti_join(A10.renewable_resource_delete,
+                by = c("region", "subsector" = "resource_elec_subsector")) ->
       L223.TechShrwt_Dispatch
 
     # technolgoy efficiency
@@ -671,7 +687,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       mutate(market.name = "temp") %>%
       write_to_all_states(LEVEL2_DATA_NAMES[["TechEff"]]) %>%
       mutate(market.name = if_else(minicam.energy.input %in%
-                                     c(gcamusa.STATE_RENEWABLE_RESOURCES, "global solar resource"), region, "USA")) ->
+                                     c(gcamusa.STATE_RENEWABLE_RESOURCES, "global solar resource"), region, "USA")) %>%
+      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+      # Use anti_join to remove them from the table.
+      anti_join(A10.renewable_resource_delete,
+                by = c("region", "subsector" = "resource_elec_subsector")) ->
       L223.TechEff_Dispatch
 
     # assign regional fuel markets if gcamusa.USE_REGIONAL_FUEL_MARKETS is TRUE
@@ -696,7 +717,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       fill_exp_decay_extrapolate(MODEL_YEARS) %>%
       select(-sector) %>%
       rename(OM.fixed = value) %>%
-      write_to_all_states(LEVEL2_DATA_NAMES[["TechOMfixed"]]) ->
+      write_to_all_states(LEVEL2_DATA_NAMES[["TechOMfixed"]]) %>%
+      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+      # Use anti_join to remove them from the table.
+      anti_join(A10.renewable_resource_delete,
+                by = c("region", "subsector" = "resource_elec_subsector")) ->
       L223.TechOMfixed_Dispatch
 
     # technology OM_Var
@@ -711,7 +737,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       fill_exp_decay_extrapolate(MODEL_YEARS) %>%
       select(-sector) %>%
       rename(OM.var = value) %>%
-      write_to_all_states(LEVEL2_DATA_NAMES[["TechOMvar"]]) ->
+      write_to_all_states(LEVEL2_DATA_NAMES[["TechOMvar"]]) %>%
+      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+      # Use anti_join to remove them from the table.
+      anti_join(A10.renewable_resource_delete,
+                by = c("region", "subsector" = "resource_elec_subsector")) ->
       L223.TechOMvar_Dispatch
 
     # technology lifetime (three parts)
@@ -753,7 +784,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       bind_rows(L223.TechLifetime_Dispatch, .) %>%
       distinct() %>%
       rename(year = year_int) %>%
-      write_to_all_states(c(LEVEL2_DATA_NAMES[["TechYr"]], "lifetime")) ->
+      write_to_all_states(c(LEVEL2_DATA_NAMES[["TechYr"]], "lifetime")) %>%
+      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+      # Use anti_join to remove them from the table.
+      anti_join(A10.renewable_resource_delete,
+                by = c("region", "subsector" = "resource_elec_subsector")) ->
       L223.TechLifetime_Dispatch
 
     # Capacity technology profit shutdown which will actually be used during
@@ -764,7 +800,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechShrwt_Dispatch %>%
       select(-share.weight) %>%
       mutate(median.shutdown.point = gcamusa.ELEC_CAP_INV_MEDIAN,
-             profit.shutdown.steepness = gcamusa.ELEC_CAP_INV_STEEPNESS) ->
+             profit.shutdown.steepness = gcamusa.ELEC_CAP_INV_STEEPNESS) %>%
+      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+      # Use anti_join to remove them from the table.
+      anti_join(A10.renewable_resource_delete,
+                by = c("region", "subsector" = "resource_elec_subsector")) ->
       L223.TechProfitShutdown_Dispatch
 
     # technology S-Curve
@@ -775,7 +816,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       filter(!is.na(steepness)) %>%
       set_years() %>%
       mutate(year = as.integer(year)) %>%
-      write_to_all_states(LEVEL2_DATA_NAMES[["TechSCurve"]]) ->
+      write_to_all_states(LEVEL2_DATA_NAMES[["TechSCurve"]]) %>%
+      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+      # Use anti_join to remove them from the table.
+      anti_join(A10.renewable_resource_delete,
+                by = c("region", "subsector" = "resource_elec_subsector")) ->
       L223.TechSCurve_Dispatch
 
     # technology capacity factor
@@ -783,7 +829,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       filter(sector == "electricity generation") %>%
       select(supplysector, subsector, technology, capacity.factor) %>%
       expand(., ., year = MODEL_YEARS) %>%
-      write_to_all_states(LEVEL2_DATA_NAMES[["TechCapFac"]]) ->
+      write_to_all_states(LEVEL2_DATA_NAMES[["TechCapFac"]]) %>%
+      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+      # Use anti_join to remove them from the table.
+      anti_join(A10.renewable_resource_delete,
+                by = c("region", "subsector" = "resource_elec_subsector")) ->
       L223.TechCapFac_Dispatch
 
     # technology capacity
@@ -814,7 +865,14 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(-sector) %>%
       rename(technology = fuel, region = state) %>%
       # note expanding by rows here so just regular left join
-      left_join(L223.TechCapFac_Dispatch %>% select(-capacity.factor), by = c("region", "technology")) %>%
+      left_join(L223.TechCapFac_Dispatch %>%
+                  select(-capacity.factor),
+                by = c("region", "technology")) %>%
+      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+      # Use anti_join to remove them from the table.
+      anti_join(A10.renewable_resource_delete,
+                by = c("region", "subsector" = "resource_elec_subsector")) %>%
       # hydro is currently only produced out of the final calibration year, while
       # it is not an error to include the segment specific capacity factor in the
       # future, not including it helps keep the size of the XML down
@@ -1117,7 +1175,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(region, supplysector, subsector, technology, year,
              capacity.factor) -> L223.TechCapFac_offshore_wind_Dispatch
 
-
     L223.TechCapFac_Dispatch %>%
       filter(technology != "wind_offshore") %>%
       bind_rows(L223.TechCapFac_offshore_wind_Dispatch) -> L223.TechCapFac_Dispatch
@@ -1129,6 +1186,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       left_join_error_no_match(L120.GridCost_offshore_wind_USA, by = c("region" = "State")) %>%
       rename(input.cost = grid.cost) ->
       L223.StubTechCost_offshore_wind_Investment
+
 
     # ----------------------------------------------------------------------------------------------------------------------------
     # Produce outputs
@@ -1393,6 +1451,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set subsector logit-exponent for state") %>%
       add_legacy_name("L223.SubsectorLogit_Dispatch (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential") ->
       L223.SubsectorLogit_Dispatch
 
@@ -1402,6 +1461,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set subsector shareweight for state") %>%
       add_legacy_name("L223.SubsectorShrwtFllt_Dispatch (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential") ->
       L223.SubsectorShrwtFllt_Dispatch
 
@@ -1424,6 +1484,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology capacity factor by segment for state") %>%
       add_legacy_name("L223.CapacityTechSegmentCapFac (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "L114.CapacityFactor_wind_state_segment_gcamusa",
                      "L119.CapacityFactor_CSP_state_segment_gcamusa",
@@ -1448,6 +1509,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_legacy_name("L223.CapacityTech (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
                      "L123.capacity_EJ_state_elec_F_tech",
+                     "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential") ->
       L223.CapacityTech
 
@@ -1457,6 +1519,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology shareweight for state all as 1") %>%
       add_legacy_name("L223.TechShrwt_Dispatch (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "L120.RsrcCurves_EJ_R_offshore_wind_USA",
                      "L120.RegCapFactor_offshore_wind_USA",
@@ -1469,6 +1532,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology efficiency for state") %>%
       add_legacy_name("L223.TechEff_Dispatch (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "energy/A23.globaltech_eff",
                      "gcam-usa/A23.dispatch_globaltech_eff_additional",
@@ -1483,6 +1547,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology OM fixed for state") %>%
       add_legacy_name("L223.TechOMfixed_Dispatch (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "energy/A23.globaltech_OMfixed",
                      "gcam-usa/A23.dispatch_globaltech_OMvar_additional",
@@ -1497,6 +1562,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology OM var for state") %>%
       add_legacy_name("L223.TechOMvar_Dispatch (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "energy/A23.globaltech_OMvar",
                      "gcam-usa/A23.dispatch_globaltech_OMvar_additional",
@@ -1511,6 +1577,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology lifetime for state") %>%
       add_legacy_name("L223.TechLifetime_Dispatch (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "energy/A23.globaltech_retirement",
                      "gcam-usa/A23.dispatch_globaltech_retirement_additional",
@@ -1524,7 +1591,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Profit shutdown param that are used to discount existing") %>%
       add_comments("capacity in investment decisions.") %>%
-      add_precursors("gcam-usa/calibrated_techs_dispatch_usa") ->
+      add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/A10.renewable_resource_delete") ->
       L223.TechProfitShutdown_Dispatch
 
     L223.TechSCurve_Dispatch %>%
@@ -1533,6 +1601,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology lifetime steepness and half.life for state") %>%
       add_legacy_name("L223.TechSCurve_Dispatch (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "energy/A23.globaltech_retirement",
                      "gcam-usa/A23.dispatch_globaltech_retirement_additional",
@@ -1547,6 +1616,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology capacity factor for state") %>%
       add_legacy_name("L223.TechCapFac_Dispatch (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "L120.RsrcCurves_EJ_R_offshore_wind_USA",
                      "L120.RegCapFactor_offshore_wind_USA",

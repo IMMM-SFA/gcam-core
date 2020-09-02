@@ -297,6 +297,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["aeei"]] <- c("region", "energy.final.demand", "year", "aeei")
   level2_data_names[["FinalDemandInfo"]] <- c("region", "energy.final.demand", "perCapitaBased", "income.elasticity", "year", "base.service", "aeei")
   level2_data_names[["SubregionalShares"]] <- c("region", "gcam.consumer", "pop.year.fillout", "inc.year.fillout", "subregional.population.share", "subregional.income.share")
+  level2_data_names[["DemandFunction_food"]] <- c("region", "gcam.consumer", "nodeInput", "prodDmdFnType")
   level2_data_names[["DemandFunction_flsp"]] <- c("region", "gcam.consumer", "nodeInput", "prodDmdFnType")
   level2_data_names[["DemandFunction_serv"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "prodDmdFnType")
   level2_data_names[["Floorspace"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "year", "base.building.size")
@@ -320,6 +321,12 @@ generate_level2_data_names <- function() {
   level2_data_names[["DeleteGenericService"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "building.service.input", "supplysector")
   level2_data_names[["BldNodes"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input")
   level2_data_names[["NegEmissFinalDemand"]] <- c("region", "negative.emissions.final.demand", "policy.name")
+  level2_data_names[["DemandStapleParams"]] <- c("region", "gcam.consumer", "nodeInput", "staples.food.demand.input", "scale.param", "self.price.elasticity", "cross.price.elasticity", "income.elasticity", "income.max.term", "price.received")
+  level2_data_names[["DemandNonStapleParams"]] <- c("region", "gcam.consumer", "nodeInput", "non.staples.food.demand.input", "scale.param", "self.price.elasticity", "income.elasticity")
+  level2_data_names[["DemandStapleRegBias"]] <- c("region", "gcam.consumer", "nodeInput", "staples.food.demand.input", "regional.bias.year", "regional.bias")
+  level2_data_names[["DemandNonStapleRegBias"]] <- c("region", "gcam.consumer", "nodeInput", "non.staples.food.demand.input", "regional.bias.year", "regional.bias")
+  level2_data_names[["StapleBaseService"]] <- c("region", "gcam.consumer", "nodeInput", "staples.food.demand.input", "year", "base.service")
+  level2_data_names[["NonStapleBaseService"]] <- c("region", "gcam.consumer", "nodeInput", "non.staples.food.demand.input", "year", "base.service")
 
   # Land types
   level2_data_names[["LN0_Land"]] <- c("region", "LandAllocatorRoot", "year.fillout", "landAllocation")
@@ -477,20 +484,19 @@ GCAM_DATA_MAP <- driver(return_data_map_only = TRUE)
 PREBUILT_DATA <- driver(write_outputs = FALSE,
                         write_xml = FALSE,
                         return_data_names = c(
-                           #outputs of module_energy_LA101.en_bal_IEA
-                         "L101.en_bal_EJ_R_Si_Fi_Yh_full",
-                         "L101.en_bal_EJ_ctry_Si_Fi_Yh_full",
+                          #outputs of module_energy_LA101.en_bal_IEA
+                          "L101.en_bal_EJ_R_Si_Fi_Yh_full",
+                          "L101.en_bal_EJ_ctry_Si_Fi_Yh_full",
                           "L101.in_EJ_ctry_trn_Fi_Yh",
-                         "L101.in_EJ_ctry_bld_Fi_Yh",
+                          "L101.in_EJ_ctry_bld_Fi_Yh",
 
-                         # output of module_energy_LA111.rsrc_fos_Prod
-                        "L111.RsrcCurves_EJ_R_Ffos",
+                          # output of module_energy_LA111.rsrc_fos_Prod
+                          "L111.RsrcCurves_EJ_R_Ffos",
 
                           # outputs of module_gcamusa_LB102.FERC_load_curves_USA
                           "L102.date_load_curve_mapping_S_gcamusa",
                           "L102.load_segments_gcamusa",
                           "L102.invest_segments_gcamusa",
-
                           # outputs of module_gcamusa_LB104.load_curve_enduse_HDDCDD_USA
                           "L104.HistoricalDD_S_Segment_gcamusa",
                           "L104.DD_S_Segment_all_gcamusa",
@@ -505,15 +511,15 @@ PREBUILT_DATA <- driver(write_outputs = FALSE,
                           # output of module_energy_LA118.hydro
                           "L118.out_EJ_R_elec_hydro_Yfut",
 
-                         # outputs of module_energy_LA121.liquids
-                        "L121.in_EJ_R_unoil_F_Yh",
-                         "L121.in_EJ_R_TPES_crude_Yh",
-                         "L121.in_EJ_R_TPES_unoil_Yh",
-                         "L121.share_R_TPES_biofuel_tech",
-                        "L121.BiomassOilRatios_kgGJ_R_C"
-                       ))
-
+                          # outputs of module_energy_LA121.liquids
+                          "L121.in_EJ_R_unoil_F_Yh",
+                          "L121.in_EJ_R_TPES_crude_Yh",
+                          "L121.in_EJ_R_TPES_unoil_Yh",
+                          "L121.share_R_TPES_biofuel_tech",
+                          "L121.BiomassOilRatios_kgGJ_R_C"
+                        ))
 
 
 # Save these objects for use as internal package data
 usethis::use_data(GCAM_DATA_MAP, LEVEL2_DATA_NAMES, PREBUILT_DATA, overwrite = TRUE, internal = TRUE)
+

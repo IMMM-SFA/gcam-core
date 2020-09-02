@@ -30,12 +30,14 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
              FILE = 'gcam-usa/reeds_PV_curve_capacity',
              FILE = 'gcam-usa/reeds_PV_curve_CF_avg',
              FILE = 'gcam-usa/reeds_PV_curve_grid_cost',
+             FILE = "gcam-usa/A23.elecS_tech_mapping_cool",
              'L223.StubTechMarket_Investment',
              'L223.TechEff_Dispatch',
              'L223.GlobalTechCapital_Investment',
              FILE = 'gcam-usa/non_reeds_PV_grid_cost',
              FILE = 'gcam-usa/NREL_us_re_technical_potential',
              FILE = 'gcam-usa/NREL_us_re_capacity_factors',
+             FILE = "gcam-usa/A10.renewable_resource_delete",
              'L223.GlobalIntTechCapital_elec',
              'L223.GlobalIntTechOMfixed_elec'))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -61,12 +63,14 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
     reeds_PV_curve_capacity <- get_data(all_data, 'gcam-usa/reeds_PV_curve_capacity')
     reeds_PV_curve_CF_avg <- get_data(all_data, 'gcam-usa/reeds_PV_curve_CF_avg')
     reeds_PV_curve_grid_cost <- get_data(all_data, 'gcam-usa/reeds_PV_curve_grid_cost')
+    A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool")
     L223.StubTechMarket_Investment <- get_data(all_data, 'L223.StubTechMarket_Investment')
     L223.TechEff_Dispatch <- get_data(all_data, 'L223.TechEff_Dispatch')
     L223.GlobalTechCapital_Investment <- get_data(all_data, 'L223.GlobalTechCapital_Investment')
     non_reeds_PV_grid_cost <- get_data(all_data, 'gcam-usa/non_reeds_PV_grid_cost')
     NREL_us_re_technical_potential <- get_data(all_data, 'gcam-usa/NREL_us_re_technical_potential')
     NREL_us_re_capacity_factors <- get_data(all_data, 'gcam-usa/NREL_us_re_capacity_factors')
+    A10.renewable_resource_delete <- get_data(all_data, "gcam-usa/A10.renewable_resource_delete")
     L223.GlobalIntTechCapital_elec <- get_data(all_data, 'L223.GlobalIntTechCapital_elec')
     L223.GlobalIntTechOMfixed_elec <- get_data(all_data, 'L223.GlobalIntTechOMfixed_elec')
 
@@ -81,7 +85,8 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
       minicam.energy.input <- efficiency <- market.name <- flag <- capacity.factor <-
       input.cost <- capital.tech.change.period <- tech.change.period <- time.change <-
       subresource <- Urban_Utility_scale_PV_GWh <- Rural_Utility_scale_PV_GWh <- Urban_Utility_scale_PV <-
-      Rural_Utility_scale_PV <- Total_Utility_scale_PV_GWh <- resource <- value <- non_reeds_state <- NULL
+      Rural_Utility_scale_PV <- Total_Utility_scale_PV_GWh <- resource <- value <- non_reeds_state <-
+      technology <- subsector_1 <- to.technology <- NULL
 
     # ===================================================
     # Data Processing
@@ -364,14 +369,23 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
       mutate(renewresource = "PV_resource",
              output.unit = "EJ",
              price.unit = "1975$/GJ",
-             market = region) -> L2238.RenewRsrc_PV_reeds_USA
+             market = region) %>%
+      # Utility-scale (i.e. non-rooftop) solar is assumed to be infeasible in DC.
+      # Thus, it should not be assigned "PV_resource".
+      # Use anti_join to remove it from the table.
+      anti_join(A10.renewable_resource_delete, by = c("region", "renewresource" = "resource_elec_subsector")) ->
+      L2238.RenewRsrc_PV_reeds_USA
 
     # Table to create the graded resource curves
     L2238.PV_curve %>%
       mutate(renewresource = "PV_resource",
              sub.renewable.resource = "PV_resource",
              available = round(available, energy.DIGITS_MAX_SUB_RESOURCE)) %>%
-      select(region = State, renewresource, sub.renewable.resource, grade, available, extractioncost) ->
+      select(region = State, renewresource, sub.renewable.resource, grade, available, extractioncost) %>%
+      # Utility-scale (i.e. non-rooftop) solar is assumed to be infeasible in DC.
+      # Thus, it should not be assigned "PV_resource".
+      # Use anti_join to remove it from the table.
+      anti_join(A10.renewable_resource_delete, by = c("region", "renewresource" = "resource_elec_subsector")) ->
       L2238.GrdRenewRsrcCurves_PV_reeds_USA
 
     # Table to read in maximum resource
@@ -380,7 +394,11 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
              sub.renewable.resource = "PV_resource",
              year.fillout = min(MODEL_YEARS),
              maxSubResource = round(maxSubResource, energy.DIGITS_MAX_SUB_RESOURCE)) %>%
-      select(region = State, renewresource, sub.renewable.resource, year.fillout, maxSubResource) ->
+      select(region = State, renewresource, sub.renewable.resource, year.fillout, maxSubResource) %>%
+      # Utility-scale (i.e. non-rooftop) solar is assumed to be infeasible in DC.
+      # Thus, it should not be assigned "PV_resource".
+      # Use anti_join to remove it from the table.
+      anti_join(A10.renewable_resource_delete, by = c("region", "renewresource" = "resource_elec_subsector")) ->
       L2238.GrdRenewRsrcMax_PV_reeds_USA
 
     # Table to delete global solar resource minicam-energy-input in investment segments
@@ -438,7 +456,12 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
       mutate(renewresource = "PV_resource",
              sub.renewable.resource = "PV_resource") %>%
       select(region,renewresource, sub.renewable.resource, year.fillout = year,
-             techChange = tech.change) -> L2238.RenewRsrcTechChange_PV_reeds_USA
+             techChange = tech.change) %>%
+      # Utility-scale (i.e. non-rooftop) solar is assumed to be infeasible in DC.
+      # Thus, it should not be assigned "PV_resource".
+      # Use anti_join to remove it from the table.
+      anti_join(A10.renewable_resource_delete, by = c("region", "renewresource" = "resource_elec_subsector")) ->
+      L2238.RenewRsrcTechChange_PV_reeds_USA
 
     # Reading the grid connection cost as a state-level non-energy cost adder
     L223.StubTechMarket_Investment %>%
@@ -451,14 +474,39 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
       filter(!is.na(input.cost)) -> L2238.StubTechCost_PV_reeds_USA
 
 	# Establishing shareweights
-	L2238.GrdRenewRsrcMax_PV_reeds_USA %>%
+    L2238.GrdRenewRsrcMax_PV_reeds_USA %>%
       select(region, resource = renewresource, subresource = sub.renewable.resource) %>%
       unique() %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       mutate(technology = subresource,
              share.weight = 1.0) %>%
+      # Utility-scale (i.e. non-rooftop) solar is assumed to be infeasible in DC.
+      # Thus, it should not be assigned "PV_resource".
+      # Use anti_join to remove it from the table.
+      anti_join(A10.renewable_resource_delete, by = c("region", "resource" = "resource_elec_subsector")) %>%
       select(LEVEL2_DATA_NAMES[["ResTechShrwt"]]) ->
       L2238.ResTechShrwt_PV_reeds_USA
+
+
+    # # To account for new nesting-subsector structure and to add cooling technologies, we must expand certain outputs
+    # add_cooling_techs <- function(data){
+    #   data_new <- data %>%
+    #     left_join(A23.elecS_tech_mapping_cool,
+    #               by=c("stub.technology"="Electric.sector.technology",
+    #                    "supplysector"="Electric.sector","subsector")) %>%
+    #     select(-technology,-subsector_1)%>%
+    #     rename(technology = to.technology,
+    #            subsector0 = subsector,
+    #            subsector = stub.technology)%>%
+    #     arrange(region,year)
+    #   return(data_new)
+    # }
+    #
+    # L2238.DeleteStubTechMinicamEnergyInput_PV_reeds_USA <- add_cooling_techs(L2238.DeleteStubTechMinicamEnergyInput_PV_reeds_USA)
+    # L2238.StubTechEffFlag_PV_reeds_USA <- add_cooling_techs(L2238.StubTechEffFlag_PV_reeds_USA)
+    # L2238.StubTechCapFactor_PV_reeds_USA <- add_cooling_techs(L2238.StubTechCapFactor_PV_reeds_USA)
+    # L2238.StubTechCost_PV_reeds_USA <- add_cooling_techs(L2238.StubTechCost_PV_reeds_USA)
+
 
     # ===================================================
     # Produce outputs
@@ -503,6 +551,10 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
                      'gcam-usa/states_subregions',
                      'gcam-usa/reeds_PV_curve_capacity',
                      'gcam-usa/reeds_PV_curve_CF_avg',
+                     'gcam-usa/NREL_us_re_technical_potential',
+                     'gcam-usa/NREL_us_re_capacity_factors',
+                     'gcam-usa/A10.renewable_resource_delete',
+                     'energy/A10.rsrc_info',
                      'L223.GlobalTechCapital_Investment',
                      'L223.GlobalIntTechCapital_elec',
                      'L223.GlobalIntTechOMfixed_elec') ->
@@ -569,6 +621,7 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
                      'gcam-usa/NREL_us_re_technical_potential',
                      'gcam-usa/NREL_us_re_capacity_factors',
                      'gcam-usa/reeds_PV_curve_grid_cost',
+                     'gcam-usa/A23.elecS_tech_mapping_cool',
                      'gcam-usa/non_reeds_PV_grid_cost',
                      'L223.StubTechMarket_Investment',
                      'L223.GlobalTechCapital_Investment',
