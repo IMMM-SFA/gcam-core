@@ -47,6 +47,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.TechShrwt_Dispatch",
              "L223.TechEff_Dispatch",
              "L223.TechOMvar_Dispatch",
+             "L223.TechOMfixed_Dispatch",
              "L223.TechLifetime_Dispatch",
              "L223.TechProfitShutdown_Dispatch",
              "L223.TechSCurve_Dispatch",
@@ -126,6 +127,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.TechShrwt_Dispatch <- get_data(all_data, "L223.TechShrwt_Dispatch")
     L223.TechEff_Dispatch <- get_data(all_data, "L223.TechEff_Dispatch")
     L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch")
+    L223.TechOMfixed_Dispatch <- get_data(all_data, "L223.TechOMfixed_Dispatch")
     L223.TechLifetime_Dispatch <- get_data(all_data, "L223.TechLifetime_Dispatch")
     L223.TechProfitShutdown_Dispatch <- get_data(all_data, "L223.TechProfitShutdown_Dispatch")
     L223.TechSCurve_Dispatch <- get_data(all_data, "L223.TechSCurve_Dispatch")
@@ -208,6 +210,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.TechShrwt_Dispatch, "TechShrwt") %>%
       add_xml_data(L223.TechEff_Dispatch, "TechEff") %>%
       add_xml_data(L223.TechOMvar_Dispatch, "TechOMvar") %>%
+      add_xml_data(L223.TechOMfixed_Dispatch, "TechOMfixed") %>%
       add_xml_data(L223.TechLifetime_Dispatch, "TechLifetime") %>%
       add_xml_data(L223.TechProfitShutdown_Dispatch, "StubTechProfitShutdown") %>%
       add_xml_data(L223.TechSCurve_Dispatch, "TechSCurve") %>%
@@ -276,6 +279,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.TechShrwt_Dispatch",
                      "L223.TechEff_Dispatch",
                      "L223.TechOMvar_Dispatch",
+                     "L223.TechOMfixed_Dispatch",
                      "L223.TechLifetime_Dispatch",
                      "L223.TechProfitShutdown_Dispatch",
                      "L223.TechSCurve_Dispatch",
