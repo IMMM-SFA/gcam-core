@@ -638,23 +638,13 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(supplysector, subsector) %>%
       distinct() %>%
       mutate(logit.exponent = -3, logit.type = NA) %>%
-      write_to_all_states(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], "logit.type")) %>%
-      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
-      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
-      # Use anti_join to remove them from the table.
-      anti_join(A10.renewable_resource_delete,
-                by = c("region", "subsector" = "resource_elec_subsector"))->
+      write_to_all_states(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], "logit.type")) ->
       L223.SubsectorLogit_Dispatch
 
     # subsector shareweight
     L223.SubsectorLogit_Dispatch %>%
       select(region, supplysector, subsector) %>%
-      mutate(year.fillout = MODEL_YEARS[1], share.weight = 1) %>%
-      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
-      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
-      # Use anti_join to remove them from the table.
-      anti_join(A10.renewable_resource_delete,
-                by = c("region", "subsector" = "resource_elec_subsector")) ->
+      mutate(year.fillout = MODEL_YEARS[1], share.weight = 1) ->
       L223.SubsectorShrwtFllt_Dispatch
 
     # technolgoy shareweight
@@ -663,12 +653,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(supplysector, subsector, technology) %>%
       repeat_add_columns(tibble::tibble(year = MODEL_YEARS)) %>%
       mutate(share.weight = gcamusa.DEFAULT_SHAREWEIGHT) %>%
-      write_to_all_states(LEVEL2_DATA_NAMES[["TechShrwt"]]) %>%
-      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
-      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
-      # Use anti_join to remove them from the table.
-      anti_join(A10.renewable_resource_delete,
-                by = c("region", "subsector" = "resource_elec_subsector")) ->
+      write_to_all_states(LEVEL2_DATA_NAMES[["TechShrwt"]]) ->
       L223.TechShrwt_Dispatch
 
     # technolgoy efficiency
@@ -687,12 +672,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       mutate(market.name = "temp") %>%
       write_to_all_states(LEVEL2_DATA_NAMES[["TechEff"]]) %>%
       mutate(market.name = if_else(minicam.energy.input %in%
-                                     c(gcamusa.STATE_RENEWABLE_RESOURCES, "global solar resource"), region, "USA")) %>%
-      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
-      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
-      # Use anti_join to remove them from the table.
-      anti_join(A10.renewable_resource_delete,
-                by = c("region", "subsector" = "resource_elec_subsector")) ->
+                                     c(gcamusa.STATE_RENEWABLE_RESOURCES, "global solar resource"), region, "USA")) ->
       L223.TechEff_Dispatch
 
     # assign regional fuel markets if gcamusa.USE_REGIONAL_FUEL_MARKETS is TRUE
@@ -717,12 +697,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       fill_exp_decay_extrapolate(MODEL_YEARS) %>%
       select(-sector) %>%
       rename(OM.fixed = value) %>%
-      write_to_all_states(LEVEL2_DATA_NAMES[["TechOMfixed"]]) %>%
-      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
-      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
-      # Use anti_join to remove them from the table.
-      anti_join(A10.renewable_resource_delete,
-                by = c("region", "subsector" = "resource_elec_subsector")) ->
+      write_to_all_states(LEVEL2_DATA_NAMES[["TechOMfixed"]]) ->
       L223.TechOMfixed_Dispatch
 
     # technology OM_Var
@@ -737,12 +712,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       fill_exp_decay_extrapolate(MODEL_YEARS) %>%
       select(-sector) %>%
       rename(OM.var = value) %>%
-      write_to_all_states(LEVEL2_DATA_NAMES[["TechOMvar"]]) %>%
-      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
-      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
-      # Use anti_join to remove them from the table.
-      anti_join(A10.renewable_resource_delete,
-                by = c("region", "subsector" = "resource_elec_subsector")) ->
+      write_to_all_states(LEVEL2_DATA_NAMES[["TechOMvar"]]) ->
       L223.TechOMvar_Dispatch
 
     # technology lifetime (three parts)
@@ -784,12 +754,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       bind_rows(L223.TechLifetime_Dispatch, .) %>%
       distinct() %>%
       rename(year = year_int) %>%
-      write_to_all_states(c(LEVEL2_DATA_NAMES[["TechYr"]], "lifetime")) %>%
-      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
-      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
-      # Use anti_join to remove them from the table.
-      anti_join(A10.renewable_resource_delete,
-                by = c("region", "subsector" = "resource_elec_subsector")) ->
+      write_to_all_states(c(LEVEL2_DATA_NAMES[["TechYr"]], "lifetime")) ->
       L223.TechLifetime_Dispatch
 
     # Capacity technology profit shutdown which will actually be used during
@@ -800,12 +765,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechShrwt_Dispatch %>%
       select(-share.weight) %>%
       mutate(median.shutdown.point = gcamusa.ELEC_CAP_INV_MEDIAN,
-             profit.shutdown.steepness = gcamusa.ELEC_CAP_INV_STEEPNESS) %>%
-      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
-      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
-      # Use anti_join to remove them from the table.
-      anti_join(A10.renewable_resource_delete,
-                by = c("region", "subsector" = "resource_elec_subsector")) ->
+             profit.shutdown.steepness = gcamusa.ELEC_CAP_INV_STEEPNESS) ->
       L223.TechProfitShutdown_Dispatch
 
     # technology S-Curve
@@ -816,12 +776,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       filter(!is.na(steepness)) %>%
       set_years() %>%
       mutate(year = as.integer(year)) %>%
-      write_to_all_states(LEVEL2_DATA_NAMES[["TechSCurve"]]) %>%
-      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
-      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
-      # Use anti_join to remove them from the table.
-      anti_join(A10.renewable_resource_delete,
-                by = c("region", "subsector" = "resource_elec_subsector")) ->
+      write_to_all_states(LEVEL2_DATA_NAMES[["TechSCurve"]]) ->
       L223.TechSCurve_Dispatch
 
     # technology capacity factor
@@ -829,12 +784,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       filter(sector == "electricity generation") %>%
       select(supplysector, subsector, technology, capacity.factor) %>%
       expand(., ., year = MODEL_YEARS) %>%
-      write_to_all_states(LEVEL2_DATA_NAMES[["TechCapFac"]]) %>%
-      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
-      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
-      # Use anti_join to remove them from the table.
-      anti_join(A10.renewable_resource_delete,
-                by = c("region", "subsector" = "resource_elec_subsector")) ->
+      write_to_all_states(LEVEL2_DATA_NAMES[["TechCapFac"]]) ->
       L223.TechCapFac_Dispatch
 
     # technology capacity
@@ -868,11 +818,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       left_join(L223.TechCapFac_Dispatch %>%
                   select(-capacity.factor),
                 by = c("region", "technology")) %>%
-      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
-      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
-      # Use anti_join to remove them from the table.
-      anti_join(A10.renewable_resource_delete,
-                by = c("region", "subsector" = "resource_elec_subsector")) %>%
       # hydro is currently only produced out of the final calibration year, while
       # it is not an error to include the segment specific capacity factor in the
       # future, not including it helps keep the size of the XML down
@@ -1165,6 +1110,32 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L223.TechTrialMarket_Dispatch %<>% filter(region %in% offshore_wind_states | capacity.technology != "wind_offshore")
     L223.TechTrialMarket_Investment %<>% filter(region %in% offshore_wind_states | invest.technology != "wind_offshore")
 
+    # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+    # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+    # Use anti_join to remove them from the table.
+    L223.SubsectorLogit_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.SubsectorShrwt_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.SubsectorInterp_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.SubsectorInterpTo_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.StubTech_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.StubTechMarket_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.TechCapFac_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.SubsectorLogit_Dispatch %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.SubsectorShrwtFllt_Dispatch %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.CapacityTech_FutureTechs %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.CapacityTechSegmentCapFac %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.CapacityTechMinCapFac %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.TechShrwt_Dispatch %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.TechEff_Dispatch %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.TechOMfixed_Dispatch %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.TechOMvar_Dispatch %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.TechLifetime_Dispatch %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.TechProfitShutdown_Dispatch %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.TechSCurve_Dispatch %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.Production_Dispatch %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.TechTrialMarket_Dispatch %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+    L223.TechTrialMarket_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector" = "resource_elec_subsector"))
+
     L223.TechCapFac_Dispatch %>%
       filter(technology == "wind_offshore",
              region %in% offshore_wind_states) %>%
@@ -1177,7 +1148,13 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
 
     L223.TechCapFac_Dispatch %>%
       filter(technology != "wind_offshore") %>%
-      bind_rows(L223.TechCapFac_offshore_wind_Dispatch) -> L223.TechCapFac_Dispatch
+      bind_rows(L223.TechCapFac_offshore_wind_Dispatch) %>%
+      # Wind & utility-scale (i.e. non-rooftop) solar are assumed to be infeasible in DC.
+      # Thus, no wind & solar subsectors should be created in DC's electricity sector.
+      # Use anti_join to remove them from the table.
+      anti_join(A10.renewable_resource_delete,
+                by = c("region", "subsector" = "resource_elec_subsector")) ->
+      L223.TechCapFac_Dispatch
 
     L223.StubTechMarket_Investment %>%
       select(LEVEL2_DATA_NAMES[["StubTechYr"]]) %>%

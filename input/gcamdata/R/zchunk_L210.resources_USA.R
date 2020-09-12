@@ -405,7 +405,7 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
       add_legacy_name("L210.GrdRenewRsrcCurves_geo_USA") %>%
       add_precursors("L210.GrdRenewRsrcCurves_geo",
                      "gcam-usa/NREL_us_re_technical_potential",
-                     "L1231.out_EJ_state_elec_F_tech") ->      L210.GrdRenewRsrcCurves_geo_USA
+                     "L123.out_EJ_state_elec_F_tech") ->      L210.GrdRenewRsrcCurves_geo_USA
 
     L210.GrdRenewRsrcMax_geo_USA %>%
       add_title("Max sub resource for geothermal (placeholder)") %>%

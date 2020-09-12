@@ -88,13 +88,6 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
     # ===================================================
     # Data Processing
 
-    # Change Global IntTech files back from nesting to previous version
-    L2247.GlobalIntTechCapitalOnly_elecS_USA %>%
-      select(-intermittent.technology) %>%
-      rename(intermittent.technology=subsector.name,
-             subsector.name=subsector.name0) %>% unique() ->
-      L2247.GlobalIntTechCapitalOnly_elecS_USA
-
     # L2239.CSP_CF: Capacity factors for CSP systems by class
     # Calculating average capacity factor by CSP class. Note that capacity factor data by region is not available.
     # Hence we assume same representative capacity factors by class across states.
