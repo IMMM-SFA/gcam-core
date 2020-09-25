@@ -1,0 +1,19 @@
+# File: A23.dispatch_subsector_shrwt_state_adj.csv
+# Title: State-Specific Multiple Load Segments Subsector Shareweight Assumptions
+# Units: unitless
+# Comments: Subsector shareweights at points of inflexion - adjusting values for particular states
+# Column types: cccci
+# ----------
+region,supplysector,subsector,year,share.weight
+HI,baseload electricity,gas,initial-future-year,0
+HI,intermediate electricity,gas,initial-future-year,0
+HI,subpeak electricity,gas,initial-future-year,0
+HI,peak electricity,gas,initial-future-year,0
+HI,baseload electricity,gas,end-year,0
+HI,intermediate electricity,gas,end-year,0
+HI,subpeak electricity,gas,end-year,0
+HI,peak electricity,gas,end-year,0
+HI,baseload electricity,gas,1975,1
+HI,intermediate electricity,gas,1975,1
+HI,subpeak electricity,gas,1975,1
+HI,peak electricity,gas,1975,1

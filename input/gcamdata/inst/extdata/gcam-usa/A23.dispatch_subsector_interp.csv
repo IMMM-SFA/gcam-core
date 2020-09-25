@@ -5,31 +5,47 @@
 # Column types: cccccic
 # ----------
 supplysector,subsector,apply.to,from.year,to.year,to.value,interpolation.function
-peak electricity,gas,share-weight,final-calibration-year,2300,1,s-curve
-peak electricity,refined liquids,share-weight,final-calibration-year,2100,,linear
-peak electricity,solar,share-weight,final-calibration-year,2100,,linear
-subpeak electricity,gas,share-weight,final-calibration-year,2300,1,s-curve
-subpeak electricity,refined liquids,share-weight,final-calibration-year,2100,,linear
-subpeak electricity,solar,share-weight,final-calibration-year,2100,,linear
-intermediate electricity,coal,share-weight,final-calibration-year,2300,1,s-curve
-intermediate electricity,gas,share-weight,final-calibration-year,2300,1,s-curve
-intermediate electricity,refined liquids,share-weight,final-calibration-year,2100,,linear
-intermediate electricity,biomass,share-weight,final-calibration-year,2100,,linear
-intermediate electricity,nuclear,share-weight,final-calibration-year,initial-future-year,,linear
-intermediate electricity,nuclear,share-weight,initial-future-year,2035,,linear
-intermediate electricity,nuclear,share-weight,2035,2050,,linear
-intermediate electricity,nuclear,share-weight,2050,2300,1,s-curve
-intermediate electricity,wind,share-weight,final-calibration-year,2100,,linear
-intermediate electricity,solar,share-weight,final-calibration-year,2100,,linear
-intermediate electricity,geothermal,share-weight,final-calibration-year,2100,,linear
-baseload electricity,coal,share-weight,final-calibration-year,2300,1,s-curve
-baseload electricity,gas,share-weight,final-calibration-year,2300,1,s-curve
-baseload electricity,refined liquids,share-weight,final-calibration-year,2100,,linear
-baseload electricity,biomass,share-weight,final-calibration-year,2100,,linear
-baseload electricity,nuclear,share-weight,final-calibration-year,initial-future-year,,linear
-baseload electricity,nuclear,share-weight,initial-future-year,2035,,linear
-baseload electricity,nuclear,share-weight,2035,2050,,linear
-baseload electricity,nuclear,share-weight,2050,2300,1,s-curve
-baseload electricity,wind,share-weight,final-calibration-year,2100,,linear
-baseload electricity,solar,share-weight,final-calibration-year,2100,,linear
-baseload electricity,geothermal,share-weight,final-calibration-year,2100,,linear
+peak electricity,gas,share-weight,final-calibration-year,2300,1,linear
+peak electricity,gas,share-weight,2030,end-year,1,fixed
+peak electricity,refined liquids,share-weight,final-calibration-year,initial-future-year,0,linear
+peak electricity,refined liquids,share-weight,initial-future-year,end-year,0,fixed
+peak electricity,solar,share-weight,final-calibration-year,2030,1,linear
+peak electricity,solar,share-weight,2030,end-year,1,fixed
+subpeak electricity,gas,share-weight,final-calibration-year,2030,1,linear
+subpeak electricity,gas,share-weight,2030,end-year,1,fixed
+subpeak electricity,refined liquids,share-weight,final-calibration-year,initial-future-year,0,linear
+subpeak electricity,refined liquids,share-weight,initial-future-year,end-year,0,fixed
+subpeak electricity,solar,share-weight,final-calibration-year,2030,1,linear
+subpeak electricity,solar,share-weight,2030,end-year,1,fixed
+intermediate electricity,coal,share-weight,final-calibration-year,2030,1,linear
+intermediate electricity,coal,share-weight,2030,end-year,1,fixed
+intermediate electricity,gas,share-weight,final-calibration-year,2030,1,linear
+intermediate electricity,gas,share-weight,2030,end-year,1,fixed
+intermediate electricity,refined liquids,share-weight,final-calibration-year,initial-future-year,0,linear
+intermediate electricity,refined liquids,share-weight,initial-future-year,end-year,0,fixed
+intermediate electricity,biomass,share-weight,final-calibration-year,end-year,1,linear
+intermediate electricity,nuclear,share-weight,final-calibration-year,initial-future-year,0,linear
+intermediate electricity,nuclear,share-weight,initial-future-year,2025,0,fixed
+intermediate electricity,nuclear,share-weight,2025,2030,1,linear
+intermediate electricity,nuclear,share-weight,2030,end-year,1,fixed
+intermediate electricity,wind,share-weight,final-calibration-year,initial-future-year,0,linear
+intermediate electricity,wind,share-weight,initial-future-year,end-year,0,fixed
+intermediate electricity,solar,share-weight,final-calibration-year,2030,1,linear
+intermediate electricity,solar,share-weight,2030,end-year,1,fixed
+intermediate electricity,geothermal,share-weight,final-calibration-year,2100,1,linear
+baseload electricity,coal,share-weight,final-calibration-year,2030,1,linear
+baseload electricity,coal,share-weight,2030,end-year,1,fixed
+baseload electricity,gas,share-weight,final-calibration-year,2030,1,linear
+baseload electricity,gas,share-weight,2030,end-year,1,fixed
+baseload electricity,refined liquids,share-weight,final-calibration-year,initial-future-year,0,linear
+baseload electricity,refined liquids,share-weight,initial-future-year,end-year,0,fixed
+baseload electricity,biomass,share-weight,final-calibration-year,end-year,1,linear
+baseload electricity,nuclear,share-weight,final-calibration-year,initial-future-year,0,linear
+baseload electricity,nuclear,share-weight,initial-future-year,2025,0,fixed
+baseload electricity,nuclear,share-weight,2025,2030,1,linear
+baseload electricity,nuclear,share-weight,2030,end-year,1,fixed
+baseload electricity,wind,share-weight,final-calibration-year,2030,1,linear
+baseload electricity,wind,share-weight,2030,end-year,1,fixed
+baseload electricity,solar,share-weight,final-calibration-year,2030,1,linear
+baseload electricity,solar,share-weight,2030,end-year,1,fixed
+baseload electricity,geothermal,share-weight,final-calibration-year,end-year,1,linear

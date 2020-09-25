@@ -15,7 +15,6 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     return(c("L223.Sector_Investment",
              "L223.SubsectorLogit_Investment",
              "L223.SubsectorShrwt_Investment",
-             "L223.SubsectorInterp_Investment",
              "L223.SubsectorInterpTo_Investment",
              "L223.StubTech_Investment",
              "L233.GlobalInvestTech_Investment",
@@ -95,7 +94,6 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.Sector_Investment <- get_data(all_data, "L223.Sector_Investment")
     L223.SubsectorLogit_Investment <- get_data(all_data, "L223.SubsectorLogit_Investment")
     L223.SubsectorShrwt_Investment <- get_data(all_data, "L223.SubsectorShrwt_Investment")
-    L223.SubsectorInterp_Investment <- get_data(all_data, "L223.SubsectorInterp_Investment")
     L223.SubsectorInterpTo_Investment <- get_data(all_data, "L223.SubsectorInterpTo_Investment")
     L223.StubTech_Investment <- get_data(all_data, "L223.StubTech_Investment")
     L233.GlobalInvestTech_Investment <- get_data(all_data, "L233.GlobalInvestTech_Investment")
@@ -176,8 +174,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_node_equiv_xml("technology") %>%
       add_logit_tables_xml(L223.Sector_Investment, "Supplysector") %>%
       add_logit_tables_xml(L223.SubsectorLogit_Investment, "SubsectorLogit") %>%
-      add_xml_data(L223.SubsectorShrwt_Investment, "SubsectorShrwt") %>%
-      add_xml_data(L223.SubsectorInterp_Investment, "SubsectorInterp") %>%
+      add_xml_data(L223.SubsectorShrwt_Investment, "SubsectorShrwtFllt") %>%
       add_xml_data(L223.SubsectorInterpTo_Investment, "SubsectorInterpTo") %>%
       add_xml_data(L223.StubTech_Investment, "StubTech") %>%
       add_xml_data(L233.GlobalInvestTech_Investment, "GlobalInvestTech") %>%
@@ -247,7 +244,6 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_precursors("L223.Sector_Investment",
                      "L223.SubsectorLogit_Investment",
                      "L223.SubsectorShrwt_Investment",
-                     "L223.SubsectorInterp_Investment",
                      "L223.SubsectorInterpTo_Investment",
                      "L223.StubTech_Investment",
                      "L233.GlobalInvestTech_Investment",
