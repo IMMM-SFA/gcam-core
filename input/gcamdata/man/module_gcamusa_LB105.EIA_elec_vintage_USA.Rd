@@ -15,7 +15,7 @@ module_gcamusa_LB105.EIA_elec_vintage_USA(command, ...)
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
 the generated outputs: \code{L105.elec_capacity_state_vintage_gcamusa}, \code{L105.elec_generation_state_vintage_gcamusa},
-\code{L105.elec_generation_gridR_vintage_gcamusa}, \code{L105.elec_fuelconsumption_state_vintage_gcamusa}.
+\code{L105.elec_fuelconsumption_state_vintage_gcamusa}.
 There is no corresponding file in the original data system. This was originally a preprocessing code
 }
 \description{

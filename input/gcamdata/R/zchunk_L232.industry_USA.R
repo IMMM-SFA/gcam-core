@@ -178,6 +178,7 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
       left_join_keep_first_only(calibrated_techs, by = c("sector", "fuel")) %>%
       rename(stub.technology = technology) ->
       L232.in_EJ_state_indenergy_F_Yh
+
     L232.in_EJ_state_indenergy_F_Yh %>% select(LEVEL2_DATA_NAMES[["StubTechYr"]], "value") %>%
       left_join_keep_first_only(select(A32.globaltech_eff, subsector, technology, minicam.energy.input),
                                 by = c("subsector", "stub.technology" = "technology")) %>%
@@ -201,6 +202,7 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
       select(-calibration, -secondary.output) %>%
       rename(stub.technology = technology) ->
       L232.in_EJ_state_indfeed_F_Yh
+
     L232.in_EJ_state_indfeed_F_Yh %>% select(LEVEL2_DATA_NAMES[["StubTechYr"]], "value") %>%
       left_join_keep_first_only(select(A32.globaltech_eff, subsector, technology, minicam.energy.input),
                                 by = c("subsector", "stub.technology" = "technology")) %>%
@@ -320,49 +322,52 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
       mutate(energy.final.demand = A32.demand$energy.final.demand) ->
       L232.BaseService_ind_USA  # base service is equal to the output of the industry supplysector
 
-    # dispatch update
-    # Creating new table for distributing industry cogeneration
-    L102.load_segments %>%
-      # join duplicates rows because most grid regions map to more than one state
-      # LJENM throws an error, so left_join() is used
-      left_join(states_subregions %>%
-                  dplyr::select(state, grid_region),
-                by = "grid_region") ->
-      segStates
+    # Adjustments to maintain consistency with demand-side dispatch segments (if needed)
+    if(gcamusa.USE_ELEC_DEMAND_SEGMENTS) {
+      # Creating new table for distributing industry cogeneration
+      L102.load_segments %>%
+        # join duplicates rows because most grid regions map to more than one state
+        # LJENM throws an error, so left_join() is used
+        left_join(states_subregions %>%
+                    dplyr::select(state, grid_region),
+                  by = "grid_region") ->
+        segStates
 
-    L232.StubTechSecMarket_ind_USA %>%
-      # join duplicates rows because each entry is multiplied by 25 load segments
-      # LJENM throws an error, so left_join() is used
-      left_join(segStates %>%
-                  dplyr::select(state, segment),
-                by = c("region" = "state")) %>%
-      mutate(secondary.output = paste(secondary.output, segment, sep = "_")) ->
-      L232.StubTechSecMarket_ind_USA_temp
+      L232.StubTechSecMarket_ind_USA %>%
+        # join duplicates rows because each entry is multiplied by 25 load segments
+        # LJENM throws an error, so left_join() is used
+        left_join(segStates %>%
+                    dplyr::select(state, segment),
+                  by = c("region" = "state")) %>%
+        mutate(secondary.output = paste(secondary.output, segment, sep = "_")) ->
+        L232.StubTechSecMarket_ind_USA_temp
 
-    L232.StubTechSecMarket_ind_USA_temp %>%
-      select(-market.name) %>%
-      left_join_error_no_match(L232.GlobalTechSecOut_ind %>%
-                                 select(-secondary.output),
-                               by = c("supplysector" = "sector.name",
-                                      "subsector" = "subsector.name",
-                                      "stub.technology" = "technology",
-                                      "year")) %>%
-      left_join_error_no_match(segStates %>%
-                  dplyr::select(state, segment, generation.fraction),
-                by = c("region" = "state", "segment")) %>%
-      mutate(output.ratio = output.ratio * generation.fraction) %>%
-      select(-segment, -generation.fraction) ->
-      L232.StubTechSecOut_ind_USA
+      L232.StubTechSecMarket_ind_USA_temp %>%
+        select(-market.name) %>%
+        left_join_error_no_match(L232.GlobalTechSecOut_ind %>%
+                                   select(-secondary.output),
+                                 by = c("supplysector" = "sector.name",
+                                        "subsector" = "subsector.name",
+                                        "stub.technology" = "technology",
+                                        "year")) %>%
+        left_join_error_no_match(segStates %>%
+                                   dplyr::select(state, segment, generation.fraction),
+                                 by = c("region" = "state", "segment")) %>%
+        mutate(output.ratio = output.ratio * generation.fraction) %>%
+        select(-segment, -generation.fraction) ->
+        L232.StubTechSecOut_ind_USA
 
-    L232.StubTechSecMarket_ind_USA_temp %>%
-      select(-segment) -> L232.StubTechSecMarket_ind_USA
+      L232.StubTechSecMarket_ind_USA_temp %>%
+        select(-segment) -> L232.StubTechSecMarket_ind_USA
 
-    # Create new table to remove previous assignment of "electricity" secondary.output from each state
-    L232.StubTechSecOut_ind_USA %>%
-      select(-output.ratio) %>%
-      mutate(secondary.output = "electricity") %>%
-      unique() ->
-      L232.StubTechDeleteSecOut_ind_USA
+      # Create new table to remove previous assignment of "electricity" secondary.output from each state
+      L232.StubTechSecOut_ind_USA %>%
+        select(-output.ratio) %>%
+        mutate(secondary.output = "electricity") %>%
+        unique() ->
+        L232.StubTechDeleteSecOut_ind_USA
+    }
+
 
     # ===================================================
     # Produce outputs
@@ -444,25 +449,43 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
                      "gcam-usa/states_subregions") ->
       L232.StubTechSecMarket_ind_USA
 
-    L232.StubTechSecOut_ind_USA %>%
-      add_title("output ratio for the cogenerated electricity (secondary output)") %>%
-      add_units("Unitless") %>%
-      add_comments("map L232.GlobalTechSecOut_ind into segment by generation fraction of each segment") %>%
-      add_legacy_name("L232.StubTechSecOut_ind_USA") %>%
-      add_precursors("L232.StubTech_ind",
-                     "energy/A32.globaltech_eff",
-                     "gcam-usa/states_subregions",
-                     "L102.load_segments_gcamusa",
-                     "L232.GlobalTechSecOut_ind") ->
-      L232.StubTechSecOut_ind_USA
+    if(exists("L232.StubTechSecOut_ind_USA")) {
+      L232.StubTechSecOut_ind_USA %>%
+        add_title("output ratio for the cogenerated electricity (secondary output)") %>%
+        add_units("Unitless") %>%
+        add_comments("map L232.GlobalTechSecOut_ind into segment by generation fraction of each segment") %>%
+        add_legacy_name("L232.StubTechSecOut_ind_USA") %>%
+        add_precursors("L232.StubTech_ind",
+                       "energy/A32.globaltech_eff",
+                       "gcam-usa/states_subregions",
+                       "L102.load_segments_gcamusa",
+                       "L232.GlobalTechSecOut_ind") ->
+        L232.StubTechSecOut_ind_USA
+    } else {
+      missing_data() %>%
+        add_legacy_name("L232.StubTechSecOut_ind_USA") %>%
+        add_precursors("L232.StubTech_ind",
+                       "energy/A32.globaltech_eff",
+                       "gcam-usa/states_subregions",
+                       "L102.load_segments_gcamusa",
+                       "L232.GlobalTechSecOut_ind") ->
+        L232.StubTechSecOut_ind_USA
+    }
 
-    L232.StubTechDeleteSecOut_ind_USA %>%
-      add_title("remove previous assignment of secondary.output of electricity from each state") %>%
-      add_units("Unitless") %>%
-      add_comments("remove previous assignment of secondary.output of electricity from each state") %>%
-      add_legacy_name("L232.StubTechDeleteSecOut_ind_USA") %>%
-      same_precursors_as("L232.StubTechSecOut_ind_USA") ->
-      L232.StubTechDeleteSecOut_ind_USA
+    if(exists("L232.StubTechDeleteSecOut_ind_USA")) {
+      L232.StubTechDeleteSecOut_ind_USA %>%
+        add_title("remove previous assignment of secondary.output of electricity from each state") %>%
+        add_units("Unitless") %>%
+        add_comments("remove previous assignment of secondary.output of electricity from each state") %>%
+        add_legacy_name("L232.StubTechDeleteSecOut_ind_USA") %>%
+        same_precursors_as("L232.StubTechSecOut_ind_USA") ->
+        L232.StubTechDeleteSecOut_ind_USA
+    } else {
+      missing_data() %>%
+        add_legacy_name("L232.StubTechDeleteSecOut_ind_USA") %>%
+        same_precursors_as("L232.StubTechSecOut_ind_USA") ->
+        L232.StubTechDeleteSecOut_ind_USA
+    }
 
     L232.BaseService_ind_USA %>%
       add_title("base-year service output of industry final demand") %>%

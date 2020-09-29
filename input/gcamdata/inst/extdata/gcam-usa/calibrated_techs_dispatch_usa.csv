@@ -15,7 +15,7 @@ electricity generation,refined liquids,refined liquids_turbine,electricity,refin
 electricity generation,refined liquids,refined liquids_CC,electricity,refined liquids,refined liquids (CC),refined liquids industrial,output,,0.8
 electricity generation,biomass,biomass_conv,electricity,biomass,biomass (conv),regional biomass,output,,0.85
 electricity generation,nuclear,nuclear_conv,electricity,nuclear,Gen_II_LWR,nuclearFuelGenII,output,,0.95
-electricity generation,hydro,hyrdo,electricity,hydro,hydro,,fixed output,,0.8
+electricity generation,hydro,hydro,electricity,hydro,hydro,,fixed output,,0.8
 electricity generation,wind,wind_onshore,electricity,wind,wind,onshore wind resource,output,,0.5
 electricity generation,wind,wind_offshore,electricity,wind,wind_offshore,offshore wind resource,output,,0.5
 electricity generation,solar PV,solar_PV,electricity,solar,PV,global solar resource,output,,0.4

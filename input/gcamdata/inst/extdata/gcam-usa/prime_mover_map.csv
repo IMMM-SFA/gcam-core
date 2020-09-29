@@ -5,7 +5,7 @@
 # Column types: cccc 
 # ----------
 Reported.Fuel.Type.Code,Reported.Prime.Mover,gcam_fuel,elec_tech
-WAT,HY,hydro,hyrdo
+WAT,HY,hydro,hydro
 NG,CA,gas,gas_CC
 NG,CT,gas,gas_CC
 BIT,ST,coal,coal_conv

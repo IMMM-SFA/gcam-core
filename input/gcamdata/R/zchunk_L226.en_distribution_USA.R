@@ -306,28 +306,29 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
       rename(market.name = grid_region) ->
       L226.TechCoef_electd_USA
 
-    # Dispatch update
+    # Optional electricity dispatch end-use demand segments
     # YO Apr 2020
-    # Dis-aggregate electric subsector, technology, minicam.energy.input and minicam.non.energy.input by dispatch segments
+    # Disaggregate electric subsector, technology, minicam.energy.input and minicam.non.energy.input by dispatch segments
     # Not disaggregating supplysectors for final services will not be distributed by segments yet.
     # Building services will eventually need to be split by demand segment.
 
-    # Attach states to grid-region names in L103.load_segments_sector_gcamusa.csv (L103.load_segments_sector)
-    L103.load_segments_sector %>%
-      left_join(states_subregions %>%
-                  dplyr::select(state,grid_region),
-                by=("grid_region")) ->
-      segStates
+    if(gcamusa.USE_ELEC_DEMAND_SEGMENTS) {
+      # Attach states to grid-region names in L103.load_segments_sector_gcamusa.csv (L103.load_segments_sector)
+      L103.load_segments_sector %>%
+        left_join(states_subregions %>%
+                    dplyr::select(state,grid_region),
+                  by=("grid_region")) ->
+        segStates
 
-    L226.TechCoef_electd_USA %>%
-      left_join(segStates %>%
-                  dplyr::select(state, sector, segment, generation.fraction),
-                by=c("region" = "state", "subsector" = "sector")) %>%
-      mutate(coefficient = coefficient * generation.fraction,
-             minicam.energy.input = paste( minicam.energy.input, segment, sep="_"))%>%
-      select(-segment,-generation.fraction)->
-      L226.TechCoef_electd_USA
-
+      L226.TechCoef_electd_USA %>%
+        left_join(segStates %>%
+                    dplyr::select(state, sector, segment, generation.fraction),
+                  by=c("region" = "state", "subsector" = "sector")) %>%
+        mutate(coefficient = coefficient * generation.fraction,
+               minicam.energy.input = paste( minicam.energy.input, segment, sep="_"))%>%
+        select(-segment,-generation.fraction) ->
+        L226.TechCoef_electd_USA
+    }
 
     # Produce outputs
     L226.DeleteSupplysector_USAelec %>%
@@ -360,16 +361,16 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
       add_precursors("L226.GlobalTechCost_en") ->
       L226.TechCost_electd_USA
 
-    L226.TechCoef_electd_USA %>%
-      add_title("Tech coefficients for elec T&D when using regional electricity markets") %>%
-      add_units("NA") %>%
-      add_comments("Tech coeff for elec T&D when using regional electricity markets.") %>%
-      add_comments("The elect_td sectors can not use the global tech database as their input is different.") %>%
-      add_legacy_name("L226.TechCoef_electd_USA") %>%
-      add_precursors("gcam-usa/states_subregions",
-                     "L226.StubTechCoef_electd",
-                     "L103.load_segments_sector_gcamusa") ->
-      L226.TechCoef_electd_USA
+      L226.TechCoef_electd_USA %>%
+        add_title("Tech coefficients for elec T&D when using regional electricity markets") %>%
+        add_units("NA") %>%
+        add_comments("Tech coeff for elec T&D when using regional electricity markets.") %>%
+        add_comments("The elect_td sectors can not use the global tech database as their input is different.") %>%
+        add_legacy_name("L226.TechCoef_electd_USA") %>%
+        add_precursors("gcam-usa/states_subregions",
+                       "L226.StubTechCoef_electd",
+                       "L103.load_segments_sector_gcamusa") ->
+        L226.TechCoef_electd_USA
 
     L226.Supplysector_en_USA %>%
       add_title("Supply sector information for energy handling and delivery sectors.") %>%

@@ -76,7 +76,11 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
     L115.rsrc_state_rooftopPV <- get_data(all_data, "L115.rsrc_state_rooftopPV")
     L120.RsrcCurves_EJ_R_offshore_wind_USA <- get_data(all_data, "L120.RsrcCurves_EJ_R_offshore_wind_USA", strip_attributes = TRUE)
     L1321.out_Mt_state_cement_Yh <- get_data(all_data, "L1321.out_Mt_state_cement_Yh")
-    L123.out_EJ_state_elec_F_tech <- get_data(all_data, "L123.out_EJ_state_elec_F_tech")
+    L123.out_EJ_state_elec_F_tech <- get_data(all_data, "L123.out_EJ_state_elec_F_tech") %>%
+      # remove cooling system detail, which isn't needed for these calculations
+      group_by(state, sector, fuel, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup()
     L210.RenewRsrc <- get_data(all_data, "L210.RenewRsrc", strip_attributes = TRUE)
     L210.UnlimitRsrc <- get_data(all_data, "L210.UnlimitRsrc", strip_attributes = TRUE)
     L210.UnlimitRsrcPrice <- get_data(all_data, "L210.UnlimitRsrcPrice", strip_attributes = TRUE)

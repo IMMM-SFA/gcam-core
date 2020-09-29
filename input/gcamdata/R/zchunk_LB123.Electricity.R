@@ -61,6 +61,7 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
     elec_generation_state_vintage <- get_data(all_data, "L105.elec_generation_state_vintage_gcamusa" )
     elec_capacity_state_vintage <- get_data(all_data, "L105.elec_capacity_state_vintage_gcamusa" )
 
+
     # ===================================================
     # ELECTRICITY - INPUT & OUTPUT
     # Using the approach in dispatch branch to calcluate percentage shares of electricity generation and capacity shares
@@ -68,19 +69,19 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
 
     # Original note: drop vintage for now (by plp)
     elec_fuelconsumption_state_vintage %>%
-      group_by(state, gcam_fuel, elec_tech) %>%
+      group_by(state, gcam_fuel, elec_tech, cooling_system) %>%
       summarize(en_in = sum(en_in)) %>%
       ungroup() ->
       elec_fuelconsumption_state_vintage
 
     elec_generation_state_vintage %>%
-      group_by(state, gcam_fuel, elec_tech) %>%
+      group_by(state, gcam_fuel, elec_tech, cooling_system) %>%
       summarize(en_out = sum(en_out)) %>%
       ungroup() ->
       elec_generation_state_vintage
 
     elec_capacity_state_vintage %>%
-      group_by(state, gcam_fuel, elec_tech) %>%
+      group_by(state, gcam_fuel, elec_tech, cooling_system) %>%
       summarize(capacity = sum(capacity)) %>%
       ungroup() ->
       elec_capacity_state_vintage
@@ -100,7 +101,8 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       rename(fuel = gcam_fuel) ->
       L123.pct_out_state_elec_F
 
-    # TODO: just using fixed share for all historical years
+    # Using fixed shares for all historical years
+    # TODO: may want to calcuate shares for all historical years eventually
 
     L123.pct_in_state_elec_F %>%
       repeat_add_columns(tibble::tibble(year = HISTORICAL_YEARS)) %>%
@@ -116,7 +118,7 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       filter(fuel %in% L123.in_EJ_R_elec_F_Yh$fuel) %>%
       left_join_error_no_match(L123.in_EJ_R_elec_F_Yh, by = c("fuel", "year")) %>%
       mutate(value = value.x * value.y) %>%
-      select(state, sector, fuel, elec_tech, year, value) ->
+      select(state, sector, fuel, elec_tech, cooling_system, year, value) ->
       L123.in_EJ_state_elec_F_tech
 
     L123.in_EJ_state_elec_F_tech %>%
@@ -128,7 +130,7 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
     L123.pct_out_state_elec_F %>%
       left_join_error_no_match(L123.out_EJ_R_elec_F_Yh, by = c("fuel", "year")) %>%
       mutate(value = value.x * value.y) %>%
-      select(state, sector, fuel, elec_tech, year, value) ->
+      select(state, sector, fuel, elec_tech, cooling_system, year, value) ->
       L123.out_EJ_state_elec_F_tech
 
     L123.out_EJ_state_elec_F_tech %>%
@@ -139,7 +141,8 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
 
     # ELECTRICITY - CAPACITY
     # rewrite from dispatch branch LB123.Electricity.R
-    # TODO: giving 2010 capacity to all historical years (capacity factors will low < 2010) (plp)
+    # TODO: assigning 2015 capacity to all historical years
+    # (capacity factors will be meaningless before 2015, and may exceed 1 (e.g. coal)) (plp)
 
     elec_capacity_state_vintage %>%
       repeat_add_columns(tibble::tibble(year = HISTORICAL_YEARS)) ->
@@ -189,6 +192,8 @@ module_gcamusa_LB123.Electricity <- function(command, ...) {
       # Input value - net value
       mutate(value = value.x - value.y) %>%
       select(state, sector, fuel, year, value)
+
+
     # ===================================================
 
     # Produce outputs

@@ -664,8 +664,9 @@ gcamusa.WATER_TYPE_FRESH <- "fresh"
 gcamusa.WATER_TYPE_SEAWATER <- "seawater"
 gcamusa.ELEC_COOLING_SYSTEM_NONE <- "none"
 gcamusa.ELEC_COOLING_SYSTEM_BINARY <- "binary"
-gcamusa.ELEC_TECHS_NO_COOLING <- c("hydro", "PV", "wind")
-gcamusa.ELEC_TECHS_NO_COOLING_FRESH <- c("hydro", "PV") # electricity technologies with no cooling system, still mapped to "fresh" water type
+gcamusa.ELEC_COOLING_SYSTEM_DEFAULT <- c("recirculating")
+gcamusa.ELEC_TECHS_NO_COOLING <- c("hydro", "solar_PV", "wind_onshore")
+gcamusa.ELEC_TECHS_NO_COOLING_FRESH <- c("hydro", "solar_PV") # electricity technologies with no cooling system, still mapped to "fresh" water type
 gcamusa.UCS_WATER_FIRST_YEAR <- 2000 # we calculate cooling shares based on power plants built this century
 
 # Logit exponent regulating competition between different grid regions in USA electricity market
@@ -772,7 +773,7 @@ gcamusa.ELEC_LOAD_SEGMENT_ORDER <- c("Jan_day", "Jan_night", "Feb_day","Feb_nigh
 gcamusa.DEGREE_HOUR_CUTOFF <- 5.0
 
 # investment reserve margin
-# TODO: used in L223.electricity_USA.R, need to explain
+# amount of capacity above maximum load required for planning reserves
 gcamusa.ELEC_INV_MARGIN <- 0.2
 
 # default capacity credit for renewables:
@@ -787,6 +788,10 @@ gcamusa.ELEC_DEFAULT_RE_CC <- -2.5
 # compared to operating the existing
 gcamusa.ELEC_CAP_INV_STEEPNESS <- 10.0
 gcamusa.ELEC_CAP_INV_MEDIAN <- -0.1
+
+# Indicate whether to use end-use electricity "demand" segments in conjunction with
+# supply-side electricity load segments
+gcamusa.USE_ELEC_DEMAND_SEGMENTS  <- FALSE
 
 
 # Time shift conditions ======================================================================
