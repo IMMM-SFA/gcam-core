@@ -948,7 +948,7 @@ void XMLDBOutputter::startVisitCapacityTechnology(const CapacityTechnology* aTec
 		// Avoid writing zeros to save space.
 		// Write price paid for input.
 		double currValue;
-		currValue = aTechnology->mCosts[i];
+		currValue = aTechnology->getEnergyCost(mCurrentRegion, mCurrentSector, i);
 		if (!objects::isEqual<double>(currValue, 0.0)) {
 			attrs["unit"] = "1975$/GJ";
 			XMLWriteElementWithAttributes(currValue, "operating-cost", *mBufferStack.top(),

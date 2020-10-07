@@ -157,9 +157,6 @@ void DispatchSector::completeInit( const IInfo* aRegionInfo,
                 marketInfo->setString( "price-unit", mPriceUnit );
                 marketInfo->setString( "output-unit", mOutputUnit );
 
-                // force trial markets as there will be circular dependencies due to
-                // cogen
-                depFinder->addDependency( segmentMarketName, mRegionName, segmentMarketName, mRegionName );
                 // the market is just used to pass demands, there is no actual activity
                 // behind it so just put a dummy activity as a place holder
                 depFinder->resolveActivityToDependency( mRegionName, segmentMarketName,
@@ -167,6 +164,9 @@ void DispatchSector::completeInit( const IInfo* aRegionInfo,
                 // finally associate this dispatch sector as a dependent on the demand segment market
                 depFinder->addDependency( segmentMarketName, mRegionName, mName, mRegionName );
             }
+            // force trial markets as there will be circular dependencies due to
+            // prices being related to dispatch quantities
+            depFinder->addDependency( segmentMarketName, mRegionName, segmentMarketName, mRegionName );
         }
     }
     else {
@@ -337,13 +337,13 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         
         // calculate the total electricity demand which will be needed during calibration
         // or to calculate the total average average cost of electricity
-        double totalElecDemand = 0.0;
+        /*double totalElecDemand = 0.0;
         for( auto segment : mDemandSegments ) {
             // guard against negative demands
             // TODO: use 0.0 or util::getVerySmallNumber?  The later was put in as a test
             // to help with solving but is it really necessary?
             totalElecDemand += std::max(marketplace->getDemand( segment->mName, mRegionName, aPeriod ), util::getVerySmallNumber());
-        }
+        }*/
         
         // sort the technologies by energy cost
         // we will also cache the costs so that we do not need to re-calculate them
@@ -382,6 +382,7 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
             // TODO: use 0.0 or util::getVerySmallNumber?  The later was put in as a test
             // to help with solving but is it really necessary?
             double segmentDemand = std::max(marketplace->getDemand(segmentMarketName, mRegionName, aPeriod), util::getVerySmallNumber());
+
             // loop over each dispatch segment in this demand segment and dispatch
             // the technologies for each one
             for( auto segment : mDispatchSegments ) {
@@ -394,15 +395,6 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
                     // to supply this energy
                     double segmentScaleFraction = segment->mHours / HOURS_IN_YEAR;
                     
-                    // NOTE: we do not actually have calibration information about technology
-                    // dispatch order.  Instead we simply rescale ALL dispatch segments to be
-                    // equal and the technologies will be using a calibrated total capacity
-                    // factor.  Thus in *total* we will be able to match historical values
-                    if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod() ) {
-                        remainingProduction = totalElecDemand * 1.0 / mDemandSegments.size();
-                        segmentScaleFraction = 1.0 / mDemandSegments.size();
-                    }
-                    
                     // If this dispatch segment was tagged as a marker segment for
                     // an investment segment we will need to calculate how much new
                     // capacity we want to invest in which is dependent on the price
@@ -411,6 +403,7 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
                     double investNewCost = isInvestSegment ? marketplace->getPrice(segment->mInvestmentSegmentName, mRegionName, aPeriod) : 0.0;
                     double currMaxInvestCap = ( remainingProduction / segmentScaleFraction ) * RESERVE_FRACTION;
                     double currExistCap = 0.0;
+                    double currLastDispCost = 0.0;
 
                     // do the dispatch
                     for( auto tech : sortedTechs) {
@@ -435,12 +428,19 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
                         // remove the generation from this tech from the remaining
                         // the actual generation may be different than the maxProduction
                         // if there was less remaining generation require
-                        double currProduction = std::max(std::min( remainingProduction, maxProduction ), 0.0);
+                        double currProduction = std::min( remainingProduction, maxProduction );
                         mSaveTechCurve[ aPeriod ][currSave] = currProduction;
                         techProd[ tech ] += currProduction;
                         remainingProduction -= currProduction;
+                        if(remainingProduction < 0.0 ) {
+                            // round off error?
+                            remainingProduction = 0.0;
+                        }
                         // we are calculating the cost as the weighted average across all segments
-                        avgCost += techEnergyCostCache[ tech ] * currProduction;
+                        currLastDispCost += techEnergyCostCache[ tech ] * currProduction;
+                        /*if( currProduction > 0.0 ) {
+                            currLastDispCost = techEnergyCostCache[ tech ];
+                        }*/
 
                         // calculate the amount of existing capacity available in this
                         // segment to determine how much new investment may need to be made
@@ -449,10 +449,13 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
                                 * maxProduction / segmentScaleFraction;
                         }
                     }
+                    currLastDispCost /= segmentDemand;
+                    avgCost += currLastDispCost * segment->mHours;
+                    marketplace->setPrice( segmentMarketName, mRegionName, currLastDispCost + capacityPrice, aPeriod );
                     
                     // TODO: some error checking to ensure there was enough capacity to meet demand
-                    /*if( remainingProduction != 0.0 ) {
-                        cout << "Remaining production in segment: " << remainingProduction << " in " << mRegionName << ", " << mName << ", " << segment.mName << endl;
+                    /*if( (remainingProduction / segmentScaleFraction) > 0.01 ) {
+                        cout << "Remaining production in segment: " << (remainingProduction / segmentScaleFraction) << " in " << mRegionName << ", " << mName << ", " << segment->mName << endl;
                     }*/
                     
                     // now that we have looped all of the technologies we can update the
@@ -461,7 +464,9 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
                         // TODO: right now it helps solution if we don't set an absolute zero
                         // for new investment to ensure the trial market doesn't get stuck as
                         // unsolvable
-                        double currNewInvest = aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() ? std::max( currMaxInvestCap - currExistCap - totalNewInvest , 2 * util::getSmallNumber() ) : 0.0;
+                        double currNewInvest = aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() ?
+                            std::max( currMaxInvestCap - currExistCap - totalNewInvest, 2 * util::getSmallNumber() ) + (remainingProduction / segmentScaleFraction) / 0.8 :
+                            0.0;
                         totalNewInvest += currNewInvest;
                         segment->getNewInvestment() = currNewInvest;
                         marketplace->addToDemand( segment->mInvestmentSegmentName, mRegionName, segment->getNewInvestment(), aPeriod );
@@ -472,14 +477,14 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
             }
         }
         // calculate the average cost and add on the capacity investment cost
-        avgCost = avgCost / totalElecDemand + capacityPrice;
+        avgCost = avgCost / HOURS_IN_YEAR /*totalElecDemand*/ + capacityPrice;
         marketplace->setPrice( mName, mRegionName, avgCost, aPeriod );
         // right now we are assuming the same price in all demand segments
         // this is mostly because we can't calibrate it
-        for( auto segment : mDemandSegments ) {
+        /*for( auto segment : mDemandSegments ) {
             const string segmentMarketName = segment->mName;
             marketplace->setPrice( segmentMarketName, mRegionName, avgCost, aPeriod );
-        }
+        }*/
         
         // now that we have the total annual production for each technology we can
         // operate them using the normal equations to calculate input demands and
@@ -487,7 +492,14 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         for( auto currProd : techProd ) {
             auto tech = currProd.first;
             auto techMarket = mAllTechMarketMap[ tech ];
-            tech->production( techMarket.second, techMarket.first, currProd.second, 1.0, aGDP, aPeriod );
+            // in the calibration periods we need to match actual historical outputs
+            // so override the dispatch production values with calibration
+            // note however that the dispatch in the calibration periods is still used
+            // to set the price of electricity
+            double currOutput = aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod() ?
+                tech->getCalibrationOutput(false, "", aPeriod ) :
+                currProd.second;
+            tech->production( techMarket.second, techMarket.first, currOutput, 1.0, aGDP, aPeriod );
         }
         
         // TODO: the following is assuming the market name for the capacity credits
