@@ -15,8 +15,7 @@ module_gcamusa_batch_wind_reeds_USA_xml <- function(command, ...) {
     return(c("L2237.SmthRenewRsrcCurves_wind_reeds_USA",
              "L2237.SmthRenewRsrcTechChange_wind_reeds_USA",
              "L2237.StubTechCost_wind_reeds_USA",
-             "L2237.ResTechShrwt_wind_reeds_USA",
-             "L2237.TechPmult_dispatch_wind_reeds_USA"))
+             "L2237.ResTechShrwt_wind_reeds_USA"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "wind_reeds_USA.xml"))
   } else if(command == driver.MAKE) {
@@ -30,30 +29,22 @@ module_gcamusa_batch_wind_reeds_USA_xml <- function(command, ...) {
     L2237.SmthRenewRsrcTechChange_wind_reeds_USA <- get_data(all_data, "L2237.SmthRenewRsrcTechChange_wind_reeds_USA")
     L2237.StubTechCost_wind_reeds_USA <- get_data(all_data, "L2237.StubTechCost_wind_reeds_USA")
     L2237.ResTechShrwt_wind_reeds_USA <- get_data(all_data, "L2237.ResTechShrwt_wind_reeds_USA")
-    L2237.TechPmult_dispatch_wind_reeds_USA <- get_data(all_data, "L2237.TechPmult_dispatch_wind_reeds_USA")
+
     # ===================================================
     # Produce outputs
 
     create_xml("wind_reeds_USA.xml") %>%
       add_xml_data(L2237.SmthRenewRsrcCurves_wind_reeds_USA, "SmthRenewRsrcCurves") %>%
-      add_xml_data_generate_levels(L2237.StubTechCapFactor_wind_reeds_USA %>%
-                                     rename(stub.technology = technology),
-                                   "StubTechCapFactor","subsector","nesting-subsector", 1, FALSE) %>%
       add_xml_data(L2237.SmthRenewRsrcTechChange_wind_reeds_USA, "SmthRenewRsrcTechChange") %>%
-      add_xml_data_generate_levels(L2237.StubTechCost_wind_reeds_USA %>%
-                                     rename(stub.technology = technology),
-                                   "StubTechCost","subsector","nesting-subsector", 1, FALSE) %>%
-      add_xml_data(rename(L2237.TechPmult_dispatch_wind_reeds_USA,
-                          dispatch.sector = supplysector,
-                          capacity.technology = technology), "CapacityTechInputPMult") %>%
+      add_xml_data_generate_levels(L2237.StubTechCost_wind_reeds_USA, "StubTechCost",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
       add_node_equiv_xml("resource") %>%
       add_node_equiv_xml("subresource") %>%
       add_xml_data(L2237.ResTechShrwt_wind_reeds_USA, "ResTechShrwt") %>%
       add_precursors("L2237.SmthRenewRsrcCurves_wind_reeds_USA",
                      "L2237.SmthRenewRsrcTechChange_wind_reeds_USA",
                      "L2237.StubTechCost_wind_reeds_USA",
-                     "L2237.ResTechShrwt_wind_reeds_USA",
-                     "L2237.TechPmult_dispatch_wind_reeds_USA") ->
+                     "L2237.ResTechShrwt_wind_reeds_USA") ->
       wind_reeds_USA.xml
 
     return_data(wind_reeds_USA.xml)

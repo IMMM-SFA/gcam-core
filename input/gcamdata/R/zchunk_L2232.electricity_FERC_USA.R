@@ -28,6 +28,7 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",
              FILE = "energy/A23.sector",
+             FILE = "gcam-usa/A23.elec_delete",
              FILE = "gcam-usa/A232.structure",
              "L102.load_segments_gcamusa",
              "L123.in_EJ_state_ownuse_elec",
@@ -68,6 +69,7 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
     # Load required inputs
     states_subregions <- get_data(all_data, "gcam-usa/states_subregions")
     A23.sector <- get_data(all_data, "energy/A23.sector", strip_attributes = TRUE)
+    A23.elec_delete <- get_data(all_data, "gcam-usa/A23.elec_delete", strip_attributes = TRUE)
     A232.structure <- get_data(all_data, "gcam-usa/A232.structure", strip_attributes = TRUE)
     L123.in_EJ_state_ownuse_elec <- get_data(all_data, "L123.in_EJ_state_ownuse_elec")
     L123.out_EJ_state_ownuse_elec <- get_data(all_data, "L123.out_EJ_state_ownuse_elec")
@@ -86,9 +88,8 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
     # PART 1: THE USA REGION
     # L2232.DeleteSupplysector_USAelec: Remove the electricity sectors of the USA region (incl. net_ownuse)
     # Remove the USA electricity sector, and replace with electricity trade
-    tibble(region = gcam.USA_REGION,
-           supplysector = c("electricity", "electricity_net_ownuse")) ->
-      L2232.DeleteSupplysector_USAelec
+    A23.elec_delete %>%
+      mutate(region = gcam.USA_REGION) -> L2232.DeleteSupplysector_USAelec
 
     # L2232.Supplysector_USAelec: supplysector for electricity trade sector in the USA region,
     # including logit exponent between grid regions
@@ -691,7 +692,8 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       add_title("Remove the electricity and net ownuse sectors of the USA region") %>%
       add_units("Unitless") %>%
       add_comments("Remove the USA electricity supply sectors, and replace with electricity trade") %>%
-      add_legacy_name("L2232.DeleteSupplysector_USAelec") ->
+      add_legacy_name("L2232.DeleteSupplysector_USAelec") %>%
+      add_precursors("gcam-usa/A23.elec_delete") ->
       L2232.DeleteSupplysector_USAelec
 
     L2232.Supplysector_USAelec %>%

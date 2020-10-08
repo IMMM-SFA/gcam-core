@@ -10,11 +10,11 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA},
-#' \code{L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA}, \code{L2238.RenewRsrc_PV_reeds_USA},
+#' \code{L2238.DeleteInput_dispatch_PV_reeds_USA}, \code{L2238.RenewRsrc_PV_reeds_USA},
 #' \code{L2238.GrdRenewRsrcCurves_PV_reeds_USA}, \code{L2238.GrdRenewRsrcMax_PV_reeds_USA},
-#' \code{L2238.StubTechEffFlag_investment_PV_reeds_USA}, \code{L2238.StubTechEffFlag_dispatch_PV_reeds_USA},
+#' \code{L2238.StubTechEffFlag_investment_PV_reeds_USA}, \code{L2238.TechEff_Dispatch_PV_reeds_USA},
 #' \code{L2238.RenewRsrcTechChange_PV_reeds_USA}, and \code{L2238.StubTechCost_PV_reeds_USA},
-#' \code{L2238.ResTechShrwt_PV_reeds_USA}, \code{L2238.StubTechPmultFlag_dispatch_PV_reeds_USA}.
+#' \code{L2238.ResTechShrwt_PV_reeds_USA}, \code{L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA}.
 #' The corresponding file in the original data system was \code{L2238.PV_reeds_USA.R} (gcam-usa level2).
 #' @details Create state-level solar PV resource supply curves
 #' @importFrom assertthat assert_that
@@ -42,16 +42,16 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
              'L223.GlobalIntTechOMfixed_elec'))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA",
-             "L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA",
+             "L2238.DeleteInput_dispatch_PV_reeds_USA",
              "L2238.RenewRsrc_PV_reeds_USA",
              "L2238.GrdRenewRsrcCurves_PV_reeds_USA",
              "L2238.GrdRenewRsrcMax_PV_reeds_USA",
              "L2238.StubTechEffFlag_investment_PV_reeds_USA",
-             "L2238.StubTechEffFlag_dispatch_PV_reeds_USA",
+             "L2238.TechEff_Dispatch_PV_reeds_USA",
              "L2238.RenewRsrcTechChange_PV_reeds_USA",
              "L2238.StubTechCost_PV_reeds_USA",
              "L2238.ResTechShrwt_PV_reeds_USA",
-             "L2238.StubTechPmultFlag_dispatch_PV_reeds_USA"))
+             "L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -406,7 +406,7 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
       filter(region %in% states_list_curve,
              grepl("PV", stub.technology)) %>%
       mutate(minicam.energy.input = "global solar resource") %>%
-      select(region, supplysector, subsector, stub.technology, year, minicam.energy.input) ->
+      select(region, supplysector, subsector0, subsector, stub.technology, year, minicam.energy.input) ->
       L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA
 
     # Table to delete global solar resource minicam-energy-input in dispatch segments
@@ -415,7 +415,7 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
              grepl("PV", technology)) %>%
       mutate(minicam.energy.input = "global solar resource") %>%
       select(region, supplysector, subsector, technology, year, minicam.energy.input) ->
-      L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA
+      L2238.DeleteInput_dispatch_PV_reeds_USA
 
     # Table to read in energy inputs at the technology level in investment segment
     L223.StubTechMarket_Investment %>%
@@ -426,8 +426,9 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
              efficiency = 1,
              # Hard code in type "Resource" for intermittent technology resource input only
              flag = "Resource") %>%
-      select(region, supplysector, subsector, stub.technology, year,
-             minicam.energy.input, efficiency, market.name, flag) -> L2238.StubTechEffFlag_investment_PV_reeds_USA
+      select(region, supplysector, subsector0, subsector, stub.technology, year,
+             minicam.energy.input, efficiency, market.name, flag) ->
+      L2238.StubTechEffFlag_investment_PV_reeds_USA
 
     # Table to read in energy inputs at the technology level in dispatch segment
     L223.TechEff_Dispatch %>%
@@ -439,7 +440,8 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
              # Hard code in type "Resource" for intermittent technology resource input only
              flag = "Resource") %>%
       select(region, supplysector, subsector, technology, year,
-             minicam.energy.input, efficiency, market.name, flag) -> L2238.StubTechEffFlag_dispatch_PV_reeds_USA
+             minicam.energy.input, efficiency, market.name, flag) ->
+      L2238.TechEff_Dispatch_PV_reeds_USA
 
     # Table to add pMul = 0.01 for capacity-technology PV resource
     L223.TechEff_Dispatch %>%
@@ -447,8 +449,9 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
              grepl("PV", technology )) %>%
       mutate(minicam.energy.input = "PV_resource",
              price.unit.conversion = 0.01) %>%
-      select(region, supplysector, subsector, technology, year,
-             minicam.energy.input, price.unit.conversion) -> L2238.StubTechPmultFlag_dispatch_PV_reeds_USA
+      select(region,  dispatch.sector = supplysector, subsector, capacity.technology = technology,
+             year, minicam.energy.input, price.unit.conversion) ->
+      L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA
 
     # Copying tech change to all states and filtering out only the contiguous states
     L2238.RenewRsrcTechChange_PV_reeds_USA <- write_to_all_states(L2238.PV_curve_tech_change, c("region", "year","tech.change"))
@@ -467,8 +470,8 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
     L223.StubTechMarket_Investment %>%
       filter(region %in% states_list_CF,
              grepl("PV", stub.technology )) %>%
-      select(region, supplysector, subsector, stub.technology, year) %>%
-      mutate(minicam.non.energy.input = "regional price adjustment") %>%
+      select(region, supplysector, subsector0, subsector, stub.technology, year) %>%
+      mutate(minicam.non.energy.input = "grid connection cost") %>%
       left_join_error_no_match(L2238.grid_cost, by = c("region" = "State")) %>%
       rename(input.cost = grid.cost) %>%
       filter(!is.na(input.cost)) -> L2238.StubTechCost_PV_reeds_USA
@@ -486,26 +489,6 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
       anti_join(A10.renewable_resource_delete, by = c("region", "resource" = "resource_elec_subsector")) %>%
       select(LEVEL2_DATA_NAMES[["ResTechShrwt"]]) ->
       L2238.ResTechShrwt_PV_reeds_USA
-
-
-    # # To account for new nesting-subsector structure and to add cooling technologies, we must expand certain outputs
-    # add_cooling_techs <- function(data){
-    #   data_new <- data %>%
-    #     left_join(A23.elecS_tech_mapping_cool,
-    #               by=c("stub.technology"="Electric.sector.technology",
-    #                    "supplysector"="Electric.sector","subsector")) %>%
-    #     select(-technology,-subsector_1)%>%
-    #     rename(technology = to.technology,
-    #            subsector0 = subsector,
-    #            subsector = stub.technology)%>%
-    #     arrange(region,year)
-    #   return(data_new)
-    # }
-    #
-    # L2238.DeleteStubTechMinicamEnergyInput_PV_reeds_USA <- add_cooling_techs(L2238.DeleteStubTechMinicamEnergyInput_PV_reeds_USA)
-    # L2238.StubTechEffFlag_PV_reeds_USA <- add_cooling_techs(L2238.StubTechEffFlag_PV_reeds_USA)
-    # L2238.StubTechCapFactor_PV_reeds_USA <- add_cooling_techs(L2238.StubTechCapFactor_PV_reeds_USA)
-    # L2238.StubTechCost_PV_reeds_USA <- add_cooling_techs(L2238.StubTechCost_PV_reeds_USA)
 
 
     # ===================================================
@@ -527,7 +510,7 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
                     'L223.GlobalIntTechOMfixed_elec') ->
       L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA
 
-    L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA %>%
+    L2238.DeleteInput_dispatch_PV_reeds_USA %>%
       add_title("Delete global solar resource Energy Input for PV Technologies in dispatch sector") %>%
       add_units("NA") %>%
       add_comments("global solar resource input deleted; will be replaced by PV_resource") %>%
@@ -540,7 +523,7 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
                      'L223.GlobalTechCapital_Investment',
                      'L223.GlobalIntTechCapital_elec',
                      'L223.GlobalIntTechOMfixed_elec') ->
-      L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA
+      L2238.DeleteInput_dispatch_PV_reeds_USA
 
     L2238.RenewRsrc_PV_reeds_USA %>%
       add_title("Market Information for Solar PV Resources") %>%
@@ -585,21 +568,21 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
       same_precursors_as("L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA") ->
       L2238.StubTechEffFlag_investment_PV_reeds_USA
 
-    L2238.StubTechEffFlag_dispatch_PV_reeds_USA %>%
+    L2238.TechEff_Dispatch_PV_reeds_USA %>%
       add_title("Market Information for Solar PV Technologies in dispatch") %>%
       add_units("unitless") %>%
       add_comments("Only applies to 45 states in ReEDS PV data set") %>%
       add_legacy_name("L2238.StubTechEffFlag_PV_USA_reeds") %>%
-      same_precursors_as("L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA") ->
-      L2238.StubTechEffFlag_dispatch_PV_reeds_USA
+      same_precursors_as("L2238.DeleteInput_dispatch_PV_reeds_USA") ->
+      L2238.TechEff_Dispatch_PV_reeds_USA
 
-    L2238.StubTechPmultFlag_dispatch_PV_reeds_USA %>%
+    L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA %>%
       add_title("Market Information for Solar PV Technologies in dispatch") %>%
       add_units("unitless") %>%
       add_comments("Only applies to 45 states in ReEDS PV data set") %>%
-      add_legacy_name("L2238.StubTechPmultFlag_dispatch_PV_reeds_USA") %>%
-      same_precursors_as("L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA") ->
-      L2238.StubTechPmultFlag_dispatch_PV_reeds_USA
+      add_legacy_name("L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA") %>%
+      same_precursors_as("L2238.DeleteInput_dispatch_PV_reeds_USA") ->
+      L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA
 
     L2238.RenewRsrcTechChange_PV_reeds_USA %>%
       add_title("Technological Change Parameter for Solar PV Resources") %>%
@@ -638,16 +621,16 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
 
 
     return_data(L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA,
-                L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA,
+                L2238.DeleteInput_dispatch_PV_reeds_USA,
                 L2238.RenewRsrc_PV_reeds_USA,
                 L2238.GrdRenewRsrcCurves_PV_reeds_USA,
                 L2238.GrdRenewRsrcMax_PV_reeds_USA,
                 L2238.StubTechEffFlag_investment_PV_reeds_USA,
-                L2238.StubTechEffFlag_dispatch_PV_reeds_USA,
+                L2238.TechEff_Dispatch_PV_reeds_USA,
                 L2238.RenewRsrcTechChange_PV_reeds_USA,
                 L2238.StubTechCost_PV_reeds_USA,
                 L2238.ResTechShrwt_PV_reeds_USA,
-                L2238.StubTechPmultFlag_dispatch_PV_reeds_USA)
+                L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA)
 
   } else {
     stop("Unknown command")

@@ -8,7 +8,7 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L2244.StubTechSCurve_nuc_gen2_USA}.
+#' the generated outputs: \code{L2244.CapacityTech_nuc_gen2_USA}, \code{L2244.TechSCurve_nuc_gen2_USA}.
 #' The corresponding file in the original data system was \code{L2244.nuclear_USA.R} (gcam-usa level2).
 #' @details This chunk creates an add-on file to update nuclear assumptions in GCAM-USA. Specifically, it reads in state-specific
 #' s-curve retirement functions and lifetimes for existing nuclear vintage, based on planned retirements by state and nuclear power plant.
@@ -24,9 +24,12 @@ module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
              FILE = "gcam-usa/A23.elecS_tech_mapping",
              FILE = "gcam-usa/A23.elecS_tech_mapping_cool",
              FILE = "gcam-usa/usa_seawater_states_basins",
-             FILE = "gcam-usa/A23.elecS_tech_availability"))
+             FILE = "gcam-usa/A23.elecS_tech_availability",
+             "L223.CapacityTech",
+             "L223.Production_Dispatch"))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L2244.StubTechSCurve_nuc_gen2_USA"))
+    return(c("L2244.CapacityTech_nuc_gen2_USA",
+             "L2244.TechSCurve_nuc_gen2_USA"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -42,8 +45,11 @@ module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
     A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool")
     A23.elecS_tech_availability <- get_data(all_data, "gcam-usa/A23.elecS_tech_availability")
     usa_seawater_states_basins <- get_data(all_data, "gcam-usa/usa_seawater_states_basins")
+    L223.CapacityTech <- get_data(all_data, "L223.CapacityTech", strip_attributes = TRUE)
+    L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
 
     # -----------------------------------------------------------------------------
+
     # Function to evaluate the output fraction for a smooth s-curve retirement function as coded in the model.
     evaluate_smooth_s_curve <- function(steepness, half.life, t) {
       1 / (1 + exp(steepness * (t - half.life)))
@@ -62,12 +68,12 @@ module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
 
     # Prepare a table by state, year, and desired nuc_gen2 generation in EJ.
     nuc_gen2 %>%
-      gather(year, gen, -region, -plant, -Units) %>%
-      mutate(year = as.integer(year))  %>%
+      gather_years() %>%
+      mutate(year = as.integer(year)) %>%
       filter(year >= max(HISTORICAL_YEARS)) %>%
       mutate(time = year - max(HISTORICAL_YEARS)) %>%
       group_by(region, year, time) %>%
-      summarise(gen = sum(gen)) %>%
+      summarise(gen = sum(value)) %>%
       ungroup() %>%
       arrange(region, year) ->
       L2244.nuc_gen2_gen
@@ -80,13 +86,12 @@ module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
       select(region, lifetime = time) ->
       L2244.nuc_gen2_lifetime
 
-
     # Loop into states and find s-curve parameters such that the error between actual and calculated data is minimized
     L2244.nuc_gen2_s_curve_parameters <- list()
 
     for (L2244.state in unique(L2244.nuc_gen2_gen$region)) {
 
-    L2244.nuc_gen2_gen %>%
+      L2244.nuc_gen2_gen %>%
         filter(region == L2244.state) %>%
         rename(data = gen) ->
         L2244.nuc_gen2_gen_state
@@ -104,62 +109,44 @@ module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
     # Need to correct for negative coefficients.
     # This is rather arbitrary assumptions for now since VT is the only state with negative coefficinets and they retire capacity too soon.
     # The assumed parameters seemed to make the most sense.
-
     bind_rows(L2244.nuc_gen2_s_curve_parameters) %>%
       mutate(half.life = replace(half.life, half.life <= 0, 0),
              steepness = replace(steepness, steepness <= 0, 0.6)) ->
       L2244.nuc_gen2_s_curve_parameters
 
     # Prepare table to read in s-curve parameters for base-year nuclear Gen II technology.
-    # L2244.StubTechSCurve_elecS_nuc_gen2: S-curve shutdown decider for historic U.S. nuclear plants
-
-    A23.elecS_tech_mapping %>%
-      anti_join(A23.elecS_tech_availability, by = c("Electric.sector.technology" = "stub.technology")) %>%
-      filter(subsector == "nuclear") %>%
-      select(Electric.sector, subsector, Electric.sector.technology) ->
-      L2244.nuc_stubtech
-
-    L2244.nuc_stubtech %>%
-      filter(!grepl("Gen III", Electric.sector.technology)) %>%
-      repeat_add_columns(tibble(region = unique(L2244.nuc_gen2_gen$region))) %>%
+    # L2244.TechSCurve_nuc_gen2_USA: S-curve shutdown decider for historic U.S. nuclear plants
+    L223.Production_Dispatch %>%
+      filter(grepl("Gen_II_LWR", technology),
+             year == max(MODEL_BASE_YEARS),
+             calOutputValue > 0) %>%
+      select(region, supplysector, subsector, technology, year) %>%
       left_join_error_no_match(L2244.nuc_gen2_s_curve_parameters, by = "region") %>%
       # Oregon (OR) has zero generation in the last historical period, thus no lifetime data
       # left_join_error_no_match throws error due to NA for Oregon, so left_join is used instead
-      left_join(L2244.nuc_gen2_lifetime, by = "region") %>%
-      filter(!is.na(lifetime)) %>%
-      mutate(year = max(MODEL_BASE_YEARS)) %>%
-      rename(supplysector = Electric.sector, stub.technology = Electric.sector.technology) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechSCurve"]]) ->
-      L2244.StubTechSCurve_nuc_gen2_USA
+      left_join_error_no_match(L2244.nuc_gen2_lifetime, by = "region") %>%
+      select(LEVEL2_DATA_NAMES[["TechSCurve"]]) ->
+      L2244.TechSCurve_nuc_gen2_USA
 
+    L223.CapacityTech %>%
+      filter(grepl("Gen_II_LWR", capacity.technology),
+             year == max(MODEL_BASE_YEARS),
+             capacity > 0) ->
+    L2244.CapacityTech_nuc_gen2_USA
 
-    ## To account for new nesting-subsector structure and to add cooling technologies, we must expand certain outputs
-
-    # Define unique states and basins that have access to seawater that will
-    # allow for seawate cooling
-
-    seawater_states_basins <- unique(usa_seawater_states_basins$seawater_region)
-
-    add_cooling_techs <- function(data){
-      data %>%
-        left_join(A23.elecS_tech_mapping_cool,
-                  by=c("stub.technology"="Electric.sector.technology",
-                       "supplysector"="Electric.sector","subsector")) %>%
-        select(-technology,-subsector_1)%>%
-        rename(technology = to.technology,
-               subsector0 = subsector,
-               subsector = stub.technology) -> data_new
-
-      data_new %>% filter(grepl(gcamusa.WATER_TYPE_SEAWATER,technology)) %>% filter((region %in% seawater_states_basins)) %>%
-        bind_rows(data_new %>% filter(!grepl(gcamusa.WATER_TYPE_SEAWATER,technology))) %>%
-        arrange(region,year) -> data_new
-      return(data_new)
-    }
-      L2244.StubTechSCurve_nuc_gen2_USA <- add_cooling_techs(L2244.StubTechSCurve_nuc_gen2_USA)
 
     # -----------------------------------------------------------------------------
+
     # Produce outputs
-    L2244.StubTechSCurve_nuc_gen2_USA %>%
+
+    L2244.CapacityTech_nuc_gen2_USA %>%
+      add_title("Dispatch technology capacity for state nuclear gen II plants") %>%
+      add_units("EJ") %>%
+      add_comments("Set technology capacity for state nuclear gen II plants") %>%
+      add_precursors("L223.CapacityTech") ->
+      L2244.CapacityTech_nuc_gen2_USA
+
+    L2244.TechSCurve_nuc_gen2_USA %>%
       add_title("S-curve shutdown decider for historic U.S. nuclear plants") %>%
       add_units("Unitless") %>%
       add_comments("Lifetime for Gen II technology by state is calculated based on first year of zero generation in each state.") %>%
@@ -169,10 +156,12 @@ module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
                      "gcam-usa/A23.elecS_tech_availability",
                      "gcam-usa/A23.elecS_tech_mapping_cool",
                      "gcam-usa/usa_seawater_states_basins",
-                     "gcam-usa/A23.elecS_tech_mapping") ->
-      L2244.StubTechSCurve_nuc_gen2_USA
+                     "gcam-usa/A23.elecS_tech_mapping",
+                     "L223.Production_Dispatch") ->
+      L2244.TechSCurve_nuc_gen2_USA
 
-    return_data(L2244.StubTechSCurve_nuc_gen2_USA)
+    return_data(L2244.CapacityTech_nuc_gen2_USA,
+                L2244.TechSCurve_nuc_gen2_USA)
 
   } else {
     stop("Unknown command")

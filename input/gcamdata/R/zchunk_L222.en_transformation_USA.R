@@ -346,7 +346,10 @@ module_gcamusa_L222.en_transformation_USA <- function(command, ...) {
                                  by = c("region" = "state")) %>%
         mutate(market.name = if_else(minicam.energy.input %in% gcamusa.REGIONAL_FUEL_MARKETS,
                                      grid_region, market.name)) %>%
-        select(-grid_region) -> L222.StubTechMarket_en_USA
+        select(-grid_region) %>%
+        # biomass is consumed from state-level sectors
+        mutate(market.name = if_else(minicam.energy.input %in% gcamusa.STATE_BIOMASS_SECTORS,
+                                     region, market.name)) -> L222.StubTechMarket_en_USA
 
       # Finish L222.StubTechMarket_en_USA by Setting electricity to the state markets
       L222.StubTechMarket_en_USA %>%

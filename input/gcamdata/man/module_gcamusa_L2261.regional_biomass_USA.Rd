@@ -20,9 +20,7 @@ the generated outputs: \code{L2261.DeleteSupplysector_bio_USA}, \code{L2261.Supp
 \code{L2261.StubTechFractSecOut_bio_USA}, \code{L2261.StubTechFractProd_bio_USA}, \code{L2261.Rsrc_DDGS_USA},
 \code{L2261.RsrcPrice_DDGS_USA}, \code{L2261.Tech_rbm_USA}, \code{L2261.TechShrwt_rbm_USA},
 \code{L2261.TechCoef_rbm_USA}, \code{L2261.Tech_dbm_USA}, \code{L2261.TechShrwt_dbm_USA}, \code{L2261.TechEff_Cal_USA},
-\code{L2261.TechEff_dbm_USA}, \code{L2261.TechCost_dbm_USA}, \code{L2261.CarbonCoef_bio_USA},
-\code{L2261.StubTechMarket_en_USA}, \code{L2261.StubTechMarket_Investment_USA}, \code{L2261.TechEff_Dispatch_USA},
-\code{L2261.StubTechMarket_ind_USA}, \code{L2261.StubTechMarket_cement_USA}, \code{L2261.StubTechMarket_bld_USA}.
+\code{L2261.TechEff_dbm_USA}, \code{L2261.TechCost_dbm_USA}, \code{L2261.CarbonCoef_bio_USA}.
 The corresponding file in the original data system was \code{L2261.regional_biomass_USA.R} (gcam-usa level2).
 }
 \description{

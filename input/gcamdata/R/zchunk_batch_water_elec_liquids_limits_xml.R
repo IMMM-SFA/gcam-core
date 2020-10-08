@@ -10,7 +10,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{water_elec_liquids_limits.xml}. The corresponding file in the
 #' original data system was \code{batch_water_elec_liquids_limits_xml.R} (water XML).
-disabled_module_water_batch_water_elec_liquids_limits_xml <- function(command, ...) {
+module_water_batch_water_elec_liquids_limits_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2233.DeleteCreditInput_elec",
               "L2233.CreditInput_elec"))

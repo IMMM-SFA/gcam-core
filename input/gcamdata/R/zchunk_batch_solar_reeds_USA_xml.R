@@ -13,14 +13,13 @@
 module_gcamusa_batch_solar_reeds_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA",
-             "L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA",
+             "L2238.DeleteInput_dispatch_PV_reeds_USA",
              "L2238.RenewRsrc_PV_reeds_USA",
              "L2238.GrdRenewRsrcCurves_PV_reeds_USA",
              "L2238.GrdRenewRsrcMax_PV_reeds_USA",
              "L2238.StubTechEffFlag_investment_PV_reeds_USA",
-             "L2238.StubTechEffFlag_dispatch_PV_reeds_USA",
-             "L2238.StubTechPmultFlag_dispatch_PV_reeds_USA",
-             # "L2238.StubTechCapFactor_PV_reeds_USA",
+             "L2238.TechEff_Dispatch_PV_reeds_USA",
+             "L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA",
              "L2238.RenewRsrcTechChange_PV_reeds_USA",
              "L2238.StubTechCost_PV_reeds_USA",
              "L2238.ResTechShrwt_PV_reeds_USA",
@@ -33,7 +32,6 @@ module_gcamusa_batch_solar_reeds_USA_xml <- function(command, ...) {
              "L2239.StubTechEffFlag_investment_CSP_reeds_USA",
              "L2239.StubTechEffFlag_dispatch_CSP_reeds_USA",
              "L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA",
-             # "L2239.StubTechCapFactor_CSP_reeds_USA",
              "L2239.RenewRsrcTechChange_CSP_reeds_USA",
              "L2239.StubTechCost_CSP_reeds_USA",
              "L2239.ResTechShrwt_CSP_reeds_USA"))
@@ -47,17 +45,17 @@ module_gcamusa_batch_solar_reeds_USA_xml <- function(command, ...) {
 
     # Load required inputs
     L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA <- get_data(all_data,"L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA")
-    L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA <- get_data(all_data, "L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA")
+    L2238.DeleteInput_dispatch_PV_reeds_USA <- get_data(all_data, "L2238.DeleteInput_dispatch_PV_reeds_USA")
     L2238.RenewRsrc_PV_reeds_USA <- get_data(all_data, "L2238.RenewRsrc_PV_reeds_USA")
     L2238.GrdRenewRsrcCurves_PV_reeds_USA <- get_data(all_data, "L2238.GrdRenewRsrcCurves_PV_reeds_USA")
     L2238.GrdRenewRsrcMax_PV_reeds_USA <- get_data(all_data, "L2238.GrdRenewRsrcMax_PV_reeds_USA")
     L2238.StubTechEffFlag_investment_PV_reeds_USA <- get_data(all_data, "L2238.StubTechEffFlag_investment_PV_reeds_USA")
-    L2238.StubTechEffFlag_dispatch_PV_reeds_USA <- get_data(all_data, "L2238.StubTechEffFlag_dispatch_PV_reeds_USA")
-    L2238.StubTechPmultFlag_dispatch_PV_reeds_USA <- get_data(all_data, "L2238.StubTechPmultFlag_dispatch_PV_reeds_USA")
-    # L2238.StubTechCapFactor_PV_reeds_USA <- get_data(all_data, "L2238.StubTechCapFactor_PV_reeds_USA")
+    L2238.TechEff_Dispatch_PV_reeds_USA <- get_data(all_data, "L2238.TechEff_Dispatch_PV_reeds_USA")
+    L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA <- get_data(all_data, "L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA")
     L2238.RenewRsrcTechChange_PV_reeds_USA <- get_data(all_data, "L2238.RenewRsrcTechChange_PV_reeds_USA")
     L2238.StubTechCost_PV_reeds_USA <- get_data(all_data, "L2238.StubTechCost_PV_reeds_USA")
     L2238.ResTechShrwt_PV_reeds_USA <- get_data(all_data, "L2238.ResTechShrwt_PV_reeds_USA")
+
     L2239.DeleteUnlimitRsrc_reeds_USA <- get_data(all_data, "L2239.DeleteUnlimitRsrc_reeds_USA")
     L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA <- get_data(all_data, "L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA")
     L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA <- get_data(all_data, "L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA")
@@ -67,7 +65,6 @@ module_gcamusa_batch_solar_reeds_USA_xml <- function(command, ...) {
     L2239.StubTechEffFlag_investment_CSP_reeds_USA <- get_data(all_data, "L2239.StubTechEffFlag_investment_CSP_reeds_USA")
     L2239.StubTechEffFlag_dispatch_CSP_reeds_USA <- get_data(all_data, "L2239.StubTechEffFlag_dispatch_CSP_reeds_USA")
     L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA <- get_data(all_data, "L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA")
-    # L2239.StubTechCapFactor_CSP_reeds_USA <- get_data(all_data, "L2239.StubTechCapFactor_CSP_reeds_USA")
     L2239.RenewRsrcTechChange_CSP_reeds_USA <- get_data(all_data, "L2239.RenewRsrcTechChange_CSP_reeds_USA")
     L2239.StubTechCost_CSP_reeds_USA <- get_data(all_data, "L2239.StubTechCost_CSP_reeds_USA")
     L2239.ResTechShrwt_CSP_reeds_USA <- get_data(all_data, "L2239.ResTechShrwt_CSP_reeds_USA")
@@ -75,57 +72,60 @@ module_gcamusa_batch_solar_reeds_USA_xml <- function(command, ...) {
     # ===================================================
     # Produce outputs
 
+    # Rename columns in two dispatch sector | capacity technology tables
+    # Note that these tables are not stub.technology tables (not connected to the global tech db)
+    # However, because we've set up the node equivalance, we can print into to XML correctly this
+    # way without adding a new LEVEL2DATANAMES for CapacityTechEffFlag
+    L2239.StubTechEffFlag_dispatch_CSP_reeds_USA %>%
+      rename(stub.technology = technology) ->
+      L2239.StubTechEffFlag_dispatch_CSP_reeds_USA
+
+    L2238.TechEff_Dispatch_PV_reeds_USA %>%
+      rename(stub.technology = technology) ->
+      L2238.TechEff_Dispatch_PV_reeds_USA
+
     create_xml("solar_reeds_USA.xml") %>%
       add_node_equiv_xml("sector") %>%
       add_node_equiv_xml("technology") %>%
-      add_xml_data(L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA, "DeleteStubTechMinicamEnergyInput", "subsector", "nesting-subsector", 1, FALSE) %>%
-      add_xml_data(rename(L2238.StubTechPmultFlag_dispatch_PV_reeds_USA,
-                          dispatch.sector = supplysector,
-                          capacity.technology = technology), "CapacityTechInputPMult") %>%
-      add_xml_data(L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA, "DeleteInput") %>%
+      add_xml_data_generate_levels(L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA, "DeleteStubTechMinicamEnergyInput",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data(L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA, "CapacityTechInputPMult") %>%
+      add_xml_data(L2238.DeleteInput_dispatch_PV_reeds_USA, "DeleteInput") %>%
       add_xml_data(L2238.RenewRsrc_PV_reeds_USA, "RenewRsrc") %>%
       add_xml_data(L2238.GrdRenewRsrcCurves_PV_reeds_USA, "GrdRenewRsrcCurves") %>%
       add_xml_data(L2238.GrdRenewRsrcMax_PV_reeds_USA, "GrdRenewRsrcMax") %>%
-      add_xml_data(L2238.StubTechEffFlag_investment_PV_reeds_USA, "StubTechEffFlag") %>%
-      add_xml_data(rename(L2238.StubTechEffFlag_dispatch_PV_reeds_USA,
-                          stub.technology = technology), "StubTechEffFlag", "subsector", "nesting-subsector", 1, FALSE) %>%
-      # add_xml_data(L2238.StubTechCapFactor_PV_reeds_USA, "StubTechCapFactor", "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data_generate_levels(L2238.StubTechEffFlag_investment_PV_reeds_USA, "StubTechEffFlag",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data(L2238.TechEff_Dispatch_PV_reeds_USA, "StubTechEffFlag") %>%
       add_xml_data(L2238.RenewRsrcTechChange_PV_reeds_USA, "RenewRsrcTechChange") %>%
-      add_xml_data_generate_levels(L2238.StubTechCost_PV_reeds_USA %>%
-                                     rename(stub.technology = technology),
-                                   "StubTechCost", "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data_generate_levels(L2238.StubTechCost_PV_reeds_USA, "StubTechCost",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
       add_xml_data(L2239.DeleteUnlimitRsrc_reeds_USA, "DeleteUnlimitRsrc") %>%
-      add_xml_data(L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA, "DeleteStubTechMinicamEnergyInput", "subsector", "nesting-subsector", 1, FALSE) %>%
-      add_xml_data(rename(L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA,
-                          dispatch.sector = supplysector,
-                          capacity.technology = technology), "CapacityTechInputPMult") %>%
-      add_xml_data(L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA, "DeleteInput", "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data_generate_levels(L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA, "DeleteStubTechMinicamEnergyInput",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data(L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA, "CapacityTechInputPMult") %>%
+      add_xml_data(L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA, "DeleteInput") %>%
       add_xml_data(L2239.RenewRsrc_CSP_reeds_USA, "RenewRsrc") %>%
       add_xml_data(L2239.GrdRenewRsrcCurves_CSP_reeds_USA, "GrdRenewRsrcCurves") %>%
       add_xml_data(L2239.GrdRenewRsrcMax_CSP_reeds_USA, "GrdRenewRsrcMax") %>%
-      add_xml_data(L2239.StubTechEffFlag_CSP_reeds_USA, "StubTechEffFlag", "subsector", "nesting-subsector", 1, FALSE) %>%
-      add_xml_data(L2239.StubTechCapFactor_CSP_reeds_USA, "StubTechCapFactor", "subsector", "nesting-subsector", 1, FALSE) %>%
-      add_xml_data(L2239.StubTechEffFlag_investment_CSP_reeds_USA, "StubTechEffFlag") %>%
-      add_xml_data(rename(L2239.StubTechEffFlag_dispatch_CSP_reeds_USA,
-                          stub.technology = technology), "StubTechEffFlag") %>%
-      # add_xml_data(L2239.StubTechCapFactor_CSP_reeds_USA, "StubTechCapFactor", NULL) %>%
+      add_xml_data_generate_levels(L2239.StubTechEffFlag_investment_CSP_reeds_USA, "StubTechEffFlag",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data(L2239.StubTechEffFlag_dispatch_CSP_reeds_USA, "StubTechEffFlag") %>%
       add_xml_data(L2239.RenewRsrcTechChange_CSP_reeds_USA, "RenewRsrcTechChange") %>%
-      add_xml_data_generate_levels(L2239.StubTechCost_CSP_reeds_USA %>%
-                                     rename(stub.technology = technology),
-                                   "StubTechCost", "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data_generate_levels(L2239.StubTechCost_CSP_reeds_USA, "StubTechCost",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
       add_node_equiv_xml("resource") %>%
       add_node_equiv_xml("subresource") %>%
       add_xml_data(L2238.ResTechShrwt_PV_reeds_USA, "ResTechShrwt") %>%
       add_xml_data(L2239.ResTechShrwt_CSP_reeds_USA, "ResTechShrwt") %>%
       add_precursors("L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA",
-                     "L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA",
+                     "L2238.DeleteInput_dispatch_PV_reeds_USA",
                      "L2238.RenewRsrc_PV_reeds_USA",
                      "L2238.GrdRenewRsrcCurves_PV_reeds_USA",
                      "L2238.GrdRenewRsrcMax_PV_reeds_USA",
                      "L2238.StubTechEffFlag_investment_PV_reeds_USA",
-                     "L2238.StubTechEffFlag_dispatch_PV_reeds_USA",
-                     "L2238.StubTechPmultFlag_dispatch_PV_reeds_USA",
-                     # "L2238.StubTechCapFactor_PV_reeds_USA",
+                     "L2238.TechEff_Dispatch_PV_reeds_USA",
+                     "L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA",
                      "L2238.RenewRsrcTechChange_PV_reeds_USA",
                      "L2238.StubTechCost_PV_reeds_USA",
                      "L2238.ResTechShrwt_PV_reeds_USA",
@@ -138,7 +138,6 @@ module_gcamusa_batch_solar_reeds_USA_xml <- function(command, ...) {
                      "L2239.StubTechEffFlag_investment_CSP_reeds_USA",
                      "L2239.StubTechEffFlag_dispatch_CSP_reeds_USA",
                      "L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA",
-                     # "L2239.StubTechCapFactor_CSP_reeds_USA",
                      "L2239.RenewRsrcTechChange_CSP_reeds_USA",
                      "L2239.StubTechCost_CSP_reeds_USA",
                      "L2239.ResTechShrwt_CSP_reeds_USA") ->

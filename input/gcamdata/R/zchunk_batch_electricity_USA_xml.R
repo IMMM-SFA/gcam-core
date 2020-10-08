@@ -25,9 +25,12 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L233.GlobalInvestTech_Investment",
              "L223.GlobalTechEff_Investment",
              "L223.StubTechMarket_Investment",
+             "L223.GlobalTechCoef_Investment_cool",
+             "L223.StubTechCoef_Investment_cool",
              "L223.GlobalTechOMfixed_Investment",
              "L223.GlobalTechOMvar_Investment",
              "L223.GlobalTechCapital_Investment",
+             "L223.GlobalTechCapital_elec_Investment_cool",
              "L223.GlobalTechShrwt_Investment",
              "L223.GlobalTechCapFac_Investment",
              "L223.TechCapFac_Investment",
@@ -50,6 +53,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.CapacityTech",
              "L223.TechShrwt_Dispatch",
              "L223.TechEff_Dispatch",
+             "L223.TechCoef_Dispatch_cool",
              "L223.TechOMvar_Dispatch",
              "L223.TechLifetime_Dispatch",
              "L223.TechProfitShutdown_Dispatch",
@@ -59,6 +63,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.Production_Dispatch",
              "L223.TechEff_Cal",
              "L223.TechTrialMarket_Dispatch",
+             "L223.TechPmult_dispatch_wind_reeds_USA",
              "L223.TechTrialMarket_Investment",
              "L223.Sector_Dispatch_Grid",
              "L223.DispatchSectorDispatchSegments",
@@ -108,9 +113,12 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L233.GlobalInvestTech_Investment <- get_data(all_data, "L233.GlobalInvestTech_Investment")
     L223.GlobalTechEff_Investment <- get_data(all_data, "L223.GlobalTechEff_Investment")
     L223.StubTechMarket_Investment <- get_data(all_data, "L223.StubTechMarket_Investment")
+    L223.GlobalTechCoef_Investment_cool <- get_data(all_data, "L223.GlobalTechCoef_Investment_cool")
+    L223.StubTechCoef_Investment_cool <- get_data(all_data, "L223.StubTechCoef_Investment_cool")
     L223.GlobalTechOMfixed_Investment <- get_data(all_data, "L223.GlobalTechOMfixed_Investment")
     L223.GlobalTechOMvar_Investment <- get_data(all_data, "L223.GlobalTechOMvar_Investment")
     L223.GlobalTechCapital_Investment <- get_data(all_data, "L223.GlobalTechCapital_Investment")
+    L223.GlobalTechCapital_elec_Investment_cool <- get_data(all_data, "L223.GlobalTechCapital_elec_Investment_cool")
     L223.GlobalTechShrwt_Investment <- get_data(all_data, "L223.GlobalTechShrwt_Investment")
     L223.GlobalTechCapFac_Investment <- get_data(all_data, "L223.GlobalTechCapFac_Investment")
     L223.TechCapFac_Investment <- get_data(all_data, "L223.TechCapFac_Investment")
@@ -133,6 +141,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.CapacityTech <- get_data(all_data, "L223.CapacityTech")
     L223.TechShrwt_Dispatch <- get_data(all_data, "L223.TechShrwt_Dispatch")
     L223.TechEff_Dispatch <- get_data(all_data, "L223.TechEff_Dispatch")
+    L223.TechCoef_Dispatch_cool <- get_data(all_data, "L223.TechCoef_Dispatch_cool")
     L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch")
     L223.TechLifetime_Dispatch <- get_data(all_data, "L223.TechLifetime_Dispatch")
     L223.TechProfitShutdown_Dispatch <- get_data(all_data, "L223.TechProfitShutdown_Dispatch")
@@ -142,6 +151,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
     L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
     L223.TechTrialMarket_Dispatch <- get_data(all_data, "L223.TechTrialMarket_Dispatch")
+    L223.TechPmult_dispatch_wind_reeds_USA <- get_data(all_data, "L223.TechPmult_dispatch_wind_reeds_USA")
     L223.TechTrialMarket_Investment <- get_data(all_data, "L223.TechTrialMarket_Investment")
     L223.Sector_Dispatch_Grid <- get_data(all_data, "L223.Sector_Dispatch_Grid")
     L223.DispatchSectorDispatchSegments <- get_data(all_data, "L223.DispatchSectorDispatchSegments")
@@ -184,7 +194,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_node_equiv_xml("technology") %>%
       add_logit_tables_xml(L223.Sector_Investment, "Supplysector") %>%
       add_logit_tables_xml_generate_levels(L223.SubsectorLogit_Investment, "SubsectorLogit",
-                           "subsector", "nesting-subsector", 1, FALSE) %>%
+                                           "subsector", "nesting-subsector", 1, FALSE) %>%
       add_xml_data_generate_levels(L223.SubsectorShrwt_Investment, "SubsectorShrwt",
                                    "subsector", "nesting-subsector", 1, FALSE) %>%
       # add_xml_data_generate_levels(L223.SubsectorInterp_Investment, "SubsectorInterp",
@@ -197,9 +207,13 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.GlobalTechEff_Investment, "GlobalTechEff") %>%
       add_xml_data_generate_levels(L223.StubTechMarket_Investment, "StubTechMarket",
                                    "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data(L223.GlobalTechCoef_Investment_cool, "GlobalTechCoef") %>%
+      add_xml_data_generate_levels(L223.StubTechCoef_Investment_cool, "StubTechCoef",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
       add_xml_data(L223.GlobalTechOMfixed_Investment, "GlobalTechOMfixed") %>%
       add_xml_data(L223.GlobalTechOMvar_Investment, "GlobalTechOMvar") %>%
       add_xml_data(L223.GlobalTechCapital_Investment, "GlobalTechCapital") %>%
+      add_xml_data(L223.GlobalTechCapital_elec_Investment_cool, "GlobalTechCapital") %>%
       add_xml_data(L223.GlobalTechShrwt_Investment, "GlobalTechShrwt") %>%
       add_xml_data(L223.GlobalTechCapFac_Investment, "GlobalTechCapFac") %>%
       add_xml_data_generate_levels(L223.TechCapFac_Investment, "TechCapFac",
@@ -232,6 +246,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.CapacityTech, "CapacityTech") %>%
       add_xml_data(L223.TechShrwt_Dispatch, "TechShrwt")  %>%
       add_xml_data(L223.TechEff_Dispatch, "TechEff") %>%
+      add_xml_data(L223.TechCoef_Dispatch_cool, "TechCoef") %>%
       add_xml_data(L223.TechOMvar_Dispatch, "TechOMvar")  %>%
       add_xml_data(L223.TechLifetime_Dispatch, "TechLifetime") %>%
       add_xml_data(L223.TechProfitShutdown_Dispatch, "StubTechProfitShutdown") %>%
@@ -241,6 +256,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.Production_Dispatch, "Production") %>%
       add_xml_data(L223.TechEff_Cal, "TechEff") %>%
       add_xml_data(L223.TechTrialMarket_Dispatch, "CapacityTechTrialMktName") %>%
+      add_xml_data(L223.TechPmult_dispatch_wind_reeds_USA, "CapacityTechInputPMult") %>%
       add_logit_tables_xml(L223.Sector_Dispatch_Grid, "Supplysector") %>%
       add_xml_data(L223.DispatchSectorDispatchSegments, "DispatchSectorDispatchSegments") %>%
       add_xml_data(L223.InterestRate_FERC, "InterestRate") %>%
@@ -278,9 +294,12 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L233.GlobalInvestTech_Investment",
                      "L223.GlobalTechEff_Investment",
                      "L223.StubTechMarket_Investment",
+                     "L223.GlobalTechCoef_Investment_cool",
+                     "L223.StubTechCoef_Investment_cool",
                      "L223.GlobalTechOMfixed_Investment",
                      "L223.GlobalTechOMvar_Investment",
                      "L223.GlobalTechCapital_Investment",
+                     "L223.GlobalTechCapital_elec_Investment_cool",
                      "L223.GlobalTechShrwt_Investment",
                      "L223.GlobalTechCapFac_Investment",
                      "L223.TechCapFac_Investment",
@@ -303,6 +322,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.CapacityTech",
                      "L223.TechShrwt_Dispatch",
                      "L223.TechEff_Dispatch",
+                     "L223.TechCoef_Dispatch_cool",
                      "L223.TechOMvar_Dispatch",
                      "L223.TechLifetime_Dispatch",
                      "L223.TechProfitShutdown_Dispatch",
@@ -312,6 +332,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.Production_Dispatch",
                      "L223.TechEff_Cal",
                      "L223.TechTrialMarket_Dispatch",
+                     "L223.TechPmult_dispatch_wind_reeds_USA",
                      "L223.TechTrialMarket_Investment",
                      "L223.Sector_Dispatch_Grid",
                      "L223.DispatchSectorDispatchSegments",

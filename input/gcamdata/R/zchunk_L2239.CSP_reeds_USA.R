@@ -29,7 +29,6 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
              FILE = 'gcam-usa/reeds_CSP_curve_capacity',
              FILE = 'gcam-usa/reeds_CSP_curve_CF',
              FILE = 'gcam-usa/reeds_CSP_curve_grid_cost',
-             FILE = 'gcam-usa/A23.elecS_tech_mapping_cool',
              FILE = 'gcam-usa/non_reeds_CSP_grid_cost',
              FILE = 'gcam-usa/NREL_us_re_technical_potential',
              FILE = 'gcam-usa/NREL_us_re_capacity_factors',
@@ -38,7 +37,6 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
              'L223.StubTechMarket_Investment',
              'L223.TechEff_Dispatch',
              'L223.GlobalTechCapital_Investment',
-             'L223.GlobalIntTechCapital_elec',
              'L223.GlobalIntTechOMfixed_elec'))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L2239.DeleteUnlimitRsrc_reeds_USA",
@@ -63,13 +61,14 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
     reeds_CSP_curve_capacity <- get_data(all_data, 'gcam-usa/reeds_CSP_curve_capacity')
     reeds_CSP_curve_CF <- get_data(all_data, 'gcam-usa/reeds_CSP_curve_CF')
     reeds_CSP_curve_grid_cost <- get_data(all_data, 'gcam-usa/reeds_CSP_curve_grid_cost')
-    A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool")
+    non_reeds_CSP_grid_cost <- get_data(all_data, 'gcam-usa/non_reeds_CSP_grid_cost')
+    NREL_us_re_technical_potential <- get_data(all_data, 'gcam-usa/NREL_us_re_technical_potential')
+    NREL_us_re_capacity_factors <- get_data(all_data, 'gcam-usa/NREL_us_re_capacity_factors')
     A10.renewable_resource_delete <- get_data(all_data, "gcam-usa/A10.renewable_resource_delete")
     A10.rsrc_info <- get_data(all_data, 'energy/A10.rsrc_info')
     L223.StubTechMarket_Investment <- get_data(all_data, 'L223.StubTechMarket_Investment')
     L223.TechEff_Dispatch <- get_data(all_data, 'L223.TechEff_Dispatch')
     L223.GlobalTechCapital_Investment <- get_data(all_data, 'L223.GlobalTechCapital_Investment')
-    L223.GlobalIntTechCapital_elec <- get_data(all_data, 'L223.GlobalIntTechCapital_elec')
     L223.GlobalIntTechOMfixed_elec <- get_data(all_data, 'L223.GlobalIntTechOMfixed_elec')
 
     # Silence package checks
@@ -88,6 +87,54 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
     # ===================================================
     # Data Processing
 
+    # First, process the states not included in the REEDS data, so they can be easily merged into the ReEDS data
+    # and associated processing pipeline
+
+    # L2239.non_reeds_states: Create a list of states not in the ReEDS data
+    reeds_regions_states %>%
+      distinct(State) -> reeds_states
+
+    states_subregions %>%
+      select(State=state) %>%
+      anti_join(reeds_states, by = "State") %>%
+      pull(State) -> L2239.non_reeds_states
+
+    # L2239.non_reeds_states_CSP_technical_potential: CSP technical potential for non-ReEDS states
+    NREL_us_re_technical_potential %>%
+      # semi-join states_subregions to filter out "TOTAL" row
+      semi_join(states_subregions, by = c("State" = "state_name")) %>%
+      left_join_error_no_match(states_subregions, by = c("State" = "state_name")) %>%
+      select(State = state, CSP_GWh) %>%
+      filter(State %in% L2239.non_reeds_states,
+             CSP_GWh > 0) -> L2239.non_reeds_states_CSP_technical_potential
+
+    # L2239.non_reeds_states_CSP_capacity_factor: CSP capacity factor for non-ReEDS states
+    NREL_us_re_capacity_factors %>%
+      # semi-join states_subregions to filter out "TOTAL" row
+      semi_join(states_subregions, by = c("State" = "state_name")) %>%
+      left_join_error_no_match(states_subregions, by = c("State" = "state_name")) %>%
+      select(State = state, CF = CSP) %>%
+      filter(State %in% L2239.non_reeds_states,
+             CF > 0) -> L2239.non_reeds_states_CSP_capacity_factor
+
+    # L2239.CSP_potential_EJ_non_reeds_states: NREL data set does not include resource class, which is needed for data processing below
+    # Create a Dummy Class for Resource Potential - assume a Class 4 resource, which is the lowest starting class for most other states
+    # Also convert GWh to EJ values
+    L2239.non_reeds_states_CSP_technical_potential %>%
+      select(State, CSP_GWh) %>%
+      mutate(CSP.class = "cspclass4",
+             resource.potential.EJ = CSP_GWh * CONV_GWH_EJ) %>%
+      select(-CSP_GWh) -> L2239.CSP_potential_EJ_non_reeds_states
+
+    # L2239.CSP_CF_non_reeds_states: Process data for capacity factor.
+    # The class data will be joined from the potential table in order to create a capacity factor table by state and class
+    L2239.non_reeds_states_CSP_capacity_factor %>%
+      left_join_error_no_match(L2239.CSP_potential_EJ_non_reeds_states, by = "State") %>%
+      select(State, class = CSP.class, CF) -> L2239.CSP_CF_non_reeds_states
+
+
+    # Second, process ReEDS data and combine with data from other states
+
     # L2239.CSP_CF: Capacity factors for CSP systems by class
     # Calculating average capacity factor by CSP class. Note that capacity factor data by region is not available.
     # Hence we assume same representative capacity factors by class across states.
@@ -95,7 +142,14 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
     reeds_CSP_curve_CF %>%
       group_by(class) %>%
       summarise(CF = mean(CF)) %>%
-      ungroup() -> L2239.CSP_CF
+      ungroup() %>%
+      # map to ReEDS states so that non-ReEDS states can be added later
+      repeat_add_columns(reeds_states) %>%
+      semi_join(states_subregions, by = c("State" = "state")) -> L2239.CSP_CF
+
+    # Merge capacity factor data from non-ReEDS states
+    L2239.CSP_CF %>%
+      bind_rows(L2239.CSP_CF_non_reeds_states) -> L2239.CSP_CF
 
     # L2239.CSP_potential_EJ: Resource potential in EJ by state and class
     # Calculate the resource potential in EJ in each ReEDS region and class my multiplying the
@@ -105,35 +159,39 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
       replace_na(list(cspsc1 = 0, cspsc2 = 0, cspsc3 = 0, cspsc4 = 0, cspsc5 = 0)) %>%
       mutate(resource.potential.MW = cspsc1 + cspsc2 + cspsc3 + cspsc4 + cspsc5) %>%
       select(Region, CSP.class, resource.potential.MW) %>%
-      left_join_error_no_match(L2239.CSP_CF, by = c("CSP.class" = "class")) %>%
-      mutate(resource.potential.EJ = resource.potential.MW * CONV_YEAR_HOURS * CONV_MWH_EJ) %>%
       left_join_error_no_match(reeds_regions_states, by = "Region") %>%
+      left_join_error_no_match(L2239.CSP_CF, by = c("State", "CSP.class" = "class")) %>%
+      mutate(resource.potential.EJ = resource.potential.MW * CONV_YEAR_HOURS * CONV_MWH_EJ) %>%
+      # left_join_error_no_match(reeds_regions_states, by = "Region") %>%
       group_by(State, CSP.class) %>%
       summarise(resource.potential.EJ = sum(resource.potential.EJ)) %>%
       ungroup() -> L2239.CSP_potential_EJ
 
-    # L2239.CSP_matrix: Creating a matrix of costs (1975$/GJ) and resource potential (EJ) by state and class
+    # Merge data with ReEDS potential data
+    L2239.CSP_potential_EJ %>%
+      bind_rows(L2239.CSP_potential_EJ_non_reeds_states) -> L2239.CSP_potential_EJ
 
+    # L2239.CSP_matrix: Creating a matrix of costs (1975$/GJ) and resource potential (EJ) by state and class
     L223.GlobalTechCapital_Investment %>%
-      filter(technology == "CSP" & sector.name == "intermediate electricity",
+      filter(subsector.name == "CSP",
              year == max(MODEL_BASE_YEARS)) %>%
-      select(capital.overnight) -> L2239.CSP_capital
+      distinct(capital.overnight) -> L2239.CSP_capital
     L2239.CSP_capital <- as.numeric(L2239.CSP_capital)
 
-    L223.GlobalIntTechCapital_elec %>%
-      filter(intermittent.technology == "CSP",
-             year == max(MODEL_BASE_YEARS)) %>%
-      select(fixed.charge.rate) -> L2239.fcr
+    L223.GlobalTechCapital_Investment %>%
+      filter(subsector.name == "CSP",
+           year == max(MODEL_BASE_YEARS)) %>%
+      distinct(fixed.charge.rate) -> L2239.fcr
     L2239.fcr <- as.numeric(L2239.fcr)
 
     L223.GlobalIntTechOMfixed_elec %>%
       filter(intermittent.technology == "CSP",
              year == max(MODEL_BASE_YEARS)) %>%
-      select(OM.fixed) -> L2239.CSP_OMfixed
+      distinct(OM.fixed) -> L2239.CSP_OMfixed
     L2239.CSP_OMfixed <- as.numeric(L2239.CSP_OMfixed)
 
     L2239.CSP_potential_EJ %>%
-      left_join_error_no_match(L2239.CSP_CF, by = c("CSP.class" ="class")) %>%
+      left_join_error_no_match(L2239.CSP_CF, by = c("State", "CSP.class" ="class")) %>%
       mutate(capital.overnight = L2239.CSP_capital,
              fcr = L2239.fcr,
              OM.fixed = L2239.CSP_OMfixed,
@@ -175,15 +233,46 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
              # because of the cumulative calculation above.
              available= if_else(grade == "grade 1", 0, available)) -> L2239.CSP_curve
 
+    # L2239.single_grade_states: Determine the list of single grade states
+    L2239.CSP_curve %>%
+      filter(grade == "grade 2") %>%
+      select(State) -> L2239.multi_grade_states
+
+    L2239.CSP_curve %>%
+      distinct(State) %>%
+      anti_join(L2239.multi_grade_states, by = "State") %>%
+      pull(State) -> L2239.single_grade_states
+
+    # L2239.CSP_curve_single_grade: Extract the relevant states from the graded curves
+    L2239.CSP_curve %>%
+      filter(State %in% L2239.single_grade_states) -> L2239.CSP_curve_single_grade
+
+    # We get the unlimited global solar resource price which will be applied to the one grade states by creating a dummy second grade which will utilize the maxsubresource for the given state
+    A10.rsrc_info %>%
+      gather_years() %>%
+      filter(resource == "global solar resource",
+             year == max(year)) %>%
+      pull(value) -> A10_solar_cost
+
+    # Make a second grade for all the single grade states by using full maxsubresource percebtage as available value and global solar resource price as extraction cost
+    L2239.CSP_curve_single_grade %>%
+      mutate(grade= "grade 2",
+             available = maxSubResource / maxSubResource,
+             extractioncost = A10_solar_cost) -> L2239.CSP_curve_single_grade
+
+    # Add the second grade to the graded curve
+    L2239.CSP_curve %>%
+      bind_rows(L2239.CSP_curve_single_grade) -> L2239.CSP_curve
+
     # Technological change in the supply curve is related to assumed improvements in capital cost.
     # If capital cost changes from CC to a.CC, then every price point of the curve will scale by a factor a' given as follows:
-    # a' = (k1.a.CC + k2. OM-fixed) / (k1.CC + k2. OM-fixed) where k1 = FCR / (CONV_YEAR_HOURS * kWh_GJ) and k2 = 1 / (CONV_YEAR_HOURS * kWh_GJ)
+    # a' = (k1.a.CC + k2. OM-fixed) / (k1.CC + k2. OM-fixed), where
+    # k1 = FCR / (CONV_YEAR_HOURS * kWh_GJ) and k2 = 1 / (CONV_YEAR_HOURS * kWh_GJ)
     # Thus, we calculate model input parameter techChange (which is the reduction per year) as 1 - a'^(1/5).
     # This approach ignores changes in fixed OM costs over time.
-
     L223.GlobalTechCapital_Investment %>%
-      filter(technology == "CSP" & sector.name == "intermediate electricity") %>%
-      select(year, capital.overnight) %>%
+      filter(subsector.name == "CSP") %>%
+      distinct(year, capital.overnight) %>%
       mutate(capital.tech.change.period = lag(capital.overnight, 1) / capital.overnight,
              time.change = year - lag(year),
              fixed.charge.rate = L2239.fcr,
@@ -196,39 +285,54 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
       filter(!is.na(tech.change),
              year > max(MODEL_BASE_YEARS)) -> L2239.CSP_curve_tech_change
 
+    # Capacity factors at the technology level need to be updated for all states that have the resource available.
+    # Hence, creating a list of all states.
+    states_list_CSP <- unique(L2239.CSP_curve$State)
+
     # Grid connection costs are read in as fixed non-energy cost adders (in $/GJ) that vary by state.
     # Our starting data comprises of grid connection costs in $/MW by ReEDS region and CSP class.
     # This data also categorizes the connection cost into five bins in each region and class.
-    # We first calculate the average cost for a region and class.Using this data, we then obtain grid connection cost
-    # in $/GJ for each region and class as FCR * (grid connection cost in $/MW) /(CONV_YEAR_HOURS * CF * MWh_GJ).
-    # Costs are then obtained for a state by averaging.
+    # We first take the minimum cost (or mean, whichever is less) for a region and class.
+    # Using this data, we then obtain grid connection cost in $/GJ for each region and class as
+    # FCR * (grid connection cost in $/MW) / (CONV_YEAR_HOURS * CF * MWh_GJ).
+    # Costs are then obtained for a state by taking the minimum or the mean, whichever is less.
+    # This method gives us costs that lines up with ReEDS national level average estimates.
+    # We also filter out states without CSP resources
     # In the future, we might think about a separate state-level curve for grid connection costs.
     reeds_CSP_curve_grid_cost %>%
       gather(bin, cost, -Region, -CSP.class) %>%
       replace_na(list(cost = 0)) %>%
       group_by(Region, CSP.class) %>%
-      summarise(cost = mean(cost)) %>%
+      summarise(cost = min(min(cost[cost>0]), mean(cost))) %>%
       ungroup() %>%
-      left_join_error_no_match(L2239.CSP_CF, by = c("CSP.class" ="class")) %>%
+      left_join_error_no_match(reeds_regions_states %>%
+                                 select(Region, State),
+                               by = "Region") %>%
+      left_join_error_no_match(L2239.CSP_CF, by = c("State", "CSP.class" ="class")) %>%
       mutate(fcr = L2239.fcr,
              grid.cost = fcr * cost / (CONV_YEAR_HOURS * CF * CONV_MWH_GJ),
              grid.cost = grid.cost* gdp_deflator(1975, 2004)) %>%
-      left_join_error_no_match(reeds_regions_states, by = "Region") %>%
-      select(State, Region, CSP.class, grid.cost) %>%
+      # left_join_error_no_match(reeds_regions_states, by = "Region") %>%
+      # select(State, Region, CSP.class, grid.cost) %>%
       group_by(State) %>%
-      summarise(grid.cost = mean(grid.cost)) %>%
+      summarise(grid.cost = min(min(grid.cost), mean(grid.cost))) %>%
       ungroup() %>%
-      mutate(grid.cost = round(grid.cost, energy.DIGITS_COST)) -> L2239.grid.cost
+      mutate(grid.cost = round(grid.cost, energy.DIGITS_COST)) %>%
+      filter(State %in% states_list_CSP) -> L2239.grid_cost
+
+    # L2239.grid_cost_non_reeds_states: Calculate grid costs for non-ReEDS states
+    # grid costs based on mapping to states with similar geography or grid costs
+    # these assumptions can be changed in gcam-usa/non_reeds_PV_grid_cost
+    non_reeds_CSP_grid_cost %>%
+      left_join_error_no_match(L2239.grid_cost, by = c("comparison_state" = "State")) %>%
+      select(State = non_reeds_state, grid.cost) -> L2239.grid_cost_non_reeds_states
+
+    # Bind tables
+    L2239.grid_cost %>%
+      bind_rows(L2239.grid_cost_non_reeds_states) -> L2239.grid_cost
+
 
     # Preparing tables for output
-    # First populate the list of states we will be creating supply cuvres for.
-    # These are the states with at least two points.
-    # For all other states, we will assume constant marginal costs regardless of deployment.
-    L2239.CSP_curve %>%
-      filter(grade == "grade 2") %>%
-      distinct(State) -> states_list_curve_temp
-
-    states_list_curve <- states_list_curve_temp$State
 
     # Table to delete global solar resource
     # All states now have a PV_resource, and
@@ -242,46 +346,21 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
       anti_join(A10.renewable_resource_delete, by = c("region", "unlimited.resource" = "resource_elec_subsector")) ->
       L2239.DeleteUnlimitRsrc_reeds_USA
 
-    # Capacity factors at the technology level need to be updated for all states that have the resource available.
-    # Hence, creating a list of all states.
-    states_list_CF <- unique(L2239.CSP_curve$State)
-
     # Table to read in renewresource, output.unit, price.unit and market
     L2239.CSP_curve %>%
-      distinct(State) %>%
-      rename(region = State) %>%
+      distinct(region = State) %>%
       mutate(renewresource = "CSP_resource",
              output.unit = "EJ",
              price.unit = "1975$/GJ",
-             market = region) %>%
-      filter(region %in% states_list_curve) -> L2239.RenewRsrc_CSP_reeds_USA
-
-    # Table to delete global solar resource
-    # All states now have a PV_resource, 19 states originally have CSP
-    # but here only 9 states have updated REEDS CSP_resources
-    # so the remaining CSP states still need to have global source resources
-    L223.StubTechMarket_Investment %>%
-      filter(stub.technology == "CSP") %>%
-      select(region) %>%
-      # 19 states have CSP
-      distinct() %>%
-      # CSP_resource was only created for 9 states,
-      # so we need to isolate the remaining 10 states to keep their global solar reource
-      filter(!(region %in% L2239.RenewRsrc_CSP_reeds_USA$region)) ->
-      keep_csp_global_solar_states
-
-    states_subregions %>%
-      distinct(region = state) %>%
-      filter(!(region %in% keep_csp_global_solar_states$region)) %>%
-      mutate(unlimited.resource = "global solar resource") -> L2239.DeleteUnlimitRsrc_reeds_USA
+             market = region) -> L2239.RenewRsrc_CSP_reeds_USA
 
     # Table to create the graded resource curves
     L2239.CSP_curve %>%
-      mutate (renewresource = "CSP_resource",
-              sub.renewable.resource = "CSP_resource",
-              available = round(available, energy.DIGITS_MAX_SUB_RESOURCE)) %>%
-      select(region = State, renewresource, sub.renewable.resource, grade, available, extractioncost) %>%
-      filter(region %in% states_list_curve) -> L2239.GrdRenewRsrcCurves_CSP_reeds_USA
+      mutate(renewresource = "CSP_resource",
+             sub.renewable.resource = "CSP_resource",
+             available = round(available, energy.DIGITS_MAX_SUB_RESOURCE)) %>%
+      select(region = State, renewresource, sub.renewable.resource, grade, available, extractioncost) ->
+      L2239.GrdRenewRsrcCurves_CSP_reeds_USA
 
     # Table to read in maximum resource
     L2239.maxSubResource_CSP %>%
@@ -289,20 +368,20 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
              renewresource = "CSP_resource",
              sub.renewable.resource = "CSP_resource",
              year.fillout = min(MODEL_YEARS)) %>%
-      select(region = State,renewresource,sub.renewable.resource, year.fillout, maxSubResource ) %>%
-      filter(region %in% states_list_curve) -> L2239.GrdRenewRsrcMax_CSP_reeds_USA
+      select(region = State,renewresource,sub.renewable.resource, year.fillout, maxSubResource ) ->
+      L2239.GrdRenewRsrcMax_CSP_reeds_USA
 
     # Table to delete global solar resource minicam-energy-input in investment segments
     L223.StubTechMarket_Investment %>%
-      filter(region %in% states_list_curve,
+      filter(region %in% states_list_CSP,
              grepl("CSP", stub.technology)) %>%
       mutate(minicam.energy.input = "global solar resource") %>%
-      select(region, supplysector, subsector, stub.technology, year, minicam.energy.input) ->
+      select(region, supplysector, subsector0, subsector, stub.technology, year, minicam.energy.input) ->
       L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA
 
     # Table to delete global solar resource minicam-energy-input in dispatch segments
     L223.TechEff_Dispatch %>%
-      filter(region %in% states_list_curve,
+      filter(region %in% states_list_CSP,
              grepl("CSP", technology)) %>%
       mutate(minicam.energy.input = "global solar resource") %>%
       select(region, supplysector, subsector, technology, year, minicam.energy.input) ->
@@ -310,19 +389,20 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
 
     # Table to read in energy inputs at the technology level in investment segment
     L223.StubTechMarket_Investment %>%
-      filter(region %in% states_list_curve,
+      filter(region %in% states_list_CSP,
              grepl("CSP", stub.technology)) %>%
       mutate(minicam.energy.input = "CSP_resource",
              market.name = region,
              efficiency = 1,
              # Hard code in type "Resource" for intermittent technology resource input only
              flag = "Resource") %>%
-      select(region, supplysector, subsector, stub.technology, year,
-             minicam.energy.input, efficiency, market.name, flag) -> L2239.StubTechEffFlag_investment_CSP_reeds_USA
+      select(region, supplysector, subsector0, subsector, stub.technology, year,
+             minicam.energy.input, efficiency, market.name, flag) ->
+      L2239.StubTechEffFlag_investment_CSP_reeds_USA
 
     # Table to read in energy inputs at the technology level in dispatch segment
     L223.TechEff_Dispatch %>%
-      filter(region %in% states_list_curve,
+      filter(region %in% states_list_CSP,
              grepl("CSP", technology )) %>%
       mutate(minicam.energy.input = "CSP_resource",
              market.name = region,
@@ -330,21 +410,23 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
              # Hard code in type "Resource" for intermittent technology resource input only
              flag = "Resource") %>%
       select(region, supplysector, subsector, technology, year,
-             minicam.energy.input, efficiency, market.name, flag) -> L2239.StubTechEffFlag_dispatch_CSP_reeds_USA
+             minicam.energy.input, efficiency, market.name, flag) ->
+      L2239.StubTechEffFlag_dispatch_CSP_reeds_USA
 
     # Table to add pMul = 0 for capacity-technology CSP resource
     L223.TechEff_Dispatch %>%
-      filter(region %in% states_list_curve,
+      filter(region %in% states_list_CSP,
              grepl("CSP", technology )) %>%
       mutate(minicam.energy.input = "CSP_resource",
              price.unit.conversion = 0.01) %>%
-      select(region, supplysector, subsector, technology, year,
-             minicam.energy.input, price.unit.conversion) -> L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA
+      select(region, dispatch.sector = supplysector, subsector, capacity.technology = technology,
+             year, minicam.energy.input, price.unit.conversion) ->
+      L2239.StubTechPmultFlag_dispatch_CSP_reeds_USA
 
     # Copying tech change to all states and filtering out only the contiguous states
     L2239.RenewRsrcTechChange_CSP_reeds_USA <- write_to_all_states(L2239.CSP_curve_tech_change, c("region", "year","tech.change"))
     L2239.RenewRsrcTechChange_CSP_reeds_USA %>%
-      filter(region %in% states_list_curve) %>%
+      filter(region %in% states_list_CSP) %>%
       mutate(renewresource = "CSP_resource",
              sub.renewable.resource = "CSP_resource") %>%
       select(region, renewresource, sub.renewable.resource,
@@ -352,11 +434,11 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
 
     # Reading the grid connection cost as a state-level non-energy cost adder
     L223.StubTechMarket_Investment %>%
-      filter(region %in% states_list_CF,
+      filter(region %in% states_list_CSP,
              grepl("CSP", stub.technology)) %>%
-      select(region, supplysector, subsector, stub.technology, year) %>%
-      mutate(minicam.non.energy.input = "regional price adjustment") %>%
-      left_join_error_no_match(L2239.grid.cost, by = c("region" = "State")) %>%
+      select(region, supplysector, subsector0, subsector, stub.technology, year) %>%
+      mutate(minicam.non.energy.input = "grid connection cost") %>%
+      left_join_error_no_match(L2239.grid_cost, by = c("region" = "State")) %>%
       rename(input.cost = grid.cost) %>%
       filter(!is.na(input.cost)) -> L2239.StubTechCost_CSP_reeds_USA
 
@@ -368,25 +450,6 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
              share.weight = 1.0) %>%
       select(LEVEL2_DATA_NAMES[["ResTechShrwt"]]) ->
       L2239.ResTechShrwt_CSP_reeds_USA
-
-    # # To account for new nesting-subsector structure and to add cooling technologies, we must expand certain outputs
-    # add_cooling_techs <- function(data){
-    #   data_new <- data %>%
-    #     left_join(A23.elecS_tech_mapping_cool,
-    #               by=c("stub.technology"="Electric.sector.technology",
-    #                    "supplysector"="Electric.sector","subsector")) %>%
-    #     select(-technology,-subsector_1)%>%
-    #     rename(technology = to.technology,
-    #            subsector0 = subsector,
-    #            subsector = stub.technology)%>%
-    #     arrange(region,year)
-    #   return(data_new)
-    # }
-    #
-    # L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA <- add_cooling_techs(L2239.DeleteStubTechMinicamEnergyInput_CSP_reeds_USA)
-    # L2239.StubTechEffFlag_CSP_reeds_USA <- add_cooling_techs(L2239.StubTechEffFlag_CSP_reeds_USA)
-    # L2239.StubTechCapFactor_CSP_reeds_USA <- add_cooling_techs(L2239.StubTechCapFactor_CSP_reeds_USA)
-    # L2239.StubTechCost_CSP_reeds_USA <- add_cooling_techs(L2239.StubTechCost_CSP_reeds_USA)
 
 
     # ===================================================
@@ -417,7 +480,6 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
                      'energy/A10.rsrc_info',
                      'L223.StubTechMarket_Investment',
                      'L223.GlobalTechCapital_Investment',
-                     'L223.GlobalIntTechCapital_elec',
                      'L223.GlobalIntTechOMfixed_elec') ->
       L2239.DeleteStubTechMinicamEnergyInput_investment_CSP_reeds_USA
 
@@ -430,13 +492,11 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
       add_precursors('gcam-usa/reeds_regions_states',
                      'gcam-usa/reeds_CSP_curve_capacity',
                      'gcam-usa/reeds_CSP_curve_CF',
-                     'gcam-usa/A23.elecS_tech_mapping_cool',
                      'gcam-usa/NREL_us_re_technical_potential',
                      'gcam-usa/NREL_us_re_capacity_factors',
                      'energy/A10.rsrc_info',
                      'L223.TechEff_Dispatch',
                      'L223.GlobalTechCapital_Investment',
-                     'L223.GlobalIntTechCapital_elec',
                      'L223.GlobalIntTechOMfixed_elec') ->
       L2239.DeleteStubTechMinicamEnergyInput_dispatch_CSP_reeds_USA
 
@@ -508,11 +568,9 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
                      'gcam-usa/reeds_CSP_curve_capacity',
                      'gcam-usa/reeds_CSP_curve_CF',
                      'gcam-usa/reeds_CSP_curve_grid_cost',
-                     'gcam-usa/A23.elecS_tech_mapping_cool',
                      'gcam-usa/non_reeds_CSP_grid_cost',
                      'L223.StubTechMarket_Investment',
                      'L223.GlobalTechCapital_Investment',
-                     'L223.GlobalIntTechCapital_elec',
                      'L223.GlobalIntTechOMfixed_elec') ->
       L2239.StubTechCost_CSP_reeds_USA
 

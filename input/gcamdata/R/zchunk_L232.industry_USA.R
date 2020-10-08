@@ -291,7 +291,10 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
       mutate(market.name = if_else(minicam.energy.input %in% gcamusa.REGIONAL_FUEL_MARKETS,
                                    grid_region, market.name)) %>%
       select(-grid_region) %>%
-      mutate(market.name = if_else(grepl("elect_td", minicam.energy.input), region, market.name)) ->
+      mutate(market.name = if_else(grepl("elect_td", minicam.energy.input), region, market.name),
+             # biomass is consumed from state-level sectors
+             market.name = if_else(minicam.energy.input %in% gcamusa.STATE_BIOMASS_SECTORS,
+                                   region, market.name)) ->
       L232.StubTechMarket_ind_USA  ## OUTPUT
 
     # markets for the cogenerated electricity (secondary output)

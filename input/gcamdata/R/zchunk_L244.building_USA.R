@@ -387,7 +387,10 @@ module_gcamusa_L244.building_USA <- function(command, ...) {
       # considered a regional fuel market
       left_join_error_no_match(states_subregions, by = c("region" = "state")) %>%
       mutate(market.name = if_else(minicam.energy.input %in% gcamusa.REGIONAL_FUEL_MARKETS,
-                                     grid_region, market.name)) %>%
+                                     grid_region, market.name),
+             # biomass is consumed from state-level sectors
+             market.name = if_else(minicam.energy.input %in% gcamusa.STATE_BIOMASS_SECTORS,
+                                   region, market.name)) %>%
       select(LEVEL2_DATA_NAMES[["StubTechMarket"]])
 
     # L244.StubTechCalInput_bld: Calibrated energy consumption by buildings technologies

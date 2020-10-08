@@ -14,7 +14,9 @@ module_gcamusa_L270.limits_USA(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L270.CreditMkt_USA}, \code{L270.CreditInput_elecS_USA}, \code{L270.NegEmissBudgetMaxPrice_USA},
+the generated outputs: \code{L270.CreditMkt_USA}, \code{L270.CreditOutput_USA},
+\code{L270.GlobalTechCoef_LiqLim_Investment}, \code{L270.TechCoef_LiqLim_Dispatch},
+\code{L270.NegEmissBudgetMaxPrice_USA},
 \code{paste0( "L270.NegEmissBudget_USA_", c("GCAM3", paste0("SSP", 1:5), paste0("gSSP", 1:5)) )}.
 }
 \description{

@@ -12,7 +12,9 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L270.CreditMkt_USA}, \code{L270.CreditInput_elecS_USA}, \code{L270.NegEmissBudgetMaxPrice_USA},
+#' the generated outputs: \code{L270.CreditMkt_USA}, \code{L270.CreditOutput_USA},
+#' \code{L270.GlobalTechCoef_LiqLim_Investment}, \code{L270.TechCoef_LiqLim_Dispatch},
+#' \code{L270.NegEmissBudgetMaxPrice_USA},
 #' \code{paste0( "L270.NegEmissBudget_USA_", c("GCAM3", paste0("SSP", 1:5), paste0("gSSP", 1:5)) )}.
 #' @details Add 50 states to USA market for GCAM policy constraints which enforce limits
 #' to liquid feedstocks and the amount of subsidies given for net negative emissions.
@@ -23,18 +25,17 @@ module_gcamusa_L270.limits_USA <- function(command, ...) {
   negative_emiss_input_names <- paste0("L270.NegEmissBudget_", c("GCAM3", paste0("SSP", 1:5), paste0("gSSP", 1:5)) )
   negative_emiss_output_names <- sub('NegEmissBudget', 'NegEmissBudget_USA', negative_emiss_input_names)
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "gcam-usa/states_subregions",
-             FILE = "gcam-usa/A23.elecS_tech_mapping_cool",
-             FILE = "gcam-usa/A23.elecS_tech_availability",
-             "L270.CreditOutput",
+    return(c("L270.CreditOutput",
              "L270.CreditMkt",
-             "L270.CreditInput_elec",
+             "L223.GlobalTechEff_Investment",
+             "L223.TechEff_Dispatch",
              "L270.NegEmissBudgetMaxPrice",
              negative_emiss_input_names))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L270.CreditMkt_USA",
              "L270.CreditOutput_USA",
-             "L270.CreditInput_elecS_USA",
+             "L270.GlobalTechCoef_LiqLim_Investment",
+             "L270.TechCoef_LiqLim_Dispatch",
              "L270.NegEmissBudgetMaxPrice_USA",
              # TODO: might just be easier to keep the scenarios in a single
              # table here and split when making XMLs but to match the old
@@ -50,12 +51,10 @@ module_gcamusa_L270.limits_USA <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    states_subregions <- get_data(all_data, "gcam-usa/states_subregions")
-    A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool", strip_attributes = TRUE)
-    A23.elecS_tech_availability <- get_data(all_data, "gcam-usa/A23.elecS_tech_availability", strip_attributes = TRUE)
+    L223.GlobalTechEff_Investment <- get_data(all_data, "L223.GlobalTechEff_Investment", strip_attributes = TRUE)
+    L223.TechEff_Dispatch <- get_data(all_data, "L223.TechEff_Dispatch", strip_attributes = TRUE)
     L270.CreditMkt <- get_data(all_data, "L270.CreditMkt", strip_attributes = TRUE)
     L270.CreditOutput <- get_data(all_data, "L270.CreditOutput", strip_attributes = TRUE)
-    L270.CreditInput_elec <- get_data(all_data, "L270.CreditInput_elec", strip_attributes = TRUE)
     L270.NegEmissBudgetMaxPrice <- get_data(all_data, "L270.NegEmissBudgetMaxPrice", strip_attributes = TRUE)
 
     # ===================================================
@@ -71,25 +70,20 @@ module_gcamusa_L270.limits_USA <- function(command, ...) {
              subsector.name = "oil refining") ->
       L270.CreditOutput_USA
 
-    L270.CreditInput_elec %>%
-      # join is intended to duplicate rows
-      # left_join_error_no_match throws error, so left_join is used
-      # Altered to include cooling technologies in the global tech database
-      left_join(A23.elecS_tech_mapping_cool,
-                by = c("technology", "sector.name" = "supplysector", "subsector.name" = "subsector")) %>%
-      select(-subsector_1, -sector.name)%>%
-      # There are several electricity load segment / technology combinations that we think
-      # do not make sense. These combinations are outlined in A23.elecS_tech_availability,
-      # and are removed here.
-      anti_join(A23.elecS_tech_availability,
-                by = c("Electric.sector" = "supplysector",
-                        "subsector.name" = "subsector",
-                        "technology" = "stub.technology")) %>%
-      select(Electric.sector, subsector.name, Electric.sector.technology, to.technology,
-             year, minicam.energy.input, coefficient) %>%
-      rename(sector.name = Electric.sector, subsector.name0 = subsector.name,
-             subsector.name = Electric.sector.technology, technology = to.technology) ->
-      L270.CreditInput_elecS_USA
+    L223.GlobalTechEff_Investment %>%
+      filter(subsector.name0 == "refined liquids") %>%
+      mutate(minicam.energy.input = energy.OIL_CREDITS_MARKETNAME,
+             # note we are converting the efficiency to a coefficient here
+             coefficient = energy.OILFRACT_ELEC / efficiency) %>%
+      select(-efficiency) -> L270.GlobalTechCoef_LiqLim_Investment
+
+    L223.TechEff_Dispatch %>%
+      filter(subsector == "refined liquids") %>%
+      mutate(minicam.energy.input = energy.OIL_CREDITS_MARKETNAME,
+             # note we are converting the efficiency to a coefficient here
+             coefficient = energy.OILFRACT_ELEC / efficiency,
+             market.name = region) %>%
+      select(-efficiency) -> L270.TechCoef_LiqLim_Dispatch
 
     L270.NegEmissBudgetMaxPrice %>%
       filter(region == gcam.USA_REGION) %>%
@@ -104,7 +98,7 @@ module_gcamusa_L270.limits_USA <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Boiler plate and units for creating the actual") %>%
       add_comments("market for balancing oil-credits") %>%
-      add_precursors("gcam-usa/states_subregions", "L270.CreditMkt") ->
+      add_precursors("L270.CreditMkt") ->
       L270.CreditMkt_USA
 
     L270.CreditOutput_USA %>%
@@ -116,15 +110,21 @@ module_gcamusa_L270.limits_USA <- function(command, ...) {
       add_precursors("L270.CreditOutput") ->
       L270.CreditOutput_USA
 
-    L270.CreditInput_elecS_USA %>%
-      add_title("Creates demand of oil credits in GCAM_USA electricity load segment sectors") %>%
-      add_units("Elec coef * constraint") %>%
+    L270.GlobalTechCoef_LiqLim_Investment %>%
+      add_title("Creates demand of oil credits in GCAM-USA electricity investment sectors") %>%
+      add_units("coefficient") %>%
+      add_comments("GCAM-USA electricity investment sectors need to consider the price of oil-credits") %>%
+      add_comments("Although electricity investment sectors won't actually consume oil-credits") %>%
+      add_precursors("L223.GlobalTechEff_Investment") ->
+      L270.GlobalTechCoef_LiqLim_Investment
+
+    L270.TechCoef_LiqLim_Dispatch %>%
+      add_title("Creates demand of oil credits in GCAM-USA electricity dispatch sectors") %>%
+      add_units("coefficient") %>%
       add_comments("Consumes oil-credits limiting the blend of refined liquids that can be used generate electricity") %>%
-      add_comments("Adding GCAM_USA electricity load segment refined liquids technologies as consumers of oil-credits") %>%
-      add_precursors("gcam-usa/A23.elecS_tech_mapping_cool",
-                     "gcam-usa/A23.elecS_tech_availability",
-                     "L270.CreditInput_elec") ->
-      L270.CreditInput_elecS_USA
+      add_comments("Adding GCAM-USA electricity dispatch sector refined liquids technologies as consumers of oil-credits") %>%
+      add_precursors("L223.TechEff_Dispatch") ->
+      L270.TechCoef_LiqLim_Dispatch
 
     L270.NegEmissBudgetMaxPrice_USA %>%
       add_title("A hint for the solver for what the max price of this market is") %>%
@@ -137,7 +137,8 @@ module_gcamusa_L270.limits_USA <- function(command, ...) {
 
     ret_data <- c("L270.CreditMkt_USA",
                   "L270.CreditOutput_USA",
-                  "L270.CreditInput_elecS_USA",
+                  "L270.GlobalTechCoef_LiqLim_Investment",
+                  "L270.TechCoef_LiqLim_Dispatch",
                   "L270.NegEmissBudgetMaxPrice_USA")
 
     # Create the negative emissions GDP budget constraint limits

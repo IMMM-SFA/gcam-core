@@ -380,7 +380,10 @@ module_gcamusa_L2321.cement_USA <- function(command, ...) {
                                  select(region = state, grid_region),
                                by = "region") %>%
       mutate(market.name = if_else(minicam.energy.input %in% gcamusa.REGIONAL_FUEL_MARKETS,
-                                   grid_region, market.name)) %>%
+                                   grid_region, market.name),
+             # biomass is consumed from state-level sectors
+             market.name = if_else(minicam.energy.input %in% gcamusa.STATE_BIOMASS_SECTORS,
+                                   region, market.name)) %>%
       select(-grid_region) ->
       L2321.StubTechMarket_cement_USA
 

@@ -15,11 +15,11 @@ module_gcamusa_L2238.PV_reeds_USA(command, ...)
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
 the generated outputs: \code{L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA},
-\code{L2238.DeleteStubTechMinicamEnergyInput_dispatch_PV_reeds_USA}, \code{L2238.RenewRsrc_PV_reeds_USA},
+\code{L2238.DeleteInput_dispatch_PV_reeds_USA}, \code{L2238.RenewRsrc_PV_reeds_USA},
 \code{L2238.GrdRenewRsrcCurves_PV_reeds_USA}, \code{L2238.GrdRenewRsrcMax_PV_reeds_USA},
-\code{L2238.StubTechEffFlag_investment_PV_reeds_USA}, \code{L2238.StubTechEffFlag_dispatch_PV_reeds_USA},
+\code{L2238.StubTechEffFlag_investment_PV_reeds_USA}, \code{L2238.TechEff_Dispatch_PV_reeds_USA},
 \code{L2238.RenewRsrcTechChange_PV_reeds_USA}, and \code{L2238.StubTechCost_PV_reeds_USA},
-\code{L2238.ResTechShrwt_PV_reeds_USA}, \code{L2238.StubTechPmultFlag_dispatch_PV_reeds_USA}.
+\code{L2238.ResTechShrwt_PV_reeds_USA}, \code{L2238.CapacityTechInputPMult_dispatch_PV_reeds_USA}.
 The corresponding file in the original data system was \code{L2238.PV_reeds_USA.R} (gcam-usa level2).
 }
 \description{

@@ -10,7 +10,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L2237.SmthRenewRsrcCurves_wind_reeds_USA},
 #' \code{L2237.SmthRenewRsrcTechChange_wind_reeds_USA}, \code{L2237.StubTechCost_wind_reeds_USA},
-#' \code{L2237.ResTechShrwt_wind_reeds_USA}, \code{L2237.TechPmult_dispatch_wind_reeds_USA}.
+#' \code{L2237.ResTechShrwt_wind_reeds_USA}.
 #' The corresponding file in the original data system was \code{L2237.wind_reeds_USA.R} (gcam-usa level2).
 #' @details Create state-level wind resource supply curves
 #' @importFrom assertthat assert_that
@@ -27,7 +27,6 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
              FILE = 'gcam-usa/A23.elecS_tech_mapping_cool',
              FILE = "gcam-usa/A10.renewable_resource_delete",
              'L223.TechCapFac_Investment',
-             'L223.TechEff_Dispatch',
              'L223.GlobalTechCapital_Investment',
              'L223.GlobalIntTechCapital_elec',
              'L223.GlobalIntTechOMfixed_elec'))
@@ -35,8 +34,7 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
     return(c('L2237.SmthRenewRsrcCurves_wind_reeds_USA',
              'L2237.SmthRenewRsrcTechChange_wind_reeds_USA',
              'L2237.StubTechCost_wind_reeds_USA',
-             'L2237.ResTechShrwt_wind_reeds_USA',
-             'L2237.TechPmult_dispatch_wind_reeds_USA'))
+             'L2237.ResTechShrwt_wind_reeds_USA'))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -49,7 +47,6 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
     A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool")
     A10.renewable_resource_delete <- get_data(all_data, "gcam-usa/A10.renewable_resource_delete")
     L223.TechCapFac_Investment <- get_data(all_data, 'L223.TechCapFac_Investment')
-    L223.TechEff_Dispatch <- get_data(all_data, 'L223.TechEff_Dispatch')
     L223.GlobalTechCapital_Investment <- get_data(all_data, 'L223.GlobalTechCapital_Investment')
     L223.GlobalIntTechCapital_elec <- get_data(all_data, 'L223.GlobalIntTechCapital_elec')
     L223.GlobalIntTechOMfixed_elec <- get_data(all_data, 'L223.GlobalIntTechOMfixed_elec')
@@ -281,8 +278,8 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
     # Reading the grid connection cost as a state-level non-energy cost adder
     L223.TechCapFac_Investment %>%
       filter(technology == "wind") %>%
-      select(region, supplysector, subsector, technology, year) %>%
-      mutate(minicam.non.energy.input = "regional price adjustment") %>%
+      select(region, supplysector, subsector0, subsector, stub.technology = technology, year) %>%
+      mutate(minicam.non.energy.input = "grid connection cost") %>%
       # using semi_join to filter out states not included in the ReEDS data set,
       # for which wind resource curves are not being updated
       semi_join(L2237.grid.cost, by = c("region" = "State")) %>%
@@ -299,30 +296,6 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["ResTechShrwt"]]) ->
       L2237.ResTechShrwt_wind_reeds_USA
 
-    # # To account for new nesting-subsector structure and to add cooling technologies, we must expand certain outputs
-    # add_cooling_techs <- function(data){
-    #   data_new <- data %>%
-    #     left_join(A23.elecS_tech_mapping_cool,
-    #               by=c("stub.technology"="Electric.sector.technology",
-    #                    "supplysector"="Electric.sector","subsector")) %>%
-    #     select(-technology,-subsector_1)%>%
-    #     rename(technology = to.technology,
-    #            subsector0 = subsector,
-    #            subsector = stub.technology)%>%
-    #     mutate(technology = if_else(subsector=="wind_base",subsector,technology)) %>%
-    #     arrange(region,year)
-    #   return(data_new)
-    # }
-    #
-    # L2237.StubTechCapFactor_wind_reeds_USA <- add_cooling_techs(L2237.StubTechCapFactor_wind_reeds_USA)
-    # L2237.StubTechCost_wind_reeds_USA <- add_cooling_techs(L2237.StubTechCost_wind_reeds_USA)
-
-    # add pMul = 0.01 for capacity-technology wind resource
-    L223.TechEff_Dispatch %>%
-      filter(grepl("wind", technology )) %>%
-      mutate(price.unit.conversion = 0.01) %>%
-      select(region, supplysector, subsector, technology, year,
-             minicam.energy.input, price.unit.conversion, market.name) -> L2237.TechPmult_dispatch_wind_reeds_USA
 
     # ===================================================
     # Produce outputs
@@ -372,18 +345,10 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
       same_attributes_as(L2237.SmthRenewRsrcCurves_wind_reeds_USA) ->
       L2237.ResTechShrwt_wind_reeds_USA
 
-    L2237.TechPmult_dispatch_wind_reeds_USA %>%
-      add_title("Capacity-technology pMultiplier for the wind") %>%
-      add_units("NA") %>%
-      add_comments("price-unit-conversion in xml to change the price of the wind-resource input") %>%
-      add_precursors("L223.TechEff_Dispatch") ->
-      L2237.TechPmult_dispatch_wind_reeds_USA
-
     return_data(L2237.SmthRenewRsrcCurves_wind_reeds_USA,
                 L2237.SmthRenewRsrcTechChange_wind_reeds_USA,
                 L2237.StubTechCost_wind_reeds_USA,
-                L2237.ResTechShrwt_wind_reeds_USA,
-                L2237.TechPmult_dispatch_wind_reeds_USA)
+                L2237.ResTechShrwt_wind_reeds_USA)
 
   } else {
     stop("Unknown command")
