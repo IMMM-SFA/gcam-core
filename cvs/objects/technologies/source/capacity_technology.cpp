@@ -383,14 +383,14 @@ double CapacityTechnology::tryDispatch( const string& aRegionName,
     // determine the appropriate capacity factor to apply
     double effectiveCapacityFactor;
     auto segCapFac = mSegCapFac.find( aDispatchSegment );
-    if( aPeriod <= scenario->getModeltime()->getFinalCalibrationPeriod()) {
-        // in the calibration years we back out the effective capacity factor
-        // as the output and capacity are calibrated
-        effectiveCapacityFactor = mCapacity == 0.0 ? 0.0 : mCalValue->getCalOutput() / mCapacity;
-    }
-    else if( segCapFac != mSegCapFac.end() ) {
+    if( segCapFac != mSegCapFac.end() ) {
         // we have a segment specific capacity factor so use it
         effectiveCapacityFactor = (*segCapFac).second;
+    }
+    else if( aDispatchSegment == "superpeak" ) {
+        // assume all dispatchable capacity is available in superpeak
+        // i.e. no outages
+        effectiveCapacityFactor = 1.0;
     }
     else {
         // this technology has the same capacity factor regardless of segment

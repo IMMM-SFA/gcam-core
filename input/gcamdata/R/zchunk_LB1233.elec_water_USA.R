@@ -15,7 +15,7 @@
 #' @importFrom dplyr filter mutate select
 #' @importFrom tidyr gather spread
 #' @author ST October 2017, NTG May 2020
-module_gcamusa_LB1233.elec_water_USA <- function(command, ...) {
+disabled_module_gcamusa_LB1233.elec_water_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",
              FILE = "gcam-usa/UCS_tech_names",

@@ -9,8 +9,8 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L223.Sector_Investment}, \code{L223.SubsectorLogit_Investment_Fuel},
-#' \code{L223.SubsectorShrwt_Investment_Fuel}, \code{L223.SubsectorInterp_Investment_Fuel}, \code{L223.SubsectorInterpTo_Investment_Fuel},
-#' \code{L223.SubsectorLogit_Investment}, \code{L223.SubsectorInterp_Investment}, \code{L223.SubsectorInterpTo_Investment},
+#' \code{L223.SubsectorShrwtFllt_Investment_Fuel}, \code{L223.SubsectorInterpTo_Investment_Fuel},
+#' \code{L223.SubsectorLogit_Investment}, \code{L223.SubsectorInterpTo_Investment},
 #' \code{L223.StubTech_Investment}, \code{L223.GlobalTechEff_Investment}, \code{L223.StubTechMarket_Investment},
 #' \code{L223.GlobalTechOMfixed_Investment},\code{L223.GlobalTechOMvar_Investment}, \code{L223.GlobalTechCapital_Investment},
 #' \code{L223.GlobalTechShrwt_Investment}, \code{L223.GlobalTechCapFac_Investment}, \code{L223.TechCapFac_Investment},
@@ -25,7 +25,7 @@
 #' \code{L223.DispatchSectorDispatchSegments}, \code{L223.InterestRate_FERC}, \code{L223.Pop_FERC}, \code{L223.BaseGDP_FERC},
 #' \code{L223.LaborForceFillout_FERC}, \code{L223.StubTechCost_offshore_wind_Investment}, \code{L223.GlobalTechCoef_Investment_cool},
 #' \code{L223.StubTechCoef_Investment_cool}, \code{L223.TechCoef_Dispatch_cool}, \code{L223.TechPmult_dispatch_wind_reeds_USA},
-#' \code{L223.GlobalTechCapital_elec_Investment_cool}.
+#' \code{L223.GlobalTechCapital_Investment_cool}.
 #' The corresponding file in the original data system was \code{L223.electricity_USA.R} (gcam-usa level2 - dispatch branch).
 #' @details This chunk generates input files to create an annualized electricity generation sector for each state
 #' and creates the demand for the state-level electricity sectors in the grid regions.
@@ -65,6 +65,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              FILE = "gcam-usa/A23.dispatch_sector_state_share",
              FILE = "gcam-usa/A23.dispatch_subsector_interp",
              FILE = "gcam-usa/A23.dispatch_subsector_shrwt",
+             FILE = "gcam-usa/A23.dispatch_subsector_shrwt_state_adj",
+             FILE = "gcam-usa/A23.dispatch_subsector_shrwt_interpto_state_adj",
              FILE = "gcam-usa/A23.dispatch_subsector_logit",
              FILE = "gcam-usa/A23.dispatch_globaltech_eff_additional",
              FILE = "gcam-usa/A23.dispatch_globaltech_OMfixed_additional",
@@ -85,11 +87,11 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L223.Sector_Investment",
              "L223.SubsectorLogit_Investment_Fuel",
-             "L223.SubsectorShrwt_Investment_Fuel",
-             "L223.SubsectorInterp_Investment_Fuel",
+             "L223.SubsectorShrwtFllt_Investment_Fuel",
+             # "L223.SubsectorInterp_Investment_Fuel",
              "L223.SubsectorInterpTo_Investment_Fuel",
              "L223.SubsectorLogit_Investment",
-             "L223.SubsectorShrwt_Investment",
+             "L223.SubsectorShrwtFllt_Investment",
              # "L223.SubsectorInterp_Investment",
              # "L223.SubsectorInterpTo_Investment",
              "L223.StubTech_Investment",
@@ -101,7 +103,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              "L223.GlobalTechOMfixed_Investment",
              "L223.GlobalTechOMvar_Investment",
              "L223.GlobalTechCapital_Investment",
-             "L223.GlobalTechCapital_elec_Investment_cool",
+             "L223.GlobalTechCapital_Investment_cool",
              "L223.GlobalTechShrwt_Investment",
              "L223.GlobalTechCapFac_Investment",
              "L223.TechCapFac_Investment",
@@ -190,6 +192,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     A23.dispatch_sector_state_share <- get_data(all_data, "gcam-usa/A23.dispatch_sector_state_share")
     A23.dispatch_subsector_interp <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_interp")
     A23.dispatch_subsector_shrwt <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_shrwt")
+    A23.dispatch_subsector_shrwt_state_adj <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_shrwt_state_adj")
+    A23.dispatch_subsector_shrwt_interpto_state_adj <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_shrwt_interpto_state_adj")
     A23.dispatch_subsector_logit <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_logit")
     A23.dispatch_globaltech_eff_additional <- get_data(all_data, "gcam-usa/A23.dispatch_globaltech_eff_additional")
     A23.dispatch_globaltech_OMfixed_additional <- get_data(all_data, "gcam-usa/A23.dispatch_globaltech_OMfixed_additional")
@@ -306,34 +310,78 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
 
     # subsector with specified shareweigt for each year
     A23.dispatch_subsector_shrwt %>%
-      gather(key="year", value="share.weight", -supplysector, -subsector) %>%
-      complete(nesting(supplysector, subsector), year = c(year, MODEL_YEARS)) %>%
-      distinct() %>%
-      mutate(year = as.integer(year)) %>%
-      group_by(supplysector, subsector) %>%
-      mutate(share.weight = approx_fun(year, share.weight)) %>%
-      ungroup() %>%
-      filter(year %in% MODEL_YEARS) %>%
-      mutate(share.weight = ifelse(year %in% MODEL_BASE_YEARS, gcamusa.DEFAULT_SHAREWEIGHT, share.weight)) %>%
+      write_to_all_states(LEVEL2_DATA_NAMES[["SubsectorShrwt"]] ) %>%
+      rename(year.fillout = year) %>%
       # TODO: currently set geothermal shareweight as 0 to help solve
       mutate(share.weight = ifelse(subsector == "geothermal", 0, share.weight)) %>%
-      write_to_all_states(LEVEL2_DATA_NAMES[["SubsectorShrwt"]]) %>%
       rename(subsector0 = subsector) ->
-      L223.SubsectorShrwt_Investment_Fuel
+      L223.SubsectorShrwtFllt_Investment_Fuel
 
-    # subsectors with linear shareweigts - refined liquids, solar, biomass, nuclear, wind, geotheraml
-    A23.dispatch_subsector_interp %>%
-      filter(is.na(to.value)) %>%
-      write_to_all_states(LEVEL2_DATA_NAMES[["SubsectorInterp"]]) %>%
-      rename(subsector0 = subsector) ->
-      L223.SubsectorInterp_Investment_Fuel
-
+    # subsectors interp to
     # subsectors with s-curve shareweigts - gas, coal, nuclear
     A23.dispatch_subsector_interp %>%
       filter(!is.na(to.value)) %>%
       write_to_all_states(LEVEL2_DATA_NAMES[["SubsectorInterpTo"]]) %>%
       rename(subsector0 = subsector) ->
       L223.SubsectorInterpTo_Investment_Fuel
+
+    # Update future subsector share-weights as follows:
+    # 1. For coal, gas and oil - fix share-weights (0/1) to calibration values. This does not require any update
+    # to the L223.SubsectorInterpTo_Investment table.
+    # 2. For nuclear - use zero  shareweights if there is no calibration year value.
+    # Interpolate to a fixed value for states that have nuclear.
+    # 3. For biomass, solar, wind, geothermal - interpolate to a fixed value in a future year.
+    # The fixed value in the above formulations are read in separately in L223.SubsectorShrwtFllt_Investment_Fuel
+
+    # check historical capacity to obtain historical share-weights (0/1)
+    L123.capacity_EJ_state_elec_F_tech %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
+      left_join_error_no_match(calibrated_techs_dispatch_usa %>%
+                                 select(-minicam.energy.input, -secondary.output),
+                               by=c("gcam_fuel" = "fuel", "elec_tech" = "elec_tech")) %>%
+      rename(region = state) %>%
+      group_by(region, subsector) %>%
+      summarise(capacity = sum(capacity)) %>%
+      ungroup() %>%
+      # here actually all capacity are above 0 in this table, but still want a safety check
+      mutate(subsector.cal.value = ifelse(capacity > 0, 1, 0)) %>%
+      select(region, subsector, subsector.cal.value) ->
+      L123.capacity_EJ_state_elec_F_tech_final_cal_year
+
+    L223.SubsectorShrwtFllt_Investment_Fuel %>%
+      # mostly nuclear, but also contains some wind/solar for states do not have capacity in final historical year
+      left_join(L123.capacity_EJ_state_elec_F_tech_final_cal_year, by = c("region", "subsector0" = "subsector")) %>%
+      # when there is no historical capacity, assign 0
+      mutate(share.weight = if_else(is.na(subsector.cal.value), 0, share.weight)) %>%
+      select(-subsector.cal.value) ->
+      L223.SubsectorShrwtFllt_Investment_Fuel
+
+    # State-specific adjustments to electricity generation subsector shareweights
+    A23.dispatch_subsector_shrwt_state_adj %>%
+      set_years() %>%
+      mutate(year.fillout = as.integer(year)) %>%
+      select(LEVEL2_DATA_NAMES[["SubsectorShrwtFllt"]]) -> A23.dispatch_subsector_shrwt_state_adj
+
+    L223.SubsectorShrwtFllt_Investment_Fuel %>%
+      mutate(year.fillout = as.integer(year.fillout)) %>%
+      anti_join(A23.dispatch_subsector_shrwt_state_adj,
+                by = c("region", "supplysector", "subsector0" = "subsector")) %>%
+      bind_rows(A23.dispatch_subsector_shrwt_state_adj %>%
+                  rename(subsector0 = subsector)) %>%
+      arrange(region, subsector0, year.fillout, supplysector) -> L223.SubsectorShrwtFllt_Investment_Fuel
+
+    A23.dispatch_subsector_shrwt_interpto_state_adj %>%
+      set_years() %>%
+      mutate(from.year = as.integer(from.year)) %>%
+      mutate(to.year = as.integer(to.year)) -> A23.dispatch_subsector_shrwt_interpto_state_adj
+
+    L223.SubsectorInterpTo_Investment_Fuel %>%
+      mutate(from.year = as.integer(from.year)) %>%
+      mutate(to.year = as.integer(to.year)) %>%
+      anti_join(A23.dispatch_subsector_shrwt_interpto_state_adj, by = c("region", "supplysector", "subsector0" = "subsector")) %>%
+      bind_rows(A23.dispatch_subsector_shrwt_interpto_state_adj %>%
+                  rename(subsector0 = subsector)) %>%
+      arrange(region, subsector0, from.year, supplysector) -> L223.SubsectorInterpTo_Investment_Fuel
 
     # ===========================================================================
     # L223 subsector_investment
@@ -350,15 +398,15 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       select(region, supplysector, subsector0, subsector, logit.year.fillout, logit.exponent, logit.type) ->
       L223.SubsectorLogit_Investment
 
-    L223.SubsectorShrwt_Investment_Fuel %>%
+    L223.SubsectorShrwtFllt_Investment_Fuel %>%
       # join will duplicate rows because multiple subsectors are available by technology
       # LJENM will error, so left_join() is used
       left_join(calibrated_techs_dispatch_usa %>%
                   filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
                   distinct(supplysector = sector, subsector0 = subsector, subsector = technology),
                 by = c("supplysector", "subsector0")) %>%
-      select(region, supplysector, subsector0, subsector, year, share.weight) ->
-      L223.SubsectorShrwt_Investment
+      select(region, supplysector, subsector0, subsector, year.fillout, share.weight) ->
+      L223.SubsectorShrwtFllt_Investment
 
     # ===========================================================================
     ## L223 StubTech_investment
@@ -533,7 +581,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       L223.GlobalTechCapital_Investment
 
     # ===========================================================================
-    ## L223.GlobalTechCapital_elec_Investment_cool  capital.overnight investment
+    ## L223.GlobalTechCapital_Investment_cool  capital.overnight investment
     # ===========================================================================
     A23.CoolingSystemCosts %>%
       gather_years %>%
@@ -556,7 +604,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       left_join_error_no_match(L223.CoolingSystemCosts,
                                by = c("cooling_system", "year")) %>%
       select(sector.name, subsector.name0, subsector.name, technology, year, input.capital, capital.overnight, fixed.charge.rate) ->
-      L223.GlobalTechCapital_elec_Investment_cool
+      L223.GlobalTechCapital_Investment_cool
 
     # ===========================================================================
     ## L223 GlobalTechShrwt_Investment  shareweight investment
@@ -641,7 +689,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       filter(subsector.name == "gas (CT)",
              sector.name == gcamusa.ELEC_INV_NAMES[1]) %>%
       mutate(input.capital = "capacity credit",
-             capital.overnight = -1.0 * capital.overnight) %>%
+             capital.overnight = -0.5 * capital.overnight) %>%
       select(year, input.capital, capital.overnight, fixed.charge.rate) ->
       gas_CT_cost
 
@@ -1505,11 +1553,11 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
 
     # Remove geothermal option from states that do not have potential
     L223.SubsectorLogit_Investment_Fuel %<>% filter(!(paste(region, subsector0) %in% geo_states_noresource))
-    L223.SubsectorShrwt_Investment_Fuel %<>% filter(!(paste(region, subsector0) %in% geo_states_noresource))
-    L223.SubsectorInterp_Investment_Fuel %<>% filter(!(paste(region, subsector0) %in% geo_states_noresource))
+    L223.SubsectorShrwtFllt_Investment_Fuel %<>% filter(!(paste(region, subsector0) %in% geo_states_noresource))
+    # L223.SubsectorInterp_Investment_Fuel %<>% filter(!(paste(region, subsector0) %in% geo_states_noresource))
     L223.SubsectorInterpTo_Investment_Fuel %<>% filter(!(paste(region, subsector0) %in% geo_states_noresource))
     L223.SubsectorLogit_Investment %<>% filter(!(paste(region, subsector0) %in% geo_states_noresource))
-    L223.SubsectorShrwt_Investment %<>% filter(!(paste(region, subsector0) %in% geo_states_noresource))
+    L223.SubsectorShrwtFllt_Investment %<>% filter(!(paste(region, subsector0) %in% geo_states_noresource))
     # L223.SubsectorInterp_Investment %<>% filter(!(paste(region, subsector0) %in% geo_states_noresource))
     # L223.SubsectorInterpTo_Investment %<>% filter(!(paste(region, subsector0) %in% geo_states_noresource))
     L223.StubTech_Investment %<>% filter(!(paste(region, subsector0) %in% geo_states_noresource))
@@ -1534,7 +1582,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
 
     # Remove CSP option from states that do not have potential
     L223.SubsectorLogit_Investment %<>% filter(!((region %in% csp_states_noresource) & (grepl("CSP", subsector))))
-    L223.SubsectorShrwt_Investment %<>% filter(!((region %in% csp_states_noresource) & (grepl("CSP", subsector))))
+    L223.SubsectorShrwtFllt_Investment %<>% filter(!((region %in% csp_states_noresource) & (grepl("CSP", subsector))))
     L223.StubTech_Investment %<>% filter(!((region %in% csp_states_noresource) & (grepl("CSP", subsector))))
     L223.StubTechMarket_Investment %<>% filter(!((region %in% csp_states_noresource) & (grepl("CSP", subsector))))
     L223.StubTechCoef_Investment_cool %<>% filter(!((region %in% csp_states_noresource) & (grepl("CSP", subsector))))
@@ -1581,11 +1629,11 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # Thus, no wind & solar subsectors should be created in DC's electricity sector.
     # Use anti_join to remove them from the table.
     L223.SubsectorLogit_Investment_Fuel %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector0" = "resource_elec_subsector"))
-    L223.SubsectorShrwt_Investment_Fuel %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector0" = "resource_elec_subsector"))
-    L223.SubsectorInterp_Investment_Fuel %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector0" = "resource_elec_subsector"))
+    L223.SubsectorShrwtFllt_Investment_Fuel %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector0" = "resource_elec_subsector"))
+    # L223.SubsectorInterp_Investment_Fuel %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector0" = "resource_elec_subsector"))
     L223.SubsectorInterpTo_Investment_Fuel %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector0" = "resource_elec_subsector"))
     L223.SubsectorLogit_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector0" = "resource_elec_subsector"))
-    L223.SubsectorShrwt_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector0" = "resource_elec_subsector"))
+    L223.SubsectorShrwtFllt_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector0" = "resource_elec_subsector"))
     # L223.SubsectorInterp_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector0" = "resource_elec_subsector"))
     # L223.SubsectorInterpTo_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector0" = "resource_elec_subsector"))
     L223.StubTech_Investment %<>% anti_join(A10.renewable_resource_delete, by = c("region", "subsector0" = "resource_elec_subsector"))
@@ -1638,7 +1686,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       rename(input.cost = grid.cost) ->
       L223.StubTechCost_offshore_wind_Investment
 
-
     # add pMul = 0.01 for capacity-technology wind resource
     L223.TechEff_Dispatch %>%
       filter(grepl("wind", technology)) %>%
@@ -1667,27 +1714,29 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "gcam-usa/NREL_us_re_technical_potential") ->
       L223.SubsectorLogit_Investment_Fuel
 
-    L223.SubsectorShrwt_Investment_Fuel %>%
+    L223.SubsectorShrwtFllt_Investment_Fuel %>%
       add_title("Investment subsector share-weight by state") %>%
       add_units("Unitless") %>%
       add_comments("Set subsector share-weight for states") %>%
       add_precursors("gcam-usa/A23.dispatch_subsector_shrwt",
+                     "gcam-usa/A23.dispatch_subsector_shrwt_state_adj",
                      "gcam-usa/NREL_us_re_technical_potential") ->
-      L223.SubsectorShrwt_Investment_Fuel
+      L223.SubsectorShrwtFllt_Investment_Fuel
 
-    L223.SubsectorInterp_Investment_Fuel %>%
-      add_title("Investment subsector linear interpolation-function by state") %>%
-      add_units("Unitless") %>%
-      add_comments("Set subsector linear interpolation-function for states") %>%
-      add_precursors("gcam-usa/A23.dispatch_subsector_interp",
-                     "gcam-usa/NREL_us_re_technical_potential") ->
-      L223.SubsectorInterp_Investment_Fuel
+    # L223.SubsectorInterp_Investment_Fuel %>%
+    #   add_title("Investment subsector linear interpolation-function by state") %>%
+    #   add_units("Unitless") %>%
+    #   add_comments("Set subsector linear interpolation-function for states") %>%
+    #   add_precursors("gcam-usa/A23.dispatch_subsector_interp",
+    #                  "gcam-usa/NREL_us_re_technical_potential") ->
+    #   L223.SubsectorInterp_Investment_Fuel
 
     L223.SubsectorInterpTo_Investment_Fuel %>%
         add_title("Investment subsector s-curve interpolation-function by state") %>%
         add_units("Unitless") %>%
         add_comments("Set subsector s-curve interpolation-function for states") %>%
         add_precursors("gcam-usa/A23.dispatch_subsector_interp",
+                     "gcam-usa/A23.dispatch_subsector_shrwt_interpto_state_adj",
                      "gcam-usa/NREL_us_re_technical_potential") ->
       L223.SubsectorInterpTo_Investment_Fuel
 
@@ -1700,14 +1749,14 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "gcam-usa/NREL_us_re_technical_potential") ->
       L223.SubsectorLogit_Investment
 
-    L223.SubsectorShrwt_Investment %>%
+    L223.SubsectorShrwtFllt_Investment %>%
       add_title("Investment subsector share-weight by state") %>%
       add_units("Unitless") %>%
       add_comments("Set subsector share-weight for states") %>%
-      add_legacy_name("L223.SubsectorShrwt_Investment (dispatch branch)") %>%
+      add_legacy_name("L223.SubsectorShrwtFllt_Investment (dispatch branch)") %>%
       add_precursors("gcam-usa/A23.dispatch_subsector_shrwt",
                      "gcam-usa/NREL_us_re_technical_potential") ->
-      L223.SubsectorShrwt_Investment
+      L223.SubsectorShrwtFllt_Investment
 
     # L223.SubsectorInterp_Investment %>%
     #   add_title("Investment subsector linear interpolation-function by state") %>%
@@ -1827,7 +1876,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "gcam-usa/A23.dispatch_globaltech_capital_additional") ->
       L223.GlobalTechCapital_Investment
 
-    L223.GlobalTechCapital_elec_Investment_cool %>%
+    L223.GlobalTechCapital_Investment_cool %>%
       add_title("Investment technology cooling system capital-overnight and fixed-charge-rate") %>%
       add_units("1975$US/kw") %>%
       add_comments("Set cooling system capital-overnight and fixed-charge-rate") %>%
@@ -1835,7 +1884,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       same_precursors_as("L223.GlobalTechCapital_Investment") %>%
       add_precursors("water/A23.CoolingSystemCosts",
                      "gcam-usa/A23.elec_tech_mapping_cool") ->
-    L223.GlobalTechCapital_elec_Investment_cool
+    L223.GlobalTechCapital_Investment_cool
 
     L223.GlobalTechShrwt_Investment %>%
       add_title("Investment technology share-weight") %>%
@@ -2265,12 +2314,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
 
     return_data(L223.Sector_Investment,
                 L223.SubsectorLogit_Investment_Fuel,
-                L223.SubsectorShrwt_Investment_Fuel,
-                L223.SubsectorInterp_Investment_Fuel,
+                L223.SubsectorShrwtFllt_Investment_Fuel,
+                # L223.SubsectorInterp_Investment_Fuel,
                 L223.SubsectorInterpTo_Investment_Fuel,
                 L223.SubsectorLogit_Investment,
                 # L223.SubsectorInterp_Investment,
-                L223.SubsectorShrwt_Investment,
+                L223.SubsectorShrwtFllt_Investment,
                 # L223.SubsectorInterpTo_Investment,
                 L223.StubTech_Investment,
                 L233.GlobalInvestTech_Investment,
@@ -2281,7 +2330,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                 L223.GlobalTechOMfixed_Investment,
                 L223.GlobalTechOMvar_Investment,
                 L223.GlobalTechCapital_Investment,
-                L223.GlobalTechCapital_elec_Investment_cool,
+                L223.GlobalTechCapital_Investment_cool,
                 L223.GlobalTechShrwt_Investment,
                 L223.GlobalTechCapFac_Investment,
                 L223.TechCapFac_Investment,

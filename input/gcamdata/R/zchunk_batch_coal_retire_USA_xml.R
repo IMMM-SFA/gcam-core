@@ -1,6 +1,6 @@
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
-#' module_gcamusa_batch_coal_retire_USA_xml
+#' disabled_module_gcamusa_batch_coal_retire_USA_xml
 #'
 #' Construct XML data structure for \code{coal_retire_vintage_USA.xml}.
 #'
@@ -11,7 +11,7 @@
 #' the generated outputs: \code{coal_retire_USA.xml}. The corresponding file in the
 #' original data system was \code{batch_coal_retire_USA.xml} (gcamusa xml-batch).
 #' the generated outputs: \code{coal_retire_vintage_USA.xml}.
-module_gcamusa_batch_coal_retire_USA_xml <- function(command, ...) {
+disabled_module_gcamusa_batch_coal_retire_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2241.TechProd_elec_coalret_dispatch_gcamusa",
              "L2241.CapacityTech_elec_coalret_dispatch_gcamusa",

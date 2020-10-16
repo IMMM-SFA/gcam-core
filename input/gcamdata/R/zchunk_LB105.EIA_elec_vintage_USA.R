@@ -9,7 +9,7 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L105.elec_capacity_state_vintage_gcamusa}, \code{L105.elec_generation_state_vintage_gcamusa},
-#' \code{L105.elec_fuelconsumption_state_vintage_gcamusa}.
+#' \code{L105.elec_fuelconsumption_state_vintage_gcamusa}, \code{L105.eia_elec_data_water}.
 #' There is no corresponding file in the original data system. This was originally a preprocessing code
 #' @details Process 2015 EIA Form 923 and Form 860
 #' @importFrom assertthat assert_that
@@ -31,7 +31,8 @@ module_gcamusa_LB105.EIA_elec_vintage_USA <- function(command, ...) {
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L105.elec_capacity_state_vintage_gcamusa",
              "L105.elec_generation_state_vintage_gcamusa",
-             "L105.elec_fuelconsumption_state_vintage_gcamusa"))
+             "L105.elec_fuelconsumption_state_vintage_gcamusa",
+             "L105.eia_elec_data_water"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -303,9 +304,19 @@ module_gcamusa_LB105.EIA_elec_vintage_USA <- function(command, ...) {
       same_precursors_as("L105.elec_capacity_state_vintage_gcamusa") ->
       L105.elec_fuelconsumption_state_vintage_gcamusa
 
+    # eia_elec_data_water - mapped but unaggregated, will be useful for coal vintage chunk
+    eia_elec_data_water %>%
+      add_title("USA 2015 electric power capacity and generation - plant level") %>%
+      add_units("various") %>%
+      add_comments("Processed from EIA From 860 and 923 (Year 2015)") %>%
+      same_precursors_as("L105.elec_capacity_state_vintage_gcamusa") ->
+      L105.eia_elec_data_water
+
+
     return_data(L105.elec_capacity_state_vintage_gcamusa,
                 L105.elec_generation_state_vintage_gcamusa,
-                L105.elec_fuelconsumption_state_vintage_gcamusa)
+                L105.elec_fuelconsumption_state_vintage_gcamusa,
+                L105.eia_elec_data_water)
   } else {
     stop("Unknown command")
   }

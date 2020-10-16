@@ -1,36 +1,71 @@
 # File: A23.dispatch_subsector_shrwt.csv
-# Title: Electricity subsector share-weights
+# Title: Multiple Load Segments Subsector Shareweights
 # Units: Unitless share-weights
 # Source: None (GCAM assumptions)
-# Note: These may be over-written by interpolation rules which take precedence
-# Column types: cciiii
+# Note: Comments: Subsector shareweights at points of inflection (end-points of interpolation function)
+# Column types: cccci
 # ----------
-supplysector,subsector,1971,2010,2015,2100
-peak electricity,gas,0,0,1,1
-peak electricity,refined liquids,0,0,1,1
-peak electricity,solar,0,0,1,1
-subpeak electricity,gas,0,0,1,1
-subpeak electricity,refined liquids,0,0,1,1
-subpeak electricity,solar,0,0,1,1
-intermediate electricity,coal,0,0,1,1
-intermediate electricity,gas,0,0,1,1
-intermediate electricity,refined liquids,0,0,1,1
-intermediate electricity,biomass,0,0,1,1
-intermediate electricity,nuclear,0,0,1,1
-intermediate electricity,nuclear,0,0,1,1
-intermediate electricity,nuclear,0,0,1,1
-intermediate electricity,nuclear,0,0,1,1
-intermediate electricity,wind,0,0,1,1
-intermediate electricity,solar,0,0,1,1
-intermediate electricity,geothermal,0,0,1,1
-baseload electricity,coal,0,0,1,1
-baseload electricity,gas,0,0,1,1
-baseload electricity,refined liquids,0,0,1,1
-baseload electricity,biomass,0,0,1,1
-baseload electricity,nuclear,0,0,1,1
-baseload electricity,nuclear,0,0,1,1
-baseload electricity,nuclear,0,0,1,1
-baseload electricity,nuclear,0,0,1,1
-baseload electricity,wind,0,0,1,1
-baseload electricity,solar,0,0,1,1
-baseload electricity,geothermal,0,0,1,1
+region,supplysector,subsector,year,share.weight
+USA,peak electricity,gas,1975,1
+USA,peak electricity,gas,2030,1
+USA,peak electricity,gas,end-year,1
+USA,peak electricity,refined liquids,1975,1
+USA,peak electricity,refined liquids,initial-future-year,0
+USA,peak electricity,refined liquids,end-year,0
+USA,peak electricity,solar,1975,1
+USA,peak electricity,solar,end-year,1
+USA,peak electricity,solar,2030,1
+USA,subpeak electricity,gas,1975,1
+USA,subpeak electricity,gas,2030,1
+USA,subpeak electricity,gas,end-year,1
+USA,subpeak electricity,refined liquids,1975,1
+USA,subpeak electricity,refined liquids,initial-future-year,0
+USA,subpeak electricity,refined liquids,end-year,0
+USA,subpeak electricity,solar,1975,1
+USA,subpeak electricity,solar,end-year,1
+USA,subpeak electricity,solar,2030,1
+USA,intermediate electricity,coal,1975,1
+USA,intermediate electricity,coal,2030,1
+USA,intermediate electricity,coal,end-year,1
+USA,intermediate electricity,gas,1975,1
+USA,intermediate electricity,gas,2030,1
+USA,intermediate electricity,gas,end-year,1
+USA,intermediate electricity,refined liquids,1975,1
+USA,intermediate electricity,refined liquids,initial-future-year,0
+USA,intermediate electricity,refined liquids,end-year,0
+USA,intermediate electricity,biomass,1975,1
+USA,intermediate electricity,biomass,end-year,1
+USA,intermediate electricity,nuclear,1975,1
+USA,intermediate electricity,nuclear,initial-future-year,0
+USA,intermediate electricity,nuclear,2025,0
+USA,intermediate electricity,nuclear,2030,1
+USA,intermediate electricity,nuclear,end-year,1
+USA,intermediate electricity,wind,1975,1
+USA,intermediate electricity,wind,end-year,0
+USA,intermediate electricity,wind,initial-future-year,0
+USA,intermediate electricity,solar,1975,1
+USA,intermediate electricity,solar,end-year,1
+USA,intermediate electricity,solar,2030,1
+USA,intermediate electricity,geothermal,1975,1
+USA,intermediate electricity,geothermal,end-year,1
+USA,baseload electricity,coal,1975,1
+USA,baseload electricity,coal,2030,1
+USA,baseload electricity,coal,end-year,1
+USA,baseload electricity,gas,1975,1
+USA,baseload electricity,gas,2030,1
+USA,baseload electricity,gas,end-year,1
+USA,baseload electricity,refined liquids,1975,1
+USA,baseload electricity,refined liquids,initial-future-year,0
+USA,baseload electricity,refined liquids,end-year,0
+USA,baseload electricity,biomass,1975,1
+USA,baseload electricity,biomass,end-year,1
+USA,baseload electricity,nuclear,1975,1
+USA,baseload electricity,nuclear,initial-future-year,0
+USA,baseload electricity,nuclear,2025,0
+USA,baseload electricity,nuclear,2030,1
+USA,baseload electricity,nuclear,end-year,1
+USA,baseload electricity,wind,1975,1
+USA,baseload electricity,wind,end-year,1
+USA,baseload electricity,wind,2030,1
+USA,baseload electricity,geothermal,1975,1
+USA,baseload electricity,geothermal,end-year,1

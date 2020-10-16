@@ -10,9 +10,11 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{elec_hydro_USA.xml}.
 #' The corresponding file in the original data system was \code{batch_elec_hydro_USA.xml} (gcamusa XML batch).
-disabled_module_gcamusa_batch_elec_hydro_USA_xml <- function(command, ...) {
+module_gcamusa_batch_elec_hydro_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L2242.StubTechFixOut_hydro_USA"))
+    return(c("L2242.CapacityTech_hydro_future",
+             "L2242.TechLifetime_hydro",
+             "L2242.CapacityTechSegmentCapFac_hydro"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "elec_hydro_USA.xml"))
   } else if(command == driver.MAKE) {
@@ -22,15 +24,22 @@ disabled_module_gcamusa_batch_elec_hydro_USA_xml <- function(command, ...) {
     technology <- stub.technology <- NULL  # silence package check notes
 
     # Load required inputs
-    L2242.StubTechFixOut_hydro_USA <- get_data(all_data, "L2242.StubTechFixOut_hydro_USA")
+    L2242.CapacityTech_hydro_future <- get_data(all_data, "L2242.CapacityTech_hydro_future")
+    L2242.TechLifetime_hydro <- get_data(all_data, "L2242.TechLifetime_hydro")
+    L2242.CapacityTechSegmentCapFac_hydro <- get_data(all_data, "L2242.CapacityTechSegmentCapFac_hydro")
 
     # ===================================================
 
     # Produce outputs
     create_xml("elec_hydro_USA.xml") %>%
-      add_xml_data_generate_levels(L2242.StubTechFixOut_hydro_USA%>% rename(stub.technology = technology),
-                                   "StubTechFixOut","subsector","nesting-subsector",1,FALSE) %>%
-      add_precursors("L2242.StubTechFixOut_hydro_USA") ->
+      add_node_equiv_xml("sector") %>%
+      add_node_equiv_xml("technology") %>%
+      add_xml_data(L2242.CapacityTech_hydro_future, "CapacityTech") %>%
+      add_xml_data(L2242.CapacityTechSegmentCapFac_hydro, "CapacityTechSegmentCapFac")  %>%
+      add_xml_data(L2242.TechLifetime_hydro, "TechLifetime") %>%
+      add_precursors("L2242.CapacityTech_hydro_future",
+                     "L2242.TechLifetime_hydro",
+                     "L2242.CapacityTechSegmentCapFac_hydro") ->
       elec_hydro_USA.xml
 
     return_data(elec_hydro_USA.xml)

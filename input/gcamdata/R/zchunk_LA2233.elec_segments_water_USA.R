@@ -27,7 +27,7 @@
 #' @importFrom dplyr anti_join distinct filter if_else mutate select semi_join summarise_if bind_rows
 #' @importFrom tidyr complete nesting replace_na
 #' @author NTG May 2020
-module_gcamusa_LA2233.elec_segments_water_USA <- function(command, ...) {
+disabled_module_gcamusa_LA2233.elec_segments_water_USA <- function(command, ...) {
 
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/A23.elecS_tech_mapping_cool",

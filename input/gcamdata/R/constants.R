@@ -699,6 +699,8 @@ gcamusa.STATE_UNLIMITED_RESOURCES <- c("global solar resource", "limestone")
 gcamusa.STATE_BIOMASS_SECTORS <- c("regional biomass", "regional corn for ethanol", "regional sugar for ethanol",
                                    "regional biomassOil", "delivered biomass")
 
+gcamusa.RPV_RESOURCE <- "distributed_solar"
+
 # Define sector(s) used in L222.en_transformation_USA
 # The supplysector and subsector structure in these sectors are retained
 gcamusa.SECTOR_EN_NAMES <- "refining"
@@ -793,7 +795,7 @@ gcamusa.ELEC_CAP_INV_MEDIAN <- -0.1
 
 # Indicate whether to use end-use electricity "demand" segments in conjunction with
 # supply-side electricity load segments
-gcamusa.USE_ELEC_DEMAND_SEGMENTS  <- FALSE
+gcamusa.USE_ELEC_DEMAND_SEGMENTS  <- TRUE
 
 
 # Time shift conditions ======================================================================

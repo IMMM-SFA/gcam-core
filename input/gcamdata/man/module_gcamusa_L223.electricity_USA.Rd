@@ -15,8 +15,8 @@ module_gcamusa_L223.electricity_USA(command, ...)
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
 the generated outputs: \code{L223.Sector_Investment}, \code{L223.SubsectorLogit_Investment_Fuel},
-\code{L223.SubsectorShrwt_Investment_Fuel}, \code{L223.SubsectorInterp_Investment_Fuel}, \code{L223.SubsectorInterpTo_Investment_Fuel},
-\code{L223.SubsectorLogit_Investment}, \code{L223.SubsectorInterp_Investment}, \code{L223.SubsectorInterpTo_Investment},
+\code{L223.SubsectorShrwtFllt_Investment_Fuel}, \code{L223.SubsectorInterpTo_Investment_Fuel},
+\code{L223.SubsectorLogit_Investment}, \code{L223.SubsectorInterpTo_Investment},
 \code{L223.StubTech_Investment}, \code{L223.GlobalTechEff_Investment}, \code{L223.StubTechMarket_Investment},
 \code{L223.GlobalTechOMfixed_Investment},\code{L223.GlobalTechOMvar_Investment}, \code{L223.GlobalTechCapital_Investment},
 \code{L223.GlobalTechShrwt_Investment}, \code{L223.GlobalTechCapFac_Investment}, \code{L223.TechCapFac_Investment},
@@ -31,7 +31,7 @@ the generated outputs: \code{L223.Sector_Investment}, \code{L223.SubsectorLogit_
 \code{L223.DispatchSectorDispatchSegments}, \code{L223.InterestRate_FERC}, \code{L223.Pop_FERC}, \code{L223.BaseGDP_FERC},
 \code{L223.LaborForceFillout_FERC}, \code{L223.StubTechCost_offshore_wind_Investment}, \code{L223.GlobalTechCoef_Investment_cool},
 \code{L223.StubTechCoef_Investment_cool}, \code{L223.TechCoef_Dispatch_cool}, \code{L223.TechPmult_dispatch_wind_reeds_USA},
-\code{L223.GlobalTechCapital_elec_Investment_cool}.
+\code{L223.GlobalTechCapital_Investment_cool}.
 The corresponding file in the original data system was \code{L223.electricity_USA.R} (gcam-usa level2 - dispatch branch).
 }
 \description{

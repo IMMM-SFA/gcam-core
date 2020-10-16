@@ -7,11 +7,11 @@
 sector,fuel,elec_tech,supplysector,subsector,technology,minicam.energy.input,calibration,secondary.output,capacity.factor
 electricity generation,coal,coal_conv,electricity,coal,coal (conv pul),regional coal,output,,0.85
 electricity generation,coal,coal_IGCC,electricity,coal,coal (IGCC),regional coal,output,,0.8
-electricity generation,gas,gas_steam,electricity,gas,gas (steam),wholesale gas,output,,0.6
-electricity generation,gas,gas_turbine,electricity,gas,gas (CT),wholesale gas,output,,0.6
+electricity generation,gas,gas_steam,electricity,gas,gas (steam),wholesale gas,output,,0.8
+electricity generation,gas,gas_turbine,electricity,gas,gas (CT),wholesale gas,output,,0.8
 electricity generation,gas,gas_CC,electricity,gas,gas (CC),wholesale gas,output,,0.8
-electricity generation,refined liquids,refined liquids_steam,electricity,refined liquids,refined liquids (steam),refined liquids industrial,output,,0.6
-electricity generation,refined liquids,refined liquids_turbine,electricity,refined liquids,refined liquids (CT),refined liquids industrial,output,,0.6
+electricity generation,refined liquids,refined liquids_steam,electricity,refined liquids,refined liquids (steam),refined liquids industrial,output,,0.8
+electricity generation,refined liquids,refined liquids_turbine,electricity,refined liquids,refined liquids (CT),refined liquids industrial,output,,0.8
 electricity generation,refined liquids,refined liquids_CC,electricity,refined liquids,refined liquids (CC),refined liquids industrial,output,,0.8
 electricity generation,biomass,biomass_conv,electricity,biomass,biomass (conv),regional biomass,output,,0.85
 electricity generation,nuclear,nuclear_conv,electricity,nuclear,Gen_II_LWR,nuclearFuelGenII,output,,0.95
@@ -74,6 +74,4 @@ baseload electricity,biomass,,electricity,biomass,biomass (IGCC CCS),regional bi
 baseload electricity,nuclear,,electricity,nuclear,Gen_III,nuclearFuelGenIII,output,,0.9
 baseload electricity,wind,,electricity,wind,wind,onshore wind resource,output,,0.5
 baseload electricity,wind,,electricity,wind,wind_offshore,offshore wind resource,output,,0.5
-baseload electricity,solar PV,,electricity,solar,PV,global solar resource,output,,0.4
-baseload electricity,solar CSP,,electricity,solar,CSP,global solar resource,output,,0.4
 baseload electricity,geothermal,,electricity,geothermal,geothermal,geothermal,output,,0.9

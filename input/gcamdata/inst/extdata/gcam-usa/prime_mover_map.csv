@@ -144,3 +144,4 @@ MSW,ST,biomass,biomass_conv
 MSW,IC,biomass,biomass_ice
 WND,WS,wind,wind_offshore
 WDS,OT,biomass,biomass_conv
+NG,CC,gas,gas_CC

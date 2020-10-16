@@ -9,7 +9,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{electricity_water.xml}. The corresponding file in the
 #' original data system was \code{batch_electricity_water.xml.R} (water XML).
-module_gcamusa_batch_elec_segments_water_USA_xml <- function(command, ...) {
+disabled_module_gcamusa_batch_elec_segments_water_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2233.GlobalTechEff_elecS_cool_USA",
              "L2233.GlobalTechShrwt_elecS_cool_USA",
