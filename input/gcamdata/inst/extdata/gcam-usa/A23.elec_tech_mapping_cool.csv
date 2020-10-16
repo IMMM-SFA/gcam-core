@@ -1,0 +1,96 @@
+# File: A23.elec_tech_mapping_cool.csv
+# Title: Electricity Generation / Cooling Technology Mapping
+# Units: NA
+# Comments: Mapping file between electricity generation technologies and cooling systems
+# Column types: cccc
+# ----------
+technology,to.technology,cooling_system,water_type
+biomass (conv CCS),biomass (conv CCS) (dry cooling),dry cooling,fresh
+biomass (conv CCS),biomass (conv CCS) (once through),once through,fresh
+biomass (conv CCS),biomass (conv CCS) (recirculating),recirculating,fresh
+biomass (conv CCS),biomass (conv CCS) (seawater),once through,seawater
+biomass (conv),biomass (conv) (cooling pond),cooling pond,fresh
+biomass (conv),biomass (conv) (dry cooling),dry cooling,fresh
+biomass (conv),biomass (conv) (once through),once through,fresh
+biomass (conv),biomass (conv) (recirculating),recirculating,fresh
+biomass (conv),biomass (conv) (seawater),once through,seawater
+biomass (IGCC CCS),biomass (IGCC CCS) (dry cooling),dry cooling,fresh
+biomass (IGCC CCS),biomass (IGCC CCS) (once through),once through,fresh
+biomass (IGCC CCS),biomass (IGCC CCS) (recirculating),recirculating,fresh
+biomass (IGCC CCS),biomass (IGCC CCS) (seawater),once through,seawater
+biomass (IGCC),biomass (IGCC) (dry cooling),dry cooling,fresh
+biomass (IGCC),biomass (IGCC) (once through),once through,fresh
+biomass (IGCC),biomass (IGCC) (recirculating),recirculating,fresh
+biomass (IGCC),biomass (IGCC) (seawater),once through,seawater
+coal (conv pul CCS),coal (conv pul CCS) (dry cooling),dry cooling,fresh
+coal (conv pul CCS),coal (conv pul CCS) (once through),once through,fresh
+coal (conv pul CCS),coal (conv pul CCS) (recirculating),recirculating,fresh
+coal (conv pul CCS),coal (conv pul CCS) (seawater),once through,seawater
+coal (conv pul),coal (conv pul) (cooling pond),cooling pond,fresh
+coal (conv pul),coal (conv pul) (dry cooling),dry cooling,fresh
+coal (conv pul),coal (conv pul) (once through),once through,fresh
+coal (conv pul),coal (conv pul) (recirculating),recirculating,fresh
+coal (conv pul),coal (conv pul) (seawater),once through,seawater
+coal (IGCC CCS),coal (IGCC CCS) (dry cooling),dry cooling,fresh
+coal (IGCC CCS),coal (IGCC CCS) (once through),once through,fresh
+coal (IGCC CCS),coal (IGCC CCS) (recirculating),recirculating,fresh
+coal (IGCC CCS),coal (IGCC CCS) (seawater),once through,seawater
+coal (IGCC),coal (IGCC) (dry cooling),dry cooling,fresh
+coal (IGCC),coal (IGCC) (once through),once through,fresh
+coal (IGCC),coal (IGCC) (recirculating),recirculating,fresh
+coal (IGCC),coal (IGCC) (seawater),once through,seawater
+CSP,CSP (dry_hybrid),dry_hybrid,fresh
+CSP,CSP (recirculating),recirculating,fresh
+gas (CC CCS),gas (CC CCS) (dry cooling),dry cooling,fresh
+gas (CC CCS),gas (CC CCS) (once through),once through,fresh
+gas (CC CCS),gas (CC CCS) (recirculating),recirculating,fresh
+gas (CC CCS),gas (CC CCS) (seawater),once through,seawater
+gas (CC),gas (CC) (cooling pond),cooling pond,fresh
+gas (CC),gas (CC) (dry cooling),dry cooling,fresh
+gas (CC),gas (CC) (once through),once through,fresh
+gas (CC),gas (CC) (recirculating),recirculating,fresh
+gas (CC),gas (CC) (seawater),once through,seawater
+gas (CT),gas (CT) (cooling pond),cooling pond,fresh
+gas (CT),gas (CT) (dry cooling),dry cooling,fresh
+gas (CT),gas (CT) (once through),once through,fresh
+gas (CT),gas (CT) (recirculating),recirculating,fresh
+gas (CT),gas (CT) (seawater),once through,seawater
+gas (steam),gas (steam) (cooling pond),cooling pond,fresh
+gas (steam),gas (steam) (dry cooling),dry cooling,fresh
+gas (steam),gas (steam) (once through),once through,fresh
+gas (steam),gas (steam) (recirculating),recirculating,fresh
+gas (steam),gas (steam) (seawater),once through,seawater
+Gen_II_LWR,Gen_II_LWR (cooling pond),cooling pond,fresh
+Gen_II_LWR,Gen_II_LWR (once through),once through,fresh
+Gen_II_LWR,Gen_II_LWR (recirculating),recirculating,fresh
+Gen_II_LWR,Gen_II_LWR (seawater),once through,seawater
+Gen_III,Gen_III (cooling pond),cooling pond,fresh
+Gen_III,Gen_III (once through),once through,fresh
+Gen_III,Gen_III (recirculating),recirculating,fresh
+Gen_III,Gen_III (seawater),once through,seawater
+geothermal,geothermal (dry_hybrid),dry_hybrid,fresh
+geothermal,geothermal (recirculating),recirculating,fresh
+grid,grid,none,none
+hydro,hydro,none,fresh
+PV,PV,none,fresh
+refined liquids (CC CCS),refined liquids (CC CCS) (dry cooling),dry cooling,fresh
+refined liquids (CC CCS),refined liquids (CC CCS) (once through),once through,fresh
+refined liquids (CC CCS),refined liquids (CC CCS) (recirculating),recirculating,fresh
+refined liquids (CC CCS),refined liquids (CC CCS) (seawater),once through,seawater
+refined liquids (CC),refined liquids (CC) (dry cooling),dry cooling,fresh
+refined liquids (CC),refined liquids (CC) (once through),once through,fresh
+refined liquids (CC),refined liquids (CC) (recirculating),recirculating,fresh
+refined liquids (CC),refined liquids (CC) (seawater),once through,seawater
+refined liquids (CT),refined liquids (CT) (cooling pond),cooling pond,fresh
+refined liquids (CT),refined liquids (CT) (dry cooling),dry cooling,fresh
+refined liquids (CT),refined liquids (CT) (once through),once through,fresh
+refined liquids (CT),refined liquids (CT) (recirculating),recirculating,fresh
+refined liquids (CT),refined liquids (CT) (seawater),once through,seawater
+refined liquids (steam),refined liquids (steam) (cooling pond),cooling pond,fresh
+refined liquids (steam),refined liquids (steam) (dry cooling),dry cooling,fresh
+refined liquids (steam),refined liquids (steam) (once through),once through,fresh
+refined liquids (steam),refined liquids (steam) (recirculating),recirculating,fresh
+refined liquids (steam),refined liquids (steam) (seawater),once through,seawater
+rooftop_pv,rooftop_pv,none,none
+wind,wind,none,none
+wind_offshore,wind_offshore,none,none

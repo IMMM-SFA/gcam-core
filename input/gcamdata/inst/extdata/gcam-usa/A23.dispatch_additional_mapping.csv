@@ -1,0 +1,26 @@
+# File: A23.dispatch_additional_mapping.csv
+# Title: Mapping additional technologies for dispatch model to corresponding techs in the standard electricity model (with & without cooling systems)
+# Units: NA
+# Column types: cccc
+# ----------
+from.technology,from.technology.cool,to.technology,to.technology.cool
+gas (steam/CT),gas (steam/CT) (once through),gas (steam),gas (steam) (once through)
+gas (steam/CT),gas (steam/CT) (seawater),gas (steam),gas (steam) (seawater)
+gas (steam/CT),gas (steam/CT) (recirculating),gas (steam),gas (steam) (recirculating)
+gas (steam/CT),gas (steam/CT) (cooling pond),gas (steam),gas (steam) (cooling pond)
+gas (steam/CT),gas (steam/CT) (dry cooling),gas (steam),gas (steam) (dry cooling)
+refined liquids (steam/CT),refined liquids (steam/CT) (once through),refined liquids (steam),refined liquids (steam) (once through)
+refined liquids (steam/CT),refined liquids (steam/CT) (seawater),refined liquids (steam),refined liquids (steam) (seawater)
+refined liquids (steam/CT),refined liquids (steam/CT) (recirculating),refined liquids (steam),refined liquids (steam) (recirculating)
+refined liquids (steam/CT),refined liquids (steam/CT) (cooling pond),refined liquids (steam),refined liquids (steam) (cooling pond)
+refined liquids (steam/CT),refined liquids (steam/CT) (dry cooling),refined liquids (steam),refined liquids (steam) (dry cooling)
+gas (steam/CT),gas (steam/CT) (once through),gas (CT),gas (CT) (once through)
+gas (steam/CT),gas (steam/CT) (seawater),gas (CT),gas (CT) (seawater)
+gas (steam/CT),gas (steam/CT) (recirculating),gas (CT),gas (CT) (recirculating)
+gas (steam/CT),gas (steam/CT) (cooling pond),gas (CT),gas (CT) (cooling pond)
+gas (steam/CT),gas (steam/CT) (dry cooling),gas (CT),gas (CT) (dry cooling)
+refined liquids (steam/CT),refined liquids (steam/CT) (once through),refined liquids (CT),refined liquids (CT) (once through)
+refined liquids (steam/CT),refined liquids (steam/CT) (seawater),refined liquids (CT),refined liquids (CT) (seawater)
+refined liquids (steam/CT),refined liquids (steam/CT) (recirculating),refined liquids (CT),refined liquids (CT) (recirculating)
+refined liquids (steam/CT),refined liquids (steam/CT) (cooling pond),refined liquids (CT),refined liquids (CT) (cooling pond)
+refined liquids (steam/CT),refined liquids (steam/CT) (dry cooling),refined liquids (CT),refined liquids (CT) (dry cooling)

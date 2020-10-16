@@ -1,0 +1,15 @@
+# File: A23.elec_tech_mapping_cool_shares_fut.csv
+# Title: Current to Future Power Sector Technology Mapping
+# Units: NA
+# Comments: Mapping file between power sector generation technologies which don't exist historically (subsector) and 
+# corresponding existing technologies (mapped_subsector).  Used to inform future cooling share assumptions for the former.
+# For ex. cooling shares for nuclear Gen III in state X are assumed to be consistent with cooling technologies
+# historically chosen for nuclear Gen II in that state.
+# Column types: cc
+# ----------
+subsector,mapped_subsector
+biomass (conv CCS),biomass (conv)
+coal (conv pul CCS),coal (conv pul)
+gas (CC CCS),gas (CC)
+Gen_III,Gen_II_LWR
+refined liquids (CC CCS),refined liquids (CC)
