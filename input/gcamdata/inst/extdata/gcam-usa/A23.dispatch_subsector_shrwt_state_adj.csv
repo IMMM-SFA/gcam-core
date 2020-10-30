@@ -13,7 +13,11 @@ HI,baseload electricity,gas,end-year,0
 HI,intermediate electricity,gas,end-year,0
 HI,subpeak electricity,gas,end-year,0
 HI,peak electricity,gas,end-year,0
-HI,baseload electricity,gas,1975,1
-HI,intermediate electricity,gas,1975,1
-HI,subpeak electricity,gas,1975,1
-HI,peak electricity,gas,1975,1
+HI,baseload electricity,refined liquids,2030,1
+HI,intermediate electricity,refined liquids,2030,1
+HI,subpeak electricity,refined liquids,2030,1
+HI,peak electricity,refined liquids,2030,1
+HI,baseload electricity,refined liquids,end-year,1
+HI,intermediate electricity,refined liquids,end-year,1
+HI,subpeak electricity,refined liquids,end-year,1
+HI,peak electricity,refined liquids,end-year,1

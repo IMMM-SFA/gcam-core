@@ -14,13 +14,10 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L223.Sector_Investment",
              "L223.SubsectorLogit_Investment_Fuel",
-             "L223.SubsectorShrwtFllt_Investment_Fuel",
-             # "L223.SubsectorInterp_Investment_Fuel",
+             "L223.SubsectorShrwt_Investment_Fuel",
              "L223.SubsectorInterpTo_Investment_Fuel",
              "L223.SubsectorLogit_Investment",
-             "L223.SubsectorShrwtFllt_Investment",
-             # "L223.SubsectorInterp_Investment",
-             # "L223.SubsectorInterpTo_Investment",
+             "L223.SubsectorShrwt_Investment",
              "L223.StubTech_Investment",
              "L233.GlobalInvestTech_Investment",
              "L223.GlobalTechEff_Investment",
@@ -32,6 +29,8 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.GlobalTechCapital_Investment",
              "L223.GlobalTechCapital_Investment_cool",
              "L223.GlobalTechShrwt_Investment",
+             "L223.StubTechInterp_Investment_USA",
+             "L223.StubTechShrwt_Investment_USA",
              "L223.GlobalTechCapFac_Investment",
              "L223.TechCapFac_Investment",
              "L223.GlobalTechCapture_Investment",
@@ -103,13 +102,10 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
 
     L223.Sector_Investment <- get_data(all_data, "L223.Sector_Investment")
     L223.SubsectorLogit_Investment_Fuel <- get_data(all_data, "L223.SubsectorLogit_Investment_Fuel")
-    L223.SubsectorShrwtFllt_Investment_Fuel <- get_data(all_data, "L223.SubsectorShrwtFllt_Investment_Fuel")
-    # L223.SubsectorInterp_Investment_Fuel <- get_data(all_data, "L223.SubsectorInterp_Investment_Fuel")
+    L223.SubsectorShrwt_Investment_Fuel <- get_data(all_data, "L223.SubsectorShrwt_Investment_Fuel")
     L223.SubsectorInterpTo_Investment_Fuel <- get_data(all_data, "L223.SubsectorInterpTo_Investment_Fuel")
     L223.SubsectorLogit_Investment <- get_data(all_data, "L223.SubsectorLogit_Investment")
-    L223.SubsectorShrwtFllt_Investment <- get_data(all_data, "L223.SubsectorShrwtFllt_Investment")
-    # L223.SubsectorInterp_Investment <- get_data(all_data, "L223.SubsectorInterp_Investment")
-    # L223.SubsectorInterpTo_Investment <- get_data(all_data, "L223.SubsectorInterpTo_Investment")
+    L223.SubsectorShrwt_Investment <- get_data(all_data, "L223.SubsectorShrwt_Investment")
     L223.StubTech_Investment <- get_data(all_data, "L223.StubTech_Investment")
     L233.GlobalInvestTech_Investment <- get_data(all_data, "L233.GlobalInvestTech_Investment")
     L223.GlobalTechEff_Investment <- get_data(all_data, "L223.GlobalTechEff_Investment")
@@ -121,6 +117,8 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.GlobalTechCapital_Investment <- get_data(all_data, "L223.GlobalTechCapital_Investment")
     L223.GlobalTechCapital_Investment_cool <- get_data(all_data, "L223.GlobalTechCapital_Investment_cool")
     L223.GlobalTechShrwt_Investment <- get_data(all_data, "L223.GlobalTechShrwt_Investment")
+    L223.StubTechInterp_Investment_USA <- get_data(all_data, "L223.StubTechInterp_Investment_USA")
+    L223.StubTechShrwt_Investment_USA <- get_data(all_data, "L223.StubTechShrwt_Investment_USA")
     L223.GlobalTechCapFac_Investment <- get_data(all_data, "L223.GlobalTechCapFac_Investment")
     L223.TechCapFac_Investment <- get_data(all_data, "L223.TechCapFac_Investment")
     L223.GlobalTechCapture_Investment <- get_data(all_data, "L223.GlobalTechCapture_Investment")
@@ -184,8 +182,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
 
     # some renames to avoid using add_xml_data_generate_levels
     L223.SubsectorLogit_Investment_Fuel <- rename(L223.SubsectorLogit_Investment_Fuel, subsector = subsector0)
-    L223.SubsectorShrwtFllt_Investment_Fuel <- rename(L223.SubsectorShrwtFllt_Investment_Fuel, subsector = subsector0)
-    # L223.SubsectorInterp_Investment_Fuel <- rename(L223.SubsectorInterp_Investment_Fuel, subsector = subsector0)
+    L223.SubsectorShrwt_Investment_Fuel <- rename(L223.SubsectorShrwt_Investment_Fuel, subsector = subsector0)
     L223.SubsectorInterpTo_Investment_Fuel <- rename(L223.SubsectorInterpTo_Investment_Fuel, subsector = subsector0)
 
     # ===================================================
@@ -197,12 +194,8 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_logit_tables_xml(L223.Sector_Investment, "Supplysector") %>%
       add_logit_tables_xml_generate_levels(L223.SubsectorLogit_Investment, "SubsectorLogit",
                                            "subsector", "nesting-subsector", 1, FALSE) %>%
-      add_xml_data_generate_levels(L223.SubsectorShrwtFllt_Investment, "SubsectorShrwtFllt",
+      add_xml_data_generate_levels(L223.SubsectorShrwt_Investment, "SubsectorShrwt",
                                    "subsector", "nesting-subsector", 1, FALSE) %>%
-      # add_xml_data_generate_levels(L223.SubsectorInterp_Investment, "SubsectorInterp",
-      #                              "subsector", "nesting-subsector", 1, FALSE) %>%
-      # add_xml_data_generate_levels(L223.SubsectorInterpTo_Investment, "SubsectorInterpTo",
-      #                              "subsector", "nesting-subsector", 1, FALSE) %>%
       add_xml_data_generate_levels(L223.StubTech_Investment, "StubTech",
                                    "subsector", "nesting-subsector", 1, FALSE) %>%
       add_xml_data(L233.GlobalInvestTech_Investment, "GlobalInvestTech") %>%
@@ -217,6 +210,10 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.GlobalTechCapital_Investment, "GlobalTechCapital") %>%
       add_xml_data(L223.GlobalTechCapital_Investment_cool, "GlobalTechCapital") %>%
       add_xml_data(L223.GlobalTechShrwt_Investment, "GlobalTechShrwt") %>%
+      add_xml_data_generate_levels(L223.StubTechInterp_Investment_USA, "StubTechInterp",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data_generate_levels(L223.StubTechShrwt_Investment_USA, "StubTechShrwt",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
       add_xml_data(L223.GlobalTechCapFac_Investment, "GlobalTechCapFac") %>%
       add_xml_data_generate_levels(L223.TechCapFac_Investment, "TechCapFac",
                                    "subsector", "nesting-subsector", 1, FALSE) %>%
@@ -229,8 +226,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                                    "subsector", "nesting-subsector", 1, FALSE) %>%
       add_node_equiv_xml("subsector") %>%
       add_logit_tables_xml(L223.SubsectorLogit_Investment_Fuel, "SubsectorLogit") %>%
-      add_xml_data(L223.SubsectorShrwtFllt_Investment_Fuel, "SubsectorShrwtFllt") %>%
-      # add_xml_data(L223.SubsectorInterp_Investment_Fuel, "SubsectorInterp")  %>%
+      add_xml_data(L223.SubsectorShrwt_Investment_Fuel, "SubsectorShrwt") %>%
       add_xml_data(L223.SubsectorInterpTo_Investment_Fuel, "SubsectorInterpTo") %>%
       add_logit_tables_xml(L223.Sector_Investment_StateShare, "Supplysector") %>%
       add_logit_tables_xml(L223.Subsector_Investment_StateShare, "SubsectorLogit") %>%
@@ -286,13 +282,10 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L2232.Production_elec_gen_FERC, "Production") %>%
       add_precursors("L223.Sector_Investment",
                      "L223.SubsectorLogit_Investment_Fuel",
-                     "L223.SubsectorShrwtFllt_Investment_Fuel",
-                     # "L223.SubsectorInterp_Investment_Fuel",
+                     "L223.SubsectorShrwt_Investment_Fuel",
                      "L223.SubsectorInterpTo_Investment_Fuel",
                      "L223.SubsectorLogit_Investment",
-                     "L223.SubsectorShrwtFllt_Investment",
-                     # "L223.SubsectorInterp_Investment",
-                     # "L223.SubsectorInterpTo_Investment",
+                     "L223.SubsectorShrwt_Investment",
                      "L223.StubTech_Investment",
                      "L233.GlobalInvestTech_Investment",
                      "L223.GlobalTechEff_Investment",
@@ -304,6 +297,8 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.GlobalTechCapital_Investment",
                      "L223.GlobalTechCapital_Investment_cool",
                      "L223.GlobalTechShrwt_Investment",
+                     "L223.StubTechInterp_Investment_USA",
+                     "L223.StubTechShrwt_Investment_USA",
                      "L223.GlobalTechCapFac_Investment",
                      "L223.TechCapFac_Investment",
                      "L223.GlobalTechCapture_Investment",

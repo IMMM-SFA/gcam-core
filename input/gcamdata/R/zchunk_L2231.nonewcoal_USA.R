@@ -19,7 +19,7 @@
 #' @author RC Aug 2018
 module_gcamusa_L2231.nonewcoal_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L223.SubsectorShrwtFllt_Investment",
+    return(c("L223.SubsectorShrwt_Investment",
              "L222.StubTechMarket_en_USA",
              "L232.StubTechMarket_ind_USA",
              "L222.StubTech_en",
@@ -37,7 +37,7 @@ module_gcamusa_L2231.nonewcoal_USA <- function(command, ...) {
       Electric.sector.technology <- Electric.sector <- subsector0 <- NULL  # silence package check notes
 
     # Load required inputs
-    L223.SubsectorShrwtFllt_Investment <- get_data(all_data, "L223.SubsectorShrwtFllt_Investment")
+    L223.SubsectorShrwt_Investment <- get_data(all_data, "L223.SubsectorShrwt_Investment")
     L222.StubTechMarket_en_USA <- get_data(all_data, "L222.StubTechMarket_en_USA")
     L232.StubTechMarket_ind_USA <- get_data(all_data, "L232.StubTechMarket_ind_USA")
     L222.StubTech_en <- get_data(all_data, "L222.StubTech_en")
@@ -47,12 +47,12 @@ module_gcamusa_L2231.nonewcoal_USA <- function(command, ...) {
     # ===================================================
     # Perform computations
 
-    L223.SubsectorShrwtFllt_Investment %>%
+    L223.SubsectorShrwt_Investment %>%
       # Get the conventional coal technology without CCS
       filter(subsector0 == "coal", !grepl("CCS", subsector)) %>%
       # bind_rows(tibble(supplysector = "industrial energy use", subsector = "coal", stub.technology = "coal cogen")) %>%
       # distinct(region, supplysector, subsector0, subsector) %>%
-      select(-year.fillout, -share.weight) %>%
+      select(-year, -share.weight) %>%
       distinct() %>%
       repeat_add_columns(tibble(year = MODEL_FUTURE_YEARS)) %>%
       mutate(share.weight = 0) ->
@@ -99,7 +99,7 @@ module_gcamusa_L2231.nonewcoal_USA <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Set zero share-weights for coal without CCS in all USA states and future years") %>%
       add_legacy_name("L2231.SubsectorShrwt_nonewcoal_elecS_cool_USA") %>%
-      add_precursors("L223.SubsectorShrwtFllt_Investment") ->
+      add_precursors("L223.SubsectorShrwt_Investment") ->
       L2231.SubsectorShrwt_elec_nonewcoal_USA
 
     L2231.StubTechShrwt_nonewcoal_USA %>%

@@ -795,7 +795,7 @@ gcamusa.ELEC_CAP_INV_MEDIAN <- -0.1
 
 # Indicate whether to use end-use electricity "demand" segments in conjunction with
 # supply-side electricity load segments
-gcamusa.USE_ELEC_DEMAND_SEGMENTS  <- TRUE
+gcamusa.USE_ELEC_DEMAND_SEGMENTS  <- FALSE
 
 
 # Time shift conditions ======================================================================

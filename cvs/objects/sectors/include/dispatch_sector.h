@@ -74,6 +74,8 @@ public:
                          const int aPeriod );
     
     virtual void postCalc( const int aPeriod );
+    
+    void gatherCapacity( const int aPeriod );
 
 protected:
     virtual bool XMLDerivedClassParse( const std::string& nodeName, const xercesc::DOMNode* curr );

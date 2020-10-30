@@ -161,7 +161,7 @@ void NegativeEmissionsFinalDemand::completeInit( const string& aRegionName,
     }
 
     MarketDependencyFinder* depFinder = scenario->getMarketplace()->getDependencyFinder();
-    depFinder->addDependency( mPolicyName, aRegionName, mName, aRegionName );
+    depFinder->addDependency( mPolicyName, aRegionName, mName, aRegionName, false );
 }
 
 void NegativeEmissionsFinalDemand::initCalc( const string& aRegionName,

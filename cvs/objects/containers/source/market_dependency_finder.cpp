@@ -143,58 +143,14 @@ bool MarketDependencyFinder::addDependency( const string& aDependentName,
     if( dependencyIter == mDependencyItems.end() ) {
         dependencyIter = mDependencyItems.insert( item.release() ).first;
     }
-    (*dependencyIter)->mCanBreakCycle &= aCanBeBroken;
+    if( !aCanBeBroken ) {
+        (*dependencyIter)->mCannotBreakDep.insert( *dependentIter );
+        (*dependentIter)->mCannotBreakDep.insert( *dependencyIter);
+    }
     
     // These are kept track of by adding to the list of dependents for the
     // dependency item.
     return (*dependencyIter)->insertDependent( *dependentIter );
-}
-
-/*!
- * \brief Copies all dependencies on one item to anther.
- * \details Dependency relationships are given in terms of price dependence.  So
- *          that if aDependencyName changes it's price then aDependentName must
- *          be recalculated.  Note that region names must be specified as well to
- *          allow direct trading between regions.
- * \param aDependentName The name of the item which will have it's existing
- *                       dependencies copied from.
- * \param aDependentRegion The region name of the item which will have it's existing
- *                         dependencies copied from.
- * \param aDependencyName The name of the item which will reieve the new dependencies.
- * \param aDependencyRegion The region name in which aDependencyName is contained.
- */
-void MarketDependencyFinder::copyDependencies( const string& aDependentName,
-                                               const string& aDependentRegion,
-                                               const string& aDependencyName,
-                                               const string& aDependencyRegion )
-{
-    // Find/create a DependencyItem entry for the dependent item
-    auto_ptr<DependencyItem> item( new DependencyItem( aDependentName, aDependentRegion ) );
-    ItemIterator dependentIter = mDependencyItems.find( item.get() );
-    if( dependentIter == mDependencyItems.end() ) {
-        dependentIter = mDependencyItems.insert( item.release() ).first;
-    }
-    
-    // Check for self dependence
-    if( aDependentName == aDependencyName && aDependentRegion == aDependencyRegion ) {
-        (*dependentIter)->mHasSelfDependence = true;
-        return;
-    }
-    
-    // Find/create a DependencyItem entry for the dependency
-    item.reset( new DependencyItem( aDependencyName, aDependencyRegion ) );
-    ItemIterator dependencyIter = mDependencyItems.find( item.get() );
-    if( dependencyIter == mDependencyItems.end() ) {
-        dependencyIter = mDependencyItems.insert( item.release() ).first;
-    }
-    
-    // These are kept track of by adding to the list of dependents for the
-    // dependency item.
-    for( auto currDep : mDependencyItems ) {
-        if( currDep != *dependencyIter && currDep->mDependentList.find( *dependentIter ) != currDep->mDependentList.end() ) {
-            currDep->mDependentList.insert( *dependencyIter );
-        }
-    }
 }
 
 /*!
@@ -463,7 +419,7 @@ void MarketDependencyFinder::createOrdering() {
             (*it)->mIsSolved = isSolved;
             // we don't need to wory about grouping solved markets since they will just
             // get disconnected anyways
-            if( !isSolved || !(*it)->mCanBreakCycle ) {
+            if( !isSolved || !(*it)->mCannotBreakDep.empty() ) {
                 marketDepGrouping[ marketNumber ].insert( *it );
             }
         }
@@ -516,6 +472,11 @@ void MarketDependencyFinder::createOrdering() {
                 ++numDependencies[ *vertexIter ];
             }
         }
+        // The price verticies should always go before the demand verticies
+        if( !(*it)->mIsSolved && !(*it)->mPriceVertices.empty() && !(*it)->mDemandVertices.empty() ) {
+            (*it)->getLastPriceVertex()->mOutEdges.push_back( (*it)->getFirstDemandVertex() );
+            ++numDependencies[ (*it)->getFirstDemandVertex() ];
+    }
     }
     
     // Connect the graph by setting the out edges.
@@ -567,7 +528,7 @@ void MarketDependencyFinder::createOrdering() {
             }
             // if this depenency can not have it's dependency broken then we can't skip adding
             // it's dependents even if it is solved
-            if( (*it)->mCanBreakCycle ) {
+            if( (*it)->mCannotBreakDep.empty() ) {
                 continue;
             }
         }
@@ -577,13 +538,6 @@ void MarketDependencyFinder::createOrdering() {
             continue;
         }
         
-        if( (*it)->mDependentList.empty() && !(*it)->mPriceVertices.empty() ) {
-            // This is the fold back point, or final demand, so loop back on self
-            // by linking the final price calculation to it's demand calculation.
-            (*it)->getLastPriceVertex()->mOutEdges.push_back( (*it)->getFirstDemandVertex() );
-            ++numDependencies[ (*it)->getFirstDemandVertex() ];
-        }
-        else {
             for( CItemIterator dependIt = (*it)->mDependentList.begin(); dependIt != (*it)->mDependentList.end(); ++dependIt ) {
                 // Typical dependency case where we add an edge from the last price vertex
                 // of this item to the first price vertex of it's dependent's item.
@@ -610,7 +564,6 @@ void MarketDependencyFinder::createOrdering() {
                 }
             }
         }
-    }
     
     // Do some error checking for activities that are not related to any other
     // activities in the model as it may be an indication of misconfiguration.
@@ -716,7 +669,7 @@ void MarketDependencyFinder::createOrdering() {
             int max = 0;
             CalcVertex* maxVertex = 0;
             for( NumDepIterator it = totalVisits.begin(); it != totalVisits.end(); ++it ) {            
-                if( (*it).first->mDepItem->mCanBreakCycle && (*it).second > max ) {
+                if( (*it).second > max && (*it).first->mDepItem->mCannotBreakDep.empty() ) {
                     maxVertex = (*it).first;
                     max = (*it).second;
                 }
@@ -930,7 +883,7 @@ void MarketDependencyFinder::createTrialsForItem( CItemIterator aItemToReset, Ca
                 if( boost::algorithm::ends_with( (*vertexIter)->mCalcItem->getDescription(), "-fixed-output" ) ) {
                     fixedOutputVertices.push_back( *vertexIter );
                 }
-                else if( !(*it)->mCanBreakCycle ) {
+                else if( (*it)->mCannotBreakDep.find( *aItemToReset ) != (*it)->mCannotBreakDep.end() ) {
                     ++numUnBreakable;
                 }
                 else {
@@ -939,7 +892,9 @@ void MarketDependencyFinder::createTrialsForItem( CItemIterator aItemToReset, Ca
             }
         }
     }
-    aNumDependencies[ (*aItemToReset)->getFirstDemandVertex() ] = fixedOutputVertices.size() + numUnBreakable;
+    // Note we add 1 here in addition to the fixed output and unbreakable because we
+    // also keep the link from the price vertex to the demand vertex
+    aNumDependencies[ (*aItemToReset)->getFirstDemandVertex() ] = fixedOutputVertices.size() + numUnBreakable + 1;
 
     // Lookup/create the associated market linkages to the price and demand
     // vertices.

@@ -5,7 +5,7 @@
 # Column types: cccccic
 # ----------
 supplysector,subsector,apply.to,from.year,to.year,to.value,interpolation.function
-peak electricity,gas,share-weight,final-calibration-year,2300,1,linear
+peak electricity,gas,share-weight,final-calibration-year,2030,1,linear
 peak electricity,gas,share-weight,2030,end-year,1,fixed
 peak electricity,refined liquids,share-weight,final-calibration-year,initial-future-year,0,linear
 peak electricity,refined liquids,share-weight,initial-future-year,end-year,0,fixed

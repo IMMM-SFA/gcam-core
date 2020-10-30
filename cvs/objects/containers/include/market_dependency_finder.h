@@ -93,11 +93,6 @@ public:
                         const std::string& aDependencyName,
                         const std::string& aDependencyRegion,
                         const bool aCanBeBroken = true );
-    
-    void copyDependencies( const std::string& aDependentName,
-                           const std::string& aDependentRegion,
-                           const std::string& aDependencyName,
-                           const std::string& aDependencyRegion );
 
     const std::vector<IActivity*> getOrdering( const int aMarketNumber = -1 ) const;
 
@@ -196,9 +191,8 @@ public:
     struct DependencyItem {
         DependencyItem( const std::string& aName, const std::string& aLocatedInRegion )
         :mName( aName ), mLocatedInRegion( aLocatedInRegion ), mIsSolved( false ),
-        mLinkedMarket( -1 ), mCanBreakCycle( true ), mHasSelfDependence( false ),
-        mHasIncomingDependency( false ){}
-        ~DependencyItem();
+        mLinkedMarket( -1 ), mHasSelfDependence( false ) {}
+		~DependencyItem();
         
         //! A name of a dependency which will correspond to a sector or resource, etc.
         const std::string mName;
@@ -225,8 +219,8 @@ public:
         //! and this graph will be static through all model periods.
         int mLinkedMarket;
         
-        //! Whether this item can be used to break a cycle.
-        bool mCanBreakCycle;
+        //! Set of dependencies which can not be broken even if solved.
+        std::set<DependencyItem*> mCannotBreakDep;
 
         //! A flag to indicate if this dependency has a self dependence.  If this
         //! flag is set then the item must be converted to a solved market by creating

@@ -8,7 +8,7 @@
 # According to the EIA Hawaii has no natural gas consumption and no electricity generation by gas.
 # Considering that over half of final energy consumption is for transport and that there are no energy intensive industries and limited heating needs building expensive LNG terminals or storage facilities seems unrealistic.
 # Thus  we do not allow gas-fired electricity as an option for Hawaii.
-# Hawaii is the only state which is allowed to deploy new refined liquids electric power plants in future model periods because of its historical reliance on oil-fired electricity generation and geographic / resource constraints on alternative fuels (particularly natual gas).,
+# Hawaii is the only state which is allowed to deploy new refined liquids electric power plants in future model periods because of its historical reliance on oil-fired electricity generation and geographic / resource constraints on alternative fuels (particularly natual gas).
 # Column types: ccccccic
 # ----------
 region,supplysector,subsector,apply.to,from.year,to.year,to.value,interpolation.function
@@ -20,7 +20,11 @@ HI,baseload electricity,gas,share-weight,initial-future-year,end-year,0,fixed
 HI,intermediate electricity,gas,share-weight,initial-future-year,end-year,0,fixed
 HI,subpeak electricity,gas,share-weight,initial-future-year,end-year,0,fixed
 HI,peak electricity,gas,share-weight,initial-future-year,end-year,0,fixed
-HI,baseload electricity,refined liquids,share-weight,final-calibration-year,end-year,1,fixed
-HI,intermediate electricity,refined liquids,share-weight,final-calibration-year,end-year,1,fixed
-HI,subpeak electricity,refined liquids,share-weight,final-calibration-year,end-year,1,fixed
-HI,peak electricity,refined liquids,share-weight,final-calibration-year,end-year,1,fixed
+HI,baseload electricity,refined liquids,share-weight,final-calibration-year,2030,1,linear
+HI,intermediate electricity,refined liquids,share-weight,final-calibration-year,2030,1,linear
+HI,subpeak electricity,refined liquids,share-weight,final-calibration-year,2030,1,linear
+HI,peak electricity,refined liquids,share-weight,final-calibration-year,2030,1,linear
+HI,baseload electricity,refined liquids,share-weight,2030,end-year,1,fixed
+HI,intermediate electricity,refined liquids,share-weight,2030,end-year,1,fixed
+HI,subpeak electricity,refined liquids,share-weight,2030,end-year,1,fixed
+HI,peak electricity,refined liquids,share-weight,2030,end-year,1,fixed

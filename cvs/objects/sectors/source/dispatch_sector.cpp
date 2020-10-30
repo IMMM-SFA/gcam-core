@@ -55,11 +55,29 @@
 #include "util/logger/include/ilogger.h"
 #include "util/base/include/gcam_fusion.hpp"
 #include "util/base/include/gcam_data_containers.h"
+#include "containers/include/iactivity.h"
 
 using namespace std;
 using namespace xercesc;
 
 extern Scenario* scenario;
+
+class GatherCapacityActivity : public IActivity {
+public:
+    GatherCapacityActivity( const string& aRegionName, DispatchSector* aSector ):mRegionName( aRegionName ),
+    mSector(aSector)
+    {
+    }
+    virtual void calc( const int aPeriod ) {
+        mSector->gatherCapacity( aPeriod );
+    }
+    virtual string getDescription() const {
+        return mRegionName+" GatherCapacity";
+    }
+private:
+    const std::string mRegionName;
+    DispatchSector* mSector;
+};
 
 /* \brief Constructor
  * \param aRegionName The name of the region.
@@ -168,6 +186,10 @@ void DispatchSector::completeInit( const IInfo* aRegionInfo,
             // prices being related to dispatch quantities
             depFinder->addDependency( segmentMarketName, mRegionName, segmentMarketName, mRegionName );
         }
+        for( auto genSector : mGenSectors ) {
+            depFinder->addDependency( mName, mRegionName, genSector.first, genSector.second, false );
+            depFinder->addDependency( "gather capacity", genSector.second, mName, mRegionName, false );
+        }
     }
     else {
         // This instance of DispatchSector is responsible for gathering capacity so we
@@ -175,15 +197,17 @@ void DispatchSector::completeInit( const IInfo* aRegionInfo,
         // new investments to the technologies before this class gathers the capacity
         for( auto genSector : mGenSectors ) {
             depFinder->addDependency( genSector.first, genSector.second, mName, mRegionName, false );
+            depFinder->addDependency( genSector.first, genSector.second, "gather capacity", mRegionName, false );
         }
+        depFinder->resolveActivityToDependency( mRegionName, "gather capacity", new GatherCapacityActivity( mRegionName, this ) );
     }
 }
 
 void DispatchSector::setMarket() {
-    if(!mSubsectors.empty()) {
+    /*if(!mSubsectors.empty()) {
         // let the grid region create the market
         return;
-    }
+    }*/
     Marketplace* marketplace = scenario->getMarketplace();
     
     
@@ -197,9 +221,9 @@ void DispatchSector::setMarket() {
         marketplace->setPriceVector( mName, mRegionName, mPrice );
         
         // add states to market
-        for( auto genSector : mGenSectors ) {
+        /*for( auto genSector : mGenSectors ) {
             marketplace->createMarket( genSector.second, mRegionName, mName, IMarketType::NORMAL );
-        }
+        }*/
     }
 }
 
@@ -282,9 +306,7 @@ void DispatchSector::initCalc( NationalAccount* aNationalAccount,
     }
 }
 
-void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
-    Marketplace* marketplace = scenario->getMarketplace();
-    
+void DispatchSector::gatherCapacity( const int aPeriod ) {
     if( mDoGatherCapacity && aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() ) {
         // this instance needs to gather new capacity investments
         // we use a GCAMFusion to query the technologies in the investment sectors
@@ -300,7 +322,9 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         // region / sectors from which to gather capacity
         getCapSteps.push_back( new FilterStep( "region", new NamedFilter( new StringEqualsRef( currRegion ) ) ) );
         getCapSteps.push_back( new FilterStep( "sector", new NamedFilter( new StringEqualsRef( currSector ) ) ) );
+        // getCapSteps.push_back( new FilterStep( "" ) );
         getCapSteps.push_back( new FilterStep( "subsector" ) );
+        getCapSteps.push_back( new FilterStep( "nested-subsector" ) );
         getCapSteps.push_back( new FilterStep( "technology", new NamedFilter( new StringEqualsRef( currTech ) ) ) );
         getCapSteps.push_back( new FilterStep( "period", new YearFilter( new IntEquals( year ) ) ) );
         GetCapacityHelper getCapHelper;
@@ -327,9 +351,15 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
         for( auto filterStep : getCapSteps ) {
             delete filterStep;
         }
-
-	
+        
+        
     }
+}
+
+void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
+    Marketplace* marketplace = scenario->getMarketplace();
+    
+    
     
 
     if( mDoDispatchCapacity ) {
