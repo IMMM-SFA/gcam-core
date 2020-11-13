@@ -47,7 +47,8 @@ USA,intermediate electricity,solar,1975,1
 USA,intermediate electricity,solar,end-year,1
 USA,intermediate electricity,solar,2030,1
 USA,intermediate electricity,geothermal,1975,1
-USA,intermediate electricity,geothermal,end-year,1
+USA,intermediate electricity,geothermal,initial-future-year,0
+USA,intermediate electricity,geothermal,end-year,0
 USA,baseload electricity,coal,1975,1
 USA,baseload electricity,coal,2030,1
 USA,baseload electricity,coal,end-year,1
@@ -68,4 +69,5 @@ USA,baseload electricity,wind,1975,1
 USA,baseload electricity,wind,end-year,1
 USA,baseload electricity,wind,2030,1
 USA,baseload electricity,geothermal,1975,1
-USA,baseload electricity,geothermal,end-year,1
+USA,baseload electricity,geothermal,initial-future-year,0
+USA,baseload electricity,geothermal,end-year,0

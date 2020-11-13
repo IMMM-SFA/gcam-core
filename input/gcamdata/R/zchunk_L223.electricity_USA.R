@@ -235,7 +235,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       csp_states_noresource
     csp_states_noresource <- unique(csp_states_noresource$state)
 
-
     # Define states and basins that have access to seawater where seawater cooling will be allowed
     seawater_states_basins <- unique(usa_seawater_states_basins$seawater_region)
 

@@ -180,51 +180,92 @@ module_gcamusa_LB105.EIA_elec_vintage_USA <- function(command, ...) {
     eia_elec_data_water %>%
       filter(!is.na(cooling_system)) -> eia_elec_data_water_cool
 
-    # NOTE:  ~2,500 plants have no cooling tech info, but this only
-    # amounts to ~14% of capacity and ~11% of generation nationally
+    # NOTE:  ~750 plants have no cooling tech info, but this only
+    # amounts to ~7% of capacity and ~6% of generation nationally
     eia_elec_data_water %>%
       filter(is.na(cooling_system)) -> eia_elec_data_water_missing
 
-    # calculate national cooling system shares, distinguishing between coastal and non-coastal states,
-    # to fill in missing cooling tech data
+    # eia_elec_data_water %>%
+    #   summarise(en_out = sum(en_out),
+    #             NAMEPLATE = sum(NAMEPLATE)) -> TEST1
+    #
+    # eia_elec_data_water_cool %>%
+    #   summarise(en_out = sum(en_out),
+    #             NAMEPLATE = sum(NAMEPLATE)) -> TEST2
+    #
+    # eia_elec_data_water_missing %>%
+    #   summarise(en_out = sum(en_out),
+    #             NAMEPLATE = sum(NAMEPLATE)) -> TEST3
+
+    # calculate state cooling system shares to fill in missing cooling tech data
     # calcluate shares on capacity and generation basis
     eia_elec_data_water_cool %>%
-      mutate(seawater = if_else(state %in% seawater_states_basins, "coastal", "non-coastal")) %>%
-      group_by(seawater, gcam_fuel, elec_tech, cooling_system, water_type) %>%
+      # mutate(seawater = if_else(state %in% seawater_states_basins, "coastal", "non-coastal")) %>%
+      group_by(state, gcam_fuel, elec_tech, cooling_system, water_type) %>%
+      # group_by(seawater, gcam_fuel, elec_tech, cooling_system, water_type) %>%
       summarise(Nameplate.MW = sum(Nameplate.MW),
                 en_out = sum(en_out)) %>%
       ungroup() %>%
-      group_by(seawater, gcam_fuel, elec_tech) %>%
+      group_by(state, gcam_fuel, elec_tech) %>%
       mutate(cap_share = Nameplate.MW / sum(Nameplate.MW),
              gen_share = en_out / sum(en_out)) %>%
       ungroup() -> eia_elec_data_water_cool_shares
 
+    # calculate most common cooling system per fuel & tech nationally
+    # this is needed because some states have missing cooling system data for fuels / techs which
+    # do not exist elsewhere in the state
+    eia_elec_data_water_cool %>%
+      # mutate(seawater = if_else(state %in% seawater_states_basins, "coastal", "non-coastal")) %>%
+      group_by(gcam_fuel, elec_tech, cooling_system, water_type) %>%
+      # group_by(seawater, gcam_fuel, elec_tech, cooling_system, water_type) %>%
+      summarise(Nameplate.MW = sum(Nameplate.MW),
+                en_out = sum(en_out)) %>%
+      ungroup() %>%
+      group_by(gcam_fuel, elec_tech) %>%
+      # select most common cooling system by capacity
+      filter(Nameplate.MW == max(Nameplate.MW)) %>%
+      ungroup() %>%
+      select(gcam_fuel, elec_tech, cooling_system_predominant = cooling_system, water_type_predominant = water_type) %>%
+      mutate(cap_share_predominant = 1,
+             gen_share_predominant = 1) ->
+      eia_elec_cool_predominant
+
     # map shares
     eia_elec_data_water_missing %>%
-      mutate(seawater = if_else(state %in% seawater_states_basins, "coastal", "non-coastal")) %>%
+      # mutate(seawater = if_else(state %in% seawater_states_basins, "coastal", "non-coastal")) %>%
       # remove cooling_system and water_type columns, which have NAs
       select(-cooling_system, -water_type) %>%
       # join is intended to duplicate rows by number of potential cooling techs
       # LJENM will throw error, so LJ is used
       left_join(eia_elec_data_water_cool_shares %>%
-                  select(-Nameplate.MW, -en_out),
-                by = c("seawater", "gcam_fuel", "elec_tech")) %>%
-      # TODO:  more robust
-      # one NA entry - IN RL_CC (no other non-coastal techs in this category)
-      # assign recirculating freshwater for now
-      replace_na(list(cooling_system = "recirculating",
-                      water_type = "fresh",
-                      gen_share = 1,
-                      cap_share = 1)) %>%
+                                 select(-Nameplate.MW, -en_out),
+                               by = c("state", "gcam_fuel", "elec_tech")) %>%
+      # some states have plants with missing cooling system data for fuels / techs
+      # which do not exist elsewhere in the state
+      # assign the most common cooling system per fuel & tech nationally
+      # LJENM throws error because of NAs (already existing in LHS), left_join is used
+      left_join(eia_elec_cool_predominant, by = c("gcam_fuel", "elec_tech")) %>%
+      # # TODO:  more robust
+      # # one NA entry - IN RL_CC (no other non-coastal techs in this category)
+      # # assign recirculating freshwater for now
+      # replace_na(list(cooling_system = "recirculating",
+      #                 water_type = "fresh",
+      #                 gen_share = 1,
+      #                 cap_share = 1)) %>%
       # share out energy variables by energy share, and capacity variables by capacity share
       # the underlying assumption is that cooling systems have identical efficiencies for a given gen tech
-      mutate(en_in = en_in * gen_share,
+      mutate(cooling_system = if_else(is.na(cooling_system), cooling_system_predominant, cooling_system),
+             water_type = if_else(is.na(water_type), water_type_predominant, water_type),
+             gen_share = if_else(is.na(gen_share), gen_share_predominant, gen_share),
+             cap_share = if_else(is.na(cap_share), cap_share_predominant, cap_share),
+             en_in = en_in * gen_share,
              en_in_elec = en_in_elec * gen_share,
              en_out = en_out * gen_share,
              Nameplate.MW = Nameplate.MW * cap_share,
              NAMEPLATE = NAMEPLATE * cap_share) %>%
       # remove seawater, cap share, and gen share info, which we no longer need
-      select(-seawater, -cap_share, -gen_share) -> eia_elec_data_water_inferred
+      select(-cap_share, -gen_share, -cooling_system_predominant, -water_type_predominant, -gen_share_predominant, -cap_share_predominant) ->
+      eia_elec_data_water_inferred
 
     eia_elec_data_water_cool %>%
       bind_rows(eia_elec_data_water_inferred) -> eia_elec_data_water_full

@@ -14,13 +14,11 @@ module_gcamusa_L2241.coal_retire_USA(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L2241.TechProd_elec_coalret_dispatch_gcamusa}, \code{L2241.CapacityTech_elec_coalret_dispatch_gcamusa},
-\code{L2241.TechEff_elec_coalret_dispatch_gcamusa}, \code{L2241.TechSCurve_elec_coalret_dispatch_gcamusa},
-\code{L2241.TechShrwt_elec_coalret_dispatch_gcamusa}, \code{L2241.TechOMvar_elec_coalret_dispatch_gcamusa},
-\code{L2241.TechProd_coal_vintage_dispatch_gcamusa}, \code{L2241.CapacityTech_coal_vintage_dispatch_gcamusa},
-\code{L2241.TechEff_coal_vintage_dispatch_gcamusa}, \code{L2241.TechOMvar_coal_vintage_dispatch_gcamusa},
-\code{L2241.TechShrwt_coal_vintage_dispatch_gcamusa}, \code{L2241.TechSCurve_coal_vintage_dispatch_gcamusa},
-\code{L2241.TechCapFac_coalret_vintage_dispatch_gcamusa}, \code{L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa}.
+the generated outputs: \code{L2241.Production_coalret_vintage_dispatch_gcamusa}, \code{L2241.CapacityTech_coalret_vintage_dispatch_gcamusa},
+\code{L2241.TechEff_coalret_vintage_dispatch_gcamusa}, \code{L2241.TechSCurve_coalret_vintage_dispatch_gcamusa},
+\code{L2241.TechShrwt_coalret_vintage_dispatch_gcamusa}, \code{L2241.TechOMvar_coalret_vintage_dispatch_gcamusa},
+\code{L2241.TechCapFac_coalret_vintage_dispatch_gcamusa}, \code{L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa},
+\code{L2241.CapacityTechMinCapFac_coalret_vintage_dispatch_gcamusa}, \code{L2241.TechProfitShutdown_coalret_vintage_dispatch_gcamusa}.
 The corresponding file in the original data system was \code{L2241.coal_slow_fast_retire_USA.R} (gcam-usa level2).
 }
 \description{

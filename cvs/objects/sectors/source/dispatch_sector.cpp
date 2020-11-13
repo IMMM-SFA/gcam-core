@@ -333,6 +333,7 @@ void DispatchSector::gatherCapacity( const int aPeriod ) {
         // gather capacity by technology
         for( auto tech : mAllTechs ) {
             getCapHelper.mTotalCapacity = 0;
+            getCapHelper.mDidFindCapacity = false;
             currTech = tech->getName();
             if( tech->isNewInvestment( aPeriod ) ) {
                 // and collapse accross investment segment
@@ -344,7 +345,9 @@ void DispatchSector::gatherCapacity( const int aPeriod ) {
                     doGetCap.startFilter( scenario );
                 }
                 // set the new investment capacity
-                tech->setCapacity( getCapHelper.mTotalCapacity, aPeriod );
+                if (getCapHelper.mDidFindCapacity) {
+                    tech->setCapacity(getCapHelper.mTotalCapacity, aPeriod);
+                }
             }
         }
         // clean up memory from the GCAMFusion query
@@ -591,6 +594,7 @@ void DispatchSector::GetCapacityHelper::processData( DataType& aData ) {
 
 template<>
 void DispatchSector::GetCapacityHelper::processData<ITechnology*>( ITechnology*& aData ) {
+    mDidFindCapacity = true;
     mTotalCapacity += aData->getOutput( mPeriod ) / aData->getCapacityFactor();
 }
 

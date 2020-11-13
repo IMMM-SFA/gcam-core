@@ -6,13 +6,11 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L2241.TechProd_elec_coalret_dispatch_gcamusa}, \code{L2241.CapacityTech_elec_coalret_dispatch_gcamusa},
-#' \code{L2241.TechEff_elec_coalret_dispatch_gcamusa}, \code{L2241.TechSCurve_elec_coalret_dispatch_gcamusa},
-#' \code{L2241.TechShrwt_elec_coalret_dispatch_gcamusa}, \code{L2241.TechOMvar_elec_coalret_dispatch_gcamusa},
-#' \code{L2241.TechProd_coal_vintage_dispatch_gcamusa}, \code{L2241.CapacityTech_coal_vintage_dispatch_gcamusa},
-#' \code{L2241.TechEff_coal_vintage_dispatch_gcamusa}, \code{L2241.TechOMvar_coal_vintage_dispatch_gcamusa},
-#' \code{L2241.TechShrwt_coal_vintage_dispatch_gcamusa}, \code{L2241.TechSCurve_coal_vintage_dispatch_gcamusa},
-#' \code{L2241.TechCapFac_coalret_vintage_dispatch_gcamusa}, \code{L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa}.
+#' the generated outputs: \code{L2241.Production_coalret_vintage_dispatch_gcamusa}, \code{L2241.CapacityTech_coalret_vintage_dispatch_gcamusa},
+#' \code{L2241.TechEff_coalret_vintage_dispatch_gcamusa}, \code{L2241.TechSCurve_coalret_vintage_dispatch_gcamusa},
+#' \code{L2241.TechShrwt_coalret_vintage_dispatch_gcamusa}, \code{L2241.TechOMvar_coalret_vintage_dispatch_gcamusa},
+#' \code{L2241.TechCapFac_coalret_vintage_dispatch_gcamusa}, \code{L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa},
+#' \code{L2241.CapacityTechMinCapFac_coalret_vintage_dispatch_gcamusa}, \code{L2241.TechProfitShutdown_coalret_vintage_dispatch_gcamusa}.
 #' The corresponding file in the original data system was \code{L2241.coal_slow_fast_retire_USA.R} (gcam-usa level2).
 #' @details This chunk creates add-on files to take the fraction of reduction in coal electricity generation between 2010 and 2015 for each state and
 #' forces that generation to retire in 2015. It also tempers retirement assumptions for the remaining coal fleet to allow
@@ -23,36 +21,32 @@
 #' @author RC Aug 2018 / YO Jul 2020
 module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "gcam-usa/states_subregions",
-             FILE = "gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
+    return(c(FILE = "gcam-usa/calibrated_techs_dispatch_usa",
+             FILE = "gcam-usa/A23.elec_tech_mapping_cool",
+             FILE = "gcam-usa/A23.dispatch_capacitytech_min_cap_fac",
              FILE = "gcam-usa/A23.elec_tech_coal_retire_SCurve_dispatch",
-             FILE = "gcam-usa/EIA_coal_generation_2018",
+             FILE = "gcam-usa/prime_mover_map",
+             FILE = "gcam-usa/EIA_860_generators_existing_2018",
+             FILE = "gcam-usa/EIA_860_generators_retired_2018",
              FILE = "gcam-usa/dispatch/AEO2019Plantfile",
              FILE = "gcam-usa/dispatch/ECP_mapping",
-             FILE = "gcam-usa/EIA_923_generator_gen_fuel_2018",
              FILE = "gcam-usa/dispatch/coal_vintage_bins",
-             FILE = "gcam-usa/A23.dispatch_capacitytech_min_cap_fac",
-             "L123.out_EJ_state_elec_F_tech",
+             "L105.eia_elec_data_water",
              "L123.in_EJ_state_elec_F_tech",
              "L223.CapacityTech",
+             "L223.Production_Dispatch",
              "L223.TechEff_Cal",
              "L223.TechOMvar_Dispatch",
              "L223.TechCapFac_Dispatch"))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L2241.TechProd_elec_coalret_dispatch_gcamusa",
-             "L2241.CapacityTech_elec_coalret_dispatch_gcamusa",
-             "L2241.TechEff_elec_coalret_dispatch_gcamusa",
-             "L2241.TechSCurve_elec_coalret_dispatch_gcamusa",
-             "L2241.TechShrwt_elec_coalret_dispatch_gcamusa",
-             "L2241.TechOMvar_elec_coalret_dispatch_gcamusa",
-             "L2241.TechProd_coal_vintage_dispatch_gcamusa",
-             "L2241.CapacityTech_coal_vintage_dispatch_gcamusa",
-             "L2241.TechEff_coal_vintage_dispatch_gcamusa",
-             "L2241.TechOMvar_coal_vintage_dispatch_gcamusa",
-             "L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa",
-             "L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa",
-             "L2241.TechShrwt_coal_vintage_dispatch_gcamusa",
-             "L2241.TechSCurve_coal_vintage_dispatch_gcamusa",
+    return(c("L2241.Production_coalret_vintage_dispatch_gcamusa",
+             "L2241.CapacityTech_coalret_vintage_dispatch_gcamusa",
+             "L2241.TechEff_coalret_vintage_dispatch_gcamusa",
+             "L2241.TechSCurve_coalret_vintage_dispatch_gcamusa",
+             "L2241.TechShrwt_coalret_vintage_dispatch_gcamusa",
+             "L2241.TechOMvar_coalret_vintage_dispatch_gcamusa",
+             "L2241.CapacityTechMinCapFac_coalret_vintage_dispatch_gcamusa",
+             "L2241.TechProfitShutdown_coalret_vintage_dispatch_gcamusa",
              "L2241.TechCapFac_coalret_vintage_dispatch_gcamusa",
              "L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa"))
 
@@ -73,19 +67,23 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       efficiency_weighted <- OMV_weighted <- min.capacity.factor <- NULL
 
     # Load required inputs
-    states_subregions <- get_data(all_data, "gcam-usa/states_subregions")
-    A23.elec_tech_mapping_coal_retire_dispatch <- get_data(all_data, "gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch")
+    calibrated_techs_dispatch_usa <- get_data(all_data, "gcam-usa/calibrated_techs_dispatch_usa")
+    A23.elec_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elec_tech_mapping_cool")
+    A23.dispatch_capacitytech_min_cap_fac <- get_data(all_data, "gcam-usa/A23.dispatch_capacitytech_min_cap_fac")
     A23.elec_tech_coal_retire_SCurve_dispatch <- get_data(all_data, "gcam-usa/A23.elec_tech_coal_retire_SCurve_dispatch")
-    EIA_coal_generation_2018 <- get_data(all_data, "gcam-usa/EIA_coal_generation_2018")
+
+    prime_mover_map <- get_data(all_data, "gcam-usa/prime_mover_map")
+    EIA_860_generators_existing_2018 <- get_data(all_data, "gcam-usa/EIA_860_generators_existing_2018")
+    EIA_860_generators_retired_2018 <- get_data(all_data, "gcam-usa/EIA_860_generators_retired_2018")
+
     REEDS_Plantfile <- get_data(all_data, "gcam-usa/dispatch/AEO2019Plantfile")
     ECP_mapping <- get_data(all_data, "gcam-usa/dispatch/ECP_mapping")
-    eia_923_data_2018 <- get_data(all_data, "gcam-usa/EIA_923_generator_gen_fuel_2018")
     vintage_bins_mapping <- get_data(all_data, "gcam-usa/dispatch/coal_vintage_bins")
-    A23.dispatch_capacitytech_min_cap_fac <- get_data(all_data, "gcam-usa/A23.dispatch_capacitytech_min_cap_fac")
 
-    L123.out_EJ_state_elec_F_tech <- get_data(all_data, "L123.out_EJ_state_elec_F_tech")
+    L105.eia_elec_data_water <- get_data(all_data, "L105.eia_elec_data_water")
     L123.in_EJ_state_elec_F_tech <- get_data(all_data, "L123.in_EJ_state_elec_F_tech")
     L223.CapacityTech <- get_data(all_data, "L223.CapacityTech")
+    L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
     L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
     L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch")
     L223.TechCapFac_Dispatch <- get_data(all_data, "L223.TechCapFac_Dispatch")
@@ -96,146 +94,171 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
 
     # 1. capacity technology that will be retired in 2020
 
-    # Prepare a table for capacity technologies with all states and base years
-    A23.elec_tech_mapping_coal_retire_dispatch %>%
-      mutate(year = MODEL_FINAL_BASE_YEAR) %>%
-      repeat_add_columns(tibble(region = gcamusa.STATES)) ->
-      L2241.elec_USA_coalret_base
+    # Process EIA 860 Form to get capacity by vintage
+    L105.eia_elec_data_water %>%
+      filter(gcam_fuel == "coal",
+             # remove three small industrial plants
+             Sector.Name != "Industrial Non-CHP") %>%
+      # if cooling system / water type are missing, set to recirculating / fresh water
+      replace_na(list(cooling_system = gcamusa.ELEC_COOLING_SYSTEM_DEFAULT,
+                      water_type = gcamusa.WATER_TYPE_FRESH)) %>%
+      select(-Combined.Heat.Power.Plant, -NERC.Region, -Sector.Name, -eff, -eff_elec, -en_in_elec) -> EIA_elec_data_coal
 
-    EIA_coal_gen_years <- EIA_coal_generation_2018 %>%
-      gather_years()
-    EIA_coal_gen_years <- unique(EIA_coal_gen_years$year)
+    EIA_860_generators_existing_2018 %>%
+      bind_rows(EIA_860_generators_retired_2018) %>%
+      mutate(unit.capacity.MW = if_else(is.na(Nameplate.Capacity..MW.), Summer.Capacity..MW., Nameplate.Capacity..MW.)) %>%
+      left_join_error_no_match(prime_mover_map,
+                               by = c("Prime.Mover" = "Reported.Prime.Mover",
+                                      "Energy.Source.1" = "Reported.Fuel.Type.Code")) %>%
+      filter(gcam_fuel == "coal",
+             # filter for plants retiring between 2016-2020
+             (Retirement.Year > max(MODEL_BASE_YEARS) & Retirement.Year <= min(MODEL_FUTURE_YEARS) |
+                Planned.Retirement.Year > max(MODEL_BASE_YEARS) & Planned.Retirement.Year <= min(MODEL_FUTURE_YEARS))) %>%
+      # Note vintages are by generator.. so we need to tag the vintage somehow by
+      # plant, using capacity weighted average for now
+      group_by(State, Plant.Code) %>%
+      # sum capacity and convert to same units as other files
+      summarize(capacity_retired = sum(unit.capacity.MW) * CONV_MWH_EJ * CONV_YEAR_HOURS) %>%
+      select(State, Plant.Code, capacity_retired) ->
+      EIA_coal_retire_capacity
 
-    # Calculate fraction of historical (2015) vintage retired by 2018 (as a proxy of 2020)
-    EIA_coal_generation_2018 %>%
-      select(-source.key) %>%
-      gather_years() %>%
-      replace_na(list(value = 0)) %>%
-      # The EIA coal generation data set (EIA_coal_generation_2018) begins in 2001
-      # This is fine for the data's intended purposes, but causes test_timeshift to fail when max(MODEL_BASE_YEARS) < 2001
-      # Backfill historical values with 2001 values to avoid test_timeshift failure
-      complete(nesting(fuel, state, units), year = c(HISTORICAL_YEARS, EIA_coal_gen_years))  %>%
-      group_by(fuel, state, units) %>%
-      mutate(value = approx_fun(year, value, rule = 2)) %>%
-      ungroup() %>%
-      rename(state_name = state) %>%
-      left_join_error_no_match(states_subregions %>%
-                                 select(state, state_name),
-                               by = "state_name") %>%
-      filter(year %in% c(MODEL_FINAL_BASE_YEAR, max(year))) %>%
-      select(state, year, units, value) %>%
-      group_by(state) %>%
-      mutate(retire_frac = 1 - (value / value[year==MODEL_FINAL_BASE_YEAR])) %>%
-      filter(year == max(year)) %>%
-      replace_na(list(retire_frac = 0)) %>%
-      # 4 states (AR, HI, SD, WA) have retirement fractions < 0 (more coal in 2018 than base year) (all are small values besides AR)
-      # for these states, default all fractions < 0 to 0; this will (slightly) under-estimate coal generation in 2018,
-      # which is acceptable because 2018 will over-estimate 2020 generation
-      mutate(retire_frac = if_else(retire_frac < 0, 0, retire_frac)) %>%
-      select(region = state, retire_frac) -> fraction_coal_gen_retire
+    EIA_elec_data_coal %>%
+      select(state, Plant.ID, gcam_fuel, elec_tech, vintage, cooling_system, water_type, capacity = NAMEPLATE, en_in, en_out) %>%
+      filter(gcam_fuel == "coal") %>%
+      # not all coal plants are retired and thus not all coal plants are included in EIA_coal_retire_capacity table
+      # join will produce NAs (resolved below); LJENM will error, so left_join() is used
+      left_join(EIA_coal_retire_capacity,
+                by = c("state" = "State",
+                       "Plant.ID" = "Plant.Code")) %>%
+      replace_na(list(capacity_retired = 0)) %>%
+      mutate(capacity_remaining = capacity - capacity_retired,
+             fraction_retired = capacity_retired / capacity,
+             fraction_remaining = 1 - fraction_retired) %>%
+      left_join_error_no_match(calibrated_techs_dispatch_usa %>%
+                                 select(fuel, elec_tech, supplysector, subsector, technology),
+                               by = c("gcam_fuel" = "fuel", "elec_tech")) %>%
+      left_join_error_no_match(A23.elec_tech_mapping_cool %>%
+                                 mutate(cooling_system = if_else(water_type == gcamusa.WATER_TYPE_SEAWATER,
+                                                                 gcamusa.WATER_TYPE_SEAWATER,
+                                                                 cooling_system)),
+                               by = c("technology", "cooling_system", "water_type")) -> L2241.EIA_coal_plant
 
-    #Create two technologies: coal_base_conv pul and coal_base_conv pul_retire_2020
-    # L2241.TechProd_elec_coalret_dispatch_gcamusa:  Calibration outputs for conventional coal electricity plants by U.S. state
+    # L2241.EIA_coal_plant represents retirement at the plant level - some plants have multiple
+    # generation units, which may retire at different times
+    # Here, aggregate to retirement by state & technology (including cooling tech detail), and
+    # track share of capacity, fuel consumption, and electricity generation retired
+    L2241.EIA_coal_plant %>%
+      group_by(state, supplysector, subsector, to.technology) %>%
+      summarise(cap_ret_share = sum(capacity_retired) / sum(capacity),
+                en_in_ret_share = sum(en_in * fraction_retired) / sum(en_in),
+                en_out_ret_share = sum(en_out * fraction_retired) / sum(en_out),
+                efficiency = sum(en_out) / sum(en_in)) %>%
+      ungroup() -> L2241.EIA_coal
 
-    # 2015 total conv coal generaiton.
-    L123.out_EJ_state_elec_F_tech %>%
-      filter(elec_tech == "coal_conv" & year == MODEL_FINAL_BASE_YEAR) %>%
-      rename(region = state) %>%
-      select(region, value) ->
-      L123.total_coal_gen
-
-    L2241.elec_USA_coalret_base %>%
-      filter(year == MODEL_FINAL_BASE_YEAR) %>%
-      filter(region %in% L123.total_coal_gen$region) %>%
-      left_join_error_no_match(L123.total_coal_gen, by = "region") %>%
-      # To check: Based on EIA 923, ME has no coal (conv pul) in 2015, but just a CHP plant
-      # but in fraction_coal_gen_retire based on the online EIA form, it has utility coal generation in 2015 and 2018
-      # this is the only inconsistent state, but the generation in ME is minor
-      left_join_error_no_match(fraction_coal_gen_retire, by = "region") %>%
-      rename(calOutput_OLD = value) %>%
-      mutate(calOutputValue = if_else(!grepl("_retire2020", technology),
-                                      calOutput_OLD * (1 - retire_frac),
-                                      calOutput_OLD * retire_frac),
-             tech.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
-      mutate(share.weight.year = year) %>%
-      group_by(region, supplysector, subsector, year) %>%
-      mutate(subs.share.weight = if_else(sum(calOutputValue) > 0, 1, 0)) %>%
-      ungroup() %>%
-      select(LEVEL2_DATA_NAMES[["Production"]]) ->
-      L2241.TechProd_elec_coalret_dispatch_gcamusa
-
-    # L2241.CapacityTech_elec_coalret_dispatch_gcamusa: existing capacity for conventional coal electricity plants by U.S. state
+    # Files for new coal_retire2020 technology
     L223.CapacityTech %>%
-      filter(capacity.technology == "coal (conv pul)" & year == MODEL_FINAL_BASE_YEAR) %>%
-      select(region, capacity) ->
-      L223.total_coal_capacity
+      filter(year == max(MODEL_BASE_YEARS),
+             subsector == "coal") %>%
+      rename(original_capacity = capacity) %>%
+      left_join_error_no_match(L2241.EIA_coal,
+                               by = c("region" = "state",
+                                      "dispatch.sector" = "supplysector",
+                                      "subsector",
+                                      "capacity.technology" = "to.technology")) %>%
+      rename(cap.tech = capacity.technology) %>%
+      mutate(cap.tech.cool = paste0(cap.tech, " (retire 2020)")) ->
+      L2241.CapacityTech
 
-    L2241.elec_USA_coalret_base %>%
-      filter(region %in% L123.total_coal_gen$region,
-             year == MODEL_FINAL_BASE_YEAR) %>%
-      left_join_error_no_match(L223.total_coal_capacity, by = "region") %>%
-      # here we still use fraction_coal_gen_retire to approximate capacity retirement
-      # this would assume these plant has the same capacity factor in 2015 and 2018
-      # otherwise we will need another data flow (probably EIA 860 for both 2015 and 2018 to track which capacity is retired)
-      left_join_error_no_match(fraction_coal_gen_retire, by = "region") %>%
-      rename(capacity_OLD = capacity) %>%
-      mutate(capacity = if_else(!grepl("_retire2020", technology),
-                                capacity_OLD * (1 - retire_frac),
-                                capacity_OLD * retire_frac)) %>%
-      rename(dispatch.sector = supplysector, capacity.technology = technology) %>%
-      select(LEVEL2_DATA_NAMES[["CapacityTech"]]) ->
+    # still active
+    L2241.CapacityTech %>%
+      filter(cap_ret_share < 1) %>%
+      # rename(capacity = capacity_remaining,
+      #        en_in = en_in_remaining,
+      #        en_out = en_out_remaining) %>%
+      select(region, dispatch.sector, subsector, cap.tech, cap.tech.cool, year,
+             original_capacity, cap_ret_share, en_in_ret_share, en_out_ret_share, efficiency) ->
+      L2241.CapacityTech_remaining
+
+    # retired
+    L2241.CapacityTech %>%
+      filter(cap_ret_share > 0) %>%
+      # rename(capacity = capacity_retired,
+      #        en_in = en_in_retired,
+      #        en_out = en_out_retired) %>%
+      select(region, dispatch.sector, subsector, cap.tech, cap.tech.cool, year,
+             original_capacity, cap_ret_share, en_in_ret_share, en_out_ret_share, efficiency)  ->
+      L2241.CapacityTech_retired
+
+
+    # Files for new coal "retire 2020" technology
+    # Capacity
+    L2241.CapacityTech_retired %>%
+      # ensure that, for techs whose capacity is considered 100% retired,
+      # 100% of original capacity assigned to new "retire" technology
+      mutate(capacity = original_capacity * cap_ret_share) %>%
+      select(region, dispatch.sector, subsector, capacity.technology = cap.tech.cool, year, capacity) ->
       L2241.CapacityTech_elec_coalret_dispatch_gcamusa
 
-    # Create a table to read in efficiencies for the new technologies in calibration years
-    # L2241.TechEff_elec_coalret_dispatch_gcamusa: Efficiencies of U.S. conventional coal electricity plants in calibration years
-    L2241.elec_USA_coalret_base %>%
-      filter(region %in% L123.total_coal_gen$region,
-             year == MODEL_FINAL_BASE_YEAR) %>%
-      left_join_error_no_match(L223.TechEff_Cal,
-                               by = c("region", "supplysector", "subsector", "current.tech" = "technology", "year")) %>%
-      arrange(region, technology, year) %>%
-      select(LEVEL2_DATA_NAMES[["TechEff"]]) ->
+    # Historical production
+    L2241.CapacityTech_retired %>%
+      left_join_error_no_match(L223.Production_Dispatch,
+                               by = c("region", "dispatch.sector" = "supplysector", "subsector",
+                                      "cap.tech" = "technology", "year")) %>%
+      # ensure that, for techs whose capacity is considered 100% retired,
+      # 100% of original capacity assigned to new "retire" technology
+      mutate(calOutputValue = calOutputValue * en_out_ret_share) %>%
+      select(region, dispatch.sector, subsector, capacity.technology = cap.tech.cool, year,
+             calOutputValue, share.weight.year, subs.share.weight, tech.share.weight) ->
+      L2241.TechProd_elec_coalret_dispatch_gcamusa
+
+    # Efficiency
+    L2241.CapacityTech_retired %>%
+      left_join_error_no_match(L223.TechEff_Cal %>%
+                                 select(-efficiency),
+                               by = c("region", "dispatch.sector" = "supplysector", "subsector",
+                                      "cap.tech" = "technology", "year")) %>%
+      select(region, dispatch.sector, subsector,  capacity.technology = cap.tech.cool, year,
+             minicam.energy.input, efficiency, market.name) ->
       L2241.TechEff_elec_coalret_dispatch_gcamusa
 
-    # Create a table to read in s-curve retirement parameters for the new technologies
-    # L2241.TechSCurve_elec_coalret_dispatch_gcamusa:  s-curve shutdown decider for historic U.S. conventional coal electricity plants
-    # Note that this updates s-curve retirement parameters for both the existing technologies and the new "retire_2020" technologies
-    L2241.TechProd_elec_coalret_dispatch_gcamusa %>%
-      select(region, supplysector, subsector, technology, year) %>%
-      left_join_error_no_match(A23.elec_tech_coal_retire_SCurve_dispatch,
-                               by = c("technology")) ->
+    # Variable O&M costs
+    L2241.CapacityTech_retired %>%
+      left_join_error_no_match(L223.TechOMvar_Dispatch,
+                               by = c("region", "dispatch.sector" = "supplysector", "subsector",
+                                      "cap.tech" = "technology", "year")) %>%
+      select(region, dispatch.sector, subsector,  capacity.technology = cap.tech.cool, year, input.OM.var, OM.var) ->
+      L2241.TechOMvar_elec_coalret_dispatch_gcamusa
+
+    # Lifetime / natural retirement
+    L2241.CapacityTech_retired %>%
+      select(region, dispatch.sector, subsector,  capacity.technology = cap.tech.cool, year) %>%
+      mutate(lifetime = 5,
+             steepness = 0.1,
+             half.life = 2.5) ->
+      # left_join_error_no_match(A23.elec_tech_coal_retire_SCurve_dispatch,
+      #                          by = c("technology")) ->
       L2241.TechSCurve_elec_coalret_dispatch_gcamusa
 
-    # Prepare a table for capacity technologies with all states and final base year
-    A23.elec_tech_mapping_coal_retire_dispatch %>%
-      # this is only needed for the new "retire_2020" technologies
-      filter(grepl("_retire2020", technology)) %>%
-      mutate(year = MODEL_FINAL_BASE_YEAR) %>%
-      repeat_add_columns(tibble(region = gcamusa.STATES)) ->
-      L2241.elec_USA_coalret
-
     # Share-weights
-    # L2241.TechShrwt_elec_coalret_dispatch_gcamusa: Shareweights for historic U.S. conventional coal electricity plants (2015 only)
-    L2241.elec_USA_coalret %>%
-      filter(region %in% L123.total_coal_gen$region) %>%
+    L2241.CapacityTech_retired %>%
       mutate(share.weight = gcamusa.DEFAULT_SHAREWEIGHT) %>%
-      select(LEVEL2_DATA_NAMES[["TechShrwt"]]) ->
+      select(region, dispatch.sector, subsector, capacity.technology = cap.tech.cool, year, share.weight) ->
       L2241.TechShrwt_elec_coalret_dispatch_gcamusa
 
-    # OM varible costs
-    # L2241.TechOMvar_elec_coalret_dispatch_gcamusa: OM var costs of historic U.S. conventional coal electricity plants
-    L2241.elec_USA_coalret %>%
-      filter(region %in% L123.total_coal_gen$region) %>%
-      left_join_error_no_match(L223.TechOMvar_Dispatch,
-                               by = c("region", "supplysector", "subsector", "current.tech" = "technology", "year")) %>%
-      select(LEVEL2_DATA_NAMES[["TechOMvar"]]) ->
-      L2241.TechOMvar_elec_coalret_dispatch_gcamusa
+    # Economic shutdown function
+    L2241.CapacityTech_retired %>%
+      mutate(median.shutdown.point = gcamusa.ELEC_CAP_INV_MEDIAN,
+             profit.shutdown.steepness = gcamusa.ELEC_CAP_INV_STEEPNESS) %>%
+      # changing variable names because we'll use the stubtech L2 data name and node equivalence in the batch file
+      select(region, supplysector = dispatch.sector, subsector, stub.technology = cap.tech.cool,
+             year, median.shutdown.point, profit.shutdown.steepness) ->
+      L2241.TechProfitShutdown_coalret_dispatch_gcamusa
 
 
     # ===================================================
     # 2. Vintage coal plants which operate beyond 2015
 
-    # process REEDS plant files to obtain coal generation by vintages
+    # Process REEDS plant files to obtain coal generation by vintages
     # Variable codes
     # EFDcd - plant type
     # ECPcd - fuel category
@@ -265,13 +288,13 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              W_FOM, WCOMB_F, W_DSIF, W_FFF, WSCR_F, WSNCR_F, W_CAPAD,
              W_VOM, WCOMB_V, W_DSIV, W_FFV, WSCR_V, WSNCR_V) %>%
       # filter for plants not yet retired in 2020
-      filter(W_RYR > 2020) %>%
+      filter(W_RYR > min(MODEL_FUTURE_YEARS)) %>%
       left_join_error_no_match(ECP_mapping %>%
                                  select(-Description),
                                by = c("ECPcd" = "ECPT")) %>%
       filter(Fuel == "Coal",
-             # filter out IGCC plants
-             !(ECPcd %in% c("IG", "IS")),
+             # # filter out IGCC plants
+             # !(ECPcd %in% c("IG", "IS")),
              # filter out CCS plants
              EFDcd != "CAS") %>%
       # appears to be some duplicate identifiers, so summarise
@@ -293,256 +316,310 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              Planned.Retirement.Year = W_RYR,
              year,
              capacity = WC_NP,
-             efficiency, OMF, OMV) %>%
-      left_join_error_no_match(vintage_bins_mapping, by = "Operating.Year") %>%
-      mutate(size = if_else(capacity >= 500, "over500MW", "under500MW"),
-             vintage.bin = paste0(vintage, "_", size)) ->
-      REEDS_coal
+             efficiency, OMF, OMV) -> REEDS_coal
 
     # Obtain state-shares of generation and capacity in 2018
     REEDS_coal %>%
-      # Obtain unit/generator-level generation in 2015 from generator-level generation data in Form 923.
-      # 13 units are missing geneation data in eia_923_data_2018.  LJENM throws error; use left_join for now
-      # most missing units or pre1970s and 1970s
-      # these missing units missed both state and generation
-      select(Plant.ID, Unit.ID, Operating.Year, Planned.Retirement.Year, capacity, vintage.bin) %>%
-      left_join(eia_923_data_2018 %>%
-                  rename(generation = Net.Generation.Year.To.Date),
-                by = c("Unit.ID" = "Generator.Id", "Plant.ID" = "Plant.Id")) %>%
-      mutate(generation = as.numeric(generation)) %>%
-      na.omit() %>%
-      # a couple of plants in MO, kY, and MI have negative generation values - reset to zero
-      mutate(generation = if_else(generation < 0.0, 0.0, generation)) ->
-      L2241.coal_units_gen_2018
-
-    # The Planned.Retirement.Year variable reflects planned retirements.
-    # When no Planned.Retirement.Year is available, we assume a maximum lifetime of 80 years
-    L2241.coal_units_gen_2018 %>%
-      # Categorize coal units by vintage bins. We stick with 5-year bins for now
-      mutate(Planned.Retirement.Year = as.numeric(Planned.Retirement.Year)) %>%
-      # For units without a Planned.Retirement.Year, we assume a maximum lifetime of 80 years
-      mutate(Retirement.Year = if_else(is.na(Planned.Retirement.Year) | Planned.Retirement.Year == 9999,
-                                       Operating.Year + gcamusa.AVG_COAL_PLANT_LIFETIME,
-                                       Planned.Retirement.Year)) ->
-      L2241.coal_units_ret_2018
-
-    # Create a table of generation and capacity-weighted lifetime from 2015 and by state and vintage
-    L2241.coal_units_ret_2018 %>%
-      # Calculate lifetime from 2018, which is model base year
-      mutate(cap.lifetime = capacity * (Retirement.Year - MODEL_FINAL_BASE_YEAR)) %>%
-      group_by(State, vintage.bin) %>%
-      summarise(lifetime = round(sum(cap.lifetime) / sum(capacity), 0), generation = sum(generation), capacity = sum(capacity)) %>%
-      mutate(generation = generation * CONV_MWH_GJ * CONV_GJ_EJ,
-             # For units with 0 or negative expected lifetime, we will set lifetime to 1 to avoid calibration issues
-             lifetime = replace(lifetime, lifetime < 0, 1)) %>%
+      select(Plant.ID, Unit.ID, region, Operating.Year, Planned.Retirement.Year, capacity, OMF, OMV) %>%
+      # units with no retirement dates are set to 9999
+      # reset to max lifetime assumed for coal plants in GCAM-USA
+      group_by(Plant.ID, Unit.ID) %>%
+      mutate(Max.Retirement.Year = Operating.Year + gcamusa.AVG_COAL_PLANT_LIFETIME,
+             Retirement.Year = min(Planned.Retirement.Year, Max.Retirement.Year)) %>%
       ungroup() %>%
-      # Keep share of each vintage bin of the total generation in each state ready to be applied to
-      # calibrated value in 2015
-      group_by(State) %>%
-      mutate(generation.share.vintage = generation / sum(generation)) %>%
-      mutate(capacity.share.vintage = capacity / sum(capacity)) %>%
+      # need to aggregate to plant-level (rather than unit-level)
+      group_by(Plant.ID, region) %>%
+      summarise(Retirement.Year = sum(Retirement.Year * capacity) / sum(capacity),
+                OMF = sum(OMF * capacity) / sum(capacity),
+                OMV = sum(OMV * capacity) / sum(capacity),
+                capacity = sum(capacity)) %>%
+      mutate(Retirement.Year = as.integer(Retirement.Year)) %>%
+      # ReEDS data set has some plants not present in EIA form data (as processed by GCAM)
+      # remove these since we need to maintain consistency with other parts of the data system
+      semi_join(EIA_elec_data_coal, by = c("Plant.ID", "region" = "state")) %>%
+      left_join_error_no_match(EIA_elec_data_coal, by = c("Plant.ID", "region" = "state")) %>%
+      # assume that difference between ReEDS capacity and EIA_elec_data_coal capacity is what was retired
+      mutate(fraction_remaining = min((capacity / Nameplate.MW), 1)) %>%
+      rename(Operating.Year = vintage) %>%
+      left_join_error_no_match(vintage_bins_mapping %>%
+                                 rename(vintage.bin = vintage),
+                               by = "Operating.Year") %>%
+      left_join_error_no_match(calibrated_techs_dispatch_usa %>%
+                                 select(fuel, elec_tech, supplysector, subsector, technology),
+                               by = c("gcam_fuel" = "fuel", "elec_tech")) %>%
+      left_join_error_no_match(A23.elec_tech_mapping_cool %>%
+                                 mutate(cooling_system = if_else(water_type == gcamusa.WATER_TYPE_SEAWATER,
+                                                                 gcamusa.WATER_TYPE_SEAWATER,
+                                                                 cooling_system)),
+                               by = c("technology", "cooling_system", "water_type")) %>%
+      # sum relevant data up to state / tech / vintage bin level
+      group_by(region, supplysector, subsector, technology, to.technology, vintage.bin) %>%
+      summarise(Retirement.Year = sum(Retirement.Year * NAMEPLATE) / sum(NAMEPLATE),
+                OMF = sum(OMF * NAMEPLATE) / sum(NAMEPLATE),
+                OMV = sum(OMV * NAMEPLATE) / sum(NAMEPLATE),
+                en_in = sum(en_in * fraction_remaining),
+                en_out = sum(en_out * fraction_remaining),
+                capacity = sum(NAMEPLATE)) %>%
+      mutate(Retirement.Year = as.integer(Retirement.Year),
+             efficiency = en_out / en_in) %>%
       ungroup() %>%
-      select(-capacity) ->
-      L2241.coal_vintage_2018
+      # calculate shares of fuel consumption / electricity generation by vintage bin for each state / tech
+      group_by(region, supplysector, subsector, technology, to.technology) %>%
+      mutate(capacity_share = capacity / sum(capacity),
+             en_in_share = en_in / sum(en_in),
+             en_out_share = en_out / sum(en_out)) %>%
+      ungroup() %>%
+      select(-technology, -capacity, -en_in, -en_out) -> L2241.ReEDS_coal_remaining
 
-    # Apply vintage share by state to calibrated capacity for slow retire component and create table to be read in
-    L2241.coal_vintage_2018 %>%
-      rename(region = State) %>%
-      # LJENM is intended to duplicate rows so production can be allocated across vintages; use left_join to avoid error
-      left_join(L2241.CapacityTech_elec_coalret_dispatch_gcamusa %>%
-                  filter(subsector == "coal",
-                         year == MODEL_FINAL_BASE_YEAR,
-                         !grepl("retire", capacity.technology)),
-                by = "region") %>%
-      filter(!is.na(capacity)) %>%
-      mutate(capacity = capacity * capacity.share.vintage,
-             capacity.technology = paste(capacity.technology, vintage.bin, sep = "_")) %>%
-      select(LEVEL2_DATA_NAMES[["CapacityTech"]]) ->
+    L2241.CapacityTech_remaining  %>%
+      select(-cap.tech.cool, -efficiency) %>%
+      # join is intended to duplicate rows (by vintage bins)
+      # LJENM throws error, so left_join is used
+      # a few NAs are also generated and addressed below
+      left_join(L2241.ReEDS_coal_remaining %>%
+                  rename(dispatch.sector = supplysector,
+                         cap.tech = to.technology),
+                by = c("region", "dispatch.sector", "subsector", "cap.tech")) %>%
+      # if no matching entries are found in ReEDS data set, simply set share variables to 1
+      # these entries with no vintage info will be handled separately
+      replace_na(list(capacity_share = 1, en_in_share = 1, en_out_share = 1)) %>%
+      mutate(capacity_share = (1 - cap_ret_share) * capacity_share,
+             en_in_share = (1 - en_in_ret_share) * en_in_share,
+             en_out_share = (1 - en_out_ret_share) * en_out_share) %>%
+      select(-cap_ret_share, -en_in_ret_share, -en_out_ret_share) -> L2241.CapacityTech_remaining_vintage
+
+    L2241.CapacityTech_remaining_vintage %>%
+      filter(is.na(Retirement.Year)) -> L2241.CapacityTech_remaining_novintage
+
+    L223.CapacityTech %>%
+      semi_join(L2241.CapacityTech_remaining_novintage,
+                by = c("region", "subsector", "capacity.technology" = "cap.tech", "year")) %>%
+      left_join_error_no_match(L2241.CapacityTech_remaining_novintage %>%
+                                 select(region, subsector, technology, cap.tech, year, capacity_share),
+                               by = c("region", "subsector", "capacity.technology" = "cap.tech", "year")) %>%
+      mutate(capacity = capacity * capacity_share) %>%
+      select(-capacity_share) -> L2241.CapacityTech_coal_novintage
+
+    L223.Production_Dispatch %>%
+      semi_join(L2241.CapacityTech_remaining_novintage,
+                by = c("region", "subsector", "technology" = "cap.tech", "year")) %>%
+      left_join_error_no_match(L2241.CapacityTech_remaining_novintage %>%
+                                 select(region, subsector, technology, cap.tech, year, en_out_share),
+                               by = c("region", "subsector", "technology" = "cap.tech", "year")) %>%
+      mutate(calOutputValue = calOutputValue * en_out_share) %>%
+      select(-en_out_share) -> L2241.TechProd_coal_novintage
+
+    L223.TechEff_Cal %>%
+      semi_join(L2241.CapacityTech_remaining_novintage,
+                by = c("region", "subsector", "technology" = "cap.tech", "year")) %>%
+      rename(dispatch.sector = supplysector,
+             capacity.technology = technology) -> L2241.TechEff_Cal_coal_novintage
+
+
+    # New files for coal vintage technologies
+    L2241.CapacityTech_remaining_vintage %>%
+      filter(!is.na(Retirement.Year)) -> L2241.CapacityTech_remaining_vintage
+
+    # Capacity
+    L2241.CapacityTech_remaining_vintage %>%
+      mutate(capacity.technology = paste0(cap.tech, " (", vintage.bin, ")"),
+             capacity = original_capacity * capacity_share) %>%
+      select(region, dispatch.sector, subsector, capacity.technology, year, capacity) ->
       L2241.CapacityTech_coal_vintage_dispatch_gcamusa
 
-    # Read in zero capacity for final base year for existing coal conv pul technology
-    # becuase this portion has been separate by vintage bins in the final base year
-    L2241.CapacityTech_elec_coalret_dispatch_gcamusa %>%
-      filter(capacity.technology == "coal (conv pul)") %>%
-      mutate(capacity = 0) %>%
-      select(LEVEL2_DATA_NAMES[["CapacityTech"]]) %>%
-      bind_rows(L2241.CapacityTech_coal_vintage_dispatch_gcamusa) %>%
-      arrange(region, capacity.technology, year) ->
-      L2241.CapacityTech_coal_vintage_dispatch_gcamusa
-
-    # Apply vintage share by state to calibrated values for slow retire component and create table to be read in
-    L2241.coal_vintage_2018 %>%
-      rename(region = State) %>%
-      # LJENM is intended to duplicate rows so production can be allocated across vintages; use left_join to avoid error
-      left_join(L2241.TechProd_elec_coalret_dispatch_gcamusa %>%
-                  filter(subsector == "coal",
-                         year == MODEL_FINAL_BASE_YEAR,
-                         !grepl("retire", technology)),
-                by = "region") %>%
-      filter(!is.na(calOutputValue), calOutputValue != 0) %>%
-      mutate(calOutputValue = calOutputValue * generation.share.vintage,
-             # Create new technologies. Naming the variable as technology.new so that we can use technology as reference later
-             technology = paste(technology, vintage.bin, sep = "_"),
-             year = MODEL_FINAL_BASE_YEAR, share.weight.year = MODEL_FINAL_BASE_YEAR,
+    # Historical production
+    L2241.CapacityTech_remaining_vintage %>%
+      left_join_error_no_match(L223.Production_Dispatch,
+                               by = c("region", "dispatch.sector" = "supplysector", "subsector",
+                                      "cap.tech" = "technology", "year")) %>%
+      mutate(capacity.technology = paste0(cap.tech, " (", vintage.bin, ")"),
+             calOutputValue = calOutputValue * en_out_share,
+             year = max(MODEL_BASE_YEARS),
+             share.weight.year = year,
              subs.share.weight = gcamusa.DEFAULT_SHAREWEIGHT,
              tech.share.weight = gcamusa.DEFAULT_SHAREWEIGHT) %>%
-      # Select variables. For now, include lifetime and vintage.bin as well. We'll remove it later
-      select(LEVEL2_DATA_NAMES[["Production"]], lifetime, vintage.bin) ->
+      select(region, dispatch.sector, subsector, capacity.technology, year,
+             calOutputValue, share.weight.year, subs.share.weight, tech.share.weight) ->
       L2241.TechProd_coal_vintage_dispatch_gcamusa
 
-    # Create a table to read in S-curve parameters for vintage bin techs by state
-    L2241.TechProd_coal_vintage_dispatch_gcamusa %>%
-      select(region, supplysector, subsector, technology, year, lifetime) %>%
+    # Efficiency
+    L2241.CapacityTech_remaining_vintage %>%
+      left_join_error_no_match(L223.TechEff_Cal %>%
+                                 select(-efficiency),
+                               by = c("region", "dispatch.sector" = "supplysector", "subsector",
+                                      "cap.tech" = "technology", "year")) %>%
+      mutate(capacity.technology = paste0(cap.tech, " (", vintage.bin, ")")) %>%
+      select(region, dispatch.sector, subsector, capacity.technology, year,
+             minicam.energy.input, efficiency, market.name) ->
+      L2241.TechEff_coal_vintage_dispatch_gcamusa
+
+    # Variable O&M costs
+    L2241.CapacityTech_remaining_vintage %>%
+      left_join_error_no_match(L223.TechOMvar_Dispatch %>%
+                                 select(-OM.var),
+                               by = c("region", "dispatch.sector" = "supplysector", "subsector",
+                                      "cap.tech" = "technology", "year")) %>%
+      mutate(capacity.technology = paste0(cap.tech, " (", vintage.bin, ")")) %>%
+      select(region, dispatch.sector, subsector, capacity.technology, year, input.OM.var, OM.var = OMV) ->
+      L2241.TechOMvar_coal_vintage_dispatch_gcamusa
+
+    # Share-weights
+    L2241.CapacityTech_remaining_vintage %>%
+      mutate(capacity.technology = paste0(cap.tech, " (", vintage.bin, ")"),
+             # dispatch technologies always get shareweight = 1
+             share.weight = gcamusa.DEFAULT_SHAREWEIGHT) %>%
+      select(region, dispatch.sector, subsector, capacity.technology, year, share.weight) ->
+      L2241.TechShrwt_coal_vintage_dispatch_gcamusa
+
+    # Economic shutdown function
+    L2241.CapacityTech_remaining_vintage %>%
+      mutate(capacity.technology = paste0(cap.tech, " (", vintage.bin, ")"),
+             median.shutdown.point = gcamusa.ELEC_CAP_INV_MEDIAN,
+             profit.shutdown.steepness = gcamusa.ELEC_CAP_INV_STEEPNESS) %>%
+      # changing variable names because we'll use the stubtech L2 data name and node equivalence in the batch file
+      select(region, supplysector = dispatch.sector, subsector, stub.technology = capacity.technology,
+             year, median.shutdown.point, profit.shutdown.steepness) ->
+      L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa
+
+    # Lifetime / natural retirement
+    L2241.CapacityTech_remaining_vintage %>%
+      mutate(capacity.technology = paste0(cap.tech, " (", vintage.bin, ")"),
+             lifetime = Retirement.Year - max(MODEL_BASE_YEARS)) %>%
+      select(region, dispatch.sector, subsector,  capacity.technology, year, lifetime) %>%
       mutate(steepness = gcamusa.COAL_RETIRE_STEEPNESS,
              half.life = round(lifetime * (gcamusa.AVG_COAL_PLANT_HALFLIFE / gcamusa.AVG_COAL_PLANT_LIFETIME), 0)) ->
       L2241.TechSCurve_coal_vintage_dispatch_gcamusa
 
-    # generating weighted average efficiency and OM-var by bin
-    eia_923_data_2018 %>%
-      filter(Generator.Id != "") %>%
-      select(Plant.Id, Generator.Id, generation_2018 = Net.Generation.Year.To.Date) %>%
-      mutate(Plant.Id = as.numeric(Plant.Id),
-             Generator.Id = as.character(Generator.Id)) %>%
-      # to keep plants that only what REEDS_coal has
-      semi_join(REEDS_coal, by = c("Plant.Id" = "Plant.ID", "Generator.Id" = "Unit.ID")) ->
-      eia_923_gen
+    # Tables with same info for both retire & vintage technologies
+    L2241.CapacityTech_retired %>%
+      select(region, dispatch.sector, subsector, cap.tech, capacity.technology = cap.tech.cool, year) %>%
+      bind_rows(L2241.CapacityTech_remaining_vintage %>%
+                  mutate(capacity.technology = paste0(cap.tech, " (", vintage.bin, ")")) %>%
+                  select(region, dispatch.sector, subsector, cap.tech, capacity.technology, year)) -> L2241.CapacityTech_ret_vint
 
-    REEDS_coal %>%
-      mutate(Plant.ID = as.numeric(Plant.ID),
-             Generator.ID = as.character(Unit.ID)) %>%
-      select(-Unit.ID) %>%
-      # here use left_join becuase 13 units (mostly small plants that REEDS_coal has but not in eia_923)
-      left_join(eia_923_gen, by = c("Plant.ID" = "Plant.Id", "Generator.ID" = "Generator.Id")) %>%
-      filter(!is.na(generation_2018)) %>%
-      group_by(region, vintage.bin) %>%
-      summarise(efficiency_weighted = sum(efficiency * generation_2018) / sum(generation_2018),
-                OMV_weighted = sum(OMV * generation_2018) / sum(generation_2018)) %>%
-      ungroup() %>%
-      mutate(technology = paste0("coal (conv pul)_", vintage.bin)) %>%
-      select(-vintage.bin) ->
-      REEDS_coal_Eff_OMvar
+    # Minimum capacity factor
+    # Note that including the retire technologies here is not strictly necessary
+    # because they don't operate in future years, but including them will avoid
+    # warning messages in the terminal / log file.
+    L2241.CapacityTech_ret_vint %>%
+      select(-cap.tech) %>%
+      left_join_error_no_match(A23.dispatch_capacitytech_min_cap_fac %>%
+                                 distinct(subsector, min.capacity.factor),
+                               by = c("subsector")) ->
+      L2241.CapacityTechMinCapFac_coalret_vintage_dispatch_gcamusa
 
-    # Create a basic strucure with common variables
-    L2241.TechProd_coal_vintage_dispatch_gcamusa %>%
-      select(region, supplysector, subsector, technology, year) %>%
-      unique() %>%
-      filter(year == MODEL_FINAL_BASE_YEAR) ->
-      L2241.TechProd_coal_vintage_dispatch_dataframe
-
-    # Create efficiency for coal vintage capacity technologies
-    L2241.TechProd_coal_vintage_dispatch_dataframe %>%
-      left_join_error_no_match(REEDS_coal_Eff_OMvar %>% select(region, technology, efficiency_weighted),
-                               by = c("region", "technology")) %>%
-      rename(efficiency = efficiency_weighted) %>%
-      # TODO: somehow update these as constants
-      mutate(minicam.energy.input = "regional coal",
-             market.name = "USA") %>%
-      select(LEVEL2_DATA_NAMES[["TechEff"]]) ->
-      L2241.TechEff_coal_vintage_dispatch_gcamusa
-
-    # Variable OM costs
-    L2241.TechProd_coal_vintage_dispatch_dataframe %>%
-      left_join_error_no_match(REEDS_coal_Eff_OMvar %>%
-                                 select(region, technology, OMV_weighted),
-                               by = c("region", "technology")) %>%
-      rename(OM.var = OMV_weighted) %>%
-      mutate(input.OM.var = "OM-var") %>%
-      select(LEVEL2_DATA_NAMES[['TechOMvar']]) ->
-      L2241.TechOMvar_coal_vintage_dispatch_gcamusa
-
-    # Create teable to read in min capacity factor
-    bind_rows(L2241.TechOMvar_coal_vintage_dispatch_gcamusa,
-              # not really needed but to avoid some errors messages in the model add them
-              L2241.TechOMvar_elec_coalret_dispatch_gcamusa) %>%
-      mutate(technology.match = gsub("_.*$", "", technology)) %>%
-      select(-input.OM.var, -OM.var) %>%
-      left_join_error_no_match(select(A23.dispatch_capacitytech_min_cap_fac, technology, min.capacity.factor),
-                               by = c("technology.match" = "technology")) %>%
-      select(-technology.match) %>%
-      rename(dispatch.sector = supplysector,
-             capacity.technology = technology) ->
-      L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa
-
-    # Create table to read in capacity investment discount params
-    L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa %>%
-      select(-min.capacity.factor) %>%
-      mutate(median.shutdown.point = gcamusa.ELEC_CAP_INV_MEDIAN,
-             profit.shutdown.steepness = gcamusa.ELEC_CAP_INV_STEEPNESS) %>%
+    # Final available year - table specifying that these techs are only available in 2015
+    L2241.CapacityTech_ret_vint %>%
+      select(-cap.tech) %>%
+      mutate(initial.available.year = MODEL_FINAL_BASE_YEAR,
+             final.available.year = MODEL_FINAL_BASE_YEAR) %>%
+      # changing variable names because we'll use the tech L2 data name and node equivalence in the batch file
       rename(supplysector = dispatch.sector,
              technology = capacity.technology) ->
-      L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa
+      L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa
 
-    # Create table to read in shareweights in future years
-    L2241.TechProd_coal_vintage_dispatch_dataframe %>%
-      select(-year) %>%
-      repeat_add_columns(tibble::tibble(year = MODEL_FUTURE_YEARS)) %>%
-      mutate(share.weight = 0) %>%
-      select(LEVEL2_DATA_NAMES[['TechShrwt']]) ->
-      L2241.TechShrwt_coal_vintage_dispatch_gcamusa
-
-    # Clean up coal vintage production table
-    L2241.TechProd_coal_vintage_dispatch_gcamusa %>%
-      select(LEVEL2_DATA_NAMES[["Production"]]) %>%
-      mutate(share.weight.year = year) %>%
-      # Read in zero caloutputvalue for other base years
-      replace_na(list(calOutputValue = 0, subs.share.weight = 1, tech.share.weight = 0)) ->
-      L2241.TechProd_coal_vintage_dispatch_gcamusa
-
-    # Read in zero calOutputValue for final base year for existing coal conv pul technology
-    L2241.TechProd_elec_coalret_dispatch_gcamusa %>%
-      filter(technology == "coal (conv pul)") %>%
-      mutate(calOutputValue = 0, tech.share.weight = 0) %>%
-      select(LEVEL2_DATA_NAMES[["Production"]]) %>%
-      bind_rows(L2241.TechProd_coal_vintage_dispatch_gcamusa) %>%
-      arrange(region, technology, year) ->
-      L2241.TechProd_coal_vintage_dispatch_gcamusa
-
-    # Table with technology capacity factors
-    L2241.CapacityTech_elec_coalret_dispatch_gcamusa %>%
-      select(-capacity) %>%
-      # remove default coal (conv pul) technology - CF assumptions already exist for this tech
-      anti_join(A23.elec_tech_mapping_coal_retire_dispatch, by = c("capacity.technology" = "current.tech")) %>%
+    # Capacity factor
+    L2241.CapacityTech_ret_vint %>%
+      left_join_error_no_match(L223.TechCapFac_Dispatch,
+                               by = c("region", "dispatch.sector" = "supplysector",
+                                      "subsector", "cap.tech" = "technology", "year")) %>%
+      select(-cap.tech) %>%
+      # changing variable names because we'll use the tech L2 data name and node equivalence in the batch file
       rename(supplysector = dispatch.sector,
-             technology = capacity.technology) %>%
-      bind_rows(L2241.TechProd_coal_vintage_dispatch_dataframe) %>%
-      filter(year == MODEL_FINAL_BASE_YEAR) %>%
-      left_join_error_no_match(L223.TechCapFac_Dispatch %>%
-                                 semi_join(A23.elec_tech_coal_retire_SCurve_dispatch, by = "technology") %>%
-                                 select(-technology),
-                               by = c("region", "supplysector", "subsector", "year" )) ->
+             technology = capacity.technology) ->
       L2241.TechCapFac_coalret_vintage_dispatch_gcamusa
 
-    # Table specifying that these techs are only available in 2015
-    L2241.TechCapFac_coalret_vintage_dispatch_gcamusa %>%
-      select(-year, -capacity.factor) %>%
-      mutate(initial.available.year = MODEL_FINAL_BASE_YEAR,
-             final.available.year = MODEL_FINAL_BASE_YEAR) -> L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa
 
-    # scale efficiency to match both energy input and ouput from IEA in 2015
-    # here need to do both coal (conv pul)_retire2020 and coal vintage bins
+    # Zero out capacity & production for all defuault (non-retire / vintage) technologies except the few that aren't vintaged
+    # Capacity
+    L223.CapacityTech %>%
+      semi_join(L2241.CapacityTech_ret_vint,
+                by = c("region", "dispatch.sector", "subsector",
+                       "capacity.technology" = "cap.tech", "year")) %>%
+      mutate(capacity = 0) -> L2241.CapacityTech_coal_dispatch_gcamusa
 
-    # total production
-    L2241.TechProd_elec_coalret_dispatch_gcamusa %>%
-      filter(technology == "coal (conv pul)_retire2020") %>%
-      bind_rows(L2241.TechProd_coal_vintage_dispatch_gcamusa %>%
-                  filter(technology != "coal (conv pul)")) -> L2241.total_production
+    # Production
+    L223.Production_Dispatch %>%
+      semi_join(L2241.CapacityTech_ret_vint,
+                by = c("region", "supplysector" = "dispatch.sector", "subsector",
+                       "technology" = "cap.tech", "year")) %>%
+      mutate(calOutputValue = 0,
+             tech.share.weight = 0) -> L2241.Production_coal_dispatch_gcamusa
 
-    # current efficiency assumption
-    L2241.TechEff_elec_coalret_dispatch_gcamusa %>%
-      filter(technology == "coal (conv pul)_retire2020") %>%
-      bind_rows(L2241.TechEff_coal_vintage_dispatch_gcamusa %>%
-                  filter(technology != "coal (conv pul)")) -> L2241.efficiency_unadjusted
 
-    # calculate the corresponding enengy input for coal based on unadjusted efficiency
-    L2241.total_production %>%
-      left_join_error_no_match(L2241.efficiency_unadjusted,
+    # Bind relevant tables together
+    # Note that in many cases we will change the variable names because we'll use the
+    # technology L2 data name and node equivalence in the batch file
+    # Capacity
+    L2241.CapacityTech_coal_dispatch_gcamusa %>% # zeroes out capacity for techs being replaced
+      bind_rows(L2241.CapacityTech_elec_coalret_dispatch_gcamusa, # capacity for "retire 2020" techs
+                L2241.CapacityTech_coal_vintage_dispatch_gcamusa, # capacity for vintage techs
+                L2241.CapacityTech_coal_novintage) -> # capacity for few remaining techs with no vintage info
+      L2241.CapacityTech_coalret_vintage_dispatch_gcamusa
+
+    # Historical production
+    L2241.Production_coal_dispatch_gcamusa %>% # zeroes out historical production for techs being replaced
+      bind_rows(L2241.TechProd_elec_coalret_dispatch_gcamusa %>% # historical production for "retire 2020" techs
+                  rename(supplysector = dispatch.sector,
+                         technology = capacity.technology),
+                L2241.TechProd_coal_vintage_dispatch_gcamusa %>% # historical production for vintage techs
+                  rename(supplysector = dispatch.sector,
+                         technology = capacity.technology),
+                L2241.TechProd_coal_novintage) -> # historical production for few remaining techs with no vintage info
+      L2241.Production_coalret_vintage_dispatch_gcamusa
+
+    # Efficiency
+    L2241.TechEff_elec_coalret_dispatch_gcamusa %>% # historical efficiency of "retire 2020" techs
+      bind_rows(L2241.TechEff_coal_vintage_dispatch_gcamusa, # historical efficiency of vintage techs
+                L2241.TechEff_Cal_coal_novintage) %>% # historical efficiency of few remaining techs with no vintage info
+      rename(supplysector = dispatch.sector,
+             technology = capacity.technology) ->
+      L2241.TechEff_coalret_vintage_dispatch_gcamusa
+
+    # Variable O&M costs
+    L2241.TechOMvar_elec_coalret_dispatch_gcamusa %>%
+      bind_rows(L2241.TechOMvar_coal_vintage_dispatch_gcamusa) %>%
+      rename(supplysector = dispatch.sector,
+             technology = capacity.technology) ->
+      L2241.TechOMvar_coalret_vintage_dispatch_gcamusa
+
+    # Lifetime / natural retirement
+    L2241.TechSCurve_elec_coalret_dispatch_gcamusa %>%
+      bind_rows(L2241.TechSCurve_coal_vintage_dispatch_gcamusa) %>%
+      rename(supplysector = dispatch.sector,
+             technology = capacity.technology) ->
+      L2241.TechSCurve_coalret_vintage_dispatch_gcamusa
+
+    # Share-weights
+    L2241.TechShrwt_elec_coalret_dispatch_gcamusa %>%
+      bind_rows(L2241.TechShrwt_coal_vintage_dispatch_gcamusa) %>%
+      rename(supplysector = dispatch.sector,
+             technology = capacity.technology) ->
+      L2241.TechShrwt_coalret_vintage_dispatch_gcamusa
+
+    # Economic shutdown function
+    L2241.TechProfitShutdown_coalret_dispatch_gcamusa %>%
+      bind_rows(L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa) ->
+      L2241.TechProfitShutdown_coalret_vintage_dispatch_gcamusa
+
+
+    # Finally, scale efficiency to match both energy input and ouput from IEA in 2015
+    # We need to do this because we take efficiencies from EIA & ReEDS data sets
+    # But these are systematically lower than those calculated frome the IEA data
+    # (likely because they include netownuse, which is modeled separately in GCAM)
+    # First, calculate the implied enengy input for coal based on calibrated production and unadjusted efficiency
+    L2241.Production_coalret_vintage_dispatch_gcamusa %>%
+      # we zeroed out production for a bunch of technologies we're eliminating
+      # filter them out here
+      filter(calOutputValue > 0) %>%
+      left_join_error_no_match(L2241.TechEff_coalret_vintage_dispatch_gcamusa,
                                by = c("region", "supplysector", "subsector", "technology", "year")) %>%
       mutate(calInputValue = calOutputValue / efficiency) %>%
       group_by(region) %>%
       summarise(calInputValue = sum(calInputValue)) %>%
       ungroup() -> L2241.input_unadjusted
 
-    # obtain the input energy from IEA balance
+    # Next, read in input energy from IEA balance
     L123.in_EJ_state_elec_F_tech %>%
       filter(year == 2015 & elec_tech == "coal_conv") %>%
       group_by(state) %>%
@@ -550,180 +627,115 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       ungroup() %>%
       rename(region = state) -> L2241.input_calibrated
 
-    # derive efficiency adjustment factor at state level
+    # Calculate an efficiency scalar at the state level
     L2241.input_calibrated %>%
       left_join_error_no_match(L2241.input_unadjusted, by = "region") %>%
       mutate(eff_adj = calInputValue / calibratedInputValue) %>%
       select(region, eff_adj) ->
       L2241.eff_adj
 
-    # update current efficiency table
-    L2241.TechEff_elec_coalret_dispatch_gcamusa %>%
+    # Update the efficiency table
+    L2241.TechEff_coalret_vintage_dispatch_gcamusa %>%
       left_join_error_no_match(L2241.eff_adj, by = "region") %>%
       mutate(efficiency = efficiency * eff_adj) %>%
-      select(-eff_adj) -> L2241.TechEff_elec_coalret_dispatch_gcamusa
+      select(-eff_adj) -> L2241.TechEff_coalret_vintage_dispatch_gcamusa
 
-    L2241.TechEff_coal_vintage_dispatch_gcamusa %>%
-      left_join_error_no_match(L2241.eff_adj, by = "region") %>%
-      mutate(efficiency = efficiency * eff_adj) %>%
-      select(-eff_adj) -> L2241.TechEff_coal_vintage_dispatch_gcamusa
 
     # ===================================================
     # Produce outputs
 
-    L2241.TechProd_elec_coalret_dispatch_gcamusa %>%
-      add_title("Calibration outputs for capacity technology coal (conv pul) by state in final base year") %>%
-      add_units("EJ") %>%
-      add_comments("Conventional coal electricity outputs are allocated to fast retire and slow retire technologies") %>%
-      add_precursors("gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
-                     "gcam-usa/states_subregions",
-                     "gcam-usa/EIA_coal_generation_2018",
-                     "L123.out_EJ_state_elec_F_tech") ->
-      L2241.TechProd_elec_coalret_dispatch_gcamusa
-
-    L2241.CapacityTech_elec_coalret_dispatch_gcamusa %>%
+    L2241.CapacityTech_coalret_vintage_dispatch_gcamusa %>%
       add_title("existing capacity for capacity technology coal (conv pul) by state in final base year") %>%
       add_units("EJ") %>%
       add_comments("Conventional coal electricity capacity are allocated to fast retire and slow retire technologies") %>%
-      add_precursors("gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
-                     "gcam-usa/states_subregions",
-                     "gcam-usa/EIA_coal_generation_2018",
-                     "L223.CapacityTech") ->
-      L2241.CapacityTech_elec_coalret_dispatch_gcamusa
+      # TODO:  add_comments("Capacity shares by vintage are calculated based on REEDS 2019 data") %>%
+      # add_comments("Capacity shares by vintage are then applied to slow_retire stub-technology 2015 fleet in each state") %>%
+      # add_comments("Capacity of coal (conv pul) is set to zero in final base year") %>%
+      add_precursors("L223.CapacityTech",
+                     "gcam-usa/dispatch/coal_vintage_bins",
+                     "gcam-usa/dispatch/ECP_mapping",
+                     "gcam-usa/dispatch/AEO2019Plantfile") ->
+      L2241.CapacityTech_coalret_vintage_dispatch_gcamusa
 
-    L2241.TechEff_elec_coalret_dispatch_gcamusa %>%
+    L2241.Production_coalret_vintage_dispatch_gcamusa %>%
+      add_title("Calibration outputs for capacity technology coal (conv pul) by state in final base year") %>%
+      add_units("EJ") %>%
+      add_comments("Conventional coal electricity outputs are allocated to fast retire and slow retire technologies") %>%
+      # TODO: add_comments("Generation shares by vintage are calculated based on REEDS 2019 data and EIA Form 923 matched by plant and unit ID") %>%
+      # add_comments("Generation shares by vintage are then applied to slow_retire stub-technology 2015 generation in each state") %>%
+      # add_comments("Generation in other base years are set to zero to each vintage stub-technology") %>%
+      add_precursors("gcam-usa/prime_mover_map",
+                     "gcam-usa/calibrated_techs_dispatch_usa",
+                     "gcam-usa/EIA_860_generators_existing_2018",
+                     "gcam-usa/EIA_860_generators_retired_2018",
+                     "gcam-usa/A23.elec_tech_mapping_cool",
+                     "gcam-usa/dispatch/coal_vintage_bins",
+                     "gcam-usa/dispatch/ECP_mapping",
+                     "gcam-usa/dispatch/AEO2019Plantfile",
+                     "L105.eia_elec_data_water",
+                     "L223.Production_Dispatch") ->
+      L2241.Production_coalret_vintage_dispatch_gcamusa
+
+    L2241.TechEff_coalret_vintage_dispatch_gcamusa %>%
       add_title("efficiency for capacity technology coal (conv pul) by state in final base year") %>%
       add_units("Unitless") %>%
       add_comments("same efficiency are applied to fast retire and slow retire technologies") %>%
-      add_precursors("gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
-                     "L123.out_EJ_state_elec_F_tech",
-                     "L123.in_EJ_state_elec_F_tech",
-                     "L223.TechEff_Cal") ->
-      L2241.TechEff_elec_coalret_dispatch_gcamusa
+      # TODO:  add_comments("Efficiency by vintage are calculated based on REEDS 2019 data") %>%
+      # add_comments("Efficiency are weighted by generation (EIA Form 923)") %>%
+      add_precursors("L123.in_EJ_state_elec_F_tech",
+                     "L223.TechEff_Cal",
+                     "gcam-usa/dispatch/coal_vintage_bins",
+                     "gcam-usa/dispatch/ECP_mapping",
+                     "gcam-usa/dispatch/AEO2019Plantfile") ->
+      L2241.TechEff_coalret_vintage_dispatch_gcamusa
 
-    L2241.TechSCurve_elec_coalret_dispatch_gcamusa %>%
+    L2241.TechSCurve_coalret_vintage_dispatch_gcamusa %>%
       add_title("S-curve shutdown decider for for capacity technology coal (conv pul) by state in final base year") %>%
       add_units("Unitless") %>%
       add_comments("Separate fast retire and slow retire technologies") %>%
-      add_precursors("gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
-                     "gcam-usa/A23.elec_tech_coal_retire_SCurve_dispatch",
-                     "gcam-usa/states_subregions",
-                     "gcam-usa/EIA_coal_generation_2018",
-                     "L123.out_EJ_state_elec_F_tech") ->
-      L2241.TechSCurve_elec_coalret_dispatch_gcamusa
+      # TODO:  add_comments("Average lifetime for each vintage group is weighted by capacity, based on EIA unit-level 2015 data") %>%
+      # add_comments("Only for vintage groups with greater than 20 years of lifetime remaining") %>%
+      add_precursors("gcam-usa/A23.elec_tech_coal_retire_SCurve_dispatch") ->
+      L2241.TechSCurve_coalret_vintage_dispatch_gcamusa
 
-    L2241.TechShrwt_elec_coalret_dispatch_gcamusa %>%
+    L2241.TechShrwt_coalret_vintage_dispatch_gcamusa %>%
       add_title("Shareweights for for capacity technology coal (conv pul) by state in final base year") %>%
       add_units("Unitless") %>%
       add_comments("Separate fast retire and slow retire technologies") %>%
-      add_precursors("gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
-                     "L123.out_EJ_state_elec_F_tech") ->
-      L2241.TechShrwt_elec_coalret_dispatch_gcamusa
+      same_precursors_as("L2241.Production_coalret_vintage_dispatch_gcamusa") ->
+      L2241.TechShrwt_coalret_vintage_dispatch_gcamusa
 
-    L2241.TechOMvar_elec_coalret_dispatch_gcamusa %>%
+    L2241.TechOMvar_coalret_vintage_dispatch_gcamusa %>%
       add_title("Variable OM costs for for capacity technology coal (conv pul) by state in final base year") %>%
       add_units("1975$/MWh") %>%
       add_comments("Set the same variable OM cost values for fast retire and slow retire technologies") %>%
-      add_precursors("gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
-                     "L123.out_EJ_state_elec_F_tech",
-                     "L223.TechOMvar_Dispatch") ->
-      L2241.TechOMvar_elec_coalret_dispatch_gcamusa
+      # TODO:  add_comments("OM var by vintage are calculated based on REEDS 2019 data") %>%
+      # add_comments("OM var are weighted by generation (EIA Form 923)") %>%
+      same_precursors_as("L2241.TechEff_coal_vintage_dispatch_gcamusa") %>%
+      add_precursors("L223.TechOMvar_Dispatch") ->
+      L2241.TechOMvar_coalret_vintage_dispatch_gcamusa
 
-    L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa %>%
+    L2241.CapacityTechMinCapFac_coalret_vintage_dispatch_gcamusa %>%
       add_title("Capacity technology minimum capacity factor") %>%
       add_units("Unitless") %>%
       add_comments("Technologies will not be allowed to dispatch when it's capacity factor") %>%
       add_comments("would fall below this minimum value.") %>%
-      add_precursors("gcam-usa/A23.dispatch_capacitytech_min_cap_fac",
-                     "gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
-                     "L123.out_EJ_state_elec_F_tech") ->
-      L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa
+      add_precursors("gcam-usa/A23.dispatch_capacitytech_min_cap_fac") ->
+      L2241.CapacityTechMinCapFac_coalret_vintage_dispatch_gcamusa
 
-    L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa %>%
+    L2241.TechProfitShutdown_coalret_vintage_dispatch_gcamusa %>%
       add_title("Dispatch technology capacity investment discount params") %>%
       add_units("NA") %>%
       add_comments("Profit shutdown param that are used to discount existing") %>%
       add_comments("capacity in investment decisions.") %>%
-      add_precursors("gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
-                     "L123.out_EJ_state_elec_F_tech") ->
-      L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa
-
-    L2241.TechProd_coal_vintage_dispatch_gcamusa %>%
-      add_title("Calibration outputs for slow_retire conventional coal electricity plants by detailed vintage and state") %>%
-      add_units("EJ") %>%
-      add_comments("Generation shares by vintage are calculated based on REEDS 2019 data and EIA Form 923 matched by plant and unit ID") %>%
-      add_comments("Generation shares by vintage are then applied to slow_retire stub-technology 2015 generation in each state") %>%
-      add_comments("Generation in other base years are set to zero to each vintage stub-technology") %>%
-      add_precursors("gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
-                     "gcam-usa/states_subregions",
-                     "gcam-usa/EIA_coal_generation_2018",
-                     "L123.out_EJ_state_elec_F_tech",
-                     "gcam-usa/EIA_923_generator_gen_fuel_2018",
-                     "gcam-usa/dispatch/coal_vintage_bins",
-                     "gcam-usa/dispatch/ECP_mapping",
-                     "gcam-usa/dispatch/AEO2019Plantfile") ->
-      L2241.TechProd_coal_vintage_dispatch_gcamusa
-
-    L2241.CapacityTech_coal_vintage_dispatch_gcamusa %>%
-      add_title("Existing capacity for slow_retire conventional coal electricity plants by detailed vintage and state") %>%
-      add_units("EJ") %>%
-      add_comments("Capacity shares by vintage are calculated based on REEDS 2019 data") %>%
-      add_comments("Capacity shares by vintage are then applied to slow_retire stub-technology 2015 fleet in each state") %>%
-      add_comments("Capacity of coal (conv pul) is set to zero in final base year") %>%
-      add_precursors("gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
-                     "gcam-usa/states_subregions",
-                     "gcam-usa/EIA_coal_generation_2018",
-                     "L223.CapacityTech",
-                     "gcam-usa/EIA_923_generator_gen_fuel_2018",
-                     "gcam-usa/dispatch/coal_vintage_bins",
-                     "gcam-usa/dispatch/ECP_mapping",
-                     "gcam-usa/dispatch/AEO2019Plantfile") ->
-      L2241.CapacityTech_coal_vintage_dispatch_gcamusa
-
-    L2241.TechEff_coal_vintage_dispatch_gcamusa %>%
-      add_title("Efficiencies for slow_retire conventional coal electricity plants by detailed vintage and state") %>%
-      add_units("Unitless") %>%
-      add_comments("Efficiency by vintage are calculated based on REEDS 2019 data") %>%
-      add_comments("Efficiency are weighted by generation (EIA Form 923)") %>%
-      add_precursors("gcam-usa/A23.elec_tech_mapping_coal_retire_dispatch",
-                     "gcam-usa/states_subregions",
-                     "gcam-usa/EIA_coal_generation_2018",
-                     "L123.out_EJ_state_elec_F_tech",
-                     "L123.in_EJ_state_elec_F_tech",
-                     "gcam-usa/EIA_923_generator_gen_fuel_2018",
-                     "gcam-usa/dispatch/coal_vintage_bins",
-                     "gcam-usa/dispatch/ECP_mapping",
-                     "gcam-usa/dispatch/AEO2019Plantfile") ->
-      L2241.TechEff_coal_vintage_dispatch_gcamusa
-
-    L2241.TechShrwt_coal_vintage_dispatch_gcamusa %>%
-      add_title("Shareweights slow_retire conventional coal electricity plants by detailed vintage and state") %>%
-      add_units("Unitless") %>%
-      add_comments("set as zero for future years") %>%
       same_precursors_as("L2241.TechProd_coal_vintage_dispatch_gcamusa") ->
-      L2241.TechShrwt_coal_vintage_dispatch_gcamusa
-
-    L2241.TechOMvar_coal_vintage_dispatch_gcamusa %>%
-      add_title("OM var for slow_retire conventional coal electricity plants by detailed vintage and state") %>%
-      add_units("1975$/MWh") %>%
-      add_comments("OM var by vintage are calculated based on REEDS 2019 data") %>%
-      add_comments("OM var are weighted by generation (EIA Form 923)") %>%
-      same_precursors_as("L2241.TechEff_coal_vintage_dispatch_gcamusa") ->
-      L2241.TechOMvar_coal_vintage_dispatch_gcamusa
-
-    L2241.TechSCurve_coal_vintage_dispatch_gcamusa %>%
-      add_title("Lifetime and retirement parameters for slow_retire conventional coal electricity plants by detailed vintage and state") %>%
-      add_units("years") %>%
-      add_comments("Average lifetime for each vintage group is weighted by capacity, based on EIA unit-level 2015 data") %>%
-      add_comments("Only for vintage groups with greater than 20 years of lifetime remaining") %>%
-      same_precursors_as("L2241.TechProd_coal_vintage_dispatch_gcamusa") ->
-      L2241.TechSCurve_coal_vintage_dispatch_gcamusa
+      L2241.TechProfitShutdown_coalret_vintage_dispatch_gcamusa
 
     L2241.TechCapFac_coalret_vintage_dispatch_gcamusa %>%
       add_title("existing capacity for capacity technology coal (conv pul) by state in final base year") %>%
       add_units("EJ") %>%
       add_comments("Conventional coal electricity capacity are allocated to fast retire and slow retire technologies") %>%
-      same_precursors_as("L2241.CapacityTech_elec_coalret_dispatch_gcamusa") %>%
+      same_precursors_as("L2241.CapacityTech_coalret_vintage_dispatch_gcamusa") %>%
       same_precursors_as("L2241.TechProd_coal_vintage_dispatch_gcamusa") %>%
       add_precursors("gcam-usa/A23.elec_tech_coal_retire_SCurve_dispatch",
                      "L223.TechCapFac_Dispatch") ->
@@ -733,26 +745,20 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       add_title("existing capacity for capacity technology coal (conv pul) by state in final base year") %>%
       add_units("EJ") %>%
       add_comments("Conventional coal electricity capacity are allocated to fast retire and slow retire technologies") %>%
-      same_precursors_as("L2241.CapacityTech_elec_coalret_dispatch_gcamusa") %>%
+      same_precursors_as("L2241.CapacityTech_coalret_vintage_dispatch_gcamusa") %>%
       same_precursors_as("L2241.TechProd_coal_vintage_dispatch_gcamusa") %>%
       add_precursors("L2241.TechCapFac_coalret_vintage_dispatch_gcamusa") ->
       L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa
 
-    return_data(L2241.TechProd_elec_coalret_dispatch_gcamusa,
-                L2241.CapacityTech_elec_coalret_dispatch_gcamusa,
-                L2241.TechEff_elec_coalret_dispatch_gcamusa,
-                L2241.TechSCurve_elec_coalret_dispatch_gcamusa,
-                L2241.TechShrwt_elec_coalret_dispatch_gcamusa,
-                L2241.TechOMvar_elec_coalret_dispatch_gcamusa,
-                # vintage of existing techs
-                L2241.TechProd_coal_vintage_dispatch_gcamusa,
-                L2241.CapacityTech_coal_vintage_dispatch_gcamusa,
-                L2241.TechEff_coal_vintage_dispatch_gcamusa,
-                L2241.TechOMvar_coal_vintage_dispatch_gcamusa,
-                L2241.CapacityTechMinCapFac_coal_vintage_dispatch_gcamusa,
-                L2241.TechProfitShutdown_coal_vintage_dispatch_gcamusa,
-                L2241.TechShrwt_coal_vintage_dispatch_gcamusa,
-                L2241.TechSCurve_coal_vintage_dispatch_gcamusa,
+
+    return_data(L2241.Production_coalret_vintage_dispatch_gcamusa,
+                L2241.CapacityTech_coalret_vintage_dispatch_gcamusa,
+                L2241.TechEff_coalret_vintage_dispatch_gcamusa,
+                L2241.TechSCurve_coalret_vintage_dispatch_gcamusa,
+                L2241.TechShrwt_coalret_vintage_dispatch_gcamusa,
+                L2241.TechOMvar_coalret_vintage_dispatch_gcamusa,
+                L2241.CapacityTechMinCapFac_coalret_vintage_dispatch_gcamusa,
+                L2241.TechProfitShutdown_coalret_vintage_dispatch_gcamusa,
                 L2241.TechCapFac_coalret_vintage_dispatch_gcamusa,
                 L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa)
 

@@ -32,7 +32,7 @@ intermediate electricity,wind,share-weight,final-calibration-year,initial-future
 intermediate electricity,wind,share-weight,initial-future-year,end-year,0,fixed
 intermediate electricity,solar,share-weight,final-calibration-year,2030,1,linear
 intermediate electricity,solar,share-weight,2030,end-year,1,fixed
-intermediate electricity,geothermal,share-weight,final-calibration-year,2100,1,linear
+intermediate electricity,geothermal,share-weight,initial-future-year,end-year,0,fixed
 baseload electricity,coal,share-weight,final-calibration-year,2030,1,linear
 baseload electricity,coal,share-weight,2030,end-year,1,fixed
 baseload electricity,gas,share-weight,final-calibration-year,2030,1,linear
@@ -46,4 +46,4 @@ baseload electricity,nuclear,share-weight,2025,2030,1,linear
 baseload electricity,nuclear,share-weight,2030,end-year,1,fixed
 baseload electricity,wind,share-weight,final-calibration-year,2030,1,linear
 baseload electricity,wind,share-weight,2030,end-year,1,fixed
-baseload electricity,geothermal,share-weight,final-calibration-year,end-year,1,linear
+baseload electricity,geothermal,share-weight,initial-future-year,end-year,0,fixed

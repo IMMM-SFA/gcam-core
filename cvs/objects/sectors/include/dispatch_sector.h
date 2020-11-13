@@ -199,11 +199,12 @@ private:
      */
     struct GetCapacityHelper {
         int mPeriod;
-        
+		
         double mTotalCapacity;
+        bool mDidFindCapacity;
         void getTotalCapacity();
         
-        template<typename DataType>
+		template<typename DataType>
         void processData( DataType& aData );
     };
 };
