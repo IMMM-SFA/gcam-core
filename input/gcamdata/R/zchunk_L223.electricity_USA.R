@@ -753,7 +753,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              to.year = max(MODEL_YEARS),
              interpolation.function = gcamusa.FIXED_SHAREWEIGHT,
              to.value = gcamusa.DEFAULT_SHAREWEIGHT) %>%
-      rename(stub.technology = technology) %>%
       mutate(apply.to = gcamusa.INTERP_APPLY_TO) %>%
       select(region, supplysector, subsector0, subsector, stub.technology, apply.to,
              from.year, to.year, to.value, interpolation.function) -> L223.StubTechInterpTo_Investment_fut_USA
@@ -838,7 +837,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              interpolation.function = gcamusa.FIXED_SHAREWEIGHT,
              to.value = capacity_share,
              apply.to = gcamusa.INTERP_APPLY_TO) %>%
-      rename(stub.technology = technology) %>%
       select(region, supplysector, subsector0, subsector, stub.technology, apply.to,
              from.year, to.year, to.value, interpolation.function) -> L223.StubTechInterpTo_Investment_mapped_USA
 
@@ -850,7 +848,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              to.year = max(MODEL_YEARS),
              interpolation.function = gcamusa.FIXED_SHAREWEIGHT,
              to.value = 0) %>%
-      rename(stub.technology = technology) %>%
       mutate(apply.to = gcamusa.INTERP_APPLY_TO) %>%
       select(region, supplysector, subsector0, subsector, stub.technology, apply.to,
              from.year, to.year, to.value, interpolation.function) ->
@@ -943,7 +940,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       filter(subsector.name == "gas (CT)",
              sector.name == gcamusa.ELEC_INV_NAMES[1]) %>%
       mutate(input.capital = "capacity credit",
-             capital.overnight = -0.5 * capital.overnight) %>%
+             capital.overnight = capital.overnight * -1) %>%
       select(year, input.capital, capital.overnight, fixed.charge.rate) ->
       gas_CT_cost
 

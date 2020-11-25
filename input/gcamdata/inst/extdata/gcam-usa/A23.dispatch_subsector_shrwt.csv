@@ -41,8 +41,8 @@ USA,intermediate electricity,nuclear,2025,0
 USA,intermediate electricity,nuclear,2030,1
 USA,intermediate electricity,nuclear,end-year,1
 USA,intermediate electricity,wind,1975,1
-USA,intermediate electricity,wind,end-year,0
-USA,intermediate electricity,wind,initial-future-year,0
+USA,intermediate electricity,wind,end-year,1
+USA,intermediate electricity,wind,initial-future-year,1
 USA,intermediate electricity,solar,1975,1
 USA,intermediate electricity,solar,end-year,1
 USA,intermediate electricity,solar,2030,1

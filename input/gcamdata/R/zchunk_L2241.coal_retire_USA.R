@@ -8,9 +8,10 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L2241.Production_coalret_vintage_dispatch_gcamusa}, \code{L2241.CapacityTech_coalret_vintage_dispatch_gcamusa},
 #' \code{L2241.TechEff_coalret_vintage_dispatch_gcamusa}, \code{L2241.TechSCurve_coalret_vintage_dispatch_gcamusa},
-#' \code{L2241.TechShrwt_coalret_vintage_dispatch_gcamusa}, \code{L2241.TechOMvar_coalret_vintage_dispatch_gcamusa},
+#' \code{L2241.TechShrwt_coalret_vintage_dispatch_gcamusa}, \code{L2241.TechOMfixed_coalret_vintage_dispatch_gcamusa}, \code{L2241.TechOMvar_coalret_vintage_dispatch_gcamusa},
 #' \code{L2241.TechCapFac_coalret_vintage_dispatch_gcamusa}, \code{L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa},
-#' \code{L2241.CapacityTechMinCapFac_coalret_vintage_dispatch_gcamusa}, \code{L2241.TechProfitShutdown_coalret_vintage_dispatch_gcamusa}.
+#' \code{L2241.CapacityTechMinCapFac_coalret_vintage_dispatch_gcamusa}, \code{L2241.TechProfitShutdown_coalret_vintage_dispatch_gcamusa},
+#' and \code{L2241.TechCoef_cool_coalret_vintage_dispatch_gcamusa}.
 #' The corresponding file in the original data system was \code{L2241.coal_slow_fast_retire_USA.R} (gcam-usa level2).
 #' @details This chunk creates add-on files to take the fraction of reduction in coal electricity generation between 2010 and 2015 for each state and
 #' forces that generation to retire in 2015. It also tempers retirement assumptions for the remaining coal fleet to allow
@@ -36,19 +37,23 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              "L223.CapacityTech",
              "L223.Production_Dispatch",
              "L223.TechEff_Cal",
+             "L223.TechOMfixed_Dispatch",
              "L223.TechOMvar_Dispatch",
-             "L223.TechCapFac_Dispatch"))
+             "L223.TechCapFac_Dispatch",
+             "L223.TechCoef_Dispatch_cool"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L2241.Production_coalret_vintage_dispatch_gcamusa",
              "L2241.CapacityTech_coalret_vintage_dispatch_gcamusa",
              "L2241.TechEff_coalret_vintage_dispatch_gcamusa",
              "L2241.TechSCurve_coalret_vintage_dispatch_gcamusa",
              "L2241.TechShrwt_coalret_vintage_dispatch_gcamusa",
+             "L2241.TechOMfixed_coalret_vintage_dispatch_gcamusa",
              "L2241.TechOMvar_coalret_vintage_dispatch_gcamusa",
              "L2241.CapacityTechMinCapFac_coalret_vintage_dispatch_gcamusa",
              "L2241.TechProfitShutdown_coalret_vintage_dispatch_gcamusa",
              "L2241.TechCapFac_coalret_vintage_dispatch_gcamusa",
-             "L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa"))
+             "L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa",
+             "L2241.TechCoef_cool_coalret_vintage_dispatch_gcamusa"))
 
   } else if(command == driver.MAKE) {
 
@@ -85,8 +90,10 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     L223.CapacityTech <- get_data(all_data, "L223.CapacityTech")
     L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
     L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
+    L223.TechOMfixed_Dispatch <- get_data(all_data, "L223.TechOMfixed_Dispatch")
     L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch")
     L223.TechCapFac_Dispatch <- get_data(all_data, "L223.TechCapFac_Dispatch")
+    L223.TechCoef_Dispatch_cool <- get_data(all_data, "L223.TechCoef_Dispatch_cool")
 
 
     # -----------------------------------------------------------------------------
@@ -220,6 +227,14 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       select(region, dispatch.sector, subsector,  capacity.technology = cap.tech.cool, year,
              minicam.energy.input, efficiency, market.name) ->
       L2241.TechEff_elec_coalret_dispatch_gcamusa
+
+    # Fixed O&M costs
+    L2241.CapacityTech_retired %>%
+      left_join_error_no_match(L223.TechOMfixed_Dispatch,
+                               by = c("region", "dispatch.sector" = "supplysector", "subsector",
+                                      "cap.tech" = "technology", "year")) %>%
+      select(region, dispatch.sector, subsector,  capacity.technology = cap.tech.cool, year, input.OM.fixed, OM.fixed) ->
+      L2241.TechOMfixed_elec_coalret_dispatch_gcamusa
 
     # Variable O&M costs
     L2241.CapacityTech_retired %>%
@@ -453,6 +468,16 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
              minicam.energy.input, efficiency, market.name) ->
       L2241.TechEff_coal_vintage_dispatch_gcamusa
 
+    # Fixed O&M costs
+    L2241.CapacityTech_remaining_vintage %>%
+      left_join_error_no_match(L223.TechOMfixed_Dispatch %>%
+                                 select(-OM.fixed),
+                               by = c("region", "dispatch.sector" = "supplysector", "subsector",
+                                      "cap.tech" = "technology", "year")) %>%
+      mutate(capacity.technology = paste0(cap.tech, " (", vintage.bin, ")")) %>%
+      select(region, dispatch.sector, subsector, capacity.technology, year, input.OM.fixed, OM.fixed = OMF) ->
+      L2241.TechOMfixed_coal_vintage_dispatch_gcamusa
+
     # Variable O&M costs
     L2241.CapacityTech_remaining_vintage %>%
       left_join_error_no_match(L223.TechOMvar_Dispatch %>%
@@ -496,6 +521,16 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       bind_rows(L2241.CapacityTech_remaining_vintage %>%
                   mutate(capacity.technology = paste0(cap.tech, " (", vintage.bin, ")")) %>%
                   select(region, dispatch.sector, subsector, cap.tech, capacity.technology, year)) -> L2241.CapacityTech_ret_vint
+
+    # Water inputs
+    L2241.CapacityTech_ret_vint %>%
+      # join will duplicate rows because we're creating coefficients for both water withdrawals and consumption
+      # LJENM errors, so left_join() is used
+      left_join(L223.TechCoef_Dispatch_cool,
+                by = c("region", "subsector", "cap.tech" = "technology", "year")) %>%
+      select(region, supplysector, subsector, technology = capacity.technology,
+             year, minicam.energy.input, coefficient, market.name) ->
+      L2241.TechCoef_cool_coalret_vintage_dispatch_gcamusa
 
     # Minimum capacity factor
     # Note that including the retire technologies here is not strictly necessary
@@ -575,6 +610,13 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       rename(supplysector = dispatch.sector,
              technology = capacity.technology) ->
       L2241.TechEff_coalret_vintage_dispatch_gcamusa
+
+    # Fixed O&M costs
+    L2241.TechOMfixed_elec_coalret_dispatch_gcamusa %>%
+      bind_rows(L2241.TechOMfixed_coal_vintage_dispatch_gcamusa) %>%
+      rename(supplysector = dispatch.sector,
+             technology = capacity.technology) ->
+      L2241.TechOMfixed_coalret_vintage_dispatch_gcamusa
 
     # Variable O&M costs
     L2241.TechOMvar_elec_coalret_dispatch_gcamusa %>%
@@ -705,6 +747,16 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       same_precursors_as("L2241.Production_coalret_vintage_dispatch_gcamusa") ->
       L2241.TechShrwt_coalret_vintage_dispatch_gcamusa
 
+    L2241.TechOMfixed_coalret_vintage_dispatch_gcamusa %>%
+      add_title("Fixed OM costs for for capacity technology coal (conv pul) by state in final base year") %>%
+      add_units("1975$/kW/yr") %>%
+      add_comments("Set the same fixed OM cost values for fast retire and slow retire technologies") %>%
+      # TODO:  add_comments("OM var by vintage are calculated based on REEDS 2019 data") %>%
+      # add_comments("OM var are weighted by generation (EIA Form 923)") %>%
+      same_precursors_as("L2241.TechEff_coal_vintage_dispatch_gcamusa") %>%
+      add_precursors("L223.TechOMfixed_Dispatch") ->
+      L2241.TechOMfixed_coalret_vintage_dispatch_gcamusa
+
     L2241.TechOMvar_coalret_vintage_dispatch_gcamusa %>%
       add_title("Variable OM costs for for capacity technology coal (conv pul) by state in final base year") %>%
       add_units("1975$/MWh") %>%
@@ -742,7 +794,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       L2241.TechCapFac_coalret_vintage_dispatch_gcamusa
 
     L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa %>%
-      add_title("existing capacity for capacity technology coal (conv pul) by state in final base year") %>%
+      add_title("Existing capacity for capacity technology coal (conv pul) by state in final base year") %>%
       add_units("EJ") %>%
       add_comments("Conventional coal electricity capacity are allocated to fast retire and slow retire technologies") %>%
       same_precursors_as("L2241.CapacityTech_coalret_vintage_dispatch_gcamusa") %>%
@@ -750,17 +802,26 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       add_precursors("L2241.TechCapFac_coalret_vintage_dispatch_gcamusa") ->
       L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa
 
+    L2241.TechCoef_cool_coalret_vintage_dispatch_gcamusa %>%
+      add_title("Historical conventional coal dispatch technology water withdrawal and consumption coefficients by state") %>%
+      add_units("Unitless") %>%
+      add_comments("Set technology water withdrawal and consumption coefficients by state") %>%
+      add_precursors("L223.TechCoef_Dispatch_cool") ->
+      L2241.TechCoef_cool_coalret_vintage_dispatch_gcamusa
+
 
     return_data(L2241.Production_coalret_vintage_dispatch_gcamusa,
                 L2241.CapacityTech_coalret_vintage_dispatch_gcamusa,
                 L2241.TechEff_coalret_vintage_dispatch_gcamusa,
                 L2241.TechSCurve_coalret_vintage_dispatch_gcamusa,
                 L2241.TechShrwt_coalret_vintage_dispatch_gcamusa,
+                L2241.TechOMfixed_coalret_vintage_dispatch_gcamusa,
                 L2241.TechOMvar_coalret_vintage_dispatch_gcamusa,
                 L2241.CapacityTechMinCapFac_coalret_vintage_dispatch_gcamusa,
                 L2241.TechProfitShutdown_coalret_vintage_dispatch_gcamusa,
                 L2241.TechCapFac_coalret_vintage_dispatch_gcamusa,
-                L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa)
+                L2241.CapacityTechAvail_coalret_vintage_dispatch_gcamusa,
+                L2241.TechCoef_cool_coalret_vintage_dispatch_gcamusa)
 
   } else {
     stop("Unknown command")

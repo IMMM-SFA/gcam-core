@@ -7,7 +7,7 @@
 # Column types: ccccnnnnnnnnn
 # ----------
 supplysector,subsector,technology,input.capital,fixed.charge.rate,1971,1990,2005,2010,2015,improvement.max,improvement.rate,improvement.shadow.technology
-electricity,gas,gas (CT),capital,0.13,246.3,246.3,246.3,246.3,246.3,0.86,0.05,
-electricity,refined liquids,refined liquids (CT),capital,0.13,246.3,246.3,246.3,246.3,246.3,0.86,0.05,
+electricity,gas,gas (CT),capital,0.13,188.7747,188.7747,188.7747,188.7747,188.7747,0.86,0.05,
+electricity,refined liquids,refined liquids (CT),capital,0.13,188.7747,188.7747,188.7747,188.7747,188.7747,0.86,0.05,
 electricity,gas,gas (steam),capital,0.13,246.3,246.3,246.3,246.3,246.3,0.86,0.05,
 electricity,refined liquids,refined liquids (steam),capital,0.13,246.3,246.3,246.3,246.3,246.3,0.86,0.05,

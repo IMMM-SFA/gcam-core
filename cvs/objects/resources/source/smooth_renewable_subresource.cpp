@@ -208,8 +208,21 @@ void SmoothRenewableSubresource::annualsupply( const std::string& aRegionName, c
 }
 
 double SmoothRenewableSubresource::getLowestPrice( const int aPeriod ) const{
-    // supply curve for smooth renewables extends down to zero, always.
-    return 0.0;
+   // technically this curve extends all the way down to zero
+   // price, but it is approaching zero potentially extremely flat and the
+   // derivative isn't very good at those very low prices.  Ideally we
+   // would want to calculate the price at which the elasticity is at
+   // some threshold, say 0.1, but that's not solvable in closed
+   // form.  Instead, we'll take the point at which the supply is
+   // equal to 1e-6
+
+    double minSupply = util::getSmallNumber() / mMaxAnnualSubResource[aPeriod];
+
+    double curveExp = mCostCurve.getCurveExponent();
+
+    double value = pow((minSupply * pow(mCostCurve.getMidprice(), curveExp)) / (1.0 - minSupply), 1.0 / curveExp);
+
+    return value;
 }
 
 double SmoothRenewableSubresource::getHighestPrice( const int aPeriod ) const{
