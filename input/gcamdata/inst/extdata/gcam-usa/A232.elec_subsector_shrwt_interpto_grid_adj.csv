@@ -7,7 +7,11 @@
 # Column types: ccccccic 
 # ----------
 region,supplysector,subsector,apply.to,from.year,to.year,to.value,interpolation.function
+Alaska grid,electricity domestic supply,electricity trade,share-weight,final-calibration-year,initial-future-year,0,linear
+Alaska grid,electricity domestic supply,electricity trade,share-weight,initial-future-year,end-year,0,fixed
 Hawaii grid,electricity domestic supply,electricity trade,share-weight,final-calibration-year,initial-future-year,0,linear
 Hawaii grid,electricity domestic supply,electricity trade,share-weight,initial-future-year,end-year,0,fixed
 USA,electricity trade,Alaska grid electricity trade,share-weight,final-calibration-year,initial-future-year,0,linear
 USA,electricity trade,Alaska grid electricity trade,share-weight,initial-future-year,end-year,0,fixed
+USA,electricity trade,Hawaii grid electricity trade,share-weight,final-calibration-year,initial-future-year,0,linear
+USA,electricity trade,Hawaii grid electricity trade,share-weight,initial-future-year,end-year,0,fixed

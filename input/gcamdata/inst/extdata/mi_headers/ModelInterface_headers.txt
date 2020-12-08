@@ -38,6 +38,10 @@ PrimaryRenewKeywordInt, global-technology-database/+{sector-name}location-info, 
 
 AvgFossilEffKeyword, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}technology, technology/+{year}period, period/{average-fossil-efficiency=}keyword, scenario, scenario/world, world/global-technology-database
 
+TechAvgFossilEffKeyword, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/{average-fossil-efficiency=}keyword, scenario, scenario/world, period/{name=CO2}CO2
+
+TechPrimaryRenewKeyword, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+{primary-renewable}keyword, scenario, scenario/world, period/{name=CO2}CO2
+
 
 #####, SOCIOECONOMICS
 

@@ -62,6 +62,8 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.TechCarbonCapture_Dispatch",
              "L223.Production_Dispatch",
              "L223.TechEff_Cal",
+             "L223.PrimaryRenewKeyword_Dispatch_USA",
+             "L223.AvgFossilEffKeyword_Dispatch_USA",
              "L223.TechTrialMarket_Dispatch",
              "L223.TechPmult_dispatch_wind_reeds_USA",
              "L223.TechTrialMarket_Investment",
@@ -76,6 +78,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L2232.Supplysector_USAelec",
              "L2232.SubsectorShrwtFllt_USAelec",
              "L2232.SubsectorInterp_USAelec",
+             "L2232.SubsectorInterpTo_USAelec",
              "L2232.SubsectorLogit_USAelec",
              "L2232.TechShrwt_USAelec",
              "L2232.TechCoef_USAelec",
@@ -84,6 +87,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L2232.ElecReserve_FERC",
              "L2232.SubsectorShrwtFllt_elec_FERC",
              "L2232.SubsectorInterp_elec_FERC",
+             "L2232.SubsectorInterpTo_elec_FERC",
              "L2232.SubsectorLogit_elec_FERC",
              "L2232.TechShrwt_elec_FERC",
              "L2232.TechCoef_elec_FERC",
@@ -150,6 +154,8 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.TechCarbonCapture_Dispatch <- get_data(all_data, "L223.TechCarbonCapture_Dispatch")
     L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
     L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
+    L223.PrimaryRenewKeyword_Dispatch_USA <- get_data(all_data, "L223.PrimaryRenewKeyword_Dispatch_USA")
+    L223.AvgFossilEffKeyword_Dispatch_USA <- get_data(all_data, "L223.AvgFossilEffKeyword_Dispatch_USA")
     L223.TechTrialMarket_Dispatch <- get_data(all_data, "L223.TechTrialMarket_Dispatch")
     L223.TechPmult_dispatch_wind_reeds_USA <- get_data(all_data, "L223.TechPmult_dispatch_wind_reeds_USA")
     L223.TechTrialMarket_Investment <- get_data(all_data, "L223.TechTrialMarket_Investment")
@@ -165,6 +171,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L2232.Supplysector_USAelec <- get_data(all_data, "L2232.Supplysector_USAelec")
     L2232.SubsectorShrwtFllt_USAelec <- get_data(all_data, "L2232.SubsectorShrwtFllt_USAelec")
     L2232.SubsectorInterp_USAelec <- get_data(all_data, "L2232.SubsectorInterp_USAelec")
+    L2232.SubsectorInterpTo_USAelec <- get_data(all_data, "L2232.SubsectorInterpTo_USAelec")
     L2232.SubsectorLogit_USAelec <- get_data(all_data, "L2232.SubsectorLogit_USAelec")
     L2232.TechShrwt_USAelec <- get_data(all_data, "L2232.TechShrwt_USAelec")
     L2232.TechCoef_USAelec <- get_data(all_data, "L2232.TechCoef_USAelec")
@@ -173,6 +180,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L2232.ElecReserve_FERC <- get_data(all_data, "L2232.ElecReserve_FERC")
     L2232.SubsectorShrwtFllt_elec_FERC <- get_data(all_data, "L2232.SubsectorShrwtFllt_elec_FERC")
     L2232.SubsectorInterp_elec_FERC <- get_data(all_data, "L2232.SubsectorInterp_elec_FERC")
+    L2232.SubsectorInterpTo_elec_FERC <- get_data(all_data, "L2232.SubsectorInterpTo_elec_FERC")
     L2232.SubsectorLogit_elec_FERC <- get_data(all_data, "L2232.SubsectorLogit_elec_FERC")
     L2232.TechShrwt_elec_FERC <- get_data(all_data, "L2232.TechShrwt_elec_FERC")
     L2232.TechCoef_elec_FERC <- get_data(all_data, "L2232.TechCoef_elec_FERC")
@@ -254,6 +262,8 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.TechCarbonCapture_Dispatch, "CarbonCapture") %>%
       add_xml_data(L223.Production_Dispatch, "Production") %>%
       add_xml_data(L223.TechEff_Cal, "TechEff") %>%
+      add_xml_data(L223.PrimaryRenewKeyword_Dispatch_USA, "TechPrimaryRenewKeyword") %>%
+      add_xml_data(L223.AvgFossilEffKeyword_Dispatch_USA, "TechAvgFossilEffKeyword") %>%
       add_xml_data(L223.TechTrialMarket_Dispatch, "CapacityTechTrialMktName") %>%
       add_xml_data(L223.TechPmult_dispatch_wind_reeds_USA, "CapacityTechInputPMult") %>%
       add_logit_tables_xml(L223.Sector_Dispatch_Grid, "Supplysector") %>%
@@ -266,6 +276,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_logit_tables_xml(L2232.Supplysector_USAelec, "Supplysector") %>%
       add_xml_data(L2232.SubsectorShrwtFllt_USAelec, "SubsectorShrwtFllt") %>%
       add_xml_data(L2232.SubsectorInterp_USAelec, "SubsectorInterp") %>%
+      add_xml_data(L2232.SubsectorInterpTo_USAelec, "SubsectorInterpTo") %>%
       add_logit_tables_xml(L2232.SubsectorLogit_USAelec, "SubsectorLogit") %>%
       add_xml_data(L2232.TechShrwt_USAelec, "TechShrwt") %>%
       add_xml_data(L2232.TechCoef_USAelec, "TechCoef") %>%
@@ -274,6 +285,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L2232.ElecReserve_FERC, "ElecReserve") %>%
       add_xml_data(L2232.SubsectorShrwtFllt_elec_FERC, "SubsectorShrwtFllt") %>%
       add_xml_data(L2232.SubsectorInterp_elec_FERC, "SubsectorInterp") %>%
+      add_xml_data(L2232.SubsectorInterpTo_elec_FERC, "SubsectorInterpTo") %>%
       add_logit_tables_xml(L2232.SubsectorLogit_elec_FERC, "SubsectorLogit") %>%
       add_xml_data(L2232.TechShrwt_elec_FERC, "TechShrwt") %>%
       add_xml_data(L2232.TechCoef_elec_FERC, "TechCoef") %>%
@@ -330,6 +342,8 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.TechCarbonCapture_Dispatch",
                      "L223.Production_Dispatch",
                      "L223.TechEff_Cal",
+                     "L223.PrimaryRenewKeyword_Dispatch_USA",
+                     "L223.AvgFossilEffKeyword_Dispatch_USA",
                      "L223.TechTrialMarket_Dispatch",
                      "L223.TechPmult_dispatch_wind_reeds_USA",
                      "L223.TechTrialMarket_Investment",
@@ -344,6 +358,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L2232.Supplysector_USAelec",
                      "L2232.SubsectorShrwtFllt_USAelec",
                      "L2232.SubsectorInterp_USAelec",
+                     "L2232.SubsectorInterpTo_USAelec",
                      "L2232.SubsectorLogit_USAelec",
                      "L2232.TechShrwt_USAelec",
                      "L2232.TechCoef_USAelec",
@@ -352,6 +367,7 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L2232.ElecReserve_FERC",
                      "L2232.SubsectorShrwtFllt_elec_FERC",
                      "L2232.SubsectorInterp_elec_FERC",
+                     "L2232.SubsectorInterpTo_elec_FERC",
                      "L2232.SubsectorLogit_elec_FERC",
                      "L2232.TechShrwt_elec_FERC",
                      "L2232.TechCoef_elec_FERC",

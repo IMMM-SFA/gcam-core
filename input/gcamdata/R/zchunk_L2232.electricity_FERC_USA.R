@@ -8,14 +8,14 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L2232.DeleteSupplysector_USAelec}, \code{L2232.Supplysector_USAelec},
-#' \code{L2232.SubsectorShrwtFllt_USAelec}, \code{L2232.SubsectorInterp_USAelec}, \code{L2232.SubsectorLogit_USAelec},
+#' the generated outputs: \code{L2232.DeleteSupplysector_USAelec}, \code{L2232.Supplysector_USAelec}, \code{L2232.SubsectorShrwtFllt_USAelec},
+#' \code{L2232.SubsectorInterp_USAelec}, \code{L2232.SubsectorInterpTo_USAelec}, \code{L2232.SubsectorLogit_USAelec},
 #' \code{L2232.TechShrwt_USAelec}, \code{L2232.TechCoef_USAelec}, \code{L2232.Production_exports_USAelec},
 #' \code{L2232.Supplysector_elec_FERC}, \code{L2232.ElecReserve_FERC}, \code{L2232.SubsectorShrwtFllt_elec_FERC},
-#' \code{L2232.SubsectorInterp_elec_FERC}, \code{L2232.SubsectorLogit_elec_FERC}, \code{L2232.TechShrwt_elec_FERC},
-#' \code{L2232.TechCoef_elec_FERC}, \code{L2232.TechCoef_elecownuse_FERC}, \code{L2232.Production_imports_FERC},
-#' \code{L2232.Production_elec_gen_FERC}. The corresponding file in the
-#' original data system was \code{L2232.electricity_FERC_USA.R} (gcam-usa level2).
+#' \code{L2232.SubsectorInterp_elec_FERC}, \code{L2232.SubsectorInterpTo_elec_FERC}, \code{L2232.SubsectorLogit_elec_FERC},
+#' \code{L2232.TechShrwt_elec_FERC}, \code{L2232.TechCoef_elec_FERC}, \code{L2232.TechCoef_elecownuse_FERC},
+#' \code{L2232.Production_imports_FERC}, \code{L2232.Production_elec_gen_FERC}, \code{L2232.SectorUseTrialMarket_USAelec}.
+#' The corresponding file in the original data system was \code{L2232.electricity_FERC_USA.R} (gcam-usa level2).
 #' @details This chunk generates input files to create electricity trade and passthrough sectors for the grid regions,
 #' and balances electricity supply and demand for each grid region.
 #' @details Update 2020 YO delete L2232.StubTechElecMarket_backup_USA related for dispatch rebase
@@ -30,6 +30,8 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
              FILE = "energy/A23.sector",
              FILE = "gcam-usa/A23.elec_delete",
              FILE = "gcam-usa/A232.structure",
+             FILE = "gcam-usa/A232.elec_subsector_shrwt_grid_adj",
+             FILE = "gcam-usa/A232.elec_subsector_shrwt_interpto_grid_adj",
              "L102.load_segments_gcamusa",
              "L123.in_EJ_state_ownuse_elec",
              "L123.out_EJ_state_ownuse_elec",
@@ -41,6 +43,7 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
              "L2232.Supplysector_USAelec",
              "L2232.SubsectorShrwtFllt_USAelec",
              "L2232.SubsectorInterp_USAelec",
+             "L2232.SubsectorInterpTo_USAelec",
              "L2232.SubsectorLogit_USAelec",
              "L2232.TechShrwt_USAelec",
              "L2232.TechCoef_USAelec",
@@ -49,12 +52,14 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
              "L2232.ElecReserve_FERC",
              "L2232.SubsectorShrwtFllt_elec_FERC",
              "L2232.SubsectorInterp_elec_FERC",
+             "L2232.SubsectorInterpTo_elec_FERC",
              "L2232.SubsectorLogit_elec_FERC",
              "L2232.TechShrwt_elec_FERC",
              "L2232.TechCoef_elec_FERC",
              "L2232.TechCoef_elecownuse_FERC",
              "L2232.Production_imports_FERC",
-             "L2232.Production_elec_gen_FERC"))
+             "L2232.Production_elec_gen_FERC",
+             "L2232.SectorUseTrialMarket_USAelec"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -71,6 +76,8 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
     A23.sector <- get_data(all_data, "energy/A23.sector", strip_attributes = TRUE)
     A23.elec_delete <- get_data(all_data, "gcam-usa/A23.elec_delete", strip_attributes = TRUE)
     A232.structure <- get_data(all_data, "gcam-usa/A232.structure", strip_attributes = TRUE)
+    A232.elec_subsector_shrwt_grid_adj <- get_data(all_data, "gcam-usa/A232.elec_subsector_shrwt_grid_adj", strip_attributes = TRUE)
+    A232.elec_subsector_shrwt_interpto_grid_adj <- get_data(all_data, "gcam-usa/A232.elec_subsector_shrwt_interpto_grid_adj", strip_attributes = TRUE)
     L123.in_EJ_state_ownuse_elec <- get_data(all_data, "L123.in_EJ_state_ownuse_elec")
     L123.out_EJ_state_ownuse_elec <- get_data(all_data, "L123.out_EJ_state_ownuse_elec")
     L126.in_EJ_state_td_elec <- get_data(all_data, "L126.in_EJ_state_td_elec")
@@ -115,16 +122,46 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["SubsectorShrwtFllt"]]) ->
       L2232.SubsectorShrwtFllt_USAelec
 
+    # Grid-specific adjustments to electricity trade shareweights
+    A232.elec_subsector_shrwt_grid_adj %>%
+      set_years() %>%
+      mutate(year = as.integer(year)) %>%
+      rename(year.fillout = year) %>%
+      filter(region == gcam.USA_REGION) -> A232.elec_subsector_shrwt_grid_adj_USA
+
+    L2232.SubsectorShrwtFllt_USAelec %>%
+      bind_rows(A232.elec_subsector_shrwt_grid_adj_USA) ->
+      L2232.SubsectorShrwtFllt_USAelec
+
+
     # L2232.SubsectorInterp_USAelec: temporal interpolation of subsector share-weights in USA electricity trade
     # NOTE: this just carries the base year share-weights forward;
     # regions that don't export in the base year don't export at all
     L2232.SubsectorShrwtFllt_USAelec %>%
       select(LEVEL2_DATA_NAMES[["Subsector"]]) %>%
+      # we have multiple entries for a couple of grid regions,
+      # use distinct to filter out duplicates
+      distinct() %>%
       mutate(apply.to = "share-weight",
              from.year = max(MODEL_BASE_YEARS),
              to.year = max(MODEL_YEARS),
              interpolation.function = "fixed") ->
       L2232.SubsectorInterp_USAelec
+
+    # Grid-specific adjustments to electricity trade shareweight interpolation
+    A232.elec_subsector_shrwt_interpto_grid_adj %>%
+      set_years() %>%
+      mutate(from.year = as.integer(from.year),
+             to.year = as.integer(to.year)) %>%
+      filter(region == gcam.USA_REGION) -> A232.elec_subsector_shrwt_interpto_grid_adj_USA
+
+    L2232.SubsectorInterp_USAelec %>%
+      anti_join(A232.elec_subsector_shrwt_interpto_grid_adj_USA,
+                by = c("region", "supplysector", "subsector")) -> L2232.SubsectorInterp_USAelec
+
+    L2232.SubsectorInterpTo_USAelec <- A232.elec_subsector_shrwt_interpto_grid_adj_USA %>%
+      select(LEVEL2_DATA_NAMES$SubsectorInterpTo)
+
 
     # L2232.SubsectorLogit_USAelec: logit exponent of subsector in USA electricity trade
     # NOTE: There is only one tech per subsector in the FERC markets so the logit choice does not matter
@@ -134,7 +171,8 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
                        logit.exponent = technology.logit,
                        logit.type = technology.logit.type),
                 by = "region") %>%
-      select(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], LOGIT_TYPE_COLNAME)) ->
+      select(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], LOGIT_TYPE_COLNAME)) %>%
+      distinct() ->
       L2232.SubsectorLogit_USAelec
 
     # L2232.TechShrwt_USAelec: technology share-weights in USA electricity trade
@@ -157,6 +195,11 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       mutate(coefficient = 1, market.name = grid_region) %>%
       select(LEVEL2_DATA_NAMES[["TechCoef"]]) ->
       L2232.TechCoef_USAelec
+
+    # L2232.SectorUseTrialMarket_USAelec:  use trial markets for electricity trade
+    L2232.Supplysector_USAelec %>%
+      select(region, supplysector) %>%
+      mutate(use.trial.market = gcamusa.USE_TRIAL_MARKETS) -> L2232.SectorUseTrialMarket_USAelec
 
     # Compile flows of electricity in each FERC region:
     # generation, cogeneration, ownuse, and consumption by all sectors
@@ -370,6 +413,17 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       mutate(year.fillout = min(MODEL_BASE_YEARS), share.weight = 1) ->
       L2232.SubsectorShrwtFllt_elec_FERC
 
+    # Grid-specific adjustments to electricity trade shareweights
+    A232.elec_subsector_shrwt_grid_adj %>%
+      set_years() %>%
+      mutate(year = as.integer(year)) %>%
+      rename(year.fillout = year) %>%
+      filter(region != gcam.USA_REGION) -> A232.elec_subsector_shrwt_grid_adj_FERC
+
+    L2232.SubsectorShrwtFllt_elec_FERC %>%
+      bind_rows(A232.elec_subsector_shrwt_grid_adj_FERC) ->
+      L2232.SubsectorShrwtFllt_elec_FERC
+
     # L2232.SubsectorInterp_elec_FERC: temporal interpolation of subsector (states) share-weights
     # for electricity passthrough sectors in grid regions
     L2232.SubsectorShrwtFllt_elec_FERC %>%
@@ -380,7 +434,22 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
              interpolation.function = "fixed") ->
       L2232.SubsectorInterp_elec_FERC
 
-    # L2232.SubsectorShrwtFllt_elec_FERC: logit exponent of subsector (states) in grid regions
+    # Grid-specific adjustments to electricity trade shareweight interpolation
+    A232.elec_subsector_shrwt_interpto_grid_adj %>%
+      set_years() %>%
+      mutate(from.year = as.integer(from.year),
+             to.year = as.integer(to.year)) %>%
+      filter(region != gcam.USA_REGION) -> A232.elec_subsector_shrwt_interpto_grid_adj_FERC
+
+    L2232.SubsectorInterp_elec_FERC %>%
+      anti_join(A232.elec_subsector_shrwt_interpto_grid_adj_FERC,
+                by = c("region", "supplysector", "subsector")) -> L2232.SubsectorInterp_elec_FERC
+
+    L2232.SubsectorInterpTo_elec_FERC <- A232.elec_subsector_shrwt_interpto_grid_adj_FERC %>%
+      select(LEVEL2_DATA_NAMES$SubsectorInterpTo)
+
+
+    # L2232.SubsectorLogit_elec_FERC: logit exponent of subsector (states) in grid regions
     # NOTE: There is only one tech per subsector in the FERC markets so the logit choice does not matter
     L2232.SubsectorShrwtFllt_elec_FERC %>%
       left_join(A232.FERCstructure %>%
@@ -389,7 +458,8 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       mutate(logit.year.fillout = min(MODEL_BASE_YEARS),
              logit.exponent = technology.logit,
              logit.type = technology.logit.type) %>%
-      select(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], LOGIT_TYPE_COLNAME)) ->
+      select(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], LOGIT_TYPE_COLNAME)) %>%
+      distinct() ->
       L2232.SubsectorLogit_elec_FERC
 
     # L2232.TechShrwt_elec_FERC: technology share-weights in grid regions
@@ -543,6 +613,11 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
         select(-segment) ->
         L2232.Supplysector_USAelec
 
+      # L2232.SectorUseTrialMarket_USAelec:  use trial markets for electricity trade
+      L2232.Supplysector_USAelec %>%
+        select(region, supplysector) %>%
+        mutate(use.trial.market = gcamusa.USE_TRIAL_MARKETS) -> L2232.SectorUseTrialMarket_USAelec
+
       L2232.SubsectorInterp_USAelec %>%
         # join duplicates rows because electricity trade subsectors are multiplied by 25 load segments
         # LJENM throws an error, so left_join() is used
@@ -554,6 +629,18 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
                subsector = paste(subsector, segment, sep = "_")) %>%
         select(-segment) ->
         L2232.SubsectorInterp_USAelec
+
+      L2232.SubsectorInterpTo_USAelec %>%
+        # join duplicates rows because electricity trade subsectors are multiplied by 25 load segments
+        # LJENM throws an error, so left_join() is used
+        left_join(segStates %>%
+                    distinct(segment) %>%
+                    mutate(region = gcam.USA_REGION),
+                  by = "region") %>%
+        mutate(supplysector = paste(supplysector, segment, sep = "_"),
+               subsector = paste(subsector, segment, sep = "_")) %>%
+        select(-segment) ->
+        L2232.SubsectorInterpTo_USAelec
 
       L2232.SubsectorShrwtFllt_USAelec %>%
         # join duplicates rows because electricity trade subsectors are multiplied by 25 load segments
@@ -636,6 +723,17 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
         select(-segment) ->
         L2232.SubsectorInterp_elec_FERC
 
+      L2232.SubsectorInterpTo_elec_FERC %>%
+        # join duplicates rows because each entry is multiplied by 25 load segments
+        # LJENM throws an error, so left_join() is used
+        left_join(segStates %>%
+                    distinct(grid_region, segment),
+                  by = c("region" = "grid_region"))  %>%
+        mutate(supplysector = paste(supplysector, segment, sep = "_"),
+               subsector = paste(subsector, segment, sep = "_")) %>%
+        select(-segment) ->
+        L2232.SubsectorInterpTo_elec_FERC
+
       L2232.SubsectorLogit_elec_FERC %>%
         # join duplicates rows because each entry is multiplied by 25 load segments
         # LJENM throws an error, so left_join() is used
@@ -684,6 +782,8 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
         select(-segment) ->
         L2232.TechCoef_elecownuse_FERC
 
+      # SectorUseTrialMarket
+
     }
 
 
@@ -712,17 +812,26 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       add_legacy_name("L2232.SubsectorShrwtFllt_USAelec") %>%
       add_precursors("gcam-usa/states_subregions",
                      "gcam-usa/A232.structure",
+                     "gcam-usa/A232.elec_subsector_shrwt_grid_adj",
                      "L102.load_segments_gcamusa") ->
       L2232.SubsectorShrwtFllt_USAelec
 
     L2232.SubsectorInterp_USAelec %>%
-      add_title("Table headers for temporal interpolation of subsector (grid region) share-weights in USA electricity trade") %>%
+      add_title("Future interpolation (fixed) of subsector (grid region) share-weights in USA electricity trade") %>%
       add_units("Unitless") %>%
       add_comments("This just carries the base year share-weights forward") %>%
       add_comments("Regions that don't export in the base year don't export at all") %>%
       add_legacy_name("L2232.SubsectorInterp_USAelec") %>%
-      same_precursors_as("L2232.SubsectorShrwtFllt_USAelec") ->
+      same_precursors_as("L2232.SubsectorShrwtFllt_USAelec") %>%
+      add_precursors("gcam-usa/A232.elec_subsector_shrwt_interpto_grid_adj") ->
       L2232.SubsectorInterp_USAelec
+
+    L2232.SubsectorInterpTo_USAelec %>%
+      add_title("Future interpolation (non-fixed) of subsector (grid region) share-weights in USA electricity trade") %>%
+      add_units("Unitless") %>%
+      add_comments("Alaska and Hawaii grids cannot export electricity in future years") %>%
+      same_precursors_as("L2232.SubsectorInterp_USAelec") ->
+      L2232.SubsectorInterpTo_USAelec
 
     L2232.SubsectorLogit_USAelec %>%
       add_title("Logit exponent of subsector (grid region) in USA electricity trade") %>%
@@ -793,17 +902,26 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       add_comments("Include electricity net own use and electricy domestic supply sectors") %>%
       add_legacy_name("L2232.SubsectorShrwtFllt_elec_FERC") %>%
       add_precursors("gcam-usa/A232.structure",
+                     "gcam-usa/A232.elec_subsector_shrwt_grid_adj",
                      "gcam-usa/states_subregions",
                      "L102.load_segments_gcamusa") ->
       L2232.SubsectorShrwtFllt_elec_FERC
 
     L2232.SubsectorInterp_elec_FERC %>%
-      add_title("Table header of temporal interpolation of subsector (states) share-weights for electricity passthrough sectors in grid regions") %>%
+      add_title("Future interpolation (fixed) of subsector (states) share-weights for electricity passthrough sectors in grid regions") %>%
       add_units("Unitless") %>%
       add_comments("Include electricity net own use and electricy domestic supply sectors") %>%
       add_legacy_name("L2232.SubsectorInterp_elec_FERC") %>%
-      same_precursors_as("L2232.SubsectorShrwtFllt_elec_FERC") ->
+      same_precursors_as("L2232.SubsectorShrwtFllt_elec_FERC") %>%
+      add_precursors("gcam-usa/A232.elec_subsector_shrwt_interpto_grid_adj") ->
       L2232.SubsectorInterp_elec_FERC
+
+    L2232.SubsectorInterpTo_elec_FERC %>%
+      add_title("Future interpolation (non-fixed) of subsector (states) share-weights for electricity passthrough sectors in grid regions") %>%
+      add_units("Unitless") %>%
+      add_comments("Alaska and Hawaii grids cannot import electricity in future years") %>%
+      same_precursors_as("L2232.SubsectorInterp_elec_FERC") ->
+      L2232.SubsectorInterpTo_elec_FERC
 
     L2232.SubsectorLogit_elec_FERC %>%
       add_title("Logit exponent of subsector (states) for electricity passthrough sectors in grid regions") %>%
@@ -871,12 +989,35 @@ module_gcamusa_L2232.electricity_FERC_USA <- function(command, ...) {
       same_precursors_as("L2232.Production_exports_USAelec") ->
       L2232.Production_elec_gen_FERC
 
-    return_data(L2232.DeleteSupplysector_USAelec, L2232.Supplysector_USAelec, L2232.SubsectorShrwtFllt_USAelec,
-                L2232.SubsectorInterp_USAelec, L2232.SubsectorLogit_USAelec, L2232.TechShrwt_USAelec,
-                L2232.TechCoef_USAelec, L2232.Production_exports_USAelec, L2232.Supplysector_elec_FERC,
-                L2232.ElecReserve_FERC, L2232.SubsectorShrwtFllt_elec_FERC, L2232.SubsectorInterp_elec_FERC,
-                L2232.SubsectorLogit_elec_FERC, L2232.TechShrwt_elec_FERC, L2232.TechCoef_elec_FERC,
-                L2232.TechCoef_elecownuse_FERC, L2232.Production_imports_FERC, L2232.Production_elec_gen_FERC)
+    L2232.SectorUseTrialMarket_USAelec %>%
+      add_title("Supplysector table that indicates to the model to create solved markets") %>%
+      add_units("NA") %>%
+      add_comments("Trial markets are used for all USA region | electricity trade markets") %>%
+      same_precursors_as("L2232.Supplysector_USAelec") ->
+      L2232.SectorUseTrialMarket_USAelec
+
+
+    return_data(L2232.DeleteSupplysector_USAelec,
+                L2232.Supplysector_USAelec,
+                L2232.SubsectorShrwtFllt_USAelec,
+                L2232.SubsectorInterp_USAelec,
+                L2232.SubsectorInterpTo_USAelec,
+                L2232.SubsectorLogit_USAelec,
+                L2232.TechShrwt_USAelec,
+                L2232.TechCoef_USAelec,
+                L2232.Production_exports_USAelec,
+                L2232.Supplysector_elec_FERC,
+                L2232.ElecReserve_FERC,
+                L2232.SubsectorShrwtFllt_elec_FERC,
+                L2232.SubsectorInterp_elec_FERC,
+                L2232.SubsectorInterpTo_elec_FERC,
+                L2232.SubsectorLogit_elec_FERC,
+                L2232.TechShrwt_elec_FERC,
+                L2232.TechCoef_elec_FERC,
+                L2232.TechCoef_elecownuse_FERC,
+                L2232.Production_imports_FERC,
+                L2232.Production_elec_gen_FERC,
+                L2232.SectorUseTrialMarket_USAelec)
   } else {
     stop("Unknown command")
   }

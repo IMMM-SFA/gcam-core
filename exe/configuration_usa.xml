@@ -70,7 +70,8 @@
 		<Value name = "bio_feedstock_limit">../input/gcamdata/xml/liquids_limits.xml</Value>
 		<Value name = "bio_elec_w_feed_limit">../input/gcamdata/xml/water_elec_liquids_limits.xml</Value>
 		<Value name = "bio_neg_emiss_budget">../input/gcamdata/xml/negative_emissions_budget_gSSP2.xml</Value>
-		<Value name = "wind_update">../input/gcamdata/xml/onshore_wind.xml</Value>
+        <Value name = "wind_update">../input/gcamdata/xml/onshore_wind.xml</Value>
+		<Value name = "solver">../input/solution/cal_broyden_config.xml</Value>
 
 		<Value name = "socio_usa">../input/gcamdata/xml/socioeconomics_USA.xml</Value>
 		<Value name = "resource_usa">../input/gcamdata/xml/resources_USA.xml</Value>
@@ -85,7 +86,7 @@
 		<!--Value name = "bld_usa">../input/gcamdata/xml/building_segments_USA.xml</Value-->
 		<Value name = "dd_usa">../input/gcamdata/xml/HDDCDD_constdds_USA.xml</Value>
 		<Value name = "ind_usa">../input/gcamdata/xml/industry_USA.xml</Value>
-		<!--Value name = "ind_usa">../input/gcamdata/xml/industry_vintage_USA.xml</Value-->
+		<Value name = "ind_usa">../input/gcamdata/xml/industry_vintage_USA.xml</Value>
 		<Value name = "cement_usa">../input/gcamdata/xml/cement_USA.xml</Value>
 		<Value name = "fert_usa">../input/gcamdata/xml/Fert_USA.xml</Value>
 
@@ -94,10 +95,7 @@
 		<Value name = "hydro_usa">../input/gcamdata/xml/elec_hydro_USA.xml</Value>
 		<Value name = "nuc_usa">../input/gcamdata/xml/nuclear_USA.xml</Value>
 		<Value name = "no_new_coal_usa">../input/gcamdata/xml/nonewcoal_USA.xml</Value>
-
-<!--
         <Value name = "coal_vintage">../input/gcamdata/xml/coal_retire_vintage_USA.xml</Value>
--->
 
 		<Value name = "liq_lim_usa">../input/gcamdata/xml/liquids_limits_USA.xml</Value>
 		<Value name = "neg_emiss_usa">../input/gcamdata/xml/negative_emissions_budget_USA_gSSP2.xml</Value>
@@ -106,11 +104,6 @@
 		<!--WATER DATA-->
 		<Value name = "municipal_water_usa">../input/gcamdata/xml/water_demand_municipal_USA.xml</Value>
 		<Value name = "ind_water_usa">../input/gcamdata/xml/water_demand_industry_USA.xml</Value>
-
-		<Value name = "solver">../input/solution/cal_broyden_config.xml</Value>
-
-		<Value name = "force_trade">./force_trade_solve_single.xml</Value>
-		<Value name = "no_export_seg">./no_export_reg.xml</Value>
 
 	</ScenarioComponents>
 	<Strings>

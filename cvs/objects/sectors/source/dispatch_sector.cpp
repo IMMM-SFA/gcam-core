@@ -501,7 +501,7 @@ void DispatchSector::supply( const GDP* aGDP, const int aPeriod ) {
                             std::max( currMaxInvestCap - currExistCap - totalNewInvest, 2 * util::getSmallNumber() ) + (remainingProduction / segmentScaleFraction) / 0.8 :
                             0.0;
                         totalNewInvest += currNewInvest;
-                        segment->getNewInvestment() = currNewInvest + 100;
+                        segment->getNewInvestment() = currNewInvest;
                         marketplace->addToDemand( segment->mInvestmentSegmentName, mRegionName, segment->getNewInvestment(), aPeriod );
                     }
                     remainingHours -= segment->mHours;

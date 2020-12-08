@@ -153,6 +153,8 @@ generate_level2_data_names <- function() {
   level2_data_names[["CapacityTechTrialMktName"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "trial.market.name", "capacity.market.name")
   level2_data_names[["CapacityTechInputPMult"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "minicam.energy.input", "price.unit.conversion")
   level2_data_names[["InvestTechTrialMktName"]] <- c(level2_data_names[["Subsector"]], "invest.technology", "year", "trial.market.name")
+  level2_data_names[["TechAvgFossilEffKeyword"]] <- c(level2_data_names[["TechYr"]], "average.fossil.efficiency")
+  level2_data_names[["TechPrimaryRenewKeyword"]] <- c(level2_data_names[["TechYr"]], "primary.renewable")
 
   # Global technologies
   level2_data_names[["GlobalTech"]] <- c("sector.name", "subsector.name", "technology")

@@ -14,14 +14,14 @@ module_gcamusa_L2232.electricity_FERC_USA(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L2232.DeleteSupplysector_USAelec}, \code{L2232.Supplysector_USAelec},
-\code{L2232.SubsectorShrwtFllt_USAelec}, \code{L2232.SubsectorInterp_USAelec}, \code{L2232.SubsectorLogit_USAelec},
+the generated outputs: \code{L2232.DeleteSupplysector_USAelec}, \code{L2232.Supplysector_USAelec}, \code{L2232.SubsectorShrwtFllt_USAelec},
+\code{L2232.SubsectorInterp_USAelec}, \code{L2232.SubsectorInterpTo_USAelec}, \code{L2232.SubsectorLogit_USAelec},
 \code{L2232.TechShrwt_USAelec}, \code{L2232.TechCoef_USAelec}, \code{L2232.Production_exports_USAelec},
 \code{L2232.Supplysector_elec_FERC}, \code{L2232.ElecReserve_FERC}, \code{L2232.SubsectorShrwtFllt_elec_FERC},
-\code{L2232.SubsectorInterp_elec_FERC}, \code{L2232.SubsectorLogit_elec_FERC}, \code{L2232.TechShrwt_elec_FERC},
-\code{L2232.TechCoef_elec_FERC}, \code{L2232.TechCoef_elecownuse_FERC}, \code{L2232.Production_imports_FERC},
-\code{L2232.Production_elec_gen_FERC}. The corresponding file in the
-original data system was \code{L2232.electricity_FERC_USA.R} (gcam-usa level2).
+\code{L2232.SubsectorInterp_elec_FERC}, \code{L2232.SubsectorInterpTo_elec_FERC}, \code{L2232.SubsectorLogit_elec_FERC},
+\code{L2232.TechShrwt_elec_FERC}, \code{L2232.TechCoef_elec_FERC}, \code{L2232.TechCoef_elecownuse_FERC},
+\code{L2232.Production_imports_FERC}, \code{L2232.Production_elec_gen_FERC}, \code{L2232.SectorUseTrialMarket_USAelec}.
+The corresponding file in the original data system was \code{L2232.electricity_FERC_USA.R} (gcam-usa level2).
 }
 \description{
 Generate GCAM-USA model inputs for electrcity trade sectors at the level of grid regions.
