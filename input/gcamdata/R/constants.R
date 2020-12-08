@@ -797,6 +797,8 @@ gcamusa.ELEC_CAP_INV_MEDIAN <- -0.1
 # supply-side electricity load segments
 gcamusa.USE_ELEC_DEMAND_SEGMENTS  <- FALSE
 
+gcamusa.USE_TRIAL_MARKETS  <- 1 # bool that indicates to the model to create solved markets
+
 
 # Time shift conditions ======================================================================
 # Uncomment these lines to run under 'timeshift' conditions
