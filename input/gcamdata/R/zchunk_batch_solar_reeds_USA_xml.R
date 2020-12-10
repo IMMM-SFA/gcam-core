@@ -10,7 +10,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{solar_reeds_USA.xml}.
 #' The corresponding file in the original data system was \code{batch_solar_USA_reeds.xml} (gcamusa XML batch).
-module_gcamusa_batch_solar_reeds_USA_xml <- function(command, ...) {
+disabled_module_gcamusa_batch_solar_reeds_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2238.DeleteStubTechMinicamEnergyInput_investment_PV_reeds_USA",
              "L2238.DeleteInput_dispatch_PV_reeds_USA",

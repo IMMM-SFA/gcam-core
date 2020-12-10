@@ -18,8 +18,8 @@ electricity generation,nuclear,nuclear_conv,electricity,nuclear,Gen_II_LWR,nucle
 electricity generation,hydro,hydro,electricity,hydro,hydro,,fixed output,,0.8
 electricity generation,wind,wind_onshore,electricity,wind,wind,onshore wind resource,output,,0.5
 electricity generation,wind,wind_offshore,electricity,wind,wind_offshore,offshore wind resource,output,,0.5
-electricity generation,solar PV,solar_PV,electricity,solar,PV,global solar resource,output,,0.4
-electricity generation,solar CSP,solar_CSP,electricity,solar,CSP,global solar resource,output,,0.4
+electricity generation,solar PV,solar_PV,electricity,solar,PV,PV_resource,output,,0.4
+electricity generation,solar CSP,solar_CSP,electricity,solar,CSP,CSP_resource,output,,0.4
 electricity generation,geothermal,geothermal_conv,electricity,geothermal,geothermal,geothermal,output,,0.8
 electricity generation,coal,,electricity,coal,coal (conv pul CCS),regional coal,output,,0.8
 electricity generation,coal,,electricity,coal,coal (IGCC CCS),regional coal,output,,0.8
@@ -33,14 +33,14 @@ peak electricity,gas,,electricity,gas,gas (CT),wholesale gas,output,,0.05
 peak electricity,gas,,electricity,gas,gas (CC),wholesale gas,output,,0.05
 peak electricity,refined liquids,,electricity,refined liquids,refined liquids (CT),refined liquids industrial,output,,0.05
 peak electricity,refined liquids,,electricity,refined liquids,refined liquids (CC),refined liquids industrial,output,,0.05
-peak electricity,solar PV,,electricity,solar,PV,global solar resource,output,,0.05
+peak electricity,solar PV,,electricity,solar,PV,PV_resource,output,,0.05
 subpeak electricity,gas,,electricity,gas,gas (CT),wholesale gas,output,,0.1
 subpeak electricity,gas,,electricity,gas,gas (CC),wholesale gas,output,,0.1
 subpeak electricity,gas,,electricity,gas,gas (CC CCS),wholesale gas,output,,0.1
 subpeak electricity,refined liquids,,electricity,refined liquids,refined liquids (CT),refined liquids industrial,output,,0.1
 subpeak electricity,refined liquids,,electricity,refined liquids,refined liquids (CC),refined liquids industrial,output,,0.1
 subpeak electricity,refined liquids,,electricity,refined liquids,refined liquids (CC CCS),refined liquids industrial,output,,0.1
-subpeak electricity,solar PV,,electricity,solar,PV,global solar resource,output,,0.1
+subpeak electricity,solar PV,,electricity,solar,PV,PV_resource,output,,0.1
 intermediate electricity,coal,,electricity,coal,coal (conv pul),regional coal,output,,0.6
 intermediate electricity,coal,,electricity,coal,coal (conv pul CCS),regional coal,output,,0.6
 intermediate electricity,coal,,electricity,coal,coal (IGCC),regional coal,output,,0.6
@@ -56,8 +56,8 @@ intermediate electricity,biomass,,electricity,biomass,biomass (IGCC CCS),regiona
 intermediate electricity,nuclear,,electricity,nuclear,Gen_III,nuclearFuelGenIII,output,,0.6
 intermediate electricity,wind,,electricity,wind,wind,onshore wind resource,output,,0.5
 intermediate electricity,wind,,electricity,wind,wind_offshore,offshore wind resource,output,,0.5
-intermediate electricity,solar PV,,electricity,solar,PV,global solar resource,output,,0.4
-intermediate electricity,solar CSP,,electricity,solar,CSP,global solar resource,output,,0.4
+intermediate electricity,solar PV,,electricity,solar,PV,PV_resource,output,,0.4
+intermediate electricity,solar CSP,,electricity,solar,CSP,CSP_resource,output,,0.4
 intermediate electricity,geothermal,,electricity,geothermal,geothermal,geothermal,output,,0.6
 baseload electricity,coal,,electricity,coal,coal (conv pul),regional coal,output,,0.9
 baseload electricity,coal,,electricity,coal,coal (conv pul CCS),regional coal,output,,0.9

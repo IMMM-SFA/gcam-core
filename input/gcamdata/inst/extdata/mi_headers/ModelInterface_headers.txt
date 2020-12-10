@@ -268,9 +268,9 @@ CapacityTechYr, world/+{name}region, region/+{name}dispatch-sector, dispatch-sec
 
 CapacityTechMinCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+min-capacity-factor, scenario, scenario/world
 
-CapacityTechSegmentCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name}segment-capacity-factor, period/+segment-capacity-factor, scenario, scenario/world
+CapacityTechSegmentCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}intermittent-capacity-technology, intermittent-capacity-technology/+{year}period, period/+{name}segment-capacity-factor, period/+segment-capacity-factor, scenario, scenario/world
 
-CapacityTechTrialMktName, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+trial-market-name, period/+capacity-market-name, scenario, scenario/world
+CapacityTechTrialMktName, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}intermittent-capacity-technology, intermittent-capacity-technology/+{year}period, period/+trial-market-name, period/+capacity-market-name, scenario, scenario/world
 
 CapacityTechInputPMult, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name}minicam-energy-input, minicam-energy-input/+price-unit-conversion, scenario, scenario/world
 
@@ -332,7 +332,9 @@ DeleteGlobalTechInput, global-technology-database/+{sector-name}location-info, g
 
 GlobalInvestTech, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, scenario, scenario/world, world/global-technology-database
 
-GlobalInvestTechCapacityCredit, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}investment-technology, investment-technology/+{year}period, capacity-credit-calculator/+steepness, capacity-credit-calculator/+x-mid, capacity-credit-calculator/+capacity-credit-max, capacity-credit-calculator/+capacity-credit-min, scenario, scenario/world, world/global-technology-database, period/capacity-credit-calculator
+GlobalInvestTechCapacityCredit, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}intermittent-investment-technology, intermittent-investment-technology/+{year}period, capacity-credit-calculator/+steepness, capacity-credit-calculator/+x-mid, capacity-credit-calculator/+capacity-credit-max, capacity-credit-calculator/+capacity-credit-min, scenario, scenario/world, world/global-technology-database, period/capacity-credit-calculator
+
+GlobalIntInvTechMaxCapFac, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}intermittent-investment-technology, intermittent-investment-technology/+{year}period, period/+max-capacity-factor, scenario, scenario/world, world/global-technology-database
 
 #####, GLOBAL INTERMITTENT TECHNOLOGY
 

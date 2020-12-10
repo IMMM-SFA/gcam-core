@@ -214,6 +214,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["GlobalIntTechCost"]] <- c("sector.name", "subsector.name", "intermittent.technology", "year", "minicam.non.energy.input", "input.cost")
   level2_data_names[["GlobalInvestTech"]] <- c("sector.name", "subsector.name", "invest.technology")
   level2_data_names[["GlobalInvestTechCapacityCredit"]] <- c(level2_data_names[["GlobalInvestTech"]], "year", "steepness", "x.mid", "Cmax", "Cmin")
+  level2_data_names[["GlobalIntInvTechMaxCapFac"]] <- c("sector.name", "subsector.name", "int.invest.technology", "year", "max.capacity.factor")
 
   # Stub technologies
   level2_data_names[["StubTech"]] <- c("region", "supplysector", "subsector", "stub.technology")
