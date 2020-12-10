@@ -163,7 +163,7 @@ protected:
         //! Coefficient for production or demand function. Coefficients are not
         // read in and are initialized to 1, but can increase over time with
         // technical change.
-        DEFINE_VARIABLE( ARRAY, "adjusted-coef", mAdjustedCoefficients, objects::TechVintageVector<Value> ),
+        DEFINE_VARIABLE( ARRAY | STATE, "adjusted-coef", mAdjustedCoefficients, objects::TechVintageVector<Value> ),
         
         //! Input specific technical change.
         DEFINE_VARIABLE( SIMPLE, "tech-change", mTechChange, Value ),

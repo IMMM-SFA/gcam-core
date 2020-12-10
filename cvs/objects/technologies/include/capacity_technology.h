@@ -86,7 +86,7 @@ public:
         const GDP* aGDP,
         const int aPeriod);
     
-    double tryDispatch( const std::string& aRegionName, const std::string& aSectorName,
+    virtual double tryDispatch( const std::string& aRegionName, const std::string& aSectorName,
                         const std::string& aDemandSegment,
                         const double aSegmentScaleFactor, const double aPercentRemainHours,
                         const double aPriorDispatch, const int aPeriod ) const;
@@ -113,20 +113,9 @@ protected:
     DEFINE_DATA_WITH_PARENT(
         Technology,
 
-        //! Name of trial market associated with this Capacity Technology.
-        DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string),
-
-        //! Name of capacity market associated with this Capacity Technology.
-        DEFINE_VARIABLE(SIMPLE, "capacity-market-name", mCapacityMarketName, std::string),
-
         //! The capacity for this technology.
         DEFINE_VARIABLE( SIMPLE | STATE, "capacity", mCapacity, Value ),
                             
-        DEFINE_VARIABLE( SIMPLE, "segment-capacity-factor", mSegCapFac, std::map<std::string, double> ),
-
-        //! State value necessary to track tech output ration
-        DEFINE_VARIABLE(SIMPLE | STATE, "tech-output-ratio", mIntermitOutTechRatio, Value),
-   
         //! A minimum capacity factor where if the capacity factor would be below
         //! this value the technology would no longer be able to dispatch.
         DEFINE_VARIABLE( SIMPLE , "min-capacity-factor", mMinCapFac, Value ),
@@ -143,6 +132,71 @@ protected:
     void copy( const CapacityTechnology& aOther );
     virtual void setProductionState( const int aPeriod );
     virtual void acceptDerived( IVisitor* aVisitor, const int aPeriod ) const; 
+};
+
+class IntermittentCapacityTechnology : public CapacityTechnology {
+public:
+    IntermittentCapacityTechnology(const std::string& aName,
+        const int aYear);
+    ~IntermittentCapacityTechnology();
+    static const std::string& getXMLNameStatic();
+    IntermittentCapacityTechnology* clone() const;
+
+    virtual void completeInit(const std::string& aRegionName,
+        const std::string& aSectorName,
+        const std::string& aSubsectorName,
+        const IInfo* aSubsectorIInfo,
+        ILandAllocator* aLandAllocator);
+
+    virtual void initCalc(const std::string& aRegionName,
+        const std::string& aSectorName,
+        const IInfo* aSubsectorInfo,
+        const Demographic* aDemographics,
+        PreviousPeriodInfo& aPrevPeriodInfo,
+        const int aPeriod);
+    
+    virtual void postCalc( const std::string& aRegionName,
+                           const int aPeriod );
+    
+    virtual double tryDispatch( const std::string& aRegionName, const std::string& aSectorName,
+                        const std::string& aDemandSegment,
+                        const double aSegmentScaleFactor, const double aPercentRemainHours,
+                        const double aPriorDispatch, const int aPeriod ) const;
+
+    virtual void  addCapacityShareToMarket(double aAggregateCapacity,
+        const std::string& aRegionName,
+        const std::string& aSectorName,
+        const int aPeriod);
+
+protected:
+    
+    // Define data such that introspection utilities can process the data from this
+    // subclass together with the data members of the parent classes.
+    DEFINE_DATA_WITH_PARENT(
+        CapacityTechnology,
+
+        //! Name of trial market associated with this Capacity Technology.
+        DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string),
+
+        //! Name of capacity market associated with this Capacity Technology.
+        DEFINE_VARIABLE(SIMPLE, "capacity-market-name", mCapacityMarketName, std::string),
+                            
+        DEFINE_VARIABLE( SIMPLE, "segment-capacity-factor", mSegCapFac, std::map<std::string, double> ),
+
+        //! State value necessary to track tech output ration
+        DEFINE_VARIABLE(SIMPLE | STATE, "tech-output-ratio", mIntermitOutTechRatio, Value),
+        
+        //! Keep track of the "marginal" capacity factor of the resource from when the technology was invested
+        DEFINE_VARIABLE(SIMPLE, "investment-capacity-factor", mInvestCapacityFactor, Value)
+    )
+    
+    //! pointer to the resource input
+    std::vector<IInput*>::iterator mResourceInput;
+
+    virtual void toDebugXMLDerived(const int period, std::ostream& out, Tabs* tabs) const;
+    virtual bool XMLDerivedClassParse(const std::string& nodeName, const xercesc::DOMNode* curr);
+    virtual const std::string& getXMLName() const;
+    void copy( const IntermittentCapacityTechnology& aOther );
 };
 
 #endif // _CAPACITY_TECHNOLOGY_H_

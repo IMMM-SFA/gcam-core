@@ -63,6 +63,59 @@ public:
     static const std::string& getXMLNameStatic();
     InvestmentTechnology* clone() const;
 
+    /*virtual void completeInit(const std::string& aRegionName,
+        const std::string& aSectorName,
+        const std::string& aSubsectorName,
+        const IInfo* aSubsectorIInfo,
+        ILandAllocator* aLandAllocator);
+
+    virtual void initCalc(const std::string& aRegionName,
+        const std::string& aSectorName,
+        const IInfo* aSubsectorInfo,
+        const Demographic* aDemographics,
+        PreviousPeriodInfo& aPrevPeriodInfo,
+        const int aPeriod);*/
+
+    virtual void production(const std::string& aRegionName,
+        const std::string& aSectorName,
+        double aVariableDemand,
+        double aFixedOutputScaleFactor,
+        const GDP* aGDP,
+        const int aPeriod);
+    
+    /*virtual void calcCost(const std::string& aRegionName,
+        const std::string& aSectorName,
+        const int aPeriod);
+
+    virtual void doInterpolations(const Technology* aPrevTech, const Technology* aNextTech);*/
+
+protected:
+    
+    // Define data such that introspection utilities can process the data from this
+    // subclass together with the data members of the parent classes.
+    DEFINE_DATA_WITH_PARENT(
+        Technology,
+    )
+    
+    //! pointer to the capacity credit input
+    std::vector<IInput*>::iterator mCapacityCreditInput;
+
+    virtual void toDebugXMLDerived(const int period, std::ostream& out, Tabs* tabs) const { }
+    virtual bool XMLDerivedClassParse(const std::string& nodeName, const xercesc::DOMNode* curr) { return false; }
+    virtual const std::string& getXMLName() const;
+    //void copy( const InvestmentTechnology& aOther );
+    //virtual void acceptDerived( IVisitor* aVisitor, const int aPeriod ) const;
+};
+
+class IntermittentInvestmentTechnology : public InvestmentTechnology {
+    friend class XMLDBOutputter;
+public:
+    IntermittentInvestmentTechnology(const std::string& aName,
+        const int aYear);
+    virtual ~IntermittentInvestmentTechnology();
+    static const std::string& getXMLNameStatic();
+    IntermittentInvestmentTechnology* clone() const;
+
     virtual void completeInit(const std::string& aRegionName,
         const std::string& aSectorName,
         const std::string& aSubsectorName,
@@ -75,17 +128,12 @@ public:
         const Demographic* aDemographics,
         PreviousPeriodInfo& aPrevPeriodInfo,
         const int aPeriod);
-
-    virtual void production(const std::string& aRegionName,
-        const std::string& aSectorName,
-        double aVariableDemand,
-        double aFixedOutputScaleFactor,
-        const GDP* aGDP,
-        const int aPeriod);
     
     virtual void calcCost(const std::string& aRegionName,
         const std::string& aSectorName,
         const int aPeriod);
+    
+    virtual double getCapacityFactor() const;
 
     virtual void doInterpolations(const Technology* aPrevTech, const Technology* aNextTech);
 
@@ -94,24 +142,31 @@ protected:
     // Define data such that introspection utilities can process the data from this
     // subclass together with the data members of the parent classes.
     DEFINE_DATA_WITH_PARENT(
-        Technology,
+        InvestmentTechnology,
         //! A calculator which determines the capacity credit as a function of renewable share.
         DEFINE_VARIABLE(CONTAINER, "capacity-credit-calculator", mCapacityCreditCalculator, CapacityCreditCalculator*),
 
         //! Name of trial market associated with this Investment Technology. This is read in only for intermittent-technologies
         //! for which trial market calculations are performed in the CapacityTechnology class. The value read in here should be
         //! equal to the value read in under the capacity technologies.
-        DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string)        
+        DEFINE_VARIABLE(SIMPLE, "trial-market-name", mTrialMarketName, std::string),
+                            
+        //! Because intermittent investment technologies will essentially have a dynamic capacity factor we need to
+        //! double check it exceeds the number of hours in this investment segment
+        DEFINE_VARIABLE(SIMPLE, "max-capacity-factor", mMaxCapFac, double)
     )
     
     //! pointer to the capacity credit input
     std::vector<IInput*>::iterator mCapacityCreditInput;
+    
+    //! pointer to the resource input
+    std::vector<IInput*>::iterator mResourceInput;
 
     virtual void toDebugXMLDerived(const int period, std::ostream& out, Tabs* tabs) const;
     virtual bool XMLDerivedClassParse(const std::string& nodeName, const xercesc::DOMNode* curr);
     virtual const std::string& getXMLName() const;
-    void copy( const InvestmentTechnology& aOther );
-    virtual void acceptDerived( IVisitor* aVisitor, const int aPeriod ) const; 
+    void copy( const IntermittentInvestmentTechnology& aOther );
+    virtual void acceptDerived( IVisitor* aVisitor, const int aPeriod ) const;
 };
 
 #endif // _INVESTMENT_TECHNOLOGY_H_

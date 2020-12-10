@@ -136,7 +136,9 @@ bool TechnologyContainer::hasTechnologyType( const string& aTechNodeName ) {
              aTechNodeName == AgProductionTechnology::getXMLNameStatic() ||
              aTechNodeName == PassThroughTechnology::getXMLNameStatic() ||
 			 aTechNodeName == CapacityTechnology::getXMLNameStatic() ||
+             aTechNodeName == IntermittentCapacityTechnology::getXMLNameStatic() ||
 			 aTechNodeName == InvestmentTechnology::getXMLNameStatic() ||
+             aTechNodeName == IntermittentInvestmentTechnology::getXMLNameStatic() ||
              aTechNodeName == UnmanagedLandTechnology::getXMLNameStatic() );
 }
 
@@ -203,9 +205,15 @@ bool TechnologyContainer::createAndParseVintage( const DOMNode* aNode, const str
 		else if (aTechType == CapacityTechnology::getXMLNameStatic()) {
 			newVintage = new CapacityTechnology(mName, techYear);
 		}
+        else if (aTechType == IntermittentCapacityTechnology::getXMLNameStatic()) {
+            newVintage = new IntermittentCapacityTechnology(mName, techYear);
+        }
 		else if (aTechType == InvestmentTechnology::getXMLNameStatic()) {
 			newVintage = new InvestmentTechnology(mName, techYear);
 		}
+        else if (aTechType == IntermittentInvestmentTechnology::getXMLNameStatic()) {
+            newVintage = new IntermittentInvestmentTechnology(mName, techYear);
+        }
         else {
             // Getting an error message here implies that the known technologies in this method are
             // out of sync with hasTechnologyType.
