@@ -863,7 +863,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                 L223.StubTechInterpTo_Investment_nofut_USA) %>%
       # use anti-join to avoid duplicates, since the scope of L223.StubTechInterpTo_Investment_mapped_USA
       # partially overlaps with that of L223.StubTechInterpTo_Investment_fut_USA
-      semi_join(L223.StubTechInterpTo_Investment_mapped_USA,
+      anti_join(L223.StubTechInterpTo_Investment_mapped_USA,
                 by = c("region", "supplysector", "subsector0", "subsector", "stub.technology")) %>%
       bind_rows(L223.StubTechInterpTo_Investment_mapped_USA) ->
       L223.StubTechInterpTo_Investment_USA

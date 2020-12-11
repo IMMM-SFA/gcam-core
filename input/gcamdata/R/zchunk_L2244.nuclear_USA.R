@@ -8,7 +8,7 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L2244.CapacityTech_nuc_gen2_USA}, \code{L2244.TechSCurve_nuc_gen2_USA}.
+#' the generated outputs: \code{L2244.CapacityTechYr_nuc_gen2_USA}, \code{L2244.TechSCurve_nuc_gen2_USA}.
 #' The corresponding file in the original data system was \code{L2244.nuclear_USA.R} (gcam-usa level2).
 #' @details This chunk creates an add-on file to update nuclear assumptions in GCAM-USA. Specifically, it reads in state-specific
 #' s-curve retirement functions and lifetimes for existing nuclear vintage, based on planned retirements by state and nuclear power plant.
@@ -28,7 +28,7 @@ module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
              "L223.CapacityTech",
              "L223.Production_Dispatch"))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L2244.CapacityTech_nuc_gen2_USA",
+    return(c("L2244.CapacityTechYr_nuc_gen2_USA",
              "L2244.TechSCurve_nuc_gen2_USA"))
   } else if(command == driver.MAKE) {
 
@@ -131,20 +131,21 @@ module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
     L223.CapacityTech %>%
       filter(grepl("Gen_II_LWR", capacity.technology),
              year == max(MODEL_BASE_YEARS),
-             capacity > 0) ->
-    L2244.CapacityTech_nuc_gen2_USA
+             capacity > 0) %>%
+      select(LEVEL2_DATA_NAMES[['CapacityTechYr']]) ->
+    L2244.CapacityTechYr_nuc_gen2_USA
 
 
     # -----------------------------------------------------------------------------
 
     # Produce outputs
 
-    L2244.CapacityTech_nuc_gen2_USA %>%
+    L2244.CapacityTechYr_nuc_gen2_USA %>%
       add_title("Dispatch technology capacity for state nuclear gen II plants") %>%
-      add_units("EJ") %>%
-      add_comments("Set technology capacity for state nuclear gen II plants") %>%
+      add_units("NA") %>%
+      add_comments("Technology shell for use with node_equiv in xml batch file") %>%
       add_precursors("L223.CapacityTech") ->
-      L2244.CapacityTech_nuc_gen2_USA
+      L2244.CapacityTechYr_nuc_gen2_USA
 
     L2244.TechSCurve_nuc_gen2_USA %>%
       add_title("S-curve shutdown decider for historic U.S. nuclear plants") %>%
@@ -160,7 +161,7 @@ module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
                      "L223.Production_Dispatch") ->
       L2244.TechSCurve_nuc_gen2_USA
 
-    return_data(L2244.CapacityTech_nuc_gen2_USA,
+    return_data(L2244.CapacityTechYr_nuc_gen2_USA,
                 L2244.TechSCurve_nuc_gen2_USA)
 
   } else {

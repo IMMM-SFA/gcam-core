@@ -13,8 +13,8 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L270.CreditMkt_USA}, \code{L270.CreditOutput_USA},
-#' \code{L270.GlobalTechCoef_LiqLim_Investment}, \code{L270.TechCoef_LiqLim_Dispatch},
-#' \code{L270.NegEmissBudgetMaxPrice_USA},
+#' \code{L270.GlobalTechCoef_LiqLim_Investment}, \code{L270.CapacityTechYr_LiqLim_Dispatch},
+#' \code{L270.TechCoef_LiqLim_Dispatch}, \code{L270.NegEmissBudgetMaxPrice_USA},
 #' \code{paste0( "L270.NegEmissBudget_USA_", c("GCAM3", paste0("SSP", 1:5), paste0("gSSP", 1:5)) )}.
 #' @details Add 50 states to USA market for GCAM policy constraints which enforce limits
 #' to liquid feedstocks and the amount of subsidies given for net negative emissions.
@@ -28,6 +28,7 @@ module_gcamusa_L270.limits_USA <- function(command, ...) {
     return(c("L270.CreditOutput",
              "L270.CreditMkt",
              "L223.GlobalTechEff_Investment",
+             "L223.CapacityTech_FutureTechs",
              "L223.TechEff_Dispatch",
              "L270.NegEmissBudgetMaxPrice",
              negative_emiss_input_names))
@@ -35,6 +36,7 @@ module_gcamusa_L270.limits_USA <- function(command, ...) {
     return(c("L270.CreditMkt_USA",
              "L270.CreditOutput_USA",
              "L270.GlobalTechCoef_LiqLim_Investment",
+             "L270.CapacityTechYr_LiqLim_Dispatch",
              "L270.TechCoef_LiqLim_Dispatch",
              "L270.NegEmissBudgetMaxPrice_USA",
              # TODO: might just be easier to keep the scenarios in a single
@@ -52,6 +54,7 @@ module_gcamusa_L270.limits_USA <- function(command, ...) {
 
     # Load required inputs
     L223.GlobalTechEff_Investment <- get_data(all_data, "L223.GlobalTechEff_Investment", strip_attributes = TRUE)
+    L223.CapacityTech_FutureTechs <- get_data(all_data, "L223.CapacityTech_FutureTechs", strip_attributes = TRUE)
     L223.TechEff_Dispatch <- get_data(all_data, "L223.TechEff_Dispatch", strip_attributes = TRUE)
     L270.CreditMkt <- get_data(all_data, "L270.CreditMkt", strip_attributes = TRUE)
     L270.CreditOutput <- get_data(all_data, "L270.CreditOutput", strip_attributes = TRUE)
@@ -76,6 +79,10 @@ module_gcamusa_L270.limits_USA <- function(command, ...) {
              # note we are converting the efficiency to a coefficient here
              coefficient = energy.OILFRACT_ELEC / efficiency) %>%
       select(-efficiency) -> L270.GlobalTechCoef_LiqLim_Investment
+
+    L223.CapacityTech_FutureTechs %>%
+      filter(subsector == "refined liquids") %>%
+      select(LEVEL2_DATA_NAMES[['CapacityTechYr']]) -> L270.CapacityTechYr_LiqLim_Dispatch
 
     L223.TechEff_Dispatch %>%
       filter(subsector == "refined liquids") %>%
@@ -118,6 +125,13 @@ module_gcamusa_L270.limits_USA <- function(command, ...) {
       add_precursors("L223.GlobalTechEff_Investment") ->
       L270.GlobalTechCoef_LiqLim_Investment
 
+    L270.CapacityTechYr_LiqLim_Dispatch %>%
+      add_title("Refined liquids dispatch technologies which must consume oil-credits") %>%
+      add_units("NA") %>%
+      add_comments("Technology shell for use with node_equiv in xml batch file") %>%
+      add_precursors("L223.CapacityTech_FutureTechs") ->
+      L270.CapacityTechYr_LiqLim_Dispatch
+
     L270.TechCoef_LiqLim_Dispatch %>%
       add_title("Creates demand of oil credits in GCAM-USA electricity dispatch sectors") %>%
       add_units("coefficient") %>%
@@ -138,6 +152,7 @@ module_gcamusa_L270.limits_USA <- function(command, ...) {
     ret_data <- c("L270.CreditMkt_USA",
                   "L270.CreditOutput_USA",
                   "L270.GlobalTechCoef_LiqLim_Investment",
+                  "L270.CapacityTechYr_LiqLim_Dispatch",
                   "L270.TechCoef_LiqLim_Dispatch",
                   "L270.NegEmissBudgetMaxPrice_USA")
 

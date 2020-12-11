@@ -218,9 +218,9 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.GlobalTechCapital_Investment, "GlobalTechCapital") %>%
       add_xml_data(L223.GlobalTechCapital_Investment_cool, "GlobalTechCapital") %>%
       add_xml_data(L223.GlobalTechShrwt_Investment, "GlobalTechShrwt") %>%
-      add_xml_data_generate_levels(L223.StubTechInterp_Investment_USA, "StubTechInterp",
-                                   "subsector", "nesting-subsector", 1, FALSE) %>%
       add_xml_data_generate_levels(L223.StubTechShrwt_Investment_USA, "StubTechShrwt",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data_generate_levels(L223.StubTechInterp_Investment_USA, "StubTechInterp",
                                    "subsector", "nesting-subsector", 1, FALSE) %>%
       add_xml_data(L223.GlobalTechCapFac_Investment, "GlobalTechCapFac") %>%
       add_xml_data_generate_levels(L223.TechCapFac_Investment, "TechCapFac",

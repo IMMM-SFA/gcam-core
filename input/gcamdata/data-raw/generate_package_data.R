@@ -148,6 +148,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["ResReserveTechProfitShutdown"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "median.shutdown.point", "profit.shutdown.steepness")
   level2_data_names[["ResReserveTechDeclinePhase"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "decline.phase.percent")
   level2_data_names[["CapacityTech"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "capacity")
+  level2_data_names[["CapacityTechYr"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year")
   level2_data_names[["CapacityTechMinCapFac"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "min.capacity.factor")
   level2_data_names[["CapacityTechSegmentCapFac"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "segment", "capacity.factor")
   level2_data_names[["CapacityTechTrialMktName"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "trial.market.name", "capacity.market.name")

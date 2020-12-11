@@ -13,8 +13,7 @@ module_gcamusa_batch_liquids_limits_usa_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c( "L270.CreditMkt_USA",
               "L270.CreditOutput_USA",
-              "L223.CapacityTech",
-              "L223.CapacityTech_FutureTechs",
+              "L270.CapacityTechYr_LiqLim_Dispatch",
               "L270.GlobalTechCoef_LiqLim_Investment",
               "L270.TechCoef_LiqLim_Dispatch"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -26,11 +25,8 @@ module_gcamusa_batch_liquids_limits_usa_xml <- function(command, ...) {
     # Load required inputs
     L270.CreditMkt_USA <- get_data(all_data, "L270.CreditMkt_USA")
     L270.CreditOutput_USA <- get_data(all_data, "L270.CreditOutput_USA")
-    L223.CapacityTech <- get_data(all_data, "L223.CapacityTech") %>%
-      filter(subsector == "refined liquids")
-    L223.CapacityTech_FutureTechs <- get_data(all_data, "L223.CapacityTech_FutureTechs") %>%
-      filter(subsector == "refined liquids")
     L270.GlobalTechCoef_LiqLim_Investment <- get_data(all_data, "L270.GlobalTechCoef_LiqLim_Investment")
+    L270.CapacityTechYr_LiqLim_Dispatch <- get_data(all_data, "L270.CapacityTechYr_LiqLim_Dispatch")
     L270.TechCoef_LiqLim_Dispatch <- get_data(all_data, "L270.TechCoef_LiqLim_Dispatch")
 
 
@@ -40,21 +36,17 @@ module_gcamusa_batch_liquids_limits_usa_xml <- function(command, ...) {
     create_xml("liquids_limits_USA.xml") %>%
       add_xml_data(L270.CreditMkt_USA, "PortfolioStd") %>%
       add_xml_data(L270.CreditOutput_USA, "GlobalTechRESSecOut") %>%
-      # add_xml_data_generate_levels(L270.GlobalTechCoef_LiqLim_Investment, "GlobalTechCoef",
-      #                              "subsector", "nesting-subsector", 1, FALSE) %>%
       add_xml_data(L270.GlobalTechCoef_LiqLim_Investment, "GlobalTechCoef") %>%
       add_node_equiv_xml("sector") %>%
       add_node_equiv_xml("subsector") %>%
       add_node_equiv_xml("technology") %>%
-      add_xml_data(L223.CapacityTech, "CapacityTech") %>%
-      add_xml_data(L223.CapacityTech_FutureTechs, "CapacityTech") %>%
+      add_xml_data(L270.CapacityTechYr_LiqLim_Dispatch, "CapacityTechYr") %>%
       add_xml_data(L270.TechCoef_LiqLim_Dispatch, "TechCoef") %>%
       add_xml_data(L270.CreditOutput_USA, "GlobalTechRESSecOut") %>%
       add_precursors("L270.CreditMkt_USA",
                      "L270.CreditOutput_USA",
-                     "L223.CapacityTech",
-                     "L223.CapacityTech_FutureTechs",
                      "L270.GlobalTechCoef_LiqLim_Investment",
+                     "L270.CapacityTechYr_LiqLim_Dispatch",
                      "L270.TechCoef_LiqLim_Dispatch") ->
       liquids_limits_USA.xml
 

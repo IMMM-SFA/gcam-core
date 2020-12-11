@@ -12,7 +12,7 @@
 #' The corresponding file in the original data system was \code{batch_nuclear_USA.xml} (gcamusa XML batch).
 module_gcamusa_batch_nuclear_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L2244.CapacityTech_nuc_gen2_USA",
+    return(c("L2244.CapacityTechYr_nuc_gen2_USA",
              "L2244.TechSCurve_nuc_gen2_USA"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "nuclear_USA.xml"))
@@ -23,7 +23,7 @@ module_gcamusa_batch_nuclear_USA_xml <- function(command, ...) {
     technology <- stub.technology <- NULL  # silence package check notes
 
     # Load required inputs
-    L2244.CapacityTech_nuc_gen2_USA <- get_data(all_data, "L2244.CapacityTech_nuc_gen2_USA")
+    L2244.CapacityTechYr_nuc_gen2_USA <- get_data(all_data, "L2244.CapacityTechYr_nuc_gen2_USA")
     L2244.TechSCurve_nuc_gen2_USA <- get_data(all_data, "L2244.TechSCurve_nuc_gen2_USA")
 
     # ===================================================
@@ -32,9 +32,9 @@ module_gcamusa_batch_nuclear_USA_xml <- function(command, ...) {
     create_xml("nuclear_USA.xml") %>%
       add_node_equiv_xml("sector") %>%
       add_node_equiv_xml("technology") %>%
-      add_xml_data(L2244.CapacityTech_nuc_gen2_USA, "CapacityTech") %>%
+      add_xml_data(L2244.CapacityTechYr_nuc_gen2_USA, "CapacityTechYr") %>%
       add_xml_data(L2244.TechSCurve_nuc_gen2_USA, "TechSCurve") %>%
-      add_precursors("L2244.CapacityTech_nuc_gen2_USA",
+      add_precursors("L2244.CapacityTechYr_nuc_gen2_USA",
                      "L2244.TechSCurve_nuc_gen2_USA") ->
       nuclear_USA.xml
 

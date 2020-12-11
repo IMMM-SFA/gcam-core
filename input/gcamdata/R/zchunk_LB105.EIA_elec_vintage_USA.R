@@ -270,24 +270,15 @@ module_gcamusa_LB105.EIA_elec_vintage_USA <- function(command, ...) {
     eia_elec_data_water_cool %>%
       bind_rows(eia_elec_data_water_inferred) -> eia_elec_data_water_full
 
-    # # check for any goofy tech / cooling system combinations
-    # eia_elec_data_water_full %>%
-    #   group_by(gcam_fuel, elec_tech, cooling_system, water_type) %>%
-    #   summarize(en_in_elec = sum(en_in_elec),
-    #             en_out = sum(en_out),
-    #             NAMEPLATE = sum(NAMEPLATE)) -> TEST
-
-    # # Make sure that we're not inflating capacity or generation by mapping in cooling system info
-    # eia_elec_data %>%
-    #   summarize(en_in_elec = sum(en_in_elec),
-    #             en_out = sum(en_out),
-    #             NAMEPLATE = sum(NAMEPLATE)) -> TEST1
-    #
-    # eia_elec_data_water_full %>%
-    #   summarize(en_in_elec = sum(en_in_elec),
-    #             en_out = sum(en_out),
-    #             NAMEPLATE = sum(NAMEPLATE)) -> TEST2
-
+    # Ensure that we're not carrying any gen tech / cooling system combinations which have a zero efficiency
+    # (i.e. non-zero inputs but zero outputs).  Drop any such entries.
+    eia_elec_data_water_full %>%
+      group_by(state, gcam_fuel, elec_tech, cooling_system, water_type) %>%
+      mutate(en_in_elec_total = sum(en_in_elec),
+             en_out_total = sum(en_out),
+             eff_total = en_out_total / en_in_elec_total)  %>%
+      filter(eff_total != 0) %>%
+      select(-en_in_elec_total, -en_out_total, -eff_total) -> eia_elec_data_water_full
 
     # Aggregate capacity and generation by tech / cooling system
     # capacity by state by vintage

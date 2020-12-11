@@ -14,7 +14,7 @@ module_gcamusa_L2244.nuclear_USA(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L2244.CapacityTech_nuc_gen2_USA}, \code{L2244.TechSCurve_nuc_gen2_USA}.
+the generated outputs: \code{L2244.CapacityTechYr_nuc_gen2_USA}, \code{L2244.TechSCurve_nuc_gen2_USA}.
 The corresponding file in the original data system was \code{L2244.nuclear_USA.R} (gcam-usa level2).
 }
 \description{

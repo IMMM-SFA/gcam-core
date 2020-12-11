@@ -264,6 +264,8 @@ TechCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name
 
 CapacityTech, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+capacity, scenario, scenario/world
 
+CapacityTechYr, world/+{name}region, region/+{name}dispatch-sector, dispatch-sector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, scenario, scenario/world
+
 CapacityTechMinCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+min-capacity-factor, scenario, scenario/world
 
 CapacityTechSegmentCapFac, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}capacity-technology, capacity-technology/+{year}period, period/+{name}segment-capacity-factor, period/+segment-capacity-factor, scenario, scenario/world
