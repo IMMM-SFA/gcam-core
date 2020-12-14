@@ -321,19 +321,22 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
       mutate(technology = subresource,
              share.weight = 1.0) %>%
       select(LEVEL2_DATA_NAMES[["ResTechShrwt"]]) %>%
-      # Wind power is assumed to be infeasible in DC. Thus, it should not be assigned "onshore wind resource".
-      # Use anti_join to remove it from the table.
-      anti_join(A10.renewable_resource_delete, by = c("region", "resource" = "resource_elec_subsector")) %>%
       bind_rows(L2237.ResTechShrwt_wind_reeds_USA,
                 L2238.ResTechShrwt_PV_reeds_USA,
-                L2239.ResTechShrwt_CSP_reeds_USA) ->
+                L2239.ResTechShrwt_CSP_reeds_USA) %>%
+      # Wind power is assumed to be infeasible in DC. Thus, it should not be assigned "onshore wind resource".
+      # Use anti_join to remove it from the table.
+      anti_join(A10.renewable_resource_delete, by = c("region", "resource" = "resource_elec_subsector")) ->
       L210.ResTechShrwt_USA
 
     L210.GrdRenewRsrcCurves_geo_USA %>%
       bind_rows(L2237.GrdRenewRsrcCurves_wind_reeds_USA,
                 L2238.GrdRenewRsrcCurves_PV_reeds_USA,
                 L2239.GrdRenewRsrcCurves_CSP_reeds_USA,
-                L120.GrdRenewRsrcCurves_offshorewind_reeds_USA) ->
+                L120.GrdRenewRsrcCurves_offshorewind_reeds_USA) %>%
+      # Wind power is assumed to be infeasible in DC. Thus, it should not be assigned "onshore wind resource".
+      # Use anti_join to remove it from the table.
+      anti_join(A10.renewable_resource_delete, by = c("region", "renewresource" = "resource_elec_subsector")) ->
       L210.GrdRenewRsrcCurves_geo_USA
 
     bind_rows(L120.GrdRenewRsrcCurves_offshorewind_reeds_USA, L2237.RenewRsrc_wind_reeds_USA) %>%
@@ -343,7 +346,10 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
              maxSubResource = 1) %>%
       bind_rows(L210.GrdRenewRsrcMax_geo_USA,
                 L2238.GrdRenewRsrcMax_PV_reeds_USA,
-                L2239.GrdRenewRsrcMax_CSP_reeds_USA) ->
+                L2239.GrdRenewRsrcMax_CSP_reeds_USA) %>%
+      # Wind power is assumed to be infeasible in DC. Thus, it should not be assigned "onshore wind resource".
+      # Use anti_join to remove it from the table.
+      anti_join(A10.renewable_resource_delete, by = c("region", "renewresource" = "resource_elec_subsector")) ->
       L210.GrdRenewRsrcMax_geo_USA
 
 

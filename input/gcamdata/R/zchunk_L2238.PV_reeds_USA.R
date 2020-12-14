@@ -276,7 +276,8 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
     L2238.GrdRenewRsrcCurves_PV_reeds_USA %>%
       select(region, renewresource, sub.renewable.resource) %>%
       distinct() %>%
-      mutate(maxSubResource = 1) -> L2238.GrdRenewRsrcMax_PV_reeds_USA
+      mutate(year.fillout = min(MODEL_YEARS),
+             maxSubResource = 1) -> L2238.GrdRenewRsrcMax_PV_reeds_USA
 
     # The points on the graded curves need to be read in as fractions of the maxSubResource
     # L2238.PV_curve %>%

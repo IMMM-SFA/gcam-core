@@ -88,7 +88,12 @@ module_gcamusa_LA120.offshore_wind_reeds_USA <- function(command, ...) {
              renewresource = "offshore wind resource",
              sub.renewable.resource = "offshore wind resource") %>%
       select(region = State, renewresource, sub.renewable.resource, grade = Wind_Class, available = resource.potential.EJ, extractioncost = price) %>%
-      arrange(region, extractioncost) ->
+      arrange(region, extractioncost) %>%
+      # we may have duplicate costs at this point so just collapse them
+      group_by(region, renewresource, sub.renewable.resource, extractioncost) %>%
+      summarize(grade = dplyr::first(grade),
+                available = sum(available)) %>%
+      ungroup() ->
       wind_cf_curve
 
     # Assigning resource to states missing from the ReEDS dataset (currently only Alaska).

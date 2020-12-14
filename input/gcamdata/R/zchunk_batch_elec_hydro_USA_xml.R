@@ -14,7 +14,7 @@ module_gcamusa_batch_elec_hydro_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2242.CapacityTech_hydro_future",
              "L2242.TechLifetime_hydro",
-             "L2242.CapacityTechSegmentCapFac_hydro"))
+             "L2242.TechCapFac_hydro"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "elec_hydro_USA.xml"))
   } else if(command == driver.MAKE) {
@@ -26,7 +26,7 @@ module_gcamusa_batch_elec_hydro_USA_xml <- function(command, ...) {
     # Load required inputs
     L2242.CapacityTech_hydro_future <- get_data(all_data, "L2242.CapacityTech_hydro_future")
     L2242.TechLifetime_hydro <- get_data(all_data, "L2242.TechLifetime_hydro")
-    L2242.CapacityTechSegmentCapFac_hydro <- get_data(all_data, "L2242.CapacityTechSegmentCapFac_hydro")
+    L2242.TechCapFac_hydro <- get_data(all_data, "L2242.TechCapFac_hydro")
 
     # ===================================================
 
@@ -35,11 +35,11 @@ module_gcamusa_batch_elec_hydro_USA_xml <- function(command, ...) {
       add_node_equiv_xml("sector") %>%
       add_node_equiv_xml("technology") %>%
       add_xml_data(L2242.CapacityTech_hydro_future, "CapacityTech") %>%
-      add_xml_data(L2242.CapacityTechSegmentCapFac_hydro, "CapacityTechSegmentCapFac")  %>%
+      add_xml_data(L2242.TechCapFac_hydro, "TechCapFac")  %>%
       add_xml_data(L2242.TechLifetime_hydro, "TechLifetime") %>%
       add_precursors("L2242.CapacityTech_hydro_future",
                      "L2242.TechLifetime_hydro",
-                     "L2242.CapacityTechSegmentCapFac_hydro") ->
+                     "L2242.TechCapFac_hydro") ->
       elec_hydro_USA.xml
 
     return_data(elec_hydro_USA.xml)
