@@ -657,6 +657,11 @@ void IntermittentCapacityTechnology::initCalc(const string& aRegionName,
     }
 }
 
+double IntermittentCapacityTechnology::getEnergyCost( const string& aRegionName, const string& aSectorName, const int aPeriod ) const {
+    // the resource price is really capacity factor and should not be included in any cost directly
+    return CapacityTechnology::getEnergyCost( aRegionName, aSectorName, aPeriod ) - (*mResourceInput)->getPrice(aRegionName, aPeriod);
+}
+
 void IntermittentCapacityTechnology::postCalc(const std::string &aRegionName, const int aPeriod) {
     if(mProductionState[aPeriod]->isOperating() && mProductionState[aPeriod]->isNewInvestment()) {
         // one minus the resource price will give use the marginal capacity factor

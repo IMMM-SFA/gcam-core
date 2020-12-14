@@ -390,7 +390,7 @@ double IntermittentInvestmentTechnology::getCapacityFactor() const {
     int techPeriod = scenario->getModeltime()->getyr_to_per(mYear);
     for(auto input : mInputs) {
         if(input->hasTypeFlag(IInput::CAPITAL) && input != *mResourceInput && input != *mCapacityCreditInput) {
-            return input->getCoefficient(techPeriod) * mCapacityFactor;
+            return mCapacityFactor / input->getCoefficient(techPeriod);
         }
     }
     return mCapacityFactor;
