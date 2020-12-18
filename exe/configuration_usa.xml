@@ -90,8 +90,6 @@
 		<Value name = "cement_usa">../input/gcamdata/xml/cement_USA.xml</Value>
 		<Value name = "fert_usa">../input/gcamdata/xml/Fert_USA.xml</Value>
 
-		<Value name = "solar_usa">../input/gcamdata/xml/solar_reeds_USA.xml</Value>
-		<Value name = "wind_usa">../input/gcamdata/xml/wind_reeds_USA.xml</Value>
 		<Value name = "hydro_usa">../input/gcamdata/xml/elec_hydro_USA.xml</Value>
 		<Value name = "nuc_usa">../input/gcamdata/xml/nuclear_USA.xml</Value>
 		<Value name = "no_new_coal_usa">../input/gcamdata/xml/nonewcoal_USA.xml</Value>

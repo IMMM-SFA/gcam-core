@@ -82,9 +82,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              FILE = "gcam-usa/calibrated_techs_dispatch_usa",
              FILE = "gcam-usa/dispatch/capacity_credit_calculator",
              FILE = "gcam-usa/dispatch/TechTrialMarket_mapping",
-             "L120.RsrcCurves_EJ_R_offshore_wind_USA",
-             "L120.RegCapFactor_offshore_wind_USA",
-             "L120.GridCost_offshore_wind_USA",
              "L223.PrimaryRenewKeyword_elec",
              "L2233.GlobalTechCoef_elec_cool",
              "L2233.GlobalIntTechCoef_elec_cool",
@@ -220,9 +217,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     calibrated_techs_dispatch_usa <- get_data(all_data, "gcam-usa/calibrated_techs_dispatch_usa")
     capacity_credit_calculator <- get_data(all_data, "gcam-usa/dispatch/capacity_credit_calculator")
     TechTrialMarket_mapping <- get_data(all_data, "gcam-usa/dispatch/TechTrialMarket_mapping")
-    L120.RsrcCurves_EJ_R_offshore_wind_USA <- get_data(all_data, "L120.RsrcCurves_EJ_R_offshore_wind_USA")
-    L120.RegCapFactor_offshore_wind_USA <- get_data(all_data, "L120.RegCapFactor_offshore_wind_USA")
-    L120.GridCost_offshore_wind_USA <- get_data(all_data, "L120.GridCost_offshore_wind_USA")
     L223.PrimaryRenewKeyword_elec <- get_data(all_data, "L223.PrimaryRenewKeyword_elec")
     L2233.GlobalTechCoef_elec_cool <- get_data(all_data, "L2233.GlobalTechCoef_elec_cool")
     L2233.GlobalIntTechCoef_elec_cool <- get_data(all_data, "L2233.GlobalIntTechCoef_elec_cool")
