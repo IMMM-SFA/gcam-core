@@ -1199,8 +1199,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       L223.StubTechEffFlag_Dispatch
 
     # L223.TechCoef_Dispatch_cool - water withdrawal and consumption coefficients
-    L223.TechEff_Dispatch %>%
-      select(-minicam.energy.input, -efficiency, -market.name) %>%
+    L223.TechShrwt_Dispatch %>%
+      select(-share.weight) %>%
       left_join_error_no_match(A23.elec_tech_mapping_cool %>%
                                select(to.technology, water_type),
                              by = c("technology" = "to.technology")) %>%
