@@ -27,9 +27,7 @@ module_gcamusa_L2261.regional_biomass_USA <- function(command, ...) {
     return(c(FILE = "energy/A21.sector",
              FILE = "energy/A26.sector",
              FILE = "gcam-usa/A28.sector",
-             FILE = 'gcam-usa/A23.elecS_tech_mapping_cool',
              FILE = "energy/calibrated_techs",
-             FILE = "gcam-usa/usa_seawater_states_basins",
              "L122.out_EJ_state_refining_F",
              "L202.CarbonCoef",
              "L221.GlobalTechCoef_en",
@@ -89,8 +87,6 @@ module_gcamusa_L2261.regional_biomass_USA <- function(command, ...) {
     A21.sector <- get_data(all_data, "energy/A21.sector", strip_attributes = TRUE)
     A26.sector <- get_data(all_data, "energy/A26.sector", strip_attributes = TRUE)
     A28.sector <- get_data(all_data, "gcam-usa/A28.sector", strip_attributes = TRUE)
-    A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool")
-    usa_seawater_states_basins <- get_data(all_data, "gcam-usa/usa_seawater_states_basins")
     calibrated_techs <- get_data(all_data, "energy/calibrated_techs", strip_attributes = TRUE)
     A21.sector <- get_data(all_data, "energy/A21.sector", strip_attributes = TRUE)
     A26.sector <- get_data(all_data, "energy/A26.sector", strip_attributes = TRUE)

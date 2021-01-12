@@ -17,16 +17,6 @@
 #' @author YO May 2020
 module_gcamusa_LB104.load_curve_enduse_HDDCDD_USA <- function(command, ...) {
   # Only process data if using end-use "demand" segments (gcamusa.USE_ELEC_DEMAND_SEGMENTS == TRUE)
-  if(gcamusa.USE_ELEC_DEMAND_SEGMENTS == "FALSE") {
-    if(command == driver.DECLARE_INPUTS) {
-      return(NULL)
-    } else if(command == driver.DECLARE_OUTPUTS) {
-      return(NULL)
-    } else if(command == driver.MAKE) {
-      return_data()
-    } else {
-      stop("Unknown command")
-    }} else {
       if(command == driver.DECLARE_INPUTS) {
         return(c(FILE = "gcam-usa/states_subregions",
                  "L102.load_segments_gcamusa",
@@ -221,5 +211,5 @@ module_gcamusa_LB104.load_curve_enduse_HDDCDD_USA <- function(command, ...) {
         return_data(L104.HistoricalDD_S_Segment_gcamusa, L104.DD_S_Segment_all_gcamusa)
       } else {
         stop("Unknown command")
-      }}
+      }
 }

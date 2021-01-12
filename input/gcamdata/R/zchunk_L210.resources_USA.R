@@ -316,7 +316,9 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
     # L210.ResTechShrwt_USA: To provide a shell for the technology object in the resources
     bind_rows(select(L210.GrdRenewRsrcMax_geo_USA, region, resource = renewresource, subresource = sub.renewable.resource)) %>%
       bind_rows(select(L210.SmthRenewRsrcCurvesGdpElast_roofPV_USA, region, resource = renewresource, subresource = smooth.renewable.subresource)) %>%
-      bind_rows(select(L120.RenewRsrc_offshorewind_reeds_USA, region, resource = renewresource, subresource = renewresource)) %>%
+      bind_rows(L120.RenewRsrc_offshorewind_reeds_USA %>%
+                  mutate(subresource = renewresource) %>%
+                  select(region, resource = renewresource, subresource)) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       mutate(technology = subresource,
              share.weight = 1.0) %>%
