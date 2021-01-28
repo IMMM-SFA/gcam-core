@@ -25,6 +25,7 @@
 #' \item{\code{L226.SubsectorLogit_electd_USA}: USA subsector logit info for elec T&D by grid_region.}
 #' \item{\code{L226.SubsectorShrwtFllt_electd_USA}: USA subsector shareweight fillout for elec T&D by state.}
 #' \item{\code{L226.SubsectorInterp_electd_USA}: USA interpolation info for elec T&D by state.}
+#' \item{\code{L226.StubTechCost_fossil_USA}: Cost adjuster to better align historical goal and gas prices for the USA.}
 #' }
 #' The corresponding file in the original data system was \code{L226.en_distribution_USA.R} (gcam-usa level2).
 #' @importFrom assertthat assert_that
@@ -45,7 +46,12 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
              "L226.SubsectorInterp_en",
              "L226.GlobalTechCost_en",
              "L226.GlobalTechShrwt_en",
-             "L226.StubTechCoef_electd"))
+             "L226.StubTechCoef_electd",
+             FILE = "gcam-usa/A26.cost_adj_map_USA",
+             FILE = "gcam-usa/EIA_USA_energy_prices",
+             "L210.RsrcPrice",
+             "L221.GlobalTechCost_en",
+             "L222.GlobalTechCost_en"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L226.DeleteSupplysector_USAelec",
              "L226.StubTechCoef_electd_USA",
@@ -62,7 +68,8 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
              "L226.TechShrwt_en_USA",
              "L226.TechCoef_en_USA",
              "L226.TechCost_en_USA",
-             "L226.Ccoef"))
+             "L226.Ccoef",
+             "L226.StubTechCost_fossil_USA"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -81,6 +88,12 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
     L226.GlobalTechCost_en <- get_data(all_data, "L226.GlobalTechCost_en", strip_attributes = TRUE)
     L226.GlobalTechShrwt_en <- get_data(all_data, "L226.GlobalTechShrwt_en", strip_attributes = TRUE)
     L226.StubTechCoef_electd <- get_data(all_data, "L226.StubTechCoef_electd", strip_attributes = TRUE)
+
+    A26.cost_adj_map_USA <- get_data(all_data, "gcam-usa/A26.cost_adj_map_USA", strip_attributes = TRUE)
+    EIA_USA_energy_prices <- get_data(all_data, "gcam-usa/EIA_USA_energy_prices", strip_attributes = TRUE)
+    L210.RsrcPrice <- get_data(all_data, "L210.RsrcPrice", strip_attributes = TRUE)
+    L221.GlobalTechCost_en <- get_data(all_data, "L221.GlobalTechCost_en", strip_attributes = TRUE)
+    L222.GlobalTechCost_en <- get_data(all_data, "L222.GlobalTechCost_en", strip_attributes = TRUE)
 
 
     # silence check package notes
@@ -306,6 +319,81 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
       rename(market.name = grid_region) ->
       L226.TechCoef_electd_USA
 
+
+    # Adjustment for USA gas prices
+    # MTB Jan 2021
+    # Start by estimating modeled price of resources by summing up relevant input cost assumptions
+    L210.RsrcPrice %>%
+      filter(region == gcam.USA_REGION) %>%
+      select(technology = resource, year, price) %>%
+      bind_rows(L221.GlobalTechCost_en %>%
+                  select(technology, year, price = input.cost),
+                L222.GlobalTechCost_en %>%
+                  select(technology, year, price = input.cost)) %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      # use semi join to filter for entries we care about
+      semi_join(A26.cost_adj_map_USA, by =  c("technology" = "tech_rsrc")) %>%
+      # map various resources / technologies to fuels
+      left_join_error_no_match(A26.cost_adj_map_USA %>%
+                                 distinct(fuel, tech_rsrc),
+                               by =  c("technology" = "tech_rsrc")) %>%
+      group_by(fuel, year) %>%
+      summarise(price = sum(price)) %>%
+      ungroup() -> L226.gas_price_modeled_USA
+
+    EIA_USA_energy_prices %>%
+      rename(year = Year) %>%
+      gather(technology, price_hist, -year) %>%
+      # convert 2018$ / MMBtu to 1975$/GJ
+      mutate(price_hist = price_hist * gdp_deflator(1975, 2016) / CONV_BTU_KJ) %>%
+      group_by(technology) %>%
+      # calculate rolling mean average price for 5 year period
+      # NOTE: there is a zoo function, rollmean, that will do this much more cleanly
+      mutate(price_hist_mean = (price_hist + lag(price_hist, 1) + lag(price_hist, 2) +
+                                  lead(price_hist, 1) + lead(price_hist, 2)) / 5) %>%
+      ungroup() %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      # use semi join to filter for entries we care about
+      semi_join(A26.cost_adj_map_USA, by =  c("technology" = "SEDS_fuel")) %>%
+      # map various resources / technologies to fuels
+      left_join_error_no_match(A26.cost_adj_map_USA %>%
+                                 distinct(fuel, SEDS_fuel),
+                               by =  c("technology" = "SEDS_fuel")) -> L226.gas_price_hist_USA
+
+    L226.gas_price_modeled_USA %>%
+      left_join_error_no_match(L226.gas_price_hist_USA %>%
+                                 select(fuel, year, price_hist_mean),
+                               by = c("fuel", "year")) %>%
+      mutate(price_adj = price_hist_mean - price) -> L226.gas_price_adj_USA
+
+    L221.GlobalTechCost_en %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      # use semi join to filter for entries we care about
+      semi_join(A26.cost_adj_map_USA, by = "sector.name") %>%
+      left_join_error_no_match(A26.cost_adj_map_USA %>%
+                                 distinct(sector.name, fuel),
+                               by = "sector.name") %>%
+      select(-input.cost) %>%
+      mutate(minicam.non.energy.input = "USA price adjustment") %>%
+      left_join_error_no_match(L226.gas_price_adj_USA %>%
+                                 select(fuel, year, input.cost = price_adj),
+                               by = c("fuel", "year")) %>%
+      select(-fuel) %>%
+      # create full time series of model years
+      complete(nesting(sector.name, subsector.name, technology, minicam.non.energy.input),
+               year = c(MODEL_YEARS)) %>%
+      group_by(sector.name) %>%
+      # set input.cost to 0 in 2100 since we'll phase out this price adjuster over time
+      mutate(input.cost = if_else(year == max(MODEL_YEARS), 0, input.cost),
+             # interoplate between historical year and final model year
+             input.cost = approx_fun(year, input.cost, rule = 2)) %>%
+      ungroup() %>%
+      mutate(region = gcam.USA_REGION) %>%
+      rename(supplysector = sector.name,
+             subsector = subsector.name,
+             stub.technology = technology) -> L226.StubTechCost_fossil_USA
+
+
     # Optional electricity dispatch end-use demand segments
     # YO Apr 2020
     # Disaggregate electric subsector, technology, minicam.energy.input and minicam.non.energy.input by dispatch segments
@@ -485,6 +573,18 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
       add_precursors("L226.SubsectorInterp_en") ->
       L226.SubsectorInterp_electd_USA
 
+    L226.StubTechCost_fossil_USA %>%
+      add_title("Cost adjuster to better align historical goal and gas prices for the USA") %>%
+      add_units("1975$/GJ") %>%
+      add_comments("Data from SEDS. This adjustment aligns national average prices.") %>%
+      add_comments("Regional prices adjusted via L226.TechCost_en_USA.") %>%
+      add_precursors("gcam-usa/A26.cost_adj_map_USA",
+                     "gcam-usa/EIA_USA_energy_prices",
+                     "L210.RsrcPrice",
+                     "L221.GlobalTechCost_en",
+                     "L222.GlobalTechCost_en") ->
+      L226.StubTechCost_fossil_USA
+
     return_data(L226.DeleteSupplysector_USAelec,
                 L226.StubTechCoef_electd_USA,
                 L226.TechShrwt_electd_USA,
@@ -500,7 +600,8 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
                 L226.Supplysector_electd_USA,
                 L226.SubsectorLogit_electd_USA,
                 L226.SubsectorShrwtFllt_electd_USA,
-                L226.SubsectorInterp_electd_USA)
+                L226.SubsectorInterp_electd_USA,
+                L226.StubTechCost_fossil_USA)
   } else {
     stop("Unknown command")
   }

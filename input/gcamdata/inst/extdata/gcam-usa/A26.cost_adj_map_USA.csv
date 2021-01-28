@@ -1,0 +1,13 @@
+# File: A26.cost_adj_map_USA.csv
+# Title: Mapping file for USA-level fossil fuel cost adjusters in GCAM-USA
+# Units: NA (mapping file)
+# Source:  Corresponds to technology / resource names in gcam-usa/EIA_USA_energy_prices; L210.RsrcPrice; L221.GlobalTechCost_en; L222.GlobalTechCost_en
+# Comments:  Focusing on coal and gas which are important fuels in the USA elecricity sector (oil is not).  Accurate fuel costs matter a lot in the new dispatch power sector because technology dispatch is based on least variable cost (not logit).
+# Column types: ccccc 
+# ----------
+fuel,sector.name,subsector.name,tech_rsrc,SEDS_fuel
+coal,,,coal,Coal_Total
+natural gas,,,natural gas,Natural_Gas
+coal,regional coal,regional coal,regional coal,
+natural gas,regional natural gas,regional natural gas,regional natural gas,
+natural gas,gas processing,natural gas,natural gas,

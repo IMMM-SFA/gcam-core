@@ -18,7 +18,8 @@ module_gcamusa_batch_en_prices_USA_xml <- function(command, ...) {
              "L226.TechShrwt_en_USA",
              "L226.TechCoef_en_USA",
              "L226.TechCost_en_USA",
-             "L226.Ccoef"))
+             "L226.Ccoef",
+             "L226.StubTechCost_fossil_USA"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "en_prices_USA.xml"))
   } else if(command == driver.MAKE) {
@@ -36,6 +37,7 @@ module_gcamusa_batch_en_prices_USA_xml <- function(command, ...) {
     L226.TechCoef_en_USA <- get_data(all_data, "L226.TechCoef_en_USA")
     L226.TechCost_en_USA <- get_data(all_data, "L226.TechCost_en_USA")
     L226.Ccoef <- get_data(all_data, "L226.Ccoef")
+    L226.StubTechCost_fossil_USA <- get_data(all_data, "L226.StubTechCost_fossil_USA")
 
     # ===================================================
     # Rename tibble columns to match the L2 data header information.
@@ -50,13 +52,15 @@ module_gcamusa_batch_en_prices_USA_xml <- function(command, ...) {
       add_xml_data(L226.TechCoef_en_USA, "TechCoef") %>%
       add_xml_data(L226.TechCost_en_USA, "TechCost") %>%
       add_xml_data(L226.Ccoef, "CarbonCoef") %>%
+      add_xml_data(L226.StubTechCost_fossil_USA, "StubTechCost") %>%
       add_precursors("L226.Supplysector_en_USA",
                      "L226.SubsectorShrwtFllt_en_USA",
                      "L226.SubsectorLogit_en_USA",
                      "L226.TechShrwt_en_USA",
                      "L226.TechCoef_en_USA",
                      "L226.TechCost_en_USA",
-                     "L226.Ccoef") ->
+                     "L226.Ccoef",
+                     "L226.StubTechCost_fossil_USA") ->
       en_prices_USA.xml
 
     return_data(en_prices_USA.xml)

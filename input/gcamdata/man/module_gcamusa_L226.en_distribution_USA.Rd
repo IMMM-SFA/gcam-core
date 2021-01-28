@@ -31,6 +31,7 @@ the generated outputs:
 \item{\code{L226.SubsectorLogit_electd_USA}: USA subsector logit info for elec T&D by grid_region.}
 \item{\code{L226.SubsectorShrwtFllt_electd_USA}: USA subsector shareweight fillout for elec T&D by state.}
 \item{\code{L226.SubsectorInterp_electd_USA}: USA interpolation info for elec T&D by state.}
+\item{\code{L226.StubTechCost_fossil_USA}: Cost adjuster to better align historical goal and gas prices for the USA.}
 }
 The corresponding file in the original data system was \code{L226.en_distribution_USA.R} (gcam-usa level2).
 }
