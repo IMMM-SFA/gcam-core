@@ -251,7 +251,7 @@ SolverComponent::ReturnCode Preconditioner::solve( SolutionInfoSet& aSolutionSet
                 if(fd == 0.0) {
                     if(olddmnd > 0.0) {
                         fd = olddmnd;
-            }
+                    }
                     else if(oldsply > 0.0) {
                         fd = oldsply;
                     }
@@ -416,7 +416,8 @@ SolverComponent::ReturnCode Preconditioner::solve( SolutionInfoSet& aSolutionSet
                             solvable[i].setPrice(newprice);
                             chg = true;
                             ++nchg;
-                        } else if(oldprice <= 0.0 && olddmnd > 0.0) {                            newprice = olddmnd;
+                        } else if(oldprice <= 0.0 && olddmnd > 0.0) {
+							newprice = olddmnd;
                             solvable[i].setPrice(newprice);
                             chg = true;
                             ++nchg;

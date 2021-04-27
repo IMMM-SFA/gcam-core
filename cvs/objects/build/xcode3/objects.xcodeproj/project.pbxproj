@@ -2573,7 +2573,6 @@
 					"../../../../libs/boost-lib/stage/lib",
 					../../../../libs/tbb/lib,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lxerces-c",
@@ -2622,7 +2621,6 @@
 					"../../../../libs/boost-lib/stage/lib",
 					../../../../libs/tbb/lib,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lxerces-c",
