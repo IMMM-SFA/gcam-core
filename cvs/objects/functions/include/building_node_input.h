@@ -80,6 +80,8 @@ class SatiationDemandFunction;
  *              - \c base-building-size BuildingNodeInput::mBuildingSize
  *                   The base year size in terms of floorspace which can be utilized to back out
  *					 coefficients.
+ *              - \c is-building-size-fixed BuildingNodeInput::mIsFixedBuildingSize
+ *                   A flag to indicate the user wants to fix the building size to the parsed value
  *              - \c price-exponent BuildingNodeInput::mPriceExponent
  *                   Price exponent by period to be used in calculating a demand for this
  *					 building type.
@@ -292,7 +294,6 @@ public:
 
     virtual void calcPricePaid( const std::string& aRegionName,
                                 const std::string& aSectorName,
-                                const MoreSectorInfo* aMoreSectorInfo,
                                 const std::vector<AGHG*>& aGhgs,
                                 const ICaptureComponent* aSequestrationDevice,
                                 const int aLifetimeYears,
@@ -303,15 +304,6 @@ public:
                             Expenditure* aExpenditure,
                             const int aPeriod ) const { return 0; }
    
-    virtual void copyParamsInto( ProductionInput& aInput,
-        const int aPeriod ) const {}
-
-    virtual void copyParamsInto( DemandInput& aInput,
-        const int aPeriod ) const {}
-
-    virtual void copyParamsInto( TradeInput& aInput,
-        const int aPeriod ) const {}
-
     virtual void copyParamsInto( EnergyInput& aInput,
         const int aPeriod ) const {}
 
@@ -366,6 +358,9 @@ protected:
 
         //! Building size by period.
         DEFINE_VARIABLE( ARRAY | STATE, "base-building-size", mBuildingSize, objects::PeriodVector<Value> ),
+
+        //! A flag to indicate the user wants to fix the building size to the parsed value.
+        DEFINE_VARIABLE(ARRAY, "is-building-size-fixed", mIsFixedBuildingSize, objects::PeriodVector<bool>),
 
         //! Price exponent by period.
         DEFINE_VARIABLE( ARRAY, "price-exponent", mPriceExponent, objects::PeriodVector<Value> ),

@@ -1,5 +1,10 @@
 library(usethis)
-library(gcamdata)
+library(devtools)
+
+# We could potentially use drake to speed up the process of updating the package
+# data which otherwise requires multiple runs of driver.  However, given drake
+# is optional we default to not use it.
+USE_DRIVER_DRAKE <- FALSE
 
 # Note: the methods below explicitly name XML tags as expected by GCAM and/or
 # the model interface headers thus will need to be maintained to be consistent.
@@ -417,6 +422,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["GDPCtrlSteepRes"]] <- c("region", "resource", "subresource", "technology", "year", "Non.CO2", "ctrl.name", "steepness")
   level2_data_names[["ResMAC"]] <- c("region", "resource", "subresource", "technology", "year", "Non.CO2", "mac.control", "tax", "mac.reduction", "market.name")
   level2_data_names[["ResMACTC"]] <- c("region", "resource", "subresource", "technology", "year", "Non.CO2", "mac.control", "tech.change.year", "tech.change")
+  level2_data_names[["ResMACPhaseIn"]] <- c("region", "resource", "subresource", "technology", "year", "Non.CO2", "mac.control", "mac.phase.in.time")
   level2_data_names[["StubTechNonCO2"]] <- c(level2_data_names[["StubTechYr"]], "Non.CO2")
   level2_data_names[["StubTechEmissUnits"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "emissions.unit")
   level2_data_names[["InputEmissCoeff"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "emiss.coef", "input.name")
@@ -425,11 +431,13 @@ generate_level2_data_names <- function() {
   level2_data_names[["OutputEmissions"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "input.emissions")
   level2_data_names[["StbTechOutputEmissions"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "input.emissions")
   level2_data_names[["ReadInControl"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "future.emiss.coeff.name", "future.emiss.coeff.year", "emiss.coeff")
+  level2_data_names[["ResReadInControl"]] <- c("region", "resource", "subresource", "technology", "year", "Non.CO2", "future.emiss.coeff.name", "future.emiss.coeff.year", "emiss.coef")
   level2_data_names[["GDPCtrlMax"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "ctrl.name", "max.reduction")
   level2_data_names[["GDPCtrlSteep"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "ctrl.name", "steepness")
   level2_data_names[["DelEmCtrl"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "ctrl.name")
   level2_data_names[["MAC"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "mac.control", "tax", "mac.reduction", "market.name")
   level2_data_names[["MACTC"]] <- c(level2_data_names[["StubTechNonCO2"]], "mac.control", "tech.change.year", "tech.change")
+  level2_data_names[["MACPhaseIn"]] <- c(level2_data_names[["StubTechNonCO2"]], "mac.control", "mac.phase.in.time")
   level2_data_names[["MAC_NC"]] <- level2_data_names[["MAC"]]
   level2_data_names[["MAC_NoBelowZero"]] <- level2_data_names[["MAC"]]
   level2_data_names[["InputEmFactUnmgd"]] <- c("region", "AgSupplySector", "AgSupplySubsector", "UnmanagedLandTechnology", "year", "Non.CO2", "emiss.coef", "input.name")
@@ -442,6 +450,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["AgGDPCtrlSteep"]] <- c("region", "AgSupplySector", "AgSupplySubsector", "AgProductionTechnology", "year", "Non.CO2", "ctrl.name", "steepness")
   level2_data_names[["AgMAC"]] <- c("region", "AgSupplySector", "AgSupplySubsector", "AgProductionTechnology", "year", "Non.CO2", "mac.control", "tax", "mac.reduction", "market.name")
   level2_data_names[["AgMACTC"]] <- c("region", "AgSupplySector", "AgSupplySubsector", "AgProductionTechnology", "year", "Non.CO2", "mac.control", "tech.change.year", "tech.change")
+  level2_data_names[["AgMACPhaseIn"]] <- c("region", "AgSupplySector", "AgSupplySubsector", "AgProductionTechnology", "year", "Non.CO2", "mac.control", "mac.phase.in.time")
   level2_data_names[["TrnInputEmissCoeff"]] <- c("region", "supplysector", "tranSubsector", "stub.technology", "year", "Non.CO2", "emiss.coef", "input.name")
   level2_data_names[["LinearCtrlInc"]] <- c("region", "supplysector", "tranSubsector","stub.technology", "year", "Non.CO2", "linear.control", "start.year", "end.year", "final.emissions.coefficient")
 
@@ -461,6 +470,19 @@ generate_level2_data_names <- function() {
 #' columns arranged in the order the ModelInterface is expecting them.
 #' @author Pralit Patel
 LEVEL2_DATA_NAMES <- generate_level2_data_names()
+# Save these objects for use as internal package data
+usethis::use_data(LEVEL2_DATA_NAMES, overwrite = TRUE, internal = TRUE)
+rm(list = c("LEVEL2_DATA_NAMES"))
+
+# It is frequently the case that we need to refresh the LEVEL2_DATA_NAMES in order to have
+# a successful driver() run which is required to update the following so we will re-load
+# the package now so the updated LEVEL2_DATA_NAMES can take effect.
+devtools::load_all()
+
+if(USE_DRIVER_DRAKE) {
+  # do an initial call to ensure all targets are up to date
+  driver_drake()
+}
 
 #' GCAM_DATA_MAP
 #'
@@ -471,8 +493,58 @@ LEVEL2_DATA_NAMES <- generate_level2_data_names()
 #' used to generate this latter data, i.e. a tibble of chunk-output-precursor information,
 #' which is used by \link{\code{dstrace}} and various other graphing and diagnostic utilities.
 #' @author BBL
-GCAM_DATA_MAP <- driver(return_data_map_only = TRUE)
+# Note: the above text is not used for package documentation and is instead
+# replicated in data.R for that purpose.
+if(USE_DRIVER_DRAKE) {
+  # we will need to drake "plan" to construct the GCAM_DATA_MAP from cache
+  # note: calling driver_drake with return_plan_only = TRUE does not actually run the driver
+  gcamdata_plan <- driver_drake(return_plan_only = TRUE)
+  GCAM_DATA_MAP <- create_datamap_from_cache(gcamdata_plan)
+} else {
+  GCAM_DATA_MAP <- driver(return_data_map_only = TRUE)
+}
+# Save these objects as external data (i.e. requires explicit call to `data()` to load)
+usethis::use_data(GCAM_DATA_MAP, overwrite = TRUE, internal = FALSE)
 # GCAM_DATA_MAP <- gcamdata:::GCAM_DATA_MAP
+
+prebuilt_data_names <- c(
+  # outputs of module_emissions_L102.nonco2_ceds_R_S_Y
+  "L102.ceds_GFED_nonco2_tg_R_S_F",
+
+  # outputs of module_energy_LA101.en_bal_IEA
+  "L101.en_bal_EJ_R_Si_Fi_Yh_full",
+  "L101.en_bal_EJ_ctry_Si_Fi_Yh_full",
+  "L101.in_EJ_ctry_trn_Fi_Yh",
+  "L101.in_EJ_ctry_bld_Fi_Yh",
+
+  # output of module_energy_LA111.rsrc_fos_Prod
+  "L111.RsrcCurves_EJ_R_Ffos",
+
+  # outputs of module_gcamusa_LB102.FERC_load_curves_USA
+  "L102.date_load_curve_mapping_S_gcamusa",
+  "L102.load_segments_gcamusa",
+  "L102.invest_segments_gcamusa",
+  # outputs of module_gcamusa_LB104.load_curve_enduse_HDDCDD_USA
+  "L104.HistoricalDD_S_Segment_gcamusa",
+  "L104.DD_S_Segment_all_gcamusa",
+
+  # output of module_energy_LA111.rsrc_fos_Prod
+  "L111.RsrcCurves_EJ_R_Ffos",
+
+  # output of module_gcamusa_LA114.wind
+  "L114.CapacityFactor_wind_state_gcamusa",
+  "L114.CapacityFactor_wind_state_segment_gcamusa",
+
+  # output of module_energy_LA118.hydro
+  "L118.out_EJ_R_elec_hydro_Yfut",
+
+  # outputs of module_energy_LA121.liquids
+  "L121.in_EJ_R_unoil_F_Yh",
+  "L121.in_EJ_R_TPES_crude_Yh",
+  "L121.in_EJ_R_TPES_unoil_Yh",
+  "L121.share_R_TPES_biofuel_tech",
+  "L121.BiomassOilRatios_kgGJ_R_C"
+)
 
 #' PREBUILT_DATA
 #'
@@ -482,47 +554,15 @@ GCAM_DATA_MAP <- driver(return_data_map_only = TRUE)
 #' Its immediate downstream dependencies (currently, four chunks) then use the
 #' prebuilt versions of their outputs stored in this object.
 #' @author BBL
-
-# PREBUILT_DATA <- gcamdata:::PREBUILT_DATA
-PREBUILT_DATA <- driver(write_outputs = FALSE,
-                        write_xml = FALSE,
-                        return_data_names = c(
-                          #outputs of module_energy_LA101.en_bal_IEA
-                          "L101.en_bal_EJ_R_Si_Fi_Yh_full",
-                          "L101.en_bal_EJ_ctry_Si_Fi_Yh_full",
-                          "L101.in_EJ_ctry_trn_Fi_Yh",
-                          "L101.in_EJ_ctry_bld_Fi_Yh",
-
-                          # output of module_energy_LA111.rsrc_fos_Prod
-                          "L111.RsrcCurves_EJ_R_Ffos",
-
-                          # outputs of module_gcamusa_LB102.FERC_load_curves_USA
-                          "L102.date_load_curve_mapping_S_gcamusa",
-                          "L102.load_segments_gcamusa",
-                          "L102.invest_segments_gcamusa",
-                          # outputs of module_gcamusa_LB104.load_curve_enduse_HDDCDD_USA
-                          "L104.HistoricalDD_S_Segment_gcamusa",
-                          "L104.DD_S_Segment_all_gcamusa",
-
-                          # output of module_energy_LA111.rsrc_fos_Prod
-                          "L111.RsrcCurves_EJ_R_Ffos",
-
-                          # output of module_gcamusa_LA114.wind
-                          "L114.CapacityFactor_wind_state_gcamusa",
-                          "L114.CapacityFactor_wind_state_segment_gcamusa",
-
-                          # output of module_energy_LA118.hydro
-                          "L118.out_EJ_R_elec_hydro_Yfut",
-
-                          # outputs of module_energy_LA121.liquids
-                          "L121.in_EJ_R_unoil_F_Yh",
-                          "L121.in_EJ_R_TPES_crude_Yh",
-                          "L121.in_EJ_R_TPES_unoil_Yh",
-                          "L121.share_R_TPES_biofuel_tech",
-                          "L121.BiomassOilRatios_kgGJ_R_C"
-                        ))
-
-
-# Save these objects for use as internal package data
-usethis::use_data(GCAM_DATA_MAP, LEVEL2_DATA_NAMES, PREBUILT_DATA, overwrite = TRUE, internal = TRUE)
+# Note: the above text is not used for package documentation and is instead
+# replicated in data.R for that purpose.
+if(USE_DRIVER_DRAKE) {
+  PREBUILT_DATA <- load_from_cache(prebuilt_data_names)
+} else {
+  PREBUILT_DATA <- driver(write_outputs = FALSE,
+                          write_xml = FALSE,
+                          return_data_names = prebuilt_data_names)
+}
+# Save these objects as external data (i.e. requires explicit call to `data()` to load)
+usethis::use_data(PREBUILT_DATA, overwrite = TRUE, internal = FALSE)
 
