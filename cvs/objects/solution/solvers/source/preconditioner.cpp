@@ -406,18 +406,10 @@ SolverComponent::ReturnCode Preconditioner::solve( SolutionInfoSet& aSolutionSet
                     // Never intentionally set a trial demand or trial value
                     // to something less than zero.
                     if(pass>=0) {
-                            newprice = 0.0;
-                            solvable[i].setPrice(newprice);
-                            chg = true;
-                            ++nchg;
-                        }
-                        else if(olddmnd <= 0.0) {
-                            newprice = util::getSmallNumber();
-                            solvable[i].setPrice(newprice);
-                            chg = true;
-                            ++nchg;
-                        } else if(oldprice <= 0.0 && olddmnd > 0.0) {
-							newprice = olddmnd;
+                        double normoldprice = oldprice / fd;
+                        double normolddemand = olddmnd / fd;
+                        if(oldprice <= 0.0 && olddmnd > 0.0) {
+                            newprice = olddmnd;
                             solvable[i].setPrice(newprice);
                             chg = true;
                             ++nchg;
