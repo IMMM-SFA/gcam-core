@@ -365,7 +365,7 @@ double CapacityTechnology::calcInvestmentCapacityScaleFactor( const string& aReg
     double investCreditAdjCost = getCost(aPeriod) ;//+ 1.25;
     double profitRate = std::max( (aNewInvestCost - investCreditAdjCost)/( fabs(investCreditAdjCost) + util::getVerySmallNumber() ), -1.0);
     // use an instance of the profit shutdown decider to do the actual scale calculation
-    return mInvestScaleDecider->calcShutdownCoef( 0, profitRate, aRegionName, aSectorName, mYear, aPeriod );
+    return mInvestScaleDecider->calcShutdownCoef( profitRate, aRegionName, aSectorName, mYear, aPeriod );
 }
 
 /*!
