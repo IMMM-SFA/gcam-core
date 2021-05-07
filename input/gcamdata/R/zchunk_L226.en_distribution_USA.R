@@ -51,7 +51,8 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
              FILE = "gcam-usa/A26.cost_adj_map_USA",
              FILE = "gcam-usa/EIA_USA_energy_prices",
              "L210.RsrcPrice",
-             "L221.GlobalTechCost_en",
+             "L239.TechCost_tra",
+             "L239.TechCoef_reg",
              "L222.GlobalTechCost_en"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L226.DeleteSupplysector_USAelec",
@@ -94,7 +95,8 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
     A26.cost_adj_map_USA <- get_data(all_data, "gcam-usa/A26.cost_adj_map_USA", strip_attributes = TRUE)
     EIA_USA_energy_prices <- get_data(all_data, "gcam-usa/EIA_USA_energy_prices", strip_attributes = TRUE)
     L210.RsrcPrice <- get_data(all_data, "L210.RsrcPrice", strip_attributes = TRUE)
-    L221.GlobalTechCost_en <- get_data(all_data, "L221.GlobalTechCost_en", strip_attributes = TRUE)
+    L239.TechCost_tra <- get_data(all_data, "L239.TechCost_tra", strip_attributes = TRUE)
+    L239.TechCoef_reg <- get_data(all_data, "L239.TechCoef_reg", strip_attributes = TRUE)
     L222.GlobalTechCost_en <- get_data(all_data, "L222.GlobalTechCost_en", strip_attributes = TRUE)
 
 
@@ -330,7 +332,7 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
     L210.RsrcPrice %>%
       filter(region == gcam.USA_REGION) %>%
       select(technology = resource, year, price) %>%
-      bind_rows(L221.GlobalTechCost_en %>%
+      bind_rows(L239.TechCost_tra %>%
                   select(technology, year, price = input.cost),
                 L222.GlobalTechCost_en %>%
                   select(technology, year, price = input.cost)) %>%
@@ -370,13 +372,16 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
                                by = c("fuel", "year")) %>%
       mutate(price_adj = price_hist_mean - price) -> L226.gas_price_adj_USA
 
-    L221.GlobalTechCost_en %>%
-      filter(year %in% MODEL_BASE_YEARS) %>%
+    L239.TechCoef_reg %>%
+      select(LEVEL2_DATA_NAMES[["TechYr"]]) %>%
+      filter(region == gcam.USA_REGION,
+             year %in% MODEL_BASE_YEARS) %>%
       # use semi join to filter for entries we care about
-      semi_join(A26.cost_adj_map_USA, by = "sector.name") %>%
+      semi_join(A26.cost_adj_map_USA, by = c("supplysector" = "sector.name")) %>%
       left_join_error_no_match(A26.cost_adj_map_USA %>%
+                                 filter(is.na(tech_rsrc)) %>%
                                  distinct(sector.name, fuel),
-                               by = "sector.name") %>%
+                               by = c("supplysector" = "sector.name")) %>%
       select(-input.cost) %>%
       mutate(minicam.non.energy.input = "USA price adjustment") %>%
       left_join_error_no_match(L226.gas_price_adj_USA %>%
@@ -384,18 +389,16 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
                                by = c("fuel", "year")) %>%
       select(-fuel) %>%
       # create full time series of model years
-      complete(nesting(sector.name, subsector.name, technology, minicam.non.energy.input),
+      complete(nesting(supplysector, subsector, technology, minicam.non.energy.input),
                year = c(MODEL_YEARS)) %>%
-      group_by(sector.name) %>%
+      group_by(supplysector) %>%
       # set input.cost to 0 in 2100 since we'll phase out this price adjuster over time
       mutate(input.cost = if_else(year == max(MODEL_YEARS), 0, input.cost),
              # interoplate between historical year and final model year
              input.cost = approx_fun(year, input.cost, rule = 2)) %>%
       ungroup() %>%
       mutate(region = gcam.USA_REGION) %>%
-      rename(supplysector = sector.name,
-             subsector = subsector.name,
-             stub.technology = technology) -> L226.StubTechCost_fossil_USA
+      rename(stub.technology = technology) -> L226.StubTechCost_fossil_USA
 
 
     # Optional electricity dispatch end-use demand segments
@@ -585,7 +588,8 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
       add_precursors("gcam-usa/A26.cost_adj_map_USA",
                      "gcam-usa/EIA_USA_energy_prices",
                      "L210.RsrcPrice",
-                     "L221.GlobalTechCost_en",
+                     "L239.TechCost_tra",
+                     "L239.TechCoef_reg",
                      "L222.GlobalTechCost_en") ->
       L226.StubTechCost_fossil_USA
 
