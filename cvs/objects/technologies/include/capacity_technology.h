@@ -162,6 +162,13 @@ public:
     virtual void postCalc( const std::string& aRegionName,
                            const int aPeriod );
     
+    virtual void production(const std::string& aRegionName,
+        const std::string& aSectorName,
+        double aVariableDemand,
+        double aFixedOutputScaleFactor,
+        const GDP* aGDP,
+        const int aPeriod);
+    
     virtual double tryDispatch( const std::string& aRegionName, const std::string& aSectorName,
                         const std::string& aDemandSegment,
                         const double aSegmentScaleFactor, const double aPercentRemainHours,

@@ -674,6 +674,42 @@ void IntermittentCapacityTechnology::postCalc(const std::string &aRegionName, co
 }
 
 /*!
+ * \brief Calculates the output of the technology.
+ * \details TODO: why the specialization
+ * \param aRegionName Region name.
+ * \param aSectorName Sector name, also the name of the product.
+ * \param aVariableDemand The actual amount of output to generate, without adjustment.
+ * \param aGDP Regional GDP container.
+ * \param aPeriod Model period.
+ */
+void IntermittentCapacityTechnology::production(const string& aRegionName,
+                                    const string& aSectorName,
+                                    const double aVariableDemand,
+                                    const double aFixedOutputScaleFactor,
+                                    const GDP* aGDP,
+                                    const int aPeriod)
+{
+    if( !mProductionState[ aPeriod ]->isOperating() ) {
+        return;
+    }
+    // the aVariableDemand is actually the total production to use to drive
+    // demands and outputs
+    double actualProduction = aVariableDemand;
+    // determine the resource driven capacity factor
+    double resourceCF = mProductionState[ aPeriod ]->isNewInvestment() ?
+        // one minus the resource price will give use the marginal capacity factor
+        // which we use for new investment
+        1.0 - (*mResourceInput)->getPrice( aRegionName, aPeriod ) :
+        // existing vintages will have saved it's capacity factor when invested
+        mInvestCapacityFactor;
+    // Calculate input demand.
+    mProductionFunction->calcDemand( mInputs, /*actualProduction*/ mCapacity * resourceCF, aRegionName, aSectorName,
+                                    1, aPeriod, 0, mAlphaZero );
+    // calculate outputs and emissions
+    calcEmissionsAndOutputs( aRegionName, actualProduction, aGDP, aPeriod );
+}
+
+/*!
  * \brief Determine how much energy this technology could provide to meet demands in
  *        the given dispatch segment.
  * \details The load will be determined by the capacity that exists and will be adjusted
