@@ -30,7 +30,7 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
              FILE = 'gcam-usa/reeds_PV_curve_capacity',
              FILE = 'gcam-usa/reeds_PV_curve_CF_avg',
              FILE = 'gcam-usa/reeds_PV_curve_grid_cost',
-             FILE = "energy/A23.globaltech_capital",
+             "L113.globaltech_capital_ATB",
              FILE = "gcam-usa/A23.elecS_tech_mapping_cool",
              #'L223.StubTechMarket_Investment',
              #'L223.TechEff_Dispatch',
@@ -63,7 +63,7 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
     reeds_PV_curve_capacity <- get_data(all_data, 'gcam-usa/reeds_PV_curve_capacity')
     reeds_PV_curve_CF_avg <- get_data(all_data, 'gcam-usa/reeds_PV_curve_CF_avg')
     reeds_PV_curve_grid_cost <- get_data(all_data, 'gcam-usa/reeds_PV_curve_grid_cost')
-    A23.globaltech_capital <- get_data(all_data, "energy/A23.globaltech_capital")
+    L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB")
     A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool")
     #L223.StubTechMarket_Investment <- get_data(all_data, 'L223.StubTechMarket_Investment')
     #L223.TechEff_Dispatch <- get_data(all_data, 'L223.TechEff_Dispatch')
@@ -345,7 +345,7 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
     #   filter(!is.na(tech.change),
     #          year > max(MODEL_BASE_YEARS)) -> L2238.PV_curve_tech_change
 
-    A23.globaltech_capital %>%
+    L113.globaltech_capital_ATB %>%
       filter(technology == "PV") %>%
       pull(fixed.charge.rate) ->
       L2238.fcr
@@ -641,7 +641,7 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
                      'gcam-usa/NREL_us_re_technical_potential',
                      'gcam-usa/NREL_us_re_capacity_factors',
                      'gcam-usa/reeds_PV_curve_grid_cost',
-                     'energy/A23.globaltech_capital',
+                     'L113.globaltech_capital_ATB',
                      'gcam-usa/A23.elecS_tech_mapping_cool',
                      'gcam-usa/non_reeds_PV_grid_cost') ->
                      #'L223.StubTechMarket_Investment',

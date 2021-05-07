@@ -40,9 +40,9 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              FILE = "gcam-usa/NREL_us_re_technical_potential",
              FILE = "energy/A23.globaltech_eff",
              FILE = "gcam-usa/A10.renewable_resource_delete",
-             FILE = "energy/A23.globaltech_OMfixed",
-             FILE = "energy/A23.globaltech_OMvar",
-             FILE = "energy/A23.globaltech_capital",
+             "L113.globaltech_OMfixed_ATB",
+             "L113.globaltech_OMvar_ATB",
+             "L113.globaltech_capital_ATB",
              FILE = "energy/A23.globaltech_retirement",
              FILE = "energy/A23.globaltech_shrwt",
              FILE = "energy/A23.globaltech_co2capture",
@@ -171,9 +171,9 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     NREL_us_re_technical_potential <- get_data(all_data, "gcam-usa/NREL_us_re_technical_potential")
     A10.renewable_resource_delete <- get_data(all_data, "gcam-usa/A10.renewable_resource_delete")
     A23.globaltech_eff <- get_data(all_data, "energy/A23.globaltech_eff")
-    A23.globaltech_OMfixed <- get_data(all_data, "energy/A23.globaltech_OMfixed")
-    A23.globaltech_OMvar <- get_data(all_data, "energy/A23.globaltech_OMvar")
-    A23.globaltech_capital <- get_data(all_data, "energy/A23.globaltech_capital")
+    L113.globaltech_OMfixed_ATB <- get_data(all_data, "L113.globaltech_OMfixed_ATB")
+    L113.globaltech_OMvar_ATB <- get_data(all_data, "L113.globaltech_OMvar_ATB")
+    L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB")
     A23.globaltech_retirement <- get_data(all_data, "energy/A23.globaltech_retirement")
     A23.globaltech_shrwt <- get_data(all_data, "energy/A23.globaltech_shrwt")
     A23.globaltech_co2capture <- get_data(all_data, "energy/A23.globaltech_co2capture")
@@ -580,7 +580,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     calibrated_techs_dispatch_usa %>%
       filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
       select(sector, supplysector, subsector, technology) %>%
-      left_join_error_no_match(bind_rows(A23.globaltech_OMfixed, A23.dispatch_globaltech_OMfixed_additional) %>%
+      left_join_error_no_match(bind_rows(L113.globaltech_OMfixed_ATB, A23.dispatch_globaltech_OMfixed_additional) %>%
                                  select(-improvement.shadow.technology),
                                by = c("supplysector", "subsector", "technology")) %>%
       nest(-sector) %>%
@@ -600,8 +600,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     calibrated_techs_dispatch_usa %>%
       filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
       select(sector, supplysector, subsector, technology) %>%
-      filter(technology %in% c(A23.globaltech_OMvar$technology, A23.dispatch_globaltech_OMvar_additional$technology)) %>%
-      left_join_error_no_match(bind_rows(A23.globaltech_OMvar, A23.dispatch_globaltech_OMvar_additional) %>%
+      filter(technology %in% c(L113.globaltech_OMvar_ATB$technology, A23.dispatch_globaltech_OMvar_additional$technology)) %>%
+      left_join_error_no_match(bind_rows(L113.globaltech_OMvar_ATB, A23.dispatch_globaltech_OMvar_additional) %>%
                                  select(-improvement.shadow.technology),
                                by = c("supplysector", "subsector", "technology")) %>%
       nest(-sector) %>%
@@ -621,7 +621,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     calibrated_techs_dispatch_usa %>%
       filter(sector %in% gcamusa.ELEC_INV_NAMES) %>%
       select(sector, supplysector, subsector, technology) %>%
-      left_join_error_no_match(bind_rows(A23.globaltech_capital,
+      left_join_error_no_match(bind_rows(L113.globaltech_capital_ATB,
                                          A23.dispatch_globaltech_capital_additional) %>%
                                  select(-improvement.shadow.technology),
                                by = c("supplysector", "subsector", "technology")) %>%
@@ -1227,8 +1227,9 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     calibrated_techs_dispatch_usa %>%
       filter(sector == "electricity generation") %>%
       select(sector, supplysector, subsector, technology) %>%
-      filter(technology %in% c(A23.globaltech_OMfixed$technology, A23.dispatch_globaltech_OMfixed_additional$technology)) %>%
-      left_join_error_no_match(bind_rows(A23.globaltech_OMfixed,
+      filter(technology %in% c(L113.globaltech_OMfixed_ATB$technology,
+                               A23.dispatch_globaltech_OMfixed_additional$technology)) %>%
+      left_join_error_no_match(bind_rows(L113.globaltech_OMfixed_ATB,
                                          A23.dispatch_globaltech_OMfixed_additional) %>%
                                  select(-improvement.shadow.technology),
                                by = c("supplysector", "subsector", "technology")) %>%
@@ -1244,8 +1245,9 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     calibrated_techs_dispatch_usa %>%
       filter(sector == "electricity generation") %>%
       select(sector, supplysector, subsector, technology) %>%
-      filter(technology %in% c(A23.globaltech_OMvar$technology, A23.dispatch_globaltech_OMvar_additional$technology)) %>%
-      left_join_error_no_match(bind_rows(A23.globaltech_OMvar,
+      filter(technology %in% c(L113.globaltech_OMvar_ATB$technology,
+                               A23.dispatch_globaltech_OMvar_additional$technology)) %>%
+      left_join_error_no_match(bind_rows(L113.globaltech_OMvar_ATB,
                                          A23.dispatch_globaltech_OMvar_additional) %>%
                                  select(-improvement.shadow.technology),
                                by = c("supplysector", "subsector", "technology")) %>%
@@ -2014,7 +2016,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology OM-fix") %>%
       add_legacy_name("L223.GlobalTechOMfixed_Investment (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
-                     "energy/A23.globaltech_OMfixed",
+                     "L113.globaltech_OMfixed_ATB",
                      "gcam-usa/A23.dispatch_globaltech_OMfixed_additional") ->
       L223.GlobalTechOMfixed_Investment
 
@@ -2024,7 +2026,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology OM-var") %>%
       add_legacy_name("L223.GlobalTechOMvar_Investment (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
-                     "energy/A23.globaltech_OMvar",
+                     "L113.globaltech_OMvar_ATB",
                      "gcam-usa/A23.dispatch_globaltech_OMvar_additional") ->
       L223.GlobalTechOMvar_Investment
 
@@ -2034,7 +2036,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_comments("Set technology capital-overnight and fixed-charge-rate") %>%
       add_legacy_name("L223.L223.GlobalTechCapital_Investment (dispatch branch)") %>%
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
-                     "energy/A23.globaltech_capital",
+                     "L113.globaltech_capital_ATB",
                      "gcam-usa/A23.dispatch_globaltech_capital_additional") ->
       L223.GlobalTechCapital_Investment
 
@@ -2335,7 +2337,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
                      "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential",
-                     "energy/A23.globaltech_OMfixed",
+                     "L113.globaltech_OMfixed_ATB",
                      "gcam-usa/A23.dispatch_globaltech_OMvar_additional",
                      "L210.GrdRenewRsrcCurves_geo_USA",
                      "L120.GridCost_offshore_wind_USA") ->
@@ -2349,7 +2351,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_precursors("gcam-usa/calibrated_techs_dispatch_usa",
                      "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential",
-                     "energy/A23.globaltech_OMvar",
+                     "L113.globaltech_OMvar_ATB",
                      "gcam-usa/A23.dispatch_globaltech_OMvar_additional",
                      "L210.GrdRenewRsrcCurves_geo_USA",
                      "L120.GridCost_offshore_wind_USA") ->

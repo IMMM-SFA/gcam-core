@@ -25,7 +25,7 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
              FILE = 'gcam-usa/reeds_wind_curve_CF_avg',
              FILE = 'gcam-usa/reeds_wind_curve_grid_cost',
              FILE = "gcam-usa/us_state_wind",
-             FILE = "energy/A23.globaltech_capital",
+             "L113.globaltech_capital_ATB",
              "L114.CapacityFactor_wind_state_gcamusa"))
              #FILE = 'gcam-usa/A23.elecS_tech_mapping_cool',
              #FILE = "gcam-usa/A10.renewable_resource_delete",
@@ -48,7 +48,7 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
     reeds_wind_curve_CF_avg <- get_data(all_data, 'gcam-usa/reeds_wind_curve_CF_avg')
     reeds_wind_curve_grid_cost <- get_data(all_data, 'gcam-usa/reeds_wind_curve_grid_cost')
     us_state_wind <- get_data(all_data, "gcam-usa/us_state_wind")
-    A23.globaltech_capital <- get_data(all_data, "energy/A23.globaltech_capital")
+    L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB")
     L114.CapacityFactor_wind_state_gcamusa <- get_data(all_data, "L114.CapacityFactor_wind_state_gcamusa")
     #A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool")
     #A10.renewable_resource_delete <- get_data(all_data, "gcam-usa/A10.renewable_resource_delete")
@@ -150,7 +150,7 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
       L2237.RenewRsrc_wind_reeds_USA
 
 
-    A23.globaltech_capital %>%
+    L113.globaltech_capital_ATB %>%
       filter(technology == "wind") %>%
       pull(fixed.charge.rate) ->
       L2237.fcr
@@ -228,7 +228,7 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
       add_precursors('gcam-usa/reeds_regions_states',
                      'gcam-usa/reeds_wind_curve_CF_avg',
                      'gcam-usa/reeds_wind_curve_grid_cost',
-                     'energy/A23.globaltech_capital') ->
+                     'L113.globaltech_capital_ATB') ->
                      #'gcam-usa/A23.elecS_tech_mapping_cool',
                      #'L223.TechCapFac_Investment') ->
       L2237.StubTechCost_wind_reeds_USA

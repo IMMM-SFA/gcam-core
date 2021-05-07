@@ -96,6 +96,7 @@ generate_level2_data_names <- function() {
   # Subsectors
   level2_data_names[["Subsector"]] <- c("region", "supplysector", "subsector")
   level2_data_names[["SubsectorAll"]] <- c(level2_data_names[["Subsector"]], "logit.year.fillout", "logit.exponent", "year.fillout", "share.weight", "apply.to", "from.year", "to.year", "interpolation.function")
+  level2_data_names[["SubsectorAllTo"]] <- c(level2_data_names[["Subsector"]], "logit.year.fillout", "logit.exponent", "year.fillout", "share.weight", "apply.to", "from.year", "to.year", "to.value", "interpolation.function")
   level2_data_names[["SubsectorLogit"]] <- c(level2_data_names[["Subsector"]], "logit.year.fillout", "logit.exponent")
   level2_data_names[["SubsectorLogitType"]] <- c(level2_data_names[["Subsector"]])
   level2_data_names[["SubsectorLogit_absolute-cost-logit"]] <- c("region", "supplysector", "subsector")
@@ -152,6 +153,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["ResReserveTechLifetime"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "lifetime")
   level2_data_names[["ResReserveTechProfitShutdown"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "median.shutdown.point", "profit.shutdown.steepness")
   level2_data_names[["ResReserveTechDeclinePhase"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "decline.phase.percent")
+  level2_data_names[["ResReserveTechCoef"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "minicam.energy.input", "coefficient")
   level2_data_names[["CapacityTech"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "capacity")
   level2_data_names[["CapacityTechYr"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year")
   level2_data_names[["CapacityTechMinCapFac"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "min.capacity.factor")
@@ -212,6 +214,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["GlobalTechIntGainOutputRatio"]] <- c(level2_data_names[["GlobalTechYr"]], "internal.gains.output.ratio", "internal.gains.market.name")
   level2_data_names[["AvgFossilEffKeyword"]] <- c(level2_data_names[["GlobalTechYr"]], "average.fossil.efficiency")
   level2_data_names[["PrimaryConsKeyword"]] <- c(level2_data_names[["GlobalTechYr"]], "primary.consumption")
+  level2_data_names[["PrimaryConsKeywordff"]] <- c("region", "supplysector", "subsector", "technology", "year", "primary.consumption")
   level2_data_names[["PrimaryRenewKeyword"]] <- c(level2_data_names[["GlobalTechYr"]], "primary.renewable")
   level2_data_names[["PrimaryRenewKeywordInt"]] <- c(level2_data_names[["GlobalTechYr"]], "primary.renewable")
   level2_data_names[["GlobalTechCTaxInput"]] <- c(level2_data_names[["GlobalTechYr"]], "ctax.input", "fuel.C.coef")

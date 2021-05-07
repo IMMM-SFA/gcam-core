@@ -32,7 +32,7 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
              FILE = 'gcam-usa/non_reeds_CSP_grid_cost',
              FILE = 'gcam-usa/NREL_us_re_technical_potential',
              FILE = 'gcam-usa/NREL_us_re_capacity_factors',
-             FILE = "energy/A23.globaltech_capital"))
+             "L113.globaltech_capital_ATB"))
              #FILE = "gcam-usa/A10.renewable_resource_delete",
              #FILE = 'energy/A10.rsrc_info',
              #'L223.StubTechMarket_Investment',
@@ -63,7 +63,7 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
     reeds_CSP_curve_grid_cost <- get_data(all_data, 'gcam-usa/reeds_CSP_curve_grid_cost')
     non_reeds_CSP_grid_cost <- get_data(all_data, 'gcam-usa/non_reeds_CSP_grid_cost')
     NREL_us_re_technical_potential <- get_data(all_data, 'gcam-usa/NREL_us_re_technical_potential')
-    A23.globaltech_capital <- get_data(all_data, "energy/A23.globaltech_capital")
+    L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB")
     NREL_us_re_capacity_factors <- get_data(all_data, 'gcam-usa/NREL_us_re_capacity_factors')
     #A10.renewable_resource_delete <- get_data(all_data, "gcam-usa/A10.renewable_resource_delete")
     #A10.rsrc_info <- get_data(all_data, 'energy/A10.rsrc_info')
@@ -322,7 +322,7 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
     # Hence, creating a list of all states.
     states_list_CSP <- unique(csp_cf_curve$region)
 
-    A23.globaltech_capital %>%
+    L113.globaltech_capital_ATB %>%
       filter(technology == "PV") %>%
       pull(fixed.charge.rate) ->
       L2239.fcr
@@ -609,7 +609,7 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
                      'gcam-usa/reeds_CSP_curve_capacity',
                      'gcam-usa/reeds_CSP_curve_CF',
                      'gcam-usa/reeds_CSP_curve_grid_cost',
-                     'energy/A23.globaltech_capital',
+                     'L113.globaltech_capital_ATB',
                      'gcam-usa/non_reeds_CSP_grid_cost') ->
                      #'L223.StubTechMarket_Investment',
                      #'L223.GlobalTechCapital_Investment',
