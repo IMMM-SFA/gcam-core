@@ -84,29 +84,34 @@ module_gcamusa_LA120.offshore_wind_reeds_USA <- function(command, ...) {
     L120.offshore_wind_potential_EJ %>%
       left_join_error_no_match(L120.offshore_wind_CF, by = c("State", "Wind_Class")) %>%
       # in order to have an upward sloping supply curve we will make the price 1 - capacity factor
-      mutate(price = 1.0 - CF,
+      # We don't want "price" points too close together. Round price (capacity factor) to two digits
+      # and summarize potential by region & price point.
+      mutate(price = round(1.0 - CF, 2),
              renewresource = "offshore wind resource",
              sub.renewable.resource = "offshore wind resource") %>%
-      select(region = State, renewresource, sub.renewable.resource, grade = Wind_Class, available = resource.potential.EJ, extractioncost = price) %>%
+      group_by(region = State, renewresource, sub.renewable.resource, extractioncost = price) %>%
+      summarise(available = sum(resource.potential.EJ)) %>%
+      ungroup() %>%
       arrange(region, extractioncost) %>%
-      # we may have duplicate costs at this point so just collapse them
-      group_by(region, renewresource, sub.renewable.resource, extractioncost) %>%
-      summarize(grade = dplyr::first(grade),
-                available = sum(available)) %>%
-      ungroup() ->
+      group_by(region) %>%
+      mutate(grade = paste0("grade ", row_number())) %>%
+      ungroup() %>%
+      select(region, renewresource, sub.renewable.resource, grade, available, extractioncost) ->
       wind_cf_curve
 
     # Assigning resource to states missing from the ReEDS dataset (currently only Alaska).
     # Alaska is assigned 5% of each supply point (this assumption is defined in offshore_wind_potential_missing).
     # Note that this approach assumes that a missing state's resource is a representative sample of the total USA resource.
     wind_cf_curve %>%
-      group_by(renewresource, sub.renewable.resource, grade) %>%
-      summarize(available = sum(available),
-                extractioncost = mean(extractioncost)) %>%
+      group_by(renewresource, sub.renewable.resource, extractioncost) %>%
+      summarize(available = sum(available)) %>%
       ungroup() %>%
       repeat_add_columns(offshore_wind_potential_missing) %>%
       mutate(region = state,
              available = available * rsrc_frac) %>%
+      group_by(region) %>%
+      mutate(grade = paste0("grade ", row_number())) %>%
+      ungroup() %>%
       select(names(wind_cf_curve)) %>%
       bind_rows(wind_cf_curve) ->
       wind_cf_curve

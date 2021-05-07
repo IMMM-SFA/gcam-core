@@ -175,20 +175,20 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
     # join the capacity factors with the CSP potential to create a graded supply curve
     L2239.CSP_potential_EJ %>%
       left_join(L2239.CSP_CF, by = c("State", "CSP.class"="class")) %>%
-      # We noticed that there are some classes with same capacity factor data. For example, in VT, class 3 and 4 have same
-      # capacity factors. This is becuase the hourly capacity factor data from ReEDS are also the same for these classes. This
-      # could be an error in the data. We get around this simply by making sure that the duplicate points in terms of capacity
-      # factors are removed and the resource potentials in those classes are accounted for.
-      # group_by(State, CF) %>%
-      # summarize(PV.class = dplyr::first(PV.class),
-      #           resource.potential.EJ = sum(resource.potential.EJ)) %>%
-      # ungroup() %>%
       # in order to have an upward sloping supply curve we will make the price 1 - capacity factor
-      mutate(price = 1.0 - CF,
+      # We don't want "price" points too close together. Round price (capacity factor) to two digits
+      # and summarize potential by region & price point.
+      mutate(price = round(1.0 - CF, 2),
              renewresource = "CSP_resource",
              sub.renewable.resource = "CSP_resource") %>%
-      select(region = State, renewresource, sub.renewable.resource, grade = CSP.class, available = resource.potential.EJ, extractioncost = price) %>%
-      arrange(region, extractioncost) ->
+      group_by(region = State, renewresource, sub.renewable.resource, extractioncost = price) %>%
+      summarise(available = sum(resource.potential.EJ)) %>%
+      ungroup() %>%
+      arrange(region, extractioncost) %>%
+      group_by(region) %>%
+      mutate(grade = paste0("grade ", row_number())) %>%
+      ungroup() %>%
+      select(region, renewresource, sub.renewable.resource, grade, available, extractioncost) ->
       csp_cf_curve
 
     # we need to add a "grade 0" and sub.renewable.resource expects the cumulative quantity

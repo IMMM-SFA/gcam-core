@@ -99,11 +99,19 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
     L2237.wind_potential_EJ %>%
       left_join_error_no_match(L2237.wind_CF, by = c("State", "Wind.Class")) %>%
       # in order to have an upward sloping supply curve we will make the price 1 - capacity factor
-      mutate(price = 1.0 - CF,
+      # We don't want "price" points too close together. Round price (capacity factor) to two digits
+      # and summarize potential by region & price point.
+      mutate(price = round(1.0 - CF, 2),
              renewresource = "onshore wind resource",
              sub.renewable.resource = "onshore wind resource") %>%
-      select(region = State, renewresource, sub.renewable.resource, grade = Wind.Class, available = resource.potential.EJ, extractioncost = price) %>%
-      arrange(region, extractioncost) ->
+      group_by(region = State, renewresource, sub.renewable.resource, extractioncost = price) %>%
+      summarise(available = sum(resource.potential.EJ)) %>%
+      ungroup() %>%
+      arrange(region, extractioncost) %>%
+      group_by(region) %>%
+      mutate(grade = paste0("grade ", row_number())) %>%
+      ungroup() %>%
+      select(region, renewresource, sub.renewable.resource, grade, available, extractioncost) ->
       wind_cf_curve
 
     # fall back to old data for states not included in the reeds data
