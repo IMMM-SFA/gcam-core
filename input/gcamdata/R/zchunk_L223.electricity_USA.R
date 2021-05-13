@@ -52,10 +52,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              FILE = "gcam-usa/A23.elec_tech_mapping_cool_shares_fut",
              FILE = "gcam-usa/usa_seawater_states_basins",
              FILE = "water/A23.CoolingSystemCosts",
-             "L114.CapacityFactor_wind_state_gcamusa",
              "L119.CapacityFactor_PV_state_gcamusa",
              "L119.CapacityFactor_CSP_state_gcamusa",
              "L114.CapacityFactor_wind_state_segment_gcamusa",
+             "L114.CapacityFactor_wind_offshore_state_segment_gcamusa",
              "L119.CapacityFactor_PV_state_segment_gcamusa",
              "L119.CapacityFactor_CSP_state_segment_gcamusa",
              "L123.in_EJ_state_elec_F_tech",
@@ -185,8 +185,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     usa_seawater_states_basins <- get_data(all_data, "gcam-usa/usa_seawater_states_basins")
     A23.CoolingSystemCosts <- get_data(all_data, "water/A23.CoolingSystemCosts")
 
-    L114.CapacityFactor_wind_state <- get_data(all_data, "L114.CapacityFactor_wind_state_gcamusa")
     L114.CapacityFactor_wind_state_segment <- get_data(all_data, "L114.CapacityFactor_wind_state_segment_gcamusa")
+    L114.CapacityFactor_wind_offshore_state_segment <- get_data(all_data, "L114.CapacityFactor_wind_offshore_state_segment_gcamusa")
     L119.CapacityFactor_PV_state <- get_data(all_data, "L119.CapacityFactor_PV_state_gcamusa")
     L119.CapacityFactor_PV_state_segment <- get_data(all_data, "L119.CapacityFactor_PV_state_segment_gcamusa")
     L119.CapacityFactor_CSP_state <- get_data(all_data, "L119.CapacityFactor_CSP_state_gcamusa")
@@ -1361,7 +1361,9 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     #   expand(., ., segment = gcamusa.ELEC_LOAD_SEGMENT_ORDER) ->
     #   L223.hydro_CapFac_segment
 
+
     bind_rows(L114.CapacityFactor_wind_state_segment,
+              L114.CapacityFactor_wind_offshore_state_segment,
               L119.CapacityFactor_PV_state_segment,
               L119.CapacityFactor_CSP_state_segment) %>%
               #L223.hydro_CapFac_segment) %>%
@@ -2105,8 +2107,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Set technology capacity factor for wind PV CSP for state") %>%
       add_legacy_name("L223.TechCapFac_Investment (dispatch branch)") %>%
-      add_precursors("L114.CapacityFactor_wind_state_gcamusa",
-                     "L119.CapacityFactor_PV_state_gcamusa",
+      add_precursors("L119.CapacityFactor_PV_state_gcamusa",
                      "L119.CapacityFactor_CSP_state_gcamusa",
                      "gcam-usa/calibrated_techs_dispatch_usa",
                      "L102.invest_segments_gcamusa") ->
@@ -2263,6 +2264,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "gcam-usa/A10.renewable_resource_delete",
                      "gcam-usa/NREL_us_re_technical_potential",
                      "L114.CapacityFactor_wind_state_segment_gcamusa",
+                     "L114.CapacityFactor_wind_offshore_state_segment_gcamusa",
                      "L119.CapacityFactor_CSP_state_segment_gcamusa",
                      "L119.CapacityFactor_PV_state_segment_gcamusa",
                      "L210.GrdRenewRsrcCurves_geo_USA",

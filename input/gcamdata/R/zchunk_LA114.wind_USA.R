@@ -23,10 +23,13 @@ module_gcamusa_LA114.wind <- function(command, ...) {
               "L113.globaltech_OMvar_ATB",
               FILE = "gcam-usa/reeds_regions_states",
               "L102.date_load_curve_mapping_S_gcamusa",
-              OPTIONAL_FILE = "gcam-usa/dispatch/wind_CFt"))
+              OPTIONAL_FILE = "gcam-usa/dispatch/wind_CFt",
+              OPTIONAL_FILE = "gcam-usa/dispatch/wind_offshore_CFt_v2018_wide"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L114.CapacityFactor_wind_state_gcamusa",
-             "L114.CapacityFactor_wind_state_segment_gcamusa"))
+             "L114.CapacityFactor_wind_state_segment_gcamusa",
+             "L114.CapacityFactor_wind_offshore_state_gcamusa",
+             "L114.CapacityFactor_wind_offshore_state_segment_gcamusa"))
   } else if(command == driver.MAKE) {
 
     # silence package check
@@ -42,6 +45,7 @@ module_gcamusa_LA114.wind <- function(command, ...) {
     L113.globaltech_OMvar_ATB <- get_data(all_data, "L113.globaltech_OMvar_ATB")
     L102.date_load_curve_mapping_S <- get_data(all_data, "L102.date_load_curve_mapping_S_gcamusa")
     wind_cf_raw <- get_data(all_data, "gcam-usa/dispatch/wind_CFt")
+    wind_offshore_CFt <- get_data(all_data, "gcam-usa/dispatch/wind_offshore_CFt_v2018_wide")
     ReEDS_region_mapping_raw <- get_data(all_data, "gcam-usa/reeds_regions_states")
 
 
@@ -51,6 +55,8 @@ module_gcamusa_LA114.wind <- function(command, ...) {
       # Proprietary FERC hourly data are not available, so used saved outputs
       L114.CapacityFactor_wind_state_gcamusa <- prebuilt_data("L114.CapacityFactor_wind_state_gcamusa")
       L114.CapacityFactor_wind_state_segment_gcamusa <- prebuilt_data("L114.CapacityFactor_wind_state_segment_gcamusa")
+      L114.CapacityFactor_wind_offshore_state_gcamusa <- prebuilt_data("L114.CapacityFactor_wind_offshore_state_gcamusa")
+      L114.CapacityFactor_wind_offshore_state_segment_gcamusa <- prebuilt_data("L114.CapacityFactor_wind_offshore_state_segment_gcamusa")
     } else {
 
       # Interpolating the cost tables as necessary to get the costs in the assumed wind base cost year
@@ -141,6 +147,32 @@ module_gcamusa_LA114.wind <- function(command, ...) {
         bind_rows(L114.CapacityFactor_wind_state_avg, .) ->
         L114.CapacityFactor_wind_state_avg
 
+
+      # Offshore wind.  Similar process as onshore wind (above), except we don't have
+      # pre-existing data to fall back on for gaps in ReEDS data
+      wind_offshore_CFt %>%
+        gather("hour", "capacity_factor", dplyr::matches("[0-9]+")) %>%
+        mutate(hour = as.integer(hour)) %>%
+        mutate(date = as.POSIXct(paste0(MODEL_FINAL_BASE_YEAR, "-01-01 00:00:00"), tz="EST") + ((hour - 1) * 60 * 60)) %>%
+        left_join_error_no_match(ReEDS_region_mapping, by = c("Wind_Resource_Region" = "Region")) %>%
+        left_join_error_no_match(L102.date_load_curve_mapping_S, by=c("state", "date")) ->
+        wind_offshore_cf
+
+      wind_offshore_cf %>%
+        mutate(segment = if_else(is_super_peak, gcamusa.ELEC_SEGMENT_SUPERPEAK,
+                                 paste(month, day_night, sep=gcamusa.SEGMENT_DELIM))) %>%
+        group_by(state, segment) %>%
+        summarize(capacity.factor = mean(capacity_factor)) %>%
+        ungroup() ->
+        L114.CapacityFactor_wind_offshore_state_segment_gcamusa
+
+      wind_offshore_cf %>%
+        group_by(state) %>%
+        summarize(capacity.factor = mean(capacity_factor)) %>%
+        ungroup() ->
+        L114.CapacityFactor_wind_offshore_state_gcamusa
+
+
       # Produce outputs
       L114.CapacityFactor_wind_state_avg %>%
         mutate(sector = "electricity generation") %>%
@@ -170,11 +202,38 @@ module_gcamusa_LA114.wind <- function(command, ...) {
         same_precursors_as("L114.CapacityFactor_wind_state_gcamusa") ->
         L114.CapacityFactor_wind_state_segment_gcamusa
 
+      L114.CapacityFactor_wind_offshore_state_gcamusa %>%
+        mutate(sector = "electricity generation") %>%
+        mutate(fuel = "wind_offshore") %>%
+        # add attributes for output...
+        add_title("avaerage annual capacity factor by state for offshore wind") %>%
+        add_units("%") %>%
+        add_comments("avaerage annual capacity factor by state for offshore wind") %>%
+        add_precursors("gcam-usa/reeds_regions_states",
+                       "L102.date_load_curve_mapping_S_gcamusa",
+                       "gcam-usa/dispatch/wind_offshore_CFt_v2018_wide") ->
+        L114.CapacityFactor_wind_offshore_state_gcamusa
+
+      L114.CapacityFactor_wind_offshore_state_segment_gcamusa %>%
+        mutate(sector = "electricity generation") %>%
+        mutate(fuel = "wind_offshore") %>%
+        # add attributes for output...
+        add_title("Capacity factor by state and load segment for offshore wind", overwrite = T) %>%
+        add_units("Unitless") %>%
+        add_comments("Capacity factor by state and load segment for offshore wind") %>%
+        same_precursors_as("L114.CapacityFactor_wind_offshore_state_gcamusa") ->
+        L114.CapacityFactor_wind_offshore_state_segment_gcamusa
+
       verify_identical_prebuilt(L114.CapacityFactor_wind_state_gcamusa,
-                                L114.CapacityFactor_wind_state_segment_gcamusa)
+                                L114.CapacityFactor_wind_state_segment_gcamusa,
+                                L114.CapacityFactor_wind_offshore_state_gcamusa,
+                                L114.CapacityFactor_wind_offshore_state_segment_gcamusa)
     }
 
-    return_data(L114.CapacityFactor_wind_state_gcamusa, L114.CapacityFactor_wind_state_segment_gcamusa)
+    return_data(L114.CapacityFactor_wind_state_gcamusa,
+                L114.CapacityFactor_wind_state_segment_gcamusa,
+                L114.CapacityFactor_wind_offshore_state_gcamusa,
+                L114.CapacityFactor_wind_offshore_state_segment_gcamusa)
   } else {
     stop("Unknown command")
   }
