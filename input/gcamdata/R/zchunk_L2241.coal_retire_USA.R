@@ -85,15 +85,15 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     ECP_mapping <- get_data(all_data, "gcam-usa/dispatch/ECP_mapping")
     vintage_bins_mapping <- get_data(all_data, "gcam-usa/dispatch/coal_vintage_bins")
 
-    L105.eia_elec_data_water <- get_data(all_data, "L105.eia_elec_data_water")
-    L123.in_EJ_state_elec_F_tech <- get_data(all_data, "L123.in_EJ_state_elec_F_tech")
-    L223.CapacityTech <- get_data(all_data, "L223.CapacityTech")
-    L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
-    L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
-    L223.TechOMfixed_Dispatch <- get_data(all_data, "L223.TechOMfixed_Dispatch")
-    L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch")
-    L223.TechCapFac_Dispatch <- get_data(all_data, "L223.TechCapFac_Dispatch")
-    L223.TechCoef_Dispatch_cool <- get_data(all_data, "L223.TechCoef_Dispatch_cool")
+    L105.eia_elec_data_water <- get_data(all_data, "L105.eia_elec_data_water", strip_attributes = TRUE)
+    L123.in_EJ_state_elec_F_tech <- get_data(all_data, "L123.in_EJ_state_elec_F_tech", strip_attributes = TRUE)
+    L223.CapacityTech <- get_data(all_data, "L223.CapacityTech", strip_attributes = TRUE)
+    L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch", strip_attributes = TRUE)
+    L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal", strip_attributes = TRUE)
+    L223.TechOMfixed_Dispatch <- get_data(all_data, "L223.TechOMfixed_Dispatch", strip_attributes = TRUE)
+    L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch", strip_attributes = TRUE)
+    L223.TechCapFac_Dispatch <- get_data(all_data, "L223.TechCapFac_Dispatch", strip_attributes = TRUE)
+    L223.TechCoef_Dispatch_cool <- get_data(all_data, "L223.TechCoef_Dispatch_cool", strip_attributes = TRUE)
 
 
     # -----------------------------------------------------------------------------
@@ -179,9 +179,6 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     # still active
     L2241.CapacityTech %>%
       filter(cap_ret_share < 1) %>%
-      # rename(capacity = capacity_remaining,
-      #        en_in = en_in_remaining,
-      #        en_out = en_out_remaining) %>%
       select(region, dispatch.sector, subsector, cap.tech, cap.tech.cool, year,
              original_capacity, cap_ret_share, en_in_ret_share, en_out_ret_share, efficiency) ->
       L2241.CapacityTech_remaining
@@ -189,9 +186,6 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     # retired
     L2241.CapacityTech %>%
       filter(cap_ret_share > 0) %>%
-      # rename(capacity = capacity_retired,
-      #        en_in = en_in_retired,
-      #        en_out = en_out_retired) %>%
       select(region, dispatch.sector, subsector, cap.tech, cap.tech.cool, year,
              original_capacity, cap_ret_share, en_in_ret_share, en_out_ret_share, efficiency)  ->
       L2241.CapacityTech_retired

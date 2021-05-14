@@ -37,11 +37,11 @@ module_gcamusa_L2231.nonewcoal_USA <- function(command, ...) {
       Electric.sector.technology <- Electric.sector <- subsector0 <- NULL  # silence package check notes
 
     # Load required inputs
-    L223.SubsectorShrwt_Investment <- get_data(all_data, "L223.SubsectorShrwt_Investment")
-    L222.StubTechMarket_en_USA <- get_data(all_data, "L222.StubTechMarket_en_USA")
-    L232.StubTechMarket_ind_USA <- get_data(all_data, "L232.StubTechMarket_ind_USA")
-    L222.StubTech_en <- get_data(all_data, "L222.StubTech_en")
-    L225.StubTech_h2 <- get_data(all_data, "L225.StubTech_h2")
+    L223.SubsectorShrwt_Investment <- get_data(all_data, "L223.SubsectorShrwt_Investment", strip_attributes = TRUE)
+    L222.StubTechMarket_en_USA <- get_data(all_data, "L222.StubTechMarket_en_USA", strip_attributes = TRUE)
+    L232.StubTechMarket_ind_USA <- get_data(all_data, "L232.StubTechMarket_ind_USA", strip_attributes = TRUE)
+    L222.StubTech_en <- get_data(all_data, "L222.StubTech_en", strip_attributes = TRUE)
+    L225.StubTech_h2 <- get_data(all_data, "L225.StubTech_h2", strip_attributes = TRUE)
 
 
     # ===================================================
