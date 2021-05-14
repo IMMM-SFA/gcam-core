@@ -40,18 +40,17 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              FILE = "gcam-usa/NREL_us_re_technical_potential",
              FILE = "energy/A23.globaltech_eff",
              FILE = "gcam-usa/A10.renewable_resource_delete",
-             "L113.globaltech_OMfixed_ATB",
-             "L113.globaltech_OMvar_ATB",
-             "L113.globaltech_capital_ATB",
              FILE = "energy/A23.globaltech_retirement",
              FILE = "energy/A23.globaltech_shrwt",
              FILE = "energy/A23.globaltech_co2capture",
              FILE = "energy/A23.globaltech_keyword",
              FILE = "gcam-usa/A23.elec_tech_mapping_cool",
-             # FILE = "gcam-usa/elec_tech_water_map",
              FILE = "gcam-usa/A23.elec_tech_mapping_cool_shares_fut",
              FILE = "gcam-usa/usa_seawater_states_basins",
              FILE = "water/A23.CoolingSystemCosts",
+             "L113.globaltech_OMfixed_ATB",
+             "L113.globaltech_OMvar_ATB",
+             "L113.globaltech_capital_ATB",
              "L119.CapacityFactor_PV_state_gcamusa",
              "L119.CapacityFactor_CSP_state_gcamusa",
              "L114.CapacityFactor_wind_state_segment_gcamusa",
@@ -172,27 +171,25 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     NREL_us_re_technical_potential <- get_data(all_data, "gcam-usa/NREL_us_re_technical_potential")
     A10.renewable_resource_delete <- get_data(all_data, "gcam-usa/A10.renewable_resource_delete")
     A23.globaltech_eff <- get_data(all_data, "energy/A23.globaltech_eff")
-    L113.globaltech_OMfixed_ATB <- get_data(all_data, "L113.globaltech_OMfixed_ATB")
-    L113.globaltech_OMvar_ATB <- get_data(all_data, "L113.globaltech_OMvar_ATB")
-    L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB")
     A23.globaltech_retirement <- get_data(all_data, "energy/A23.globaltech_retirement")
     A23.globaltech_shrwt <- get_data(all_data, "energy/A23.globaltech_shrwt")
     A23.globaltech_co2capture <- get_data(all_data, "energy/A23.globaltech_co2capture")
     A23.globaltech_keyword <- get_data(all_data, "energy/A23.globaltech_keyword")
 
     A23.elec_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elec_tech_mapping_cool")
-    # elec_tech_water_map <- get_data(all_data, "gcam-usa/elec_tech_water_map")
     A23.elec_tech_mapping_cool_shares_fut <- get_data(all_data, "gcam-usa/A23.elec_tech_mapping_cool_shares_fut")
     usa_seawater_states_basins <- get_data(all_data, "gcam-usa/usa_seawater_states_basins")
     A23.CoolingSystemCosts <- get_data(all_data, "water/A23.CoolingSystemCosts")
 
+    L113.globaltech_OMfixed_ATB <- get_data(all_data, "L113.globaltech_OMfixed_ATB")
+    L113.globaltech_OMvar_ATB <- get_data(all_data, "L113.globaltech_OMvar_ATB")
+    L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB")
     L114.CapacityFactor_wind_state_segment <- get_data(all_data, "L114.CapacityFactor_wind_state_segment_gcamusa")
     L114.CapacityFactor_wind_offshore_state_segment <- get_data(all_data, "L114.CapacityFactor_wind_offshore_state_segment_gcamusa")
     L119.CapacityFactor_PV_state <- get_data(all_data, "L119.CapacityFactor_PV_state_gcamusa")
     L119.CapacityFactor_PV_state_segment <- get_data(all_data, "L119.CapacityFactor_PV_state_segment_gcamusa")
     L119.CapacityFactor_CSP_state <- get_data(all_data, "L119.CapacityFactor_CSP_state_gcamusa")
     L119.CapacityFactor_CSP_state_segment <- get_data(all_data, "L119.CapacityFactor_CSP_state_segment_gcamusa")
-
     L123.in_EJ_state_elec_F_tech <- get_data(all_data, "L123.in_EJ_state_elec_F_tech")
     L123.out_EJ_state_elec_F_tech <- get_data(all_data, "L123.out_EJ_state_elec_F_tech")
     L123.capacity_EJ_state_elec_F_tech <- get_data(all_data, "L123.capacity_EJ_state_elec_F_tech")
@@ -1965,7 +1962,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "L210.GrdRenewRsrcCurves_geo_USA",
                      "L120.GridCost_offshore_wind_USA",
                      "gcam-usa/A23.elec_tech_mapping_cool",
-                     # "gcam-usa/elec_tech_water_map",
                      "gcam-usa/A23.elec_tech_mapping_cool_shares_fut",
                      "gcam-usa/usa_seawater_states_basins",
                      "gcam-usa/A23.dispatch_additional_mapping",

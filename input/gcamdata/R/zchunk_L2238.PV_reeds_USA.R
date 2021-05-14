@@ -166,9 +166,9 @@ module_gcamusa_L2238.PV_reeds_USA <- function(command, ...) {
     L2238.PV_CF %>%
       left_join_error_no_match(L2238.PV_potential_EJ, by = c("State", "PV.class")) %>%
       # in order to have an upward sloping supply curve we will make the price 1 - capacity factor
-      # We don't want "price" points too close together. Round price (capacity factor) to two digits
+      # We don't want "price" points too close together. Round price (capacity factor) to three digits
       # and summarize potential by region & price point.
-      mutate(price = round(1.0 - CF, 2),
+      mutate(price = round(1.0 - CF, 3),
              renewresource = "PV_resource",
              sub.renewable.resource = "PV_resource") %>%
       group_by(region = State, renewresource, sub.renewable.resource, extractioncost = price) %>%

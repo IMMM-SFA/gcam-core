@@ -158,9 +158,9 @@ module_gcamusa_L2239.CSP_reeds_USA <- function(command, ...) {
     L2239.CSP_potential_EJ %>%
       left_join(L2239.CSP_CF, by = c("State", "CSP.class"="class")) %>%
       # in order to have an upward sloping supply curve we will make the price 1 - capacity factor
-      # We don't want "price" points too close together. Round price (capacity factor) to two digits
+      # We don't want "price" points too close together. Round price (capacity factor) to three digits
       # and summarize potential by region & price point.
-      mutate(price = round(1.0 - CF, 2),
+      mutate(price = round(1.0 - CF, 3),
              renewresource = "CSP_resource",
              sub.renewable.resource = "CSP_resource") %>%
       group_by(region = State, renewresource, sub.renewable.resource, extractioncost = price) %>%
