@@ -63,16 +63,16 @@ module_gcamusa_LB105.EIA_elec_vintage_USA <- function(command, ...) {
 
     # process EIA 923 Form to get efficiency data, but seems not used anyway for now
     eia_923_data_raw %>%
-      mutate(en_in = Total.Fuel.Consumption.MMBtus * CONV_BTU_KJ * 1e-9) %>%
-      mutate(en_in_elec = Elec.Fuel.Consumption.MMBtus * CONV_BTU_KJ * 1e-9) %>%
-      mutate(en_out = Net.Generation.MWh * CONV_MWH_EJ) %>%
+      mutate(en_in = Total.Fuel.Consumption.MMBtus * CONV_BTU_KJ * 1e-9,
+             en_in_elec = Elec.Fuel.Consumption.MMBtus * CONV_BTU_KJ * 1e-9,
+             en_out = Net.Generation.MWh * CONV_MWH_EJ) %>%
       filter(!is.na(Reported.Fuel.Type.Code)) %>%
       left_join_error_no_match(prime_mover_map, by = c("Reported.Fuel.Type.Code", "Reported.Prime.Mover")) %>%
       group_by(Plant.ID, Combined.Heat.Power.Plant, Plant.State, NERC.Region, gcam_fuel, elec_tech) %>%
       summarize(en_in = sum(en_in), en_in_elec = sum(en_in_elec), en_out = sum(en_out)) %>%
       ungroup() %>%
-      mutate(eff = en_out / en_in) %>%
-      mutate(eff_elec = en_out / en_in_elec) ->
+      mutate(eff = en_out / en_in,
+             eff_elec = en_out / en_in_elec) ->
       eia_923_data
 
     # process EIA 860 Form to get capacity by vintage
@@ -84,20 +84,20 @@ module_gcamusa_LB105.EIA_elec_vintage_USA <- function(command, ...) {
       # plant, using capacity weighted average for now
       mutate(vint_cap_weighted = Operating.Year * Nameplate.MW) %>%
       group_by(Plant.Code, Sector.Name, gcam_fuel, elec_tech) %>%
-      summarize(Nameplate.MW=sum(Nameplate.MW),
+      summarize(Nameplate.MW = sum(Nameplate.MW),
                 vint_cap_weighted = sum(vint_cap_weighted)) %>%
-      mutate(vintage=as.integer(vint_cap_weighted / Nameplate.MW)) %>%
+      mutate(vintage = as.integer(vint_cap_weighted / Nameplate.MW)) %>%
       select(-vint_cap_weighted) %>%
-      mutate(NAMEPLATE=Nameplate.MW * CONV_MWH_EJ * CONV_YEAR_HOURS) %>%
+      mutate(NAMEPLATE = Nameplate.MW * CONV_MWH_EJ * CONV_YEAR_HOURS) %>%
       ungroup() ->
       eia_860_data
 
     # combine Form 923 and 860
     eia_923_data %>%
       ungroup() %>%
-      # left missing 2566 plant IDs, right missing 180 plant IDs, but both missing IDs did not add up to
-      # too much generation/capacity
-      inner_join(eia_860_data, by=c("Plant.ID"="Plant.Code", "gcam_fuel", "elec_tech")) ->
+      # eia_923_data is missing 2566 plant IDs, eia_860_data is missing 180 plant IDs,
+      # but both missing IDs did not add up to too much generation/capacity
+      inner_join(eia_860_data, by = c("Plant.ID" = "Plant.Code", "gcam_fuel", "elec_tech")) ->
       eia_elec_data_full
 
     # keep non-CHP only
@@ -106,8 +106,8 @@ module_gcamusa_LB105.EIA_elec_vintage_USA <- function(command, ...) {
       # otherwise there will be no capacity in DC and creating a lot of mapping errors in subsequent chunks
       mutate(Combined.Heat.Power.Plant = ifelse(Plant.State == "DC", "N", Combined.Heat.Power.Plant)) %>%
       filter(Combined.Heat.Power.Plant == 'N' , eff_elec >= 0, eff_elec <= 1.0) %>%
-      mutate(elec_tech = if_else(gcam_fuel == "biomass", "biomass_conv", elec_tech)) %>%
-      mutate(elec_tech = sub('_ice$', '_turbine', elec_tech)) %>%
+      mutate(elec_tech = if_else(gcam_fuel == "biomass", "biomass_conv", elec_tech),
+             elec_tech = sub('_ice$', '_turbine', elec_tech)) %>%
       filter(elec_tech %in% unique(calibrated_techs_dispatch_usa$elec_tech)) %>%
       rename(state = Plant.State) ->
       eia_elec_data
@@ -152,10 +152,6 @@ module_gcamusa_LB105.EIA_elec_vintage_USA <- function(command, ...) {
       distinct(Plant.Code, state, cooling_system, water_type) ->
       UCS_db_adj
 
-    # UCS_db_adj %>%
-    #   group_by(Plant.Code, state) %>%
-    #   filter(row_number() > 1) -> TEST
-
 
     # Join EIA capacity / generation data w/ UCS cooling data
     eia_elec_data %>%
@@ -185,24 +181,10 @@ module_gcamusa_LB105.EIA_elec_vintage_USA <- function(command, ...) {
     eia_elec_data_water %>%
       filter(is.na(cooling_system)) -> eia_elec_data_water_missing
 
-    # eia_elec_data_water %>%
-    #   summarise(en_out = sum(en_out),
-    #             NAMEPLATE = sum(NAMEPLATE)) -> TEST1
-    #
-    # eia_elec_data_water_cool %>%
-    #   summarise(en_out = sum(en_out),
-    #             NAMEPLATE = sum(NAMEPLATE)) -> TEST2
-    #
-    # eia_elec_data_water_missing %>%
-    #   summarise(en_out = sum(en_out),
-    #             NAMEPLATE = sum(NAMEPLATE)) -> TEST3
-
     # calculate state cooling system shares to fill in missing cooling tech data
     # calcluate shares on capacity and generation basis
     eia_elec_data_water_cool %>%
-      # mutate(seawater = if_else(state %in% seawater_states_basins, "coastal", "non-coastal")) %>%
       group_by(state, gcam_fuel, elec_tech, cooling_system, water_type) %>%
-      # group_by(seawater, gcam_fuel, elec_tech, cooling_system, water_type) %>%
       summarise(Nameplate.MW = sum(Nameplate.MW),
                 en_out = sum(en_out)) %>%
       ungroup() %>%
@@ -215,9 +197,7 @@ module_gcamusa_LB105.EIA_elec_vintage_USA <- function(command, ...) {
     # this is needed because some states have missing cooling system data for fuels / techs which
     # do not exist elsewhere in the state
     eia_elec_data_water_cool %>%
-      # mutate(seawater = if_else(state %in% seawater_states_basins, "coastal", "non-coastal")) %>%
       group_by(gcam_fuel, elec_tech, cooling_system, water_type) %>%
-      # group_by(seawater, gcam_fuel, elec_tech, cooling_system, water_type) %>%
       summarise(Nameplate.MW = sum(Nameplate.MW),
                 en_out = sum(en_out)) %>%
       ungroup() %>%
@@ -232,26 +212,18 @@ module_gcamusa_LB105.EIA_elec_vintage_USA <- function(command, ...) {
 
     # map shares
     eia_elec_data_water_missing %>%
-      # mutate(seawater = if_else(state %in% seawater_states_basins, "coastal", "non-coastal")) %>%
       # remove cooling_system and water_type columns, which have NAs
       select(-cooling_system, -water_type) %>%
       # join is intended to duplicate rows by number of potential cooling techs
       # LJENM will throw error, so LJ is used
       left_join(eia_elec_data_water_cool_shares %>%
-                                 select(-Nameplate.MW, -en_out),
-                               by = c("state", "gcam_fuel", "elec_tech")) %>%
+                  select(-Nameplate.MW, -en_out),
+                by = c("state", "gcam_fuel", "elec_tech")) %>%
       # some states have plants with missing cooling system data for fuels / techs
       # which do not exist elsewhere in the state
       # assign the most common cooling system per fuel & tech nationally
       # LJENM throws error because of NAs (already existing in LHS), left_join is used
       left_join(eia_elec_cool_predominant, by = c("gcam_fuel", "elec_tech")) %>%
-      # # TODO:  more robust
-      # # one NA entry - IN RL_CC (no other non-coastal techs in this category)
-      # # assign recirculating freshwater for now
-      # replace_na(list(cooling_system = "recirculating",
-      #                 water_type = "fresh",
-      #                 gen_share = 1,
-      #                 cap_share = 1)) %>%
       # share out energy variables by energy share, and capacity variables by capacity share
       # the underlying assumption is that cooling systems have identical efficiencies for a given gen tech
       mutate(cooling_system = if_else(is.na(cooling_system), cooling_system_predominant, cooling_system),
@@ -264,7 +236,8 @@ module_gcamusa_LB105.EIA_elec_vintage_USA <- function(command, ...) {
              Nameplate.MW = Nameplate.MW * cap_share,
              NAMEPLATE = NAMEPLATE * cap_share) %>%
       # remove seawater, cap share, and gen share info, which we no longer need
-      select(-cap_share, -gen_share, -cooling_system_predominant, -water_type_predominant, -gen_share_predominant, -cap_share_predominant) ->
+      select(-cap_share, -gen_share, -cooling_system_predominant, -water_type_predominant,
+             -gen_share_predominant, -cap_share_predominant) ->
       eia_elec_data_water_inferred
 
     eia_elec_data_water_cool %>%

@@ -2,7 +2,7 @@
 
 #' module_gcamusa_L2237.wind_reeds_USA
 #'
-#' Create updated wind resource supply curves consistent with ReEDS.
+#' Create wind resource supply curves for USA states based on data from NREL ReEDS model.
 #'
 #' @param command API command to execute
 #' @param ... other optional parameters, depending on command
@@ -27,12 +27,6 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
              FILE = "gcam-usa/us_state_wind",
              "L113.globaltech_capital_ATB",
              "L114.CapacityFactor_wind_state_gcamusa"))
-             #FILE = 'gcam-usa/A23.elecS_tech_mapping_cool',
-             #FILE = "gcam-usa/A10.renewable_resource_delete",
-             #'L223.TechCapFac_Investment',
-             #'L223.GlobalTechCapital_Investment',
-             #'L223.GlobalIntTechCapital_elec',
-             #'L223.GlobalIntTechOMfixed_elec'))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c('L2237.RenewRsrc_wind_reeds_USA',
              'L2237.GrdRenewRsrcCurves_wind_reeds_USA',
@@ -50,12 +44,6 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
     us_state_wind <- get_data(all_data, "gcam-usa/us_state_wind")
     L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB")
     L114.CapacityFactor_wind_state_gcamusa <- get_data(all_data, "L114.CapacityFactor_wind_state_gcamusa")
-    #A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool")
-    #A10.renewable_resource_delete <- get_data(all_data, "gcam-usa/A10.renewable_resource_delete")
-    #L223.TechCapFac_Investment <- get_data(all_data, 'L223.TechCapFac_Investment')
-    #L223.GlobalTechCapital_Investment <- get_data(all_data, 'L223.GlobalTechCapital_Investment')
-    #L223.GlobalIntTechCapital_elec <- get_data(all_data, 'L223.GlobalIntTechCapital_elec')
-    #L223.GlobalIntTechOMfixed_elec <- get_data(all_data, 'L223.GlobalIntTechOMfixed_elec')
 
     # Silence package checks
     region <- state <- states_list <- sector.name <- subsector.name <- intermittent.technology <-
@@ -149,7 +137,6 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
              market = region) ->
       L2237.RenewRsrc_wind_reeds_USA
 
-
     L113.globaltech_capital_ATB %>%
       filter(technology == "wind") %>%
       pull(fixed.charge.rate) ->
@@ -176,18 +163,6 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
       group_by(State) %>%
       summarise(grid.cost = round(min(grid.cost), energy.DIGITS_COST)) %>%
       ungroup() -> L2237.grid.cost
-
-    # Reading the grid connection cost as a state-level non-energy cost adder
-    # A23.elecS_tech_mapping_cool %>%
-    #   filter(technology == "wind") %>%
-    #   select(region, supplysector, subsector0, subsector, stub.technology = technology, year) %>%
-    #   mutate(minicam.non.energy.input = "grid connection cost") %>%
-    #   # using semi_join to filter out states not included in the ReEDS data set,
-    #   # for which wind resource curves are not being updated
-    #   semi_join(L2237.grid.cost, by = c("region" = "State")) %>%
-    #   left_join_error_no_match(L2237.grid.cost, by = c("region" = "State")) %>%
-    #   rename(input.cost = grid.cost) %>%
-    #   filter(!is.na(input.cost)) -> L2237.StubTechCost_wind_reeds_USA
 
     L2237.GrdRenewRsrcCurves_wind_reeds_USA %>%
       select(region, resource = renewresource, subresource = sub.renewable.resource) %>%
@@ -229,8 +204,6 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
                      'gcam-usa/reeds_wind_curve_CF_avg',
                      'gcam-usa/reeds_wind_curve_grid_cost',
                      'L113.globaltech_capital_ATB') ->
-                     #'gcam-usa/A23.elecS_tech_mapping_cool',
-                     #'L223.TechCapFac_Investment') ->
       L2237.StubTechCost_wind_reeds_USA
 
     L2237.ResTechShrwt_wind_reeds_USA %>%

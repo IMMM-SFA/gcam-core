@@ -20,19 +20,18 @@
 module_gcamusa_LA120.offshore_wind_reeds_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/reeds_regions_states",
-             "L113.globaltech_capital_ATB",
-             "L113.globaltech_OMfixed_ATB",
              FILE = "gcam-usa/A20.offshore_wind_class_depth",
              FILE = "energy/A20.offshore_wind_depth_cap_cost",
              FILE = "gcam-usa/reeds_offshore_wind_curve_capacity",
              FILE = "gcam-usa/reeds_offshore_wind_curve_grid_cost",
              FILE = "gcam-usa/reeds_offshore_wind_curve_CF_avg",
-             FILE = "gcam-usa/offshore_wind_potential_missing"))
+             FILE = "gcam-usa/offshore_wind_potential_missing",
+             "L113.globaltech_capital_ATB",
+             "L113.globaltech_OMfixed_ATB"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L120.GrdRenewRsrcCurves_offshorewind_reeds_USA",
              "L120.GridCost_offshore_wind_USA",
              "L120.RenewRsrc_offshorewind_reeds_USA"))
-             #"L120.RegCapFactor_offshore_wind_USA"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -47,14 +46,14 @@ module_gcamusa_LA120.offshore_wind_reeds_USA <- function(command, ...) {
 
     # Load required inputs
     reeds_regions_states <- get_data(all_data, "gcam-usa/reeds_regions_states")
-    L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB")
-    L113.globaltech_OMfixed_ATB <- get_data(all_data, "L113.globaltech_OMfixed_ATB")
     A20.offshore_wind_class_depth <- get_data(all_data, "gcam-usa/A20.offshore_wind_class_depth")
     A20.offshore_wind_depth_cap_cost <- get_data(all_data, "energy/A20.offshore_wind_depth_cap_cost")
     reeds_offshore_wind_curve_capacity  <- get_data(all_data, "gcam-usa/reeds_offshore_wind_curve_capacity")
     reeds_offshore_wind_curve_grid_cost <- get_data(all_data, "gcam-usa/reeds_offshore_wind_curve_grid_cost")
     reeds_offshore_wind_curve_CF_avg <- get_data(all_data, "gcam-usa/reeds_offshore_wind_curve_CF_avg")
     offshore_wind_potential_missing  <- get_data(all_data, "gcam-usa/offshore_wind_potential_missing")
+    L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB")
+    L113.globaltech_OMfixed_ATB <- get_data(all_data, "L113.globaltech_OMfixed_ATB")
 
     # -----------------------------------------------------------------------------
     # Perform computations

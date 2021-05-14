@@ -33,6 +33,7 @@ module_gcamusa_LB1232.Elec_subregions <- function(command, ...) {
     L123.out_EJ_state_elec_F_tech <- get_data(all_data, "L123.out_EJ_state_elec_F_tech")
 
     # ===================================================
+
     # Aggregating states to electricity subregions
     L1232.out_EJ_sR_elec <- L123.out_EJ_state_elec_F_tech %>%
       left_join_error_no_match(states_subregions, by = "state") %>%
@@ -40,8 +41,8 @@ module_gcamusa_LB1232.Elec_subregions <- function(command, ...) {
       summarise(value = sum(value)) %>%
       ungroup() %>%
       # ===================================================
-    # Produce outputs
-    add_title("Electricity generation by FERC region/fuel/technology") %>%
+      # Produce outputs
+      add_title("Electricity generation by FERC region/fuel/technology") %>%
       add_units("EJ") %>%
       add_comments("L123.out_EJ_state_elec_F_tech aggregated to FERC region") %>%
       add_legacy_name("L1232.out_EJ_sR_elec") %>%
