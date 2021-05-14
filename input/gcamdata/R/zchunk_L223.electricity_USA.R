@@ -18,7 +18,7 @@
 #' \code{L223.GlobalTechCapture_Investment}, \code{L223.GlobalTechCost_Investment}, \code{L223.GlobalTechCost_CapacityCreditCalulator},
 #' \code{L223.Sector_Investment_StateShare}, \code{L223.Subsector_Investment_StateShare}, \code{L223.CapacityTech},
 #' \code{L223.SubsectorShrwtFllt_Investment_StateShare}, \code{L223.TechCoef_Investment_StateShare},
-#' \code{L223.TechShrwt_Investment_StateShare}, \code{L223.TechShrwt_Dispatch}, \code{L223.TechEff_Dispatch},
+#' \code{L223.TechShrwt_Investment_StateShare}, \code{L223.TechShrwt_Dispatch}, \code{L223.TechEff_Dispatch}, \code{L223.CapacityTechInputPMult_geo},
 #' \code{L223.DispatchSector}, \code{L223.Sector_Dispatch}, \code{L223.SubsectorLogit_Dispatch}, \code{L223.SubsectorShrwtFllt_Dispatch},
 #' \code{L223.CapacityTech_FutureTechs}, \code{L223.TechOMvar_Dispatch}, \code{L223.TechLifetime_Dispatch}, \code{L223.TechSCurve_Dispatch},
 #' \code{L223.TechCapFac_Dispatch}, \code{L223.TechCarbonCapture_Dispatch}, \code{L223.Production_Dispatch}, \code{L223.TechEff_Cal},
@@ -133,6 +133,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              "L223.CapacityTech",
              "L223.TechShrwt_Dispatch",
              "L223.TechEff_Dispatch",
+             "L223.CapacityTechInputPMult_geo",
              "L223.StubTechEffFlag_Dispatch",
              "L223.TechCoef_Dispatch_cool",
              "L223.TechOMfixed_Dispatch",
@@ -1888,8 +1889,18 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              input.cost = grid.cost) ->
       L223.StubTechCost_offshore_wind_Investment
 
+    # Geothermal resource cost should not impact variable cost of generation / dispatch order
+    # Create a pmult table to zero out resource cost in the dispatch sector
+    # Note that we can't delete the input entirely because the resource is "consumed" in the dispatch sector
+    L223.TechEff_Dispatch %>%
+      filter(subsector == "geothermal") %>%
+      select(-efficiency, -market.name) %>%
+      mutate(price.unit.conversion = 0) %>%
+      rename(dispatch.sector = supplysector,
+             capacity.technology = technology) -> L223.CapacityTechInputPMult_geo
 
-    # ----------------------------------------------------------------------------------------------------------------------------
+
+    # -----------------------------------------------------------------------------
     # Produce outputs
 
       L223.Sector_Investment %>%
@@ -2316,6 +2327,13 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "L120.GridCost_offshore_wind_USA") ->
       L223.TechEff_Dispatch
 
+    L223.CapacityTechInputPMult_geo %>%
+      add_title("Dispatch technology price multiplier for geothermal resource") %>%
+      add_units("multiplier") %>%
+      add_comments("Set zero price multiplier for geothermal resource for dispatch techs") %>%
+      same_precursors_as(L223.TechEff_Dispatch) ->
+      L223.CapacityTechInputPMult_geo
+
     L223.StubTechEffFlag_Dispatch %>%
       add_title("Add flag for intermittent capacity technologies") %>%
       add_units("NA") %>%
@@ -2569,6 +2587,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                 L223.CapacityTech,
                 L223.TechShrwt_Dispatch,
                 L223.TechEff_Dispatch,
+                L223.CapacityTechInputPMult_geo,
                 L223.StubTechEffFlag_Dispatch,
                 L223.TechCoef_Dispatch_cool,
                 L223.TechOMfixed_Dispatch,
