@@ -196,7 +196,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
 
     L102.load_segments <- get_data(all_data, "L102.load_segments_gcamusa", strip_attributes = TRUE)
     L102.invest_segments <- get_data(all_data, "L102.invest_segments_gcamusa", strip_attributes = TRUE)
-    A23.dispatch_sector <- get_data(all_data, "gcam-usa/A23.dispatch_sector")
+    A23.dispatch_sector <- get_data(all_data, "gcam-usa/A23.dispatch_sector", strip_attributes = TRUE)
     A23.dispatch_sector_state_share <- get_data(all_data, "gcam-usa/A23.dispatch_sector_state_share")
     A23.dispatch_subsector_interp <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_interp")
     A23.dispatch_subsector_shrwt <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_shrwt")
