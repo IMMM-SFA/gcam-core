@@ -63,7 +63,7 @@ module_gcamusa_L2237.wind_reeds_USA <- function(command, ...) {
     # L2237.wind_CF: Capacity factor by state and wind class
     reeds_wind_curve_CF_avg %>%
       left_join_error_no_match(reeds_regions_states, by = c("Wind.Resource.Region" = "Region")) %>%
-      select(State, Wind.Class = TRG, CF ) %>%
+      select(State, Wind.Class = TRG, CF) %>%
       group_by(State, Wind.Class) %>%
       summarise_if(is.numeric, mean) %>%
       ungroup() -> L2237.wind_CF

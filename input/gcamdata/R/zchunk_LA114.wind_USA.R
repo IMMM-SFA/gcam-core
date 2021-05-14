@@ -75,7 +75,7 @@ module_gcamusa_LA114.wind <- function(command, ...) {
         mutate(data = lapply(data, fill_exp_decay_extrapolate, energy.WIND.BASE.COST.YEAR)) %>%
         unnest()
 
-      #Extract the costs. These are in 1975$
+      # Extract the costs. These are in 1975$
 
       L114.CapCost <- L113.globaltech_capital_ATB$value[L113.globaltech_capital_ATB$year == energy.WIND.BASE.COST.YEAR &
                                                      L113.globaltech_capital_ATB$technology == "wind"]
@@ -120,14 +120,31 @@ module_gcamusa_LA114.wind <- function(command, ...) {
         left_join_error_no_match(L102.date_load_curve_mapping_S, by=c("state", "date")) ->
         wind_cf
 
+      # For each state, find the wind class that has the highest annual average capacity factor
+      # We'll use this class to calculate segment capacity factors, to be consistent with our
+      # approach in module_gcamusa_L2237.wind_reeds_USA and the annual capacity factors
+      # we use elsewhere in the model.  Note that with our new capacity factor -based resource curves,
+      # these segment capacity factors will be reduced over time as more capacity is deployed using
+      # lower quality resources.
       wind_cf %>%
-        mutate(segment = if_else(is_super_peak, gcamusa.ELEC_SEGMENT_SUPERPEAK, paste(month, day_night, sep=gcamusa.SEGMENT_DELIM))) %>%
+        group_by(state, class) %>%
+        summarize(capacity.factor = mean(capacity_factor)) %>%
+        ungroup() %>%
+        group_by(state) %>%
+        filter(capacity.factor == max(capacity.factor)) ->
+        wind_cf_state_class_annual
+
+      wind_cf %>%
+        mutate(segment = if_else(is_super_peak, gcamusa.ELEC_SEGMENT_SUPERPEAK,
+                                 paste(month, day_night, sep=gcamusa.SEGMENT_DELIM))) %>%
+        semi_join(wind_cf_state_class_annual, by = c("state", "class")) %>%
         group_by(state, segment) %>%
         summarize(capacity.factor = mean(capacity_factor)) %>%
         ungroup() ->
         L114.CapacityFactor_wind_state_segment
 
       wind_cf %>%
+        semi_join(wind_cf_state_class_annual, by = c("state", "class")) %>%
         group_by(state) %>%
         summarize(capacity.factor = mean(capacity_factor)) %>%
         ungroup() ->
@@ -158,15 +175,32 @@ module_gcamusa_LA114.wind <- function(command, ...) {
         left_join_error_no_match(L102.date_load_curve_mapping_S, by=c("state", "date")) ->
         wind_offshore_cf
 
+      # For each state, find the wind class that has the highest annual average capacity factor
+      # We'll use this class to calculate segment capacity factors, to be consistent with our
+      # approach in module_gcamusa_LA120.offshore_wind_reeds_USA and the annual capacity factors
+      # we use elsewhere in the model.  Note that with our new capacity factor -based resource curves,
+      # these segment capacity factors will be reduced over time as more capacity is deployed using
+      # lower quality resources.
+      wind_offshore_cf %>%
+        group_by(state, class) %>%
+        summarize(capacity.factor = mean(capacity_factor)) %>%
+        ungroup() %>%
+        group_by(state) %>%
+        filter(capacity.factor == max(capacity.factor)) %>%
+        ungroup() ->
+        wind_offshore_cf_state_class_annual
+
       wind_offshore_cf %>%
         mutate(segment = if_else(is_super_peak, gcamusa.ELEC_SEGMENT_SUPERPEAK,
                                  paste(month, day_night, sep=gcamusa.SEGMENT_DELIM))) %>%
+        semi_join(wind_offshore_cf_state_class_annual, by = c("state", "class")) %>%
         group_by(state, segment) %>%
         summarize(capacity.factor = mean(capacity_factor)) %>%
         ungroup() ->
         L114.CapacityFactor_wind_offshore_state_segment_gcamusa
 
       wind_offshore_cf %>%
+        semi_join(wind_offshore_cf_state_class_annual, by = c("state", "class")) %>%
         group_by(state) %>%
         summarize(capacity.factor = mean(capacity_factor)) %>%
         ungroup() ->
@@ -199,7 +233,7 @@ module_gcamusa_LA114.wind <- function(command, ...) {
         add_units("Unitless") %>%
         add_comments("capacity factor by state and load segment for wind") %>%
         add_legacy_name("L114.CapacityFactor_wind_state_segment (dispatch branch)") %>%
-        same_precursors_as("L114.CapacityFactor_wind_state_gcamusa") ->
+        same_precursors_as(L114.CapacityFactor_wind_state_gcamusa) ->
         L114.CapacityFactor_wind_state_segment_gcamusa
 
       L114.CapacityFactor_wind_offshore_state_gcamusa %>%
@@ -221,7 +255,7 @@ module_gcamusa_LA114.wind <- function(command, ...) {
         add_title("Capacity factor by state and load segment for offshore wind", overwrite = T) %>%
         add_units("Unitless") %>%
         add_comments("Capacity factor by state and load segment for offshore wind") %>%
-        same_precursors_as("L114.CapacityFactor_wind_offshore_state_gcamusa") ->
+        same_precursors_as(L114.CapacityFactor_wind_offshore_state_gcamusa) ->
         L114.CapacityFactor_wind_offshore_state_segment_gcamusa
 
       verify_identical_prebuilt(L114.CapacityFactor_wind_state_gcamusa,

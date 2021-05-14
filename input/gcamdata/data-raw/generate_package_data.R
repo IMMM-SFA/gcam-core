@@ -537,6 +537,8 @@ prebuilt_data_names <- c(
   # output of module_gcamusa_LA114.wind
   "L114.CapacityFactor_wind_state_gcamusa",
   "L114.CapacityFactor_wind_state_segment_gcamusa",
+  "L114.CapacityFactor_wind_offshore_state_gcamusa",
+  "L114.CapacityFactor_wind_offshore_state_segment_gcamusa",
 
   # output of module_energy_LA118.hydro
   "L118.out_EJ_R_elec_hydro_Yfut",
