@@ -35,10 +35,10 @@ module_gcamusa_L2242.elec_hydro_USA <- function(command, ...) {
     # Load required inputs
     states_subregions <- get_data(all_data, 'gcam-usa/states_subregions')
     EIA_elec_gen_hydro <- get_data(all_data, 'gcam-usa/EIA_elec_gen_hydro')
-    L223.CapacityTech <- get_data(all_data, 'L223.CapacityTech')
-    L223.Production_Dispatch <- get_data(all_data, 'L223.Production_Dispatch')
-    L223.TechCapFac_Dispatch <- get_data(all_data, 'L223.TechCapFac_Dispatch')
-    L223.TechLifetime_Dispatch <- get_data(all_data, 'L223.TechLifetime_Dispatch')
+    L223.CapacityTech <- get_data(all_data, 'L223.CapacityTech', strip_attributes = TRUE)
+    L223.Production_Dispatch <- get_data(all_data, 'L223.Production_Dispatch', strip_attributes = TRUE)
+    L223.TechCapFac_Dispatch <- get_data(all_data, 'L223.TechCapFac_Dispatch', strip_attributes = TRUE)
+    L223.TechLifetime_Dispatch <- get_data(all_data, 'L223.TechLifetime_Dispatch', strip_attributes = TRUE)
 
     # Silence package checks
     subsector <- year <- fixedOutput <- state <- EIA <- EIA_ratio <- fixedOutput_2015 <-
