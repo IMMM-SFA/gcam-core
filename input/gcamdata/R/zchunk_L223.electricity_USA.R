@@ -179,7 +179,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     A23.elec_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elec_tech_mapping_cool")
     A23.elec_tech_mapping_cool_shares_fut <- get_data(all_data, "gcam-usa/A23.elec_tech_mapping_cool_shares_fut")
     usa_seawater_states_basins <- get_data(all_data, "gcam-usa/usa_seawater_states_basins")
-    A23.CoolingSystemCosts <- get_data(all_data, "water/A23.CoolingSystemCosts")
+    A23.CoolingSystemCosts <- get_data(all_data, "water/A23.CoolingSystemCosts", strip_attributes = TRUE)
 
     L113.globaltech_OMfixed_ATB <- get_data(all_data, "L113.globaltech_OMfixed_ATB", strip_attributes = TRUE)
     L113.globaltech_OMvar_ATB <- get_data(all_data, "L113.globaltech_OMvar_ATB", strip_attributes = TRUE)
@@ -197,12 +197,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L102.load_segments <- get_data(all_data, "L102.load_segments_gcamusa", strip_attributes = TRUE)
     L102.invest_segments <- get_data(all_data, "L102.invest_segments_gcamusa", strip_attributes = TRUE)
     A23.dispatch_sector <- get_data(all_data, "gcam-usa/A23.dispatch_sector", strip_attributes = TRUE)
-    A23.dispatch_sector_state_share <- get_data(all_data, "gcam-usa/A23.dispatch_sector_state_share")
-    A23.dispatch_subsector_interp <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_interp")
-    A23.dispatch_subsector_shrwt <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_shrwt")
+    A23.dispatch_sector_state_share <- get_data(all_data, "gcam-usa/A23.dispatch_sector_state_share", strip_attributes = TRUE)
+    A23.dispatch_subsector_interp <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_interp", strip_attributes = TRUE)
+    A23.dispatch_subsector_shrwt <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_shrwt", strip_attributes = TRUE)
     A23.dispatch_subsector_shrwt_state_adj <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_shrwt_state_adj")
-    A23.dispatch_subsector_shrwt_interpto_state_adj <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_shrwt_interpto_state_adj")
-    A23.dispatch_subsector_logit <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_logit")
+    A23.dispatch_subsector_shrwt_interpto_state_adj <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_shrwt_interpto_state_adj", strip_attributes = TRUE)
+    A23.dispatch_subsector_logit <- get_data(all_data, "gcam-usa/A23.dispatch_subsector_logit", strip_attributes = TRUE)
     A23.dispatch_globaltech_eff_additional <- get_data(all_data, "gcam-usa/A23.dispatch_globaltech_eff_additional")
     A23.dispatch_globaltech_OMfixed_additional <- get_data(all_data, "gcam-usa/A23.dispatch_globaltech_OMfixed_additional")
     A23.dispatch_globaltech_OMvar_additional <- get_data(all_data, "gcam-usa/A23.dispatch_globaltech_OMvar_additional")
@@ -212,7 +212,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     A23.globaltech_keyword_additional <- get_data(all_data, "gcam-usa/A23.globaltech_keyword_additional")
     A23.dispatch_additional_mapping <- get_data(all_data, "gcam-usa/A23.dispatch_additional_mapping")
     A23.dispatch_capacitytech_min_cap_fac <- get_data(all_data, "gcam-usa/A23.dispatch_capacitytech_min_cap_fac")
-    calibrated_techs_dispatch_usa <- get_data(all_data, "gcam-usa/calibrated_techs_dispatch_usa")
+    calibrated_techs_dispatch_usa <- get_data(all_data, "gcam-usa/calibrated_techs_dispatch_usa", strip_attributes = TRUE)
     capacity_credit_calculator <- get_data(all_data, "gcam-usa/dispatch/capacity_credit_calculator")
     TechTrialMarket_mapping <- get_data(all_data, "gcam-usa/dispatch/TechTrialMarket_mapping")
     L223.PrimaryRenewKeyword_elec <- get_data(all_data, "L223.PrimaryRenewKeyword_elec", strip_attributes = TRUE)
@@ -229,7 +229,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     # -----------------------------------------------------------------------------
     # 2. Perform computations
 
-    #A vector indicate states where geothermal electric technologies will not be created
+    # A vector indicate states where geothermal electric technologies will not be created
     NREL_us_re_technical_potential %>%
       left_join(states_subregions, by = c("State" = "state_name")) %>%
       filter(Geothermal_Hydrothermal_GWh == 0) %>%
@@ -237,7 +237,7 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       unlist ->
       geo_states_noresource
 
-    # # A vector indicating states where CSP electric technologies will not be created
+    # A vector indicating states where CSP electric technologies will not be created
     L119.CapacityFactor_CSP_state %>%
       # states with effectively no resource has a very minor capacity.factor (<0.01)
       # remove these states to avoid creating CSP technologies there
