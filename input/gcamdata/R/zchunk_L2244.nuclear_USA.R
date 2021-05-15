@@ -21,10 +21,6 @@
 module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/nuc_gen2",
-             FILE = "gcam-usa/A23.elecS_tech_mapping",
-             FILE = "gcam-usa/A23.elecS_tech_mapping_cool",
-             FILE = "gcam-usa/usa_seawater_states_basins",
-             FILE = "gcam-usa/A23.elecS_tech_availability",
              "L223.CapacityTech",
              "L223.Production_Dispatch"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -41,12 +37,8 @@ module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
 
     # Load required inputs
     nuc_gen2 <- get_data(all_data, "gcam-usa/nuc_gen2")
-    A23.elecS_tech_mapping <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping", strip_attributes = TRUE)
-    A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool")
-    A23.elecS_tech_availability <- get_data(all_data, "gcam-usa/A23.elecS_tech_availability")
-    usa_seawater_states_basins <- get_data(all_data, "gcam-usa/usa_seawater_states_basins")
     L223.CapacityTech <- get_data(all_data, "L223.CapacityTech", strip_attributes = TRUE)
-    L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
+    L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch", strip_attributes = TRUE)
 
     # -----------------------------------------------------------------------------
 
@@ -154,10 +146,6 @@ module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
       add_comments("S-curve parameters are based on minimized error between estimated and planned retirement data.") %>%
       add_legacy_name("L2244.StubTechSCurve_nuc_gen2_USA") %>%
       add_precursors("gcam-usa/nuc_gen2",
-                     "gcam-usa/A23.elecS_tech_availability",
-                     "gcam-usa/A23.elecS_tech_mapping_cool",
-                     "gcam-usa/usa_seawater_states_basins",
-                     "gcam-usa/A23.elecS_tech_mapping",
                      "L223.Production_Dispatch") ->
       L2244.TechSCurve_nuc_gen2_USA
 
