@@ -523,16 +523,13 @@ prebuilt_data_names <- c(
   # output of module_energy_LA111.rsrc_fos_Prod
   "L111.RsrcCurves_EJ_R_Ffos",
 
+  # output of module_energy_LA111.rsrc_fos_Prod
+  "L111.RsrcCurves_EJ_R_Ffos",
+
   # outputs of module_gcamusa_LB102.FERC_load_curves_USA
   "L102.date_load_curve_mapping_S_gcamusa",
   "L102.load_segments_gcamusa",
   "L102.invest_segments_gcamusa",
-  # outputs of module_gcamusa_LB104.load_curve_enduse_HDDCDD_USA
-  "L104.HistoricalDD_S_Segment_gcamusa",
-  "L104.DD_S_Segment_all_gcamusa",
-
-  # output of module_energy_LA111.rsrc_fos_Prod
-  "L111.RsrcCurves_EJ_R_Ffos",
 
   # output of module_gcamusa_LA114.wind
   "L114.CapacityFactor_wind_state_gcamusa",

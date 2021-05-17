@@ -39,7 +39,6 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
              FILE = "energy/A_ff_RegionalSector",
              FILE = "energy/A26.sector",
              FILE = "gcam-usa/EIA_state_energy_prices",
-             "L103.load_segments_sector_gcamusa",
              "L202.CarbonCoef",
              "L226.Supplysector_en",
              "L226.SubsectorLogit_en",
@@ -83,7 +82,6 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
     A26.sector <- get_data(all_data, "energy/A26.sector", strip_attributes = TRUE)
     EIA_state_energy_prices <- get_data(all_data, "gcam-usa/EIA_state_energy_prices", strip_attributes = TRUE)
     L202.CarbonCoef <- get_data(all_data, "L202.CarbonCoef", strip_attributes = TRUE)
-    L103.load_segments_sector <- get_data(all_data, "L103.load_segments_sector_gcamusa")
     L226.Supplysector_en <- get_data(all_data, "L226.Supplysector_en", strip_attributes = TRUE)
     L226.SubsectorLogit_en <- get_data(all_data, "L226.SubsectorLogit_en", strip_attributes = TRUE)
     L226.SubsectorShrwtFllt_en <- get_data(all_data, "L226.SubsectorShrwtFllt_en", strip_attributes = TRUE)
@@ -254,7 +252,7 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
         rename(input.cost = adjustment) %>%
         mutate(input.cost = round(input.cost, energy.DIGITS_COST)) ->
         L226.TechCost_en_USA
-      }
+    }
 
 
     # L226.Ccoef: carbon coef for cost adder sectors
@@ -401,30 +399,6 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
       rename(stub.technology = technology) -> L226.StubTechCost_fossil_USA
 
 
-    # Optional electricity dispatch end-use demand segments
-    # YO Apr 2020
-    # Disaggregate electric subsector, technology, minicam.energy.input and minicam.non.energy.input by dispatch segments
-    # Not disaggregating supplysectors for final services will not be distributed by segments yet.
-    # Building services will eventually need to be split by demand segment.
-
-    if(gcamusa.USE_ELEC_DEMAND_SEGMENTS) {
-      # Attach states to grid-region names in L103.load_segments_sector_gcamusa.csv (L103.load_segments_sector)
-      L103.load_segments_sector %>%
-        left_join(states_subregions %>%
-                    dplyr::select(state,grid_region),
-                  by=("grid_region")) ->
-        segStates
-
-      L226.TechCoef_electd_USA %>%
-        left_join(segStates %>%
-                    dplyr::select(state, sector, segment, generation.fraction),
-                  by=c("region" = "state", "subsector" = "sector")) %>%
-        mutate(coefficient = coefficient * generation.fraction,
-               minicam.energy.input = paste( minicam.energy.input, segment, sep="_"))%>%
-        select(-segment,-generation.fraction) ->
-        L226.TechCoef_electd_USA
-    }
-
     # Produce outputs
     L226.DeleteSupplysector_USAelec %>%
       add_title("Removing the electricity T&D sectors of the USA region") %>%
@@ -456,16 +430,15 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
       add_precursors("L226.GlobalTechCost_en") ->
       L226.TechCost_electd_USA
 
-      L226.TechCoef_electd_USA %>%
-        add_title("Tech coefficients for elec T&D when using regional electricity markets") %>%
-        add_units("NA") %>%
-        add_comments("Tech coeff for elec T&D when using regional electricity markets.") %>%
-        add_comments("The elect_td sectors can not use the global tech database as their input is different.") %>%
-        add_legacy_name("L226.TechCoef_electd_USA") %>%
-        add_precursors("gcam-usa/states_subregions",
-                       "L226.StubTechCoef_electd",
-                       "L103.load_segments_sector_gcamusa") ->
-        L226.TechCoef_electd_USA
+    L226.TechCoef_electd_USA %>%
+      add_title("Tech coefficients for elec T&D when using regional electricity markets") %>%
+      add_units("NA") %>%
+      add_comments("Tech coeff for elec T&D when using regional electricity markets.") %>%
+      add_comments("The elect_td sectors can not use the global tech database as their input is different.") %>%
+      add_legacy_name("L226.TechCoef_electd_USA") %>%
+      add_precursors("gcam-usa/states_subregions",
+                     "L226.StubTechCoef_electd") ->
+      L226.TechCoef_electd_USA
 
     L226.Supplysector_en_USA %>%
       add_title("Supply sector information for energy handling and delivery sectors.") %>%
