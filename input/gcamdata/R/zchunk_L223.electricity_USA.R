@@ -1130,7 +1130,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
 
     # ===========================================================================
     ## subsector logit dispatch and share-weight
-    # TODO: these values are not actually going to be used
+    # NOTE: These values are not actually going to be used, as dispatch is performed
+    # on the basis of least variable cost optimization, rather than logit sharing.
     # ===========================================================================
 
     calibrated_techs_dispatch_usa %>%
@@ -1249,7 +1250,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                                          A23.dispatch_globaltech_OMvar_additional) %>%
                                  select(-improvement.shadow.technology),
                                by = c("supplysector", "subsector", "technology")) %>%
-      # TODO: double check why solar doesn't have OMvar
       fill_exp_decay_extrapolate(MODEL_YEARS) %>%
       select(-sector) %>%
       rename(OM.var = value) %>%
@@ -1347,19 +1347,6 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       L223.CapacityTech_FutureTechs
 
     # renewable capacity factor by load segment
-
-    # We need to make sure hydro continues to use the historical capacity factor into
-    # the future.  We can do that by using the segment specific capacity factors.
-    # TODO: get actual seasonal variations for hydro instead
-    # L123.out_EJ_state_elec_F_tech %>%
-    #   filter(fuel == "hydro", year == MODEL_FINAL_BASE_YEAR) %>%
-    #   left_join_error_no_match(L123.capacity_EJ_state_elec_F_tech, by= c("state", "fuel" = "gcam_fuel", "year")) %>%
-    #   mutate(capacity.factor = value / capacity) %>%
-    #   select(state, sector, fuel, capacity.factor) %>%
-    #   expand(., ., segment = gcamusa.ELEC_LOAD_SEGMENT_ORDER) ->
-    #   L223.hydro_CapFac_segment
-
-
     bind_rows(L114.CapacityFactor_wind_state_segment,
               L114.CapacityFactor_wind_offshore_state_segment,
               L119.CapacityFactor_PV_state_segment,
@@ -1830,10 +1817,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                                  filter(renewresource != "geothermal") %>%
                                  group_by(region, renewresource) %>%
                                  summarize(CFmax = 1.0 - min(extractioncost)) %>%
-                                 ungroup(), select(L223.TechEff_Dispatch, region, technology, minicam.energy.input) %>% distinct(), by=c("region", "renewresource" = "minicam.energy.input")),
+                                 ungroup(),
+                          select(L223.TechEff_Dispatch, region, technology, minicam.energy.input) %>%
+                            distinct(),
+                          by = c("region", "renewresource" = "minicam.energy.input")),
                                ., by= c("region", "technology")) %>%
-      filter(region != "DC") %>% # TODO: DC wind and PV
-      mutate(capacity.factor= round(CFmax,energy.DIGITS_CAPACITY_FACTOR)) %>%
+      mutate(capacity.factor = round(CFmax,energy.DIGITS_CAPACITY_FACTOR)) %>%
       select(region, supplysector, subsector, technology, year,
              capacity.factor) -> L223.TechCapFac_offshore_wind_Dispatch
 
@@ -2088,16 +2077,18 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       add_title("Investment technology share-weight interpolation rules by state") %>%
       add_units("Unitless") %>%
       add_comments("Set technology share-weight interpolation rules by state") %>%
-      # TODO:  set precursors
-      same_precursors_as("L223.GlobalTechShrwt_Investment") ->
+      same_precursors_as("L223.StubTech_Investment") %>%
+      add_precursors("gcam-usa/A23.elec_tech_mapping_cool",
+                     "gcam-usa/A23.elec_tech_mapping_cool_shares_fut",
+                     "L123.capacity_EJ_state_elec_F_tech",
+                     "gcam-usa/NREL_us_re_technical_potential") ->
       L223.StubTechInterp_Investment_USA
 
     L223.StubTechShrwt_Investment_USA %>%
       add_title("Investment technology share-weights by state") %>%
       add_units("Unitless") %>%
       add_comments("Set technology share-weights by state") %>%
-      # TODO:  set precursors
-      same_precursors_as("L223.GlobalTechShrwt_Investment") ->
+      same_precursors_as("L223.StubTechInterp_Investment_USA") ->
       L223.StubTechShrwt_Investment_USA
 
     L223.GlobalTechCapFac_Investment %>%

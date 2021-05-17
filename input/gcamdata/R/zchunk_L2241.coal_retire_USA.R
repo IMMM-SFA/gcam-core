@@ -681,7 +681,7 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
     # Produce outputs
 
     L2241.CapacityTech_coalret_vintage_dispatch_gcamusa %>%
-      add_title("existing capacity for capacity technology coal (conv pul) by state in final base year") %>%
+      add_title("Existing capacity for capacity technology coal (conv pul) by state in final base year") %>%
       add_units("EJ") %>%
       add_comments("Conventional coal electricity capacity are allocated to fast retire and slow retire technologies") %>%
       # TODO:  add_comments("Capacity shares by vintage are calculated based on REEDS 2019 data") %>%
