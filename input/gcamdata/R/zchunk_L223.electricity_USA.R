@@ -51,10 +51,12 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
              "L113.globaltech_OMfixed_ATB",
              "L113.globaltech_OMvar_ATB",
              "L113.globaltech_capital_ATB",
-             "L119.CapacityFactor_PV_state_gcamusa",
-             "L119.CapacityFactor_CSP_state_gcamusa",
              "L114.CapacityFactor_wind_state_segment_gcamusa",
              "L114.CapacityFactor_wind_offshore_state_segment_gcamusa",
+             "L115.CapacityFactor_hydro_state_gcamusa",
+             "L115.CapacityFactor_hydro_state_segment_gcamusa",
+             "L119.CapacityFactor_PV_state_gcamusa",
+             "L119.CapacityFactor_CSP_state_gcamusa",
              "L119.CapacityFactor_PV_state_segment_gcamusa",
              "L119.CapacityFactor_CSP_state_segment_gcamusa",
              "L123.in_EJ_state_elec_F_tech",
@@ -186,6 +188,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB", strip_attributes = TRUE)
     L114.CapacityFactor_wind_state_segment <- get_data(all_data, "L114.CapacityFactor_wind_state_segment_gcamusa", strip_attributes = TRUE)
     L114.CapacityFactor_wind_offshore_state_segment <- get_data(all_data, "L114.CapacityFactor_wind_offshore_state_segment_gcamusa", strip_attributes = TRUE)
+    L115.CapacityFactor_hydro_state_gcamusa <- get_data(all_data, "L115.CapacityFactor_hydro_state_gcamusa", strip_attributes = TRUE)
+    L115.CapacityFactor_hydro_state_segment_gcamusa <- get_data(all_data, "L115.CapacityFactor_hydro_state_segment_gcamusa", strip_attributes = TRUE)
     L119.CapacityFactor_PV_state <- get_data(all_data, "L119.CapacityFactor_PV_state_gcamusa", strip_attributes = TRUE)
     L119.CapacityFactor_PV_state_segment <- get_data(all_data, "L119.CapacityFactor_PV_state_segment_gcamusa", strip_attributes = TRUE)
     L119.CapacityFactor_CSP_state <- get_data(all_data, "L119.CapacityFactor_CSP_state_gcamusa", strip_attributes = TRUE)
@@ -900,7 +904,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     L102.invest_segments %>%
       filter(grid_region == "Alaska grid") %>% # pick any grid is OK as they are the same for all gird
       select(invest_segment, hours) %>%
-      mutate(seg_fraction = hours / gcamusa.ELEC_BASELOAD_HRS) %>%
+      mutate(invest_segment = as.character(invest_segment),
+             seg_fraction = hours / gcamusa.ELEC_BASELOAD_HRS) %>%
       rename(sector = invest_segment) %>%
       select(-hours) ->
       L223.TechCapFac_Investment_SegAdjust
@@ -1849,7 +1854,33 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       bind_rows(filter(L223.TechCapFac_Dispatch, subsector != "hydro")) ->
       L223.TechCapFac_Dispatch
 
+    # Add segment capacity factors for hydropower
+    # First, hydropower segment capacity factors need to be scaled to be consistent with annual average
+    L115.CapacityFactor_hydro_state_segment_gcamusa %>%
+      left_join_error_no_match(L115.CapacityFactor_hydro_state_gcamusa %>%
+                                 rename(EIA_CF_annual = capacity.factor),
+                               by = c("state", "sector", "fuel"))  %>%
+      left_join_error_no_match(L223.hydro_CapFac,
+                               by = c("state", "fuel")) %>%
+      # calculate scaler (ratio between annual capacity factor and one implied by segments)
+      mutate(CF_scaler = capacity.factor.hydro / EIA_CF_annual,
+             # apply scaler to segment capacity factor
+             capacity.factor = capacity.factor * CF_scaler) %>%
+      rename(region = state) %>%
+      mutate(dispatch.sector = "electricity",
+             subsector = fuel,
+             capacity.technology = fuel) %>%
+      # We only need to provide this info for model base years because
+      # we don't allow new investment in hydropower
+      repeat_add_columns(tibble::tibble(year = MODEL_BASE_YEARS)) %>%
+      select(LEVEL2_DATA_NAMES[['CapacityTechSegmentCapFac']]) ->
+      L223.CapacityTechSegmentCapFac_hydro
 
+    L223.CapacityTechSegmentCapFac %>%
+      bind_rows(L223.CapacityTechSegmentCapFac_hydro) ->
+      L223.CapacityTechSegmentCapFac
+
+    # Grid connection costs for investment technologies
     bind_rows(
       mutate(L120.GridCost_offshore_wind_USA, minicam.energy.input = "offshore wind resource"),
       mutate(L2237.StubTechCost_wind_reeds_USA, minicam.energy.input = "onshore wind resource"),
@@ -1858,11 +1889,10 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
     )  ->
       L223.grid_cost
 
-
     L223.StubTechMarket_Investment %>%
       # select(LEVEL2_DATA_NAMES[["StubTechYr"]]) %>%
       select(region, supplysector, subsector0, subsector, stub.technology, year, minicam.energy.input) %>%
-      left_join(L223.grid_cost, by=c("region" = "State", "minicam.energy.input")) %>%
+      left_join(L223.grid_cost, by = c("region" = "State", "minicam.energy.input")) %>%
       filter(!is.na(grid.cost)) %>%
       mutate(minicam.energy.input = "grid connection cost") %>%
       rename(minicam.non.energy.input = minicam.energy.input,
@@ -2247,6 +2277,8 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
                      "gcam-usa/NREL_us_re_technical_potential",
                      "L114.CapacityFactor_wind_state_segment_gcamusa",
                      "L114.CapacityFactor_wind_offshore_state_segment_gcamusa",
+                     "L115.CapacityFactor_hydro_state_gcamusa",
+                     "L115.CapacityFactor_hydro_state_segment_gcamusa",
                      "L119.CapacityFactor_CSP_state_segment_gcamusa",
                      "L119.CapacityFactor_PV_state_segment_gcamusa",
                      "L210.GrdRenewRsrcCurves_USA",

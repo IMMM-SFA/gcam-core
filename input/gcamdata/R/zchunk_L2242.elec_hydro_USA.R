@@ -9,7 +9,7 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L2242.CapacityTech_hydro_future}, \code{L2242.TechLifetime_hydro},
-#' \code{L2242.CapacityTechSegmentCapFac_hydro}.
+#' \code{L2242.CapacityTechSegmentCapFac_hydro}, \code{L2242.CapacityTechSegmentCapFac_hydro}.
 #' The corresponding file in the original data system was \code{L2242.elec_hydro_USA.R} (gcam-usa level2).
 #' @details Update state-level hydro-electricity fixed outputs
 #' @importFrom assertthat assert_that
@@ -23,11 +23,13 @@ module_gcamusa_L2242.elec_hydro_USA <- function(command, ...) {
              "L223.CapacityTech",
              "L223.Production_Dispatch",
              "L223.TechCapFac_Dispatch",
-             "L223.TechLifetime_Dispatch"))
+             "L223.TechLifetime_Dispatch",
+             "L223.CapacityTechSegmentCapFac"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L2242.CapacityTech_hydro_future",
              "L2242.TechLifetime_hydro",
-             "L2242.TechCapFac_hydro"))
+             "L2242.TechCapFac_hydro",
+             "L2242.CapacityTechSegmentCapFac_hydro"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -39,6 +41,7 @@ module_gcamusa_L2242.elec_hydro_USA <- function(command, ...) {
     L223.Production_Dispatch <- get_data(all_data, 'L223.Production_Dispatch', strip_attributes = TRUE)
     L223.TechCapFac_Dispatch <- get_data(all_data, 'L223.TechCapFac_Dispatch', strip_attributes = TRUE)
     L223.TechLifetime_Dispatch <- get_data(all_data, 'L223.TechLifetime_Dispatch', strip_attributes = TRUE)
+    L223.CapacityTechSegmentCapFac <- get_data(all_data, 'L223.CapacityTechSegmentCapFac', strip_attributes = TRUE)
 
     # Silence package checks
     subsector <- year <- fixedOutput <- state <- EIA <- EIA_ratio <- fixedOutput_2015 <-
@@ -119,6 +122,15 @@ module_gcamusa_L2242.elec_hydro_USA <- function(command, ...) {
       mutate(year = min(MODEL_FUTURE_YEARS)) %>%
       left_join_error_no_match(L2242.CapacityTech_hydro_future_capfac, ., by = "region") -> L2242.TechCapFac_hydro
 
+    L223.CapacityTechSegmentCapFac %>%
+      filter(subsector == "hydro",
+             year == max(MODEL_BASE_YEARS)) %>%
+      left_join_error_no_match(L2242.hydro_EIA_ratio_hist, by = c("region" = "state")) %>%
+      mutate(capacity.factor = capacity.factor * ratio,
+             year = min(MODEL_FUTURE_YEARS)) %>%
+      select(LEVEL2_DATA_NAMES[['CapacityTechSegmentCapFac']]) ->
+      L2242.CapacityTechSegmentCapFac_hydro
+
 
     # ===================================================
     # Produce outputs
@@ -150,9 +162,19 @@ module_gcamusa_L2242.elec_hydro_USA <- function(command, ...) {
       add_precursors("L223.TechCapFac_Dispatch") ->
       L2242.TechCapFac_hydro
 
+    L2242.CapacityTechSegmentCapFac_hydro %>%
+      add_title("Dispatch technology hydropower capacity factor by state and segment") %>%
+      add_units("capacity factor") %>%
+      add_comments("Segment capacity factor calculated to match EIA hydropower generation data from most recent historical year (2019)") %>%
+      add_precursors("gcam-usa/states_subregions",
+                     "gcam-usa/EIA_elec_gen_hydro",
+                     "L223.CapacityTechSegmentCapFac") ->
+      L2242.CapacityTechSegmentCapFac_hydro
+
     return_data(L2242.CapacityTech_hydro_future,
                 L2242.TechLifetime_hydro,
-                L2242.TechCapFac_hydro)
+                L2242.TechCapFac_hydro,
+                L2242.CapacityTechSegmentCapFac_hydro)
 
   } else {
     stop("Unknown command")
