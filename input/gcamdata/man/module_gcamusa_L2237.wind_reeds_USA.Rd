@@ -20,7 +20,7 @@ the generated outputs: \code{L2237.SmthRenewRsrcCurves_wind_reeds_USA},
 The corresponding file in the original data system was \code{L2237.wind_reeds_USA.R} (gcam-usa level2).
 }
 \description{
-Create updated wind resource supply curves consistent with ReEDS.
+Create wind resource supply curves for USA states based on data from NREL ReEDS model.
 }
 \details{
 Create state-level wind resource supply curves

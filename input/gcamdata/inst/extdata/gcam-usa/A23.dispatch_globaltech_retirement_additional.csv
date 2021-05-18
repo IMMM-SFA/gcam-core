@@ -8,7 +8,7 @@
 #           steepness: shape parameter used by the s-curve-shutdown-decider retirement function
 #           median.shutdown.point: Profit-ratio ((revenue - costs) / costs) at which 50% of cohort is shut down by profit shutdown decider. Only variable costs
 #           profit.shutdown.steepness: shape parameter of profit-shutdown-decider function
-# Column types: ccccicinni
+# Column types: ccccicinni 
 # ----------
 supplysector,subsector,technology,year,lifetime,shutdown.rate,half.life,steepness,median.shutdown.point,profit.shutdown.steepness
 electricity,gas,gas (CT),final-calibration-year,30,,15,0.1,-0.1,6
@@ -20,3 +20,4 @@ electricity,refined liquids,refined liquids (CT),initial-future-year,30,,,,-0.1,
 electricity,gas,gas (steam),initial-future-year,30,,,,-0.1,6
 electricity,refined liquids,refined liquids (steam),initial-future-year,30,,,,-0.1,6
 electricity,hydro,hydro,final-calibration-year,100,,,,,
+electricity,geothermal,geothermal,final-calibration-year,100,,,,,
