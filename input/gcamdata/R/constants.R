@@ -760,6 +760,9 @@ gcamusa.STORAGE_TECH_LIST <- c("CSP_storage", "PV_storage", "wind_storage")
 # Define constant for geothermal resource / subsector, which will be treated as fixed output for now
 gcamusa.GEOTHERMAL <- "geothermal"
 
+# Define constant for rooftop_pv sector
+gcamusa.ROOFTOP_PV_SECTOR <- "elect_td_bld"
+
 # Degree day norms
 gcamusa.BASE_HDD_USA <- 4524 # https://www.eia.gov/totalenergy/data/annual/showtext.php?t=ptb0107
 gcamusa.BASE_CDD_USA <- 1215 # https://www.eia.gov/totalenergy/data/annual/showtext.php?t=ptb010
