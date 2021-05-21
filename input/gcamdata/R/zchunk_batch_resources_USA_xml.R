@@ -18,6 +18,8 @@ module_gcamusa_batch_resources_USA_xml <- function(command, ...) {
              "L210.RenewRsrc_USA",
              "L210.UnlimitRsrc_USA",
              "L210.UnlimitRsrcPrice_USA",
+             "L210.UnlimitRsrc_hydro_USA",
+             "L210.UnlimitRsrcPrice_hydro_USA",
              "L210.GrdRenewRsrcCurves_USA",
              "L210.GrdRenewRsrcMax_USA",
              "L210.SmthRenewRsrcCurvesGdpElast_roofPV_USA",
@@ -35,6 +37,8 @@ module_gcamusa_batch_resources_USA_xml <- function(command, ...) {
     L210.RenewRsrc_USA <- get_data(all_data, "L210.RenewRsrc_USA")
     L210.UnlimitRsrc_USA <- get_data(all_data, "L210.UnlimitRsrc_USA")
     L210.UnlimitRsrcPrice_USA <- get_data(all_data, "L210.UnlimitRsrcPrice_USA")
+    L210.UnlimitRsrc_hydro_USA <- get_data(all_data, "L210.UnlimitRsrc_hydro_USA")
+    L210.UnlimitRsrcPrice_hydro_USA <- get_data(all_data, "L210.UnlimitRsrcPrice_hydro_USA")
     L210.GrdRenewRsrcCurves_USA <- get_data(all_data, "L210.GrdRenewRsrcCurves_USA")
     L210.GrdRenewRsrcMax_USA <- get_data(all_data, "L210.GrdRenewRsrcMax_USA")
     L210.SmthRenewRsrcCurvesGdpElast_roofPV_USA <- get_data(all_data, "L210.SmthRenewRsrcCurvesGdpElast_roofPV_USA")
@@ -50,6 +54,8 @@ module_gcamusa_batch_resources_USA_xml <- function(command, ...) {
       add_xml_data(L210.RenewRsrc_USA, "RenewRsrc") %>%
       add_xml_data(L210.UnlimitRsrc_USA, "UnlimitRsrc") %>%
       add_xml_data(L210.UnlimitRsrcPrice_USA, "UnlimitRsrcPrice") %>%
+      add_xml_data(L210.UnlimitRsrc_hydro_USA, "UnlimitRsrc") %>%
+      add_xml_data(L210.UnlimitRsrcPrice_hydro_USA, "UnlimitRsrcPrice") %>%
       add_xml_data(L210.GrdRenewRsrcCurves_USA, "GrdRenewRsrcCurves") %>%
       add_xml_data(L210.GrdRenewRsrcMax_USA, "GrdRenewRsrcMax") %>%
       add_xml_data(L210.SmthRenewRsrcCurvesGdpElast_roofPV_USA, "SmthRenewRsrcCurvesGdpElast") %>%
@@ -62,6 +68,8 @@ module_gcamusa_batch_resources_USA_xml <- function(command, ...) {
                      "L210.RenewRsrc_USA",
                      "L210.UnlimitRsrc_USA",
                      "L210.UnlimitRsrcPrice_USA",
+                     "L210.UnlimitRsrc_hydro_USA",
+                     "L210.UnlimitRsrcPrice_hydro_USA",
                      "L210.GrdRenewRsrcCurves_USA",
                      "L210.GrdRenewRsrcMax_USA",
                      "L210.SmthRenewRsrcCurvesGdpElast_roofPV_USA",

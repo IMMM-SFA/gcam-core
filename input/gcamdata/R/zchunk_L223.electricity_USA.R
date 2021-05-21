@@ -1880,6 +1880,24 @@ module_gcamusa_L223.electricity_USA <- function(command, ...) {
       bind_rows(L223.CapacityTechSegmentCapFac_hydro) ->
       L223.CapacityTechSegmentCapFac
 
+    # Finally, add resource input (unlimited) for hydropower,
+    # which is needed in order to utilize segment capacity factors
+    L223.CapacityTech_FutureTechs %>%
+      filter(subsector == "hydro") %>%
+      select(-capacity) %>%
+      # not all states have hydropower capacity, filter for those that do
+      semi_join(L223.hydro_CapFac, by = c("region" = "state")) %>%
+      mutate(minicam.energy.input = gcamusa.HYDRO_RESOURCE,
+             efficiency = gcamusa.DEFAULT_COEFFICIENT,
+             market.name = region,
+             flag = "Resource") %>%
+      rename(supplysector = dispatch.sector,
+             technology = capacity.technology) -> L223.StubTechEffFlag_Dispatch_hydro
+
+    L223.StubTechEffFlag_Dispatch %>%
+      bind_rows(L223.StubTechEffFlag_Dispatch_hydro) -> L223.StubTechEffFlag_Dispatch
+
+
     # Grid connection costs for investment technologies
     bind_rows(
       mutate(L120.GridCost_offshore_wind_USA, minicam.energy.input = "offshore wind resource"),

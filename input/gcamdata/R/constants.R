@@ -757,6 +757,9 @@ gcamusa.INT_TECH_LIST <- c("CSP", "PV", "wind")
 # Define storage technologies
 gcamusa.STORAGE_TECH_LIST <- c("CSP_storage", "PV_storage", "wind_storage")
 
+# Define constant for hydropower resource
+gcamusa.HYDRO_RESOURCE <- "hydropower resource"
+
 # Define constant for geothermal resource / subsector, which will be treated as fixed output for now
 gcamusa.GEOTHERMAL <- "geothermal"
 

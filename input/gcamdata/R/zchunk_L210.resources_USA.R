@@ -9,8 +9,8 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L210.DeleteRenewRsrc_USArsrc}, \code{L210.DeleteUnlimitRsrc_USArsrc},
-#' \code{L210.RenewRsrc_USA},\code{L210.UnlimitRsrc_USA}, \code{L210.UnlimitRsrcPrice_USA},
-#' \code{L210.SmthRenewRsrcTechChange_USA}, \code{L210.SmthRenewRsrcCurves_wind_USA},
+#' \code{L210.RenewRsrc_USA},\code{L210.UnlimitRsrc_USA}, \code{L210.UnlimitRsrcPrice_USA}, \code{L210.UnlimitRsrc_hydro_USA},
+#' \code{L210.UnlimitRsrcPrice_hydro_USA}, \code{L210.SmthRenewRsrcTechChange_USA}, \code{L210.SmthRenewRsrcCurves_wind_USA},
 #' \code{L210.SmthRenewRsrcCurves_offshore_wind_USA}, \code{L210.GrdRenewRsrcCurves_USA}, \code{L210.GrdRenewRsrcMax_USA},
 #' \code{L210.SmthRenewRsrcCurvesGdpElast_roofPV_USA}, \code{L210.DeleteUnlimitRsrc_USAlimestone},
 #' \code{L210.UnlimitRsrc_limestone_USA}, \code{L210.UnlimitRsrcPrice_limestone_USA}, \code{L210.ResTechShrwt_USA}.
@@ -32,6 +32,7 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
              "L120.RenewRsrc_offshorewind_reeds_USA",
              "L1321.out_Mt_state_cement_Yh",
              "L123.out_EJ_state_elec_F_tech",
+             "L123.capacity_EJ_state_elec_F_tech",
              "L210.RenewRsrc",
              "L210.UnlimitRsrc",
              "L210.UnlimitRsrcPrice",
@@ -57,6 +58,8 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
              "L210.RenewRsrc_USA",
              "L210.UnlimitRsrc_USA",
              "L210.UnlimitRsrcPrice_USA",
+             "L210.UnlimitRsrc_hydro_USA",
+             "L210.UnlimitRsrcPrice_hydro_USA",
              "L210.SmthRenewRsrcTechChange_USA",
              "L210.GrdRenewRsrcCurves_USA",
              "L210.GrdRenewRsrcMax_USA",
@@ -91,6 +94,7 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
       group_by(state, sector, fuel, year) %>%
       summarise(value = sum(value)) %>%
       ungroup()
+    L123.capacity_EJ_state_elec_F_tech <- get_data(all_data, "L123.capacity_EJ_state_elec_F_tech")
     L210.RenewRsrc <- get_data(all_data, "L210.RenewRsrc", strip_attributes = TRUE)
     L210.UnlimitRsrc <- get_data(all_data, "L210.UnlimitRsrc", strip_attributes = TRUE)
     L210.UnlimitRsrcPrice <- get_data(all_data, "L210.UnlimitRsrcPrice", strip_attributes = TRUE)
@@ -219,6 +223,29 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
 
     L210.UnlimitRsrcPrice_USA <- L210.UnlimitRsrcPrice_USA %>%
       filter(unlimited.resource != "limestone")
+
+    # L210.UnlimitRsrc_hydro_USA & L210.UnlimitRsrcPrice_hydro_USA: unlimited resource info for hydropower in the states
+    L123.out_EJ_state_elec_F_tech %>%
+      filter(fuel == "hydro", year == MODEL_FINAL_BASE_YEAR) %>%
+      left_join_error_no_match(L123.capacity_EJ_state_elec_F_tech, by= c("state", "fuel" = "gcam_fuel", "year")) %>%
+      mutate(capacity.factor.hydro = value / capacity) %>%
+      select(state, fuel, capacity.factor.hydro) ->
+      L210.hydro_CapFac
+
+    L210.UnlimitRsrc_USA %>%
+      mutate(unlimited.resource = gcamusa.HYDRO_RESOURCE,
+             market = region) %>%
+      # not all states have hydropower, filter for those that do
+     semi_join(L210.hydro_CapFac, by = c("region" = "state")) -> L210.UnlimitRsrc_hydro_USA
+
+    L210.UnlimitRsrc_hydro_USA %>%
+      repeat_add_columns(tibble::tibble(year = MODEL_BASE_YEARS)) %>%
+      left_join_error_no_match(L210.hydro_CapFac %>%
+                                 select(state, capacity.factor.hydro),
+                               by = c("region" = "state")) %>%
+      mutate(price = 1 - capacity.factor.hydro) %>%
+      select(LEVEL2_DATA_NAMES[["UnlimitRsrcPrice"]]) -> L210.UnlimitRsrcPrice_hydro_USA
+
 
     # L210.SmthRenewRsrcTechChange_USA: smooth renewable resource tech change
     L210.SmthRenewRsrcTechChange_USA <- L210.SmthRenewRsrcTechChange %>%
@@ -398,6 +425,24 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
                      "L1321.out_Mt_state_cement_Yh") ->
       L210.UnlimitRsrcPrice_limestone_USA
 
+    L210.UnlimitRsrc_hydro_USA %>%
+      add_title("Unlimited resource info for hydropower in the states") %>%
+      add_units("NA") %>%
+      add_comments("Resource input is needed in order to differentiate hydropower capacity factors by segment in dispatch model") %>%
+      add_comments("Hydro resource does not impact hydro costs or deployment (which is fixed)") %>%
+      same_precursors_as("L210.UnlimitRsrc_USA") %>%
+      add_precursors("L123.out_EJ_state_elec_F_tech",
+                     "L123.capacity_EJ_state_elec_F_tech") ->
+      L210.UnlimitRsrc_hydro_USA
+
+    L210.UnlimitRsrcPrice_hydro_USA %>%
+      add_title("Hydropower resource prices in the states") %>%
+      add_units("1 minus hydropower capacity factor") %>%
+      add_comments("Resource input is needed in order to differentiate hydropower capacity factors by segment in dispatch model") %>%
+      add_comments("Hydro resource does not impact hydro costs or deployment (which is fixed)") %>%
+      same_precursors_as("L210.UnlimitRsrc_hydro_USA") ->
+      L210.UnlimitRsrcPrice_hydro_USA
+
     L210.SmthRenewRsrcTechChange_USA %>%
       add_title("Smooth renewable resource tech change: USA") %>%
       add_units("Unitless") %>%
@@ -465,6 +510,8 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
                 L210.RenewRsrc_USA,
                 L210.UnlimitRsrc_USA,
                 L210.UnlimitRsrcPrice_USA,
+                L210.UnlimitRsrc_hydro_USA,
+                L210.UnlimitRsrcPrice_hydro_USA,
                 L210.SmthRenewRsrcTechChange_USA,
                 L210.GrdRenewRsrcCurves_USA,
                 L210.GrdRenewRsrcMax_USA,

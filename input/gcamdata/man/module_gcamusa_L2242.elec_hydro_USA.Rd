@@ -15,7 +15,8 @@ module_gcamusa_L2242.elec_hydro_USA(command, ...)
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
 the generated outputs: \code{L2242.CapacityTech_hydro_future}, \code{L2242.TechLifetime_hydro},
-\code{L2242.CapacityTechSegmentCapFac_hydro}, \code{L2242.CapacityTechSegmentCapFac_hydro}.
+\code{L2242.CapacityTechSegmentCapFac_hydro}, \code{L2242.CapacityTechSegmentCapFac_hydro},
+\code{L2242.UnlimitRsrcPrice_hydro}.
 The corresponding file in the original data system was \code{L2242.elec_hydro_USA.R} (gcam-usa level2).
 }
 \description{
