@@ -357,7 +357,8 @@ module_gcamusa_L203.water_mapping_USA <- function(command, ...) {
     L203.TechShrwt_USA %>%
       filter(region != gcam.USA_REGION) %>%
       mutate(technology = "desalination",
-             share.weight = if_else(!(region %in% seawater_states_basins), 0, 1))  %>%
+             share.weight = if_else(!(region %in% seawater_states_basins), 0, 1),
+             share.weight = if_else(!(subsector %in% seawater_states_basins), 0, share.weight))  %>%
       dplyr::filter(!is.na(year)) ->
       L203.TechDesalShrwt_USA
 
