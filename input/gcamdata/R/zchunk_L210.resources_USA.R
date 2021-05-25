@@ -204,6 +204,7 @@ module_gcamusa_L210.resources_USA <- function(command, ...) {
       filter(unlimited.resource == "limestone",
              region %in% cement_states)
 
+    # TODO: delete?
     L210.UnlimitRsrc_USA <- L210.UnlimitRsrc_USA %>%
       filter(unlimited.resource != "limestone")
 
