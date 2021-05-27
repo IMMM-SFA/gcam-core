@@ -232,7 +232,7 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
                                 by = c("supplysector", "subsector", "stub.technology" = "technology", "year")) %>%
       mutate(calOutputValue = round(value * efficiency, energy.DIGITS_CALOUTPUT)) ->
       L232.out_EJ_state_ind_serv_F_Yh
-    # ^^ service output, by technology, for energy-use and feedstocks
+      # ^^ service output, by technology, for energy-use and feedstocks
 
     L232.out_EJ_state_ind_serv_F_Yh %>%
       group_by(region, year) %>%
@@ -324,6 +324,52 @@ module_gcamusa_L232.industry_USA <- function(command, ...) {
       rename(base.service = calOutputValue) %>%
       mutate(energy.final.demand = A32.demand$energy.final.demand) ->
       L232.BaseService_ind_USA  # base service is equal to the output of the industry supplysector
+
+    # Adjustments to maintain consistency with demand-side dispatch segments (if needed)
+    if(gcamusa.USE_ELEC_DEMAND_SEGMENTS) {
+      # Creating new table for distributing industry cogeneration
+      L102.load_segments %>%
+        # join duplicates rows because most grid regions map to more than one state
+        # LJENM throws an error, so left_join() is used
+        left_join(states_subregions %>%
+                    dplyr::select(state, grid_region),
+                  by = "grid_region") ->
+        segStates
+
+      L232.StubTechSecMarket_ind_USA %>%
+        # join duplicates rows because each entry is multiplied by 25 load segments
+        # LJENM throws an error, so left_join() is used
+        left_join(segStates %>%
+                    dplyr::select(state, segment),
+                  by = c("region" = "state")) %>%
+        mutate(secondary.output = paste(secondary.output, segment, sep = "_")) ->
+        L232.StubTechSecMarket_ind_USA_temp
+
+      L232.StubTechSecMarket_ind_USA_temp %>%
+        select(-market.name) %>%
+        left_join_error_no_match(L232.GlobalTechSecOut_ind %>%
+                                   select(-secondary.output),
+                                 by = c("supplysector" = "sector.name",
+                                        "subsector" = "subsector.name",
+                                        "stub.technology" = "technology",
+                                        "year")) %>%
+        left_join_error_no_match(segStates %>%
+                                   dplyr::select(state, segment, generation.fraction),
+                                 by = c("region" = "state", "segment")) %>%
+        mutate(output.ratio = output.ratio * generation.fraction) %>%
+        select(-segment, -generation.fraction) ->
+        L232.StubTechSecOut_ind_USA
+
+      L232.StubTechSecMarket_ind_USA_temp %>%
+        select(-segment) -> L232.StubTechSecMarket_ind_USA
+
+      # Create new table to remove previous assignment of "electricity" secondary.output from each state
+      L232.StubTechSecOut_ind_USA %>%
+        select(-output.ratio) %>%
+        mutate(secondary.output = "electricity") %>%
+        unique() ->
+        L232.StubTechDeleteSecOut_ind_USA
+    }
 
 
     # ===================================================

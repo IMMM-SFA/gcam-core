@@ -8,8 +8,6 @@
 fuel,sector.name,subsector.name,tech_rsrc,SEDS_fuel
 coal,,,coal,Coal_Total
 natural gas,,,natural gas,Natural_Gas
-coal,traded coal,USA traded coal,USA traded coal,
-natural gas,traded natural gas,USA traded natural gas,USA traded natural gas,
+coal,regional coal,regional coal,regional coal,
+natural gas,regional natural gas,regional natural gas,regional natural gas,
 natural gas,gas processing,natural gas,natural gas,
-coal,regional coal,,,
-natural gas,regional natural gas,,,

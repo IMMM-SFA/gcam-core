@@ -8,7 +8,7 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L100.pcGDP_thous90usd_state}, \code{L100.GDP_mil90usd_state}, \code{L100.Pop_thous_state}. The corresponding file in the
+#' the generated outputs: \code{L100.pcGDP_thous90usd_state}, \code{L100.pcGDP_thous90usd_state_SSP}, \code{L100.GDP_mil90usd_state}, \code{L100.Pop_thous_state}. The corresponding file in the
 #' original data system was \code{LA100.Socioeconomics.R} (gcam-usa level1).
 #' @details Describe in detail what this chunk does.
 #' @importFrom assertthat assert_that
@@ -23,12 +23,14 @@ module_gcamusa_LA100.Socioeconomics <- function(command, ...) {
              FILE = "gcam-usa/BEA_GDP_87_96_97USD_state",
              FILE = "gcam-usa/BEA_GDP_97_18_12USD_state",
              FILE = "gcam-usa/NCAR_SSP2_pop_state",
+             FILE = "gcam-usa/NCAR_SSP_pop_state",
              FILE = "gcam-usa/AEO_2019_regional_pcGDP_ratio",
              "L102.pcgdp_thous90USD_Scen_R_Y"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L100.pcGDP_thous90usd_state",
              "L100.GDP_mil90usd_state",
-             "L100.Pop_thous_state"))
+             "L100.Pop_thous_state",
+             "L100.Pop_thous_state_SSP"))
   } else if(command == driver.MAKE) {
 
     state <- state_name <- year <- value <- Fips <- Area <- population <- iso <- share <-
@@ -46,6 +48,7 @@ module_gcamusa_LA100.Socioeconomics <- function(command, ...) {
     BEA_GDP_97_18_12USD_state <- get_data(all_data, "gcam-usa/BEA_GDP_97_18_12USD_state")
     BEA_GDP_87_96_97USD_state <- get_data(all_data, "gcam-usa/BEA_GDP_87_96_97USD_state")
     NCAR_SSP2_pop_state <- get_data(all_data, "gcam-usa/NCAR_SSP2_pop_state")
+    NCAR_SSP_pop_state <- get_data(all_data, "gcam-usa/NCAR_SSP_pop_state")
     AEO_2019_regional_pcGDP_ratio <- get_data(all_data, "gcam-usa/AEO_2019_regional_pcGDP_ratio")
     L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y")
 
@@ -129,6 +132,85 @@ module_gcamusa_LA100.Socioeconomics <- function(command, ...) {
       mutate(pop = round(pop, socioeconomics.POP_DIGITS)) %>%
       rename(value = pop) %>%
       arrange(state, year) -> L100.Pop_thous_state
+
+
+    # Calculate SSP state-level population growth rates
+    NCAR_SSP_pop_state %>%
+      rename(state_name = State) %>%
+      left_join_error_no_match(states_subregions %>%
+                                 select(state, state_name),
+                               by = c("state_name")) %>%
+      select(-state_name, -State_FIPS) %>%
+      gather_years("pop") %>%
+      # converting people to thousands of people
+      mutate(pop = pop * CONV_ONES_THOUS) %>%
+      group_by(state,SSP) %>%
+      complete(nesting(state, SSP), year = c(FUTURE_YEARS)) %>%
+      mutate(pop = approx_fun(year, pop),
+             growth_rate_SSP = (pop / lag(pop)) ^ (1 / (year - lag(year))) - 1) %>%
+      ungroup() %>%
+      filter(year >= gcamusa.SE_NEAR_TERM_YEAR) -> L100.Pop_GR_SSP
+
+    L100.Pop_thous_state_SSP <- tibble()
+
+    for(ssp_i in unique(L100.Pop_GR_SSP$SSP)){
+
+      L100.Pop_GR_SSP %>%
+        filter(SSP==ssp_i) %>%
+        select(-SSP)-> L100.Pop_GR_SSPi
+
+    # Interpolate between historical 2010-2018 growth rates to NCAR 2030 growth rates
+    L100.Pop_future_temp %>%
+      # left_join_error_no_match thorws error because of NAs in new columns
+      # this is becuase some years are (intentionally) missing from RHS
+      # thus we use left_join instead
+      left_join(L100.Pop_GR_SSPi %>%
+                  select(-pop),
+                by = c("state", "year")) %>%
+      group_by(state) %>%
+      mutate(growth_rate = if_else(is.na(growth_rate_hist), growth_rate_SSP, growth_rate_hist),
+             growth_rate = approx_fun(year, growth_rate)) %>%
+      ungroup() %>%
+      select(-growth_rate_hist, -growth_rate_SSP) -> L100.Pop_GRi
+
+    L100.Pop_GRi %>%
+      distinct(year) %>%
+      filter(year != min(year)) -> L100.Pop_GR_yearsi
+    pop_yearsi <- unique(L100.Pop_GR_yearsi$year)
+
+    for (y in pop_yearsi) {
+      # Calculate revised population
+      L100.Pop_GRi %>%
+        group_by(state) %>%
+        mutate(time = year - lag(year, n = 1L),
+               lag_pop = lag(pop, n = 1L)) %>%
+        ungroup() %>%
+        filter(year == y) %>%
+        mutate(pop = lag_pop * ((1 + growth_rate) ^ time)) -> L100.Pop_GR_tempi
+
+      # Add back into table
+      L100.Pop_GRi %>%
+        filter(year != y) %>%
+        bind_rows(L100.Pop_GR_tempi %>%
+                    select(-time, -lag_pop)) %>%
+        mutate(year = as.numeric(year)) %>%
+        arrange(state, year) -> L100.Pop_GRi
+
+    }
+
+    L100.Pop_USA %>%
+      bind_rows(L100.Pop_GRi %>%
+                  filter(!(year %in% L100.Pop_USA$year)) %>%
+                  select(-growth_rate)) %>%
+      mutate(pop = round(pop, socioeconomics.POP_DIGITS)) %>%
+      rename(value = pop) %>%
+      arrange(state, year) -> L100.Pop_thous_statei
+
+    L100.Pop_thous_state_SSP <-
+      L100.Pop_thous_state_SSP %>%
+      bind_rows(L100.Pop_thous_statei %>%
+                  mutate(SSP=ssp_i))
+    }
 
 
     # Historical per-capita GDP time series
@@ -267,6 +349,16 @@ module_gcamusa_LA100.Socioeconomics <- function(command, ...) {
       add_legacy_name("L100.Pop_thous_state") ->
       L100.Pop_thous_state
 
+    L100.Pop_thous_state_SSP %>%
+      add_title("Population by state for all SSPs") %>%
+      add_units("thousand persons") %>%
+      add_comments("State populations from end of history projected into future") %>%
+      add_precursors("gcam-usa/states_subregions",
+                     "gcam-usa/Census_pop",
+                     "gcam-usa/NCAR_SSP_pop_state") %>%
+      add_legacy_name("L100.Pop_thous_state") ->
+      L100.Pop_thous_state_SSP
+
     L100.pcGDP_thous90usd_state %>%
       add_title("Per-capita GDP by state") %>%
       add_units("thousand 1990 USD per capita") %>%
@@ -289,7 +381,7 @@ module_gcamusa_LA100.Socioeconomics <- function(command, ...) {
       add_legacy_name("L100.GDP_mil90usd_state") ->
       L100.GDP_mil90usd_state
 
-    return_data(L100.pcGDP_thous90usd_state, L100.GDP_mil90usd_state, L100.Pop_thous_state)
+    return_data(L100.pcGDP_thous90usd_state, L100.GDP_mil90usd_state, L100.Pop_thous_state, L100.Pop_thous_state_SSP)
   } else {
     stop("Unknown command")
   }

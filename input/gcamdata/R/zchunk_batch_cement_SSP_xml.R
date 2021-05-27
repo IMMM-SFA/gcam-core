@@ -18,7 +18,9 @@ module_energy_batch_cement_incelas_SSP_xml <- function(command, ...) {
                                 paste0("SSP", 1:5))
 
   if(command == driver.DECLARE_INPUTS) {
-    return(c(paste("L2321.IncomeElasticity_cement", tolower(INCOME_ELASTICITY_INPUTS), sep = "_")))
+    return(c(paste("L2321.IncomeElasticity_cement", tolower(INCOME_ELASTICITY_INPUTS), sep = "_"),
+             "L2321.IncomeElasticity_cement_gcam3_USA",
+             FILE = "gcam-usa/states_subregions"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "cement_incelas_gcam3.xml",
              XML = "cement_incelas_gssp1.xml",
@@ -30,15 +32,33 @@ module_energy_batch_cement_incelas_SSP_xml <- function(command, ...) {
              XML = "cement_incelas_ssp2.xml",
              XML = "cement_incelas_ssp3.xml",
              XML = "cement_incelas_ssp4.xml",
-             XML = "cement_incelas_ssp5.xml"))
+             XML = "cement_incelas_ssp5.xml",
+             XML = "cement_incelas_USA_gcam3.xml",
+             XML = "cement_incelas_USA_gssp1.xml",
+             XML = "cement_incelas_USA_gssp2.xml",
+             XML = "cement_incelas_USA_gssp3.xml",
+             XML = "cement_incelas_USA_gssp4.xml",
+             XML = "cement_incelas_USA_gssp5.xml",
+             XML = "cement_incelas_USA_ssp1.xml",
+             XML = "cement_incelas_USA_ssp2.xml",
+             XML = "cement_incelas_USA_ssp3.xml",
+             XML = "cement_incelas_USA_ssp4.xml",
+             XML = "cement_incelas_USA_ssp5.xml"))
   } else if(command == driver.MAKE) {
 
     # Silence package checks
-    cement_incelas_gcam3.xml <- cement_incelas_ssp1.xml <- cement_incelas_ssp2.xml <- cement_incelas_ssp3.xml <-
+    cement_incelas_USA_gcam3.xml <- cement_incelas_USA_ssp1.xml <- cement_incelas_USA_ssp2.xml <- cement_incelas_USA_ssp3.xml <-
+      cement_incelas_USA_ssp4.xml <- cement_incelas_USA_ssp5.xml<- cement_incelas_USA_gssp1.xml<- cement_incelas_USA_gssp2.xml<-
+      cement_incelas_USA_gssp3.xml<- cement_incelas_USA_gssp4.xml <- cement_incelas_USA_gssp5.xml <-
+      cement_incelas_gcam3.xml <- cement_incelas_ssp1.xml <- cement_incelas_ssp2.xml <- cement_incelas_ssp3.xml <-
       cement_incelas_ssp4.xml <- cement_incelas_ssp5.xml<- cement_incelas_gssp1.xml<- cement_incelas_gssp2.xml<-
       cement_incelas_gssp3.xml<- cement_incelas_gssp4.xml <- cement_incelas_gssp5.xml <- NULL
 
     all_data <- list(...)[[1]]
+
+    # Load Inputs
+    states_subregions <- get_data(all_data, "gcam-usa/states_subregions")
+    L2321.IncomeElasticity_cement_gcam3_USA <- get_data(all_data, "L2321.IncomeElasticity_cement_gcam3_USA")
 
     # Loop through all the GCAM3, SSP, and gSSP objects and build the corresponding XML structure
     for(iei in INCOME_ELASTICITY_INPUTS) {
@@ -52,11 +72,36 @@ module_energy_batch_cement_incelas_SSP_xml <- function(command, ...) {
 
       # Assign output to output name
       assign(xmlfn, xml_obj)
+
+      # Copy to US states
+      data_obj_usa <-get_data(all_data, data_obj) %>%
+        filter(region == "USA") %>%
+        left_join(states_subregions %>%
+                    select(state) %>%
+                    mutate(region="USA"), by = "region") %>%
+        select(-region) %>%
+        rename(region=state) %>%
+        filter(region %in% unique(L2321.IncomeElasticity_cement_gcam3_USA$region))
+
+      xmlfn_usa <- paste0("cement_incelas_USA_", tolower(iei), '.xml')
+
+      create_xml(xmlfn_usa) %>%
+        add_xml_data(data_obj_usa, "IncomeElasticity") %>%
+        add_precursors(paste0("L2321.IncomeElasticity_cement_", tolower(iei)),
+                       "L2321.IncomeElasticity_cement_gcam3_USA",
+                       "gcam-usa/states_subregions") ->
+        xml_obj_usa
+
+      # Assign output to output name
+      assign(xmlfn_usa, xml_obj_usa)
     }
 
     return_data(cement_incelas_gcam3.xml,
                 cement_incelas_ssp1.xml, cement_incelas_ssp2.xml, cement_incelas_ssp3.xml, cement_incelas_ssp4.xml, cement_incelas_ssp5.xml,
-                cement_incelas_gssp1.xml, cement_incelas_gssp2.xml, cement_incelas_gssp3.xml, cement_incelas_gssp4.xml, cement_incelas_gssp5.xml)
+                cement_incelas_gssp1.xml, cement_incelas_gssp2.xml, cement_incelas_gssp3.xml, cement_incelas_gssp4.xml, cement_incelas_gssp5.xml,
+                cement_incelas_USA_gcam3.xml,
+                cement_incelas_USA_ssp1.xml, cement_incelas_USA_ssp2.xml, cement_incelas_USA_ssp3.xml, cement_incelas_USA_ssp4.xml, cement_incelas_USA_ssp5.xml,
+                cement_incelas_USA_gssp1.xml, cement_incelas_USA_gssp2.xml, cement_incelas_USA_gssp3.xml, cement_incelas_USA_gssp4.xml, cement_incelas_USA_gssp5.xml)
   } else {
     stop("Unknown command")
   }

@@ -20,18 +20,19 @@
 module_gcamusa_LA120.offshore_wind_reeds_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/reeds_regions_states",
+             FILE = "energy/A23.globaltech_capital",
+             FILE = "energy/A23.globaltech_OMfixed",
              FILE = "gcam-usa/A20.offshore_wind_class_depth",
              FILE = "energy/A20.offshore_wind_depth_cap_cost",
              FILE = "gcam-usa/reeds_offshore_wind_curve_capacity",
              FILE = "gcam-usa/reeds_offshore_wind_curve_grid_cost",
              FILE = "gcam-usa/reeds_offshore_wind_curve_CF_avg",
-             FILE = "gcam-usa/offshore_wind_potential_missing",
-             "L113.globaltech_capital_ATB",
-             "L113.globaltech_OMfixed_ATB"))
+             FILE = "gcam-usa/offshore_wind_potential_missing"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L120.GrdRenewRsrcCurves_offshorewind_reeds_USA",
              "L120.GridCost_offshore_wind_USA",
              "L120.RenewRsrc_offshorewind_reeds_USA"))
+             #"L120.RegCapFactor_offshore_wind_USA"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -46,14 +47,14 @@ module_gcamusa_LA120.offshore_wind_reeds_USA <- function(command, ...) {
 
     # Load required inputs
     reeds_regions_states <- get_data(all_data, "gcam-usa/reeds_regions_states")
+    A23.globaltech_capital <- get_data(all_data, "energy/A23.globaltech_capital")
+    A23.globaltech_OMfixed <- get_data(all_data, "energy/A23.globaltech_OMfixed")
     A20.offshore_wind_class_depth <- get_data(all_data, "gcam-usa/A20.offshore_wind_class_depth")
     A20.offshore_wind_depth_cap_cost <- get_data(all_data, "energy/A20.offshore_wind_depth_cap_cost")
     reeds_offshore_wind_curve_capacity  <- get_data(all_data, "gcam-usa/reeds_offshore_wind_curve_capacity")
     reeds_offshore_wind_curve_grid_cost <- get_data(all_data, "gcam-usa/reeds_offshore_wind_curve_grid_cost")
     reeds_offshore_wind_curve_CF_avg <- get_data(all_data, "gcam-usa/reeds_offshore_wind_curve_CF_avg")
     offshore_wind_potential_missing  <- get_data(all_data, "gcam-usa/offshore_wind_potential_missing")
-    L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB")
-    L113.globaltech_OMfixed_ATB <- get_data(all_data, "L113.globaltech_OMfixed_ATB")
 
     # -----------------------------------------------------------------------------
     # Perform computations
@@ -83,9 +84,9 @@ module_gcamusa_LA120.offshore_wind_reeds_USA <- function(command, ...) {
     L120.offshore_wind_potential_EJ %>%
       left_join_error_no_match(L120.offshore_wind_CF, by = c("State", "Wind_Class")) %>%
       # in order to have an upward sloping supply curve we will make the price 1 - capacity factor
-      # We don't want "price" points too close together. Round price (capacity factor) to three digits
+      # We don't want "price" points too close together. Round price (capacity factor) to two digits
       # and summarize potential by region & price point.
-      mutate(price = round(1.0 - CF, 3),
+      mutate(price = round(1.0 - CF, 2),
              renewresource = "offshore wind resource",
              sub.renewable.resource = "offshore wind resource") %>%
       group_by(region = State, renewresource, sub.renewable.resource, extractioncost = price) %>%
@@ -141,12 +142,12 @@ module_gcamusa_LA120.offshore_wind_reeds_USA <- function(command, ...) {
       left_join_error_no_match(A20.offshore_wind_depth_cap_cost, by = c("depth_class")) %>%
       select(Wind_Class, capital.overnight) -> L2231.offshore_wind_capital
 
-    L113.globaltech_capital_ATB %>%
+    A23.globaltech_capital %>%
       filter(technology == "wind_offshore") %>%
       select(fixed.charge.rate) -> L120.offshore_wind_fcr
     L120.offshore_wind_fcr <- as.numeric(L120.offshore_wind_fcr)
 
-    # L113.globaltech_OMfixed_ATB %>%
+    # A23.globaltech_OMfixed %>%
     #   gather_years() %>%
     #   filter(technology == "wind_offshore",
     #          year == max(HISTORICAL_YEARS)) %>%
@@ -389,8 +390,8 @@ module_gcamusa_LA120.offshore_wind_reeds_USA <- function(command, ...) {
       add_units("maxSubResource: EJ; mid.price: 1975$/GJ") %>%
       add_comments("Offshore wind resource curve by states") %>%
       add_precursors("gcam-usa/reeds_regions_states",
-                     "L113.globaltech_capital_ATB",
-                     "L113.globaltech_OMfixed_ATB",
+                     "energy/A23.globaltech_capital",
+                     "energy/A23.globaltech_OMfixed",
                      "gcam-usa/A20.offshore_wind_class_depth",
                      "energy/A20.offshore_wind_depth_cap_cost",
                      "gcam-usa/reeds_offshore_wind_curve_capacity",

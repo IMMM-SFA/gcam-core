@@ -36,9 +36,9 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",
              FILE = "energy/A21.sector",
-             FILE = "energy/A_ff_RegionalSector",
              FILE = "energy/A26.sector",
              FILE = "gcam-usa/EIA_state_energy_prices",
+             "L103.load_segments_sector_gcamusa",
              "L202.CarbonCoef",
              "L226.Supplysector_en",
              "L226.SubsectorLogit_en",
@@ -50,8 +50,7 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
              FILE = "gcam-usa/A26.cost_adj_map_USA",
              FILE = "gcam-usa/EIA_USA_energy_prices",
              "L210.RsrcPrice",
-             "L239.TechCost_tra",
-             "L239.TechCoef_reg",
+             "L221.GlobalTechCost_en",
              "L222.GlobalTechCost_en"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L226.DeleteSupplysector_USAelec",
@@ -78,10 +77,10 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
     # Load required inputs
     states_subregions <- get_data(all_data, "gcam-usa/states_subregions")
     A21.sector <- get_data(all_data, "energy/A21.sector", strip_attributes = TRUE)
-    A_ff_regional_sector <- get_data(all_data, "energy/A_ff_RegionalSector", strip_attributes = TRUE) %>% mutate(traded=0)
     A26.sector <- get_data(all_data, "energy/A26.sector", strip_attributes = TRUE)
     EIA_state_energy_prices <- get_data(all_data, "gcam-usa/EIA_state_energy_prices", strip_attributes = TRUE)
     L202.CarbonCoef <- get_data(all_data, "L202.CarbonCoef", strip_attributes = TRUE)
+    L103.load_segments_sector <- get_data(all_data, "L103.load_segments_sector_gcamusa")
     L226.Supplysector_en <- get_data(all_data, "L226.Supplysector_en", strip_attributes = TRUE)
     L226.SubsectorLogit_en <- get_data(all_data, "L226.SubsectorLogit_en", strip_attributes = TRUE)
     L226.SubsectorShrwtFllt_en <- get_data(all_data, "L226.SubsectorShrwtFllt_en", strip_attributes = TRUE)
@@ -93,8 +92,7 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
     A26.cost_adj_map_USA <- get_data(all_data, "gcam-usa/A26.cost_adj_map_USA", strip_attributes = TRUE)
     EIA_USA_energy_prices <- get_data(all_data, "gcam-usa/EIA_USA_energy_prices", strip_attributes = TRUE)
     L210.RsrcPrice <- get_data(all_data, "L210.RsrcPrice", strip_attributes = TRUE)
-    L239.TechCost_tra <- get_data(all_data, "L239.TechCost_tra", strip_attributes = TRUE)
-    L239.TechCoef_reg <- get_data(all_data, "L239.TechCoef_reg", strip_attributes = TRUE)
+    L221.GlobalTechCost_en <- get_data(all_data, "L221.GlobalTechCost_en", strip_attributes = TRUE)
     L222.GlobalTechCost_en <- get_data(all_data, "L222.GlobalTechCost_en", strip_attributes = TRUE)
 
 
@@ -132,9 +130,7 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
     # L226.Supplysector_en_USA: Supply sector information for energy handling and delivery sectors
     # NOTE: Currently using FERC regions as a proxy for regional energy markets
     A21.sector %>%
-      bind_rows(A_ff_regional_sector) %>%
       select(supplysector, output.unit, input.unit, price.unit, logit.exponent, logit.type) %>%
-      mutate(logit.exponent= if_else(supplysector=="regional coal",-3,logit.exponent)) %>%
       filter(supplysector %in% gcamusa.REGIONAL_FUEL_MARKETS) ->
       A21.tmp
 
@@ -252,7 +248,7 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
         rename(input.cost = adjustment) %>%
         mutate(input.cost = round(input.cost, energy.DIGITS_COST)) ->
         L226.TechCost_en_USA
-    }
+      }
 
 
     # L226.Ccoef: carbon coef for cost adder sectors
@@ -330,7 +326,7 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
     L210.RsrcPrice %>%
       filter(region == gcam.USA_REGION) %>%
       select(technology = resource, year, price) %>%
-      bind_rows(L239.TechCost_tra %>%
+      bind_rows(L221.GlobalTechCost_en %>%
                   select(technology, year, price = input.cost),
                 L222.GlobalTechCost_en %>%
                   select(technology, year, price = input.cost)) %>%
@@ -370,16 +366,13 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
                                by = c("fuel", "year")) %>%
       mutate(price_adj = price_hist_mean - price) -> L226.gas_price_adj_USA
 
-    L239.TechCoef_reg %>%
-      select(LEVEL2_DATA_NAMES[["TechYr"]]) %>%
-      filter(region == gcam.USA_REGION,
-             year %in% MODEL_BASE_YEARS) %>%
+    L221.GlobalTechCost_en %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
       # use semi join to filter for entries we care about
-      semi_join(A26.cost_adj_map_USA, by = c("supplysector" = "sector.name")) %>%
+      semi_join(A26.cost_adj_map_USA, by = "sector.name") %>%
       left_join_error_no_match(A26.cost_adj_map_USA %>%
-                                 filter(is.na(tech_rsrc)) %>%
                                  distinct(sector.name, fuel),
-                               by = c("supplysector" = "sector.name")) %>%
+                               by = "sector.name") %>%
       select(-input.cost) %>%
       mutate(minicam.non.energy.input = "USA price adjustment") %>%
       left_join_error_no_match(L226.gas_price_adj_USA %>%
@@ -387,17 +380,43 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
                                by = c("fuel", "year")) %>%
       select(-fuel) %>%
       # create full time series of model years
-      complete(nesting(supplysector, subsector, technology, minicam.non.energy.input),
+      complete(nesting(sector.name, subsector.name, technology, minicam.non.energy.input),
                year = c(MODEL_YEARS)) %>%
-      group_by(supplysector) %>%
+      group_by(sector.name) %>%
       # set input.cost to 0 in 2100 since we'll phase out this price adjuster over time
       mutate(input.cost = if_else(year == max(MODEL_YEARS), 0, input.cost),
              # interoplate between historical year and final model year
              input.cost = approx_fun(year, input.cost, rule = 2)) %>%
       ungroup() %>%
       mutate(region = gcam.USA_REGION) %>%
-      rename(stub.technology = technology) -> L226.StubTechCost_fossil_USA
+      rename(supplysector = sector.name,
+             subsector = subsector.name,
+             stub.technology = technology) -> L226.StubTechCost_fossil_USA
 
+
+    # Optional electricity dispatch end-use demand segments
+    # YO Apr 2020
+    # Disaggregate electric subsector, technology, minicam.energy.input and minicam.non.energy.input by dispatch segments
+    # Not disaggregating supplysectors for final services will not be distributed by segments yet.
+    # Building services will eventually need to be split by demand segment.
+
+    if(gcamusa.USE_ELEC_DEMAND_SEGMENTS) {
+      # Attach states to grid-region names in L103.load_segments_sector_gcamusa.csv (L103.load_segments_sector)
+      L103.load_segments_sector %>%
+        left_join(states_subregions %>%
+                    dplyr::select(state,grid_region),
+                  by=("grid_region")) ->
+        segStates
+
+      L226.TechCoef_electd_USA %>%
+        left_join(segStates %>%
+                    dplyr::select(state, sector, segment, generation.fraction),
+                  by=c("region" = "state", "subsector" = "sector")) %>%
+        mutate(coefficient = coefficient * generation.fraction,
+               minicam.energy.input = paste( minicam.energy.input, segment, sep="_"))%>%
+        select(-segment,-generation.fraction) ->
+        L226.TechCoef_electd_USA
+    }
 
     # Produce outputs
     L226.DeleteSupplysector_USAelec %>%
@@ -430,15 +449,16 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
       add_precursors("L226.GlobalTechCost_en") ->
       L226.TechCost_electd_USA
 
-    L226.TechCoef_electd_USA %>%
-      add_title("Tech coefficients for elec T&D when using regional electricity markets") %>%
-      add_units("NA") %>%
-      add_comments("Tech coeff for elec T&D when using regional electricity markets.") %>%
-      add_comments("The elect_td sectors can not use the global tech database as their input is different.") %>%
-      add_legacy_name("L226.TechCoef_electd_USA") %>%
-      add_precursors("gcam-usa/states_subregions",
-                     "L226.StubTechCoef_electd") ->
-      L226.TechCoef_electd_USA
+      L226.TechCoef_electd_USA %>%
+        add_title("Tech coefficients for elec T&D when using regional electricity markets") %>%
+        add_units("NA") %>%
+        add_comments("Tech coeff for elec T&D when using regional electricity markets.") %>%
+        add_comments("The elect_td sectors can not use the global tech database as their input is different.") %>%
+        add_legacy_name("L226.TechCoef_electd_USA") %>%
+        add_precursors("gcam-usa/states_subregions",
+                       "L226.StubTechCoef_electd",
+                       "L103.load_segments_sector_gcamusa") ->
+        L226.TechCoef_electd_USA
 
     L226.Supplysector_en_USA %>%
       add_title("Supply sector information for energy handling and delivery sectors.") %>%
@@ -561,8 +581,7 @@ module_gcamusa_L226.en_distribution_USA <- function(command, ...) {
       add_precursors("gcam-usa/A26.cost_adj_map_USA",
                      "gcam-usa/EIA_USA_energy_prices",
                      "L210.RsrcPrice",
-                     "L239.TechCost_tra",
-                     "L239.TechCoef_reg",
+                     "L221.GlobalTechCost_en",
                      "L222.GlobalTechCost_en") ->
       L226.StubTechCost_fossil_USA
 

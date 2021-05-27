@@ -54,7 +54,6 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L223.CapacityTech",
              "L223.TechShrwt_Dispatch",
              "L223.TechEff_Dispatch",
-             "L223.CapacityTechInputPMult_geo",
              "L223.StubTechEffFlag_Dispatch",
              "L223.TechCoef_Dispatch_cool",
              "L223.TechOMvar_Dispatch",
@@ -149,7 +148,6 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     L223.CapacityTech <- get_data(all_data, "L223.CapacityTech")
     L223.TechShrwt_Dispatch <- get_data(all_data, "L223.TechShrwt_Dispatch")
     L223.TechEff_Dispatch <- get_data(all_data, "L223.TechEff_Dispatch")
-    L223.CapacityTechInputPMult_geo <- get_data(all_data, "L223.CapacityTechInputPMult_geo")
     L223.StubTechEffFlag_Dispatch <- get_data(all_data, "L223.StubTechEffFlag_Dispatch")
     L223.TechCoef_Dispatch_cool <- get_data(all_data, "L223.TechCoef_Dispatch_cool")
     L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch")
@@ -261,7 +259,6 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
       add_xml_data(L223.CapacityTech, "CapacityTech") %>%
       add_xml_data(L223.TechShrwt_Dispatch, "TechShrwt")  %>%
       add_xml_data(L223.TechEff_Dispatch, "TechEff") %>%
-      add_xml_data(L223.CapacityTechInputPMult_geo, "CapacityTechInputPMult") %>%
       add_xml_data(rename(L223.StubTechEffFlag_Dispatch, stub.technology = technology), "StubTechEffFlag") %>%
       add_xml_data(L223.TechCoef_Dispatch_cool, "TechCoef") %>%
       add_xml_data(L223.TechOMvar_Dispatch, "TechOMvar")  %>%
@@ -343,7 +340,6 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L223.CapacityTech",
                      "L223.TechShrwt_Dispatch",
                      "L223.TechEff_Dispatch",
-                     "L223.CapacityTechInputPMult_geo",
                      "L223.StubTechEffFlag_Dispatch",
                      "L223.TechCoef_Dispatch_cool",
                      "L223.TechOMvar_Dispatch",

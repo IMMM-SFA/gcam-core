@@ -44,10 +44,6 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
     eia_operators_nerc_region_mapping <- get_data(all_data, "gcam-usa/dispatch/eia_operators_nerc_region_mapping")
     FERC_hourly_gen_raw <- get_data(all_data, "gcam-usa/dispatch/FERC_hourly_gen")
 
-
-    # -----------------------------------------------------------------------------
-    # Perform computations
-
     # If the large raw FERC datasets are available, go through the full computations below
     # If not, use the pre-built outputs
     if(is.null(FERC_hourly_gen_raw)) {
@@ -245,42 +241,39 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
         select(-NERC.Region) ->
         L102.invest_segments
 
+    # Produce outputs
+    L102.date_load_curve_mapping_S %>%
+      add_title("A state by state mapping from date+time to load segment") %>%
+      add_units("NA") %>%
+      add_comments("A state by state mapping from date+time to load segment") %>%
+      add_legacy_name("L102.date_load_curve_mapping_S") %>%
+      add_precursors("gcam-usa/states_subregions",
+                     "gcam-usa/states_coordinates") ->
+      L102.date_load_curve_mapping_S_gcamusa
 
-      # -----------------------------------------------------------------------------
-      # Produce outputs
+    L102.load_segments %>%
+      add_title("Defines the relative shape of each load segment by grid_region") %>%
+      add_units("hours / % / rank") %>%
+      add_comments("Defines the relative shape of each load segment by grid_region") %>%
+      add_legacy_name("L102.load_segments") %>%
+      add_precursors("gcam-usa/states_subregions",
+                     "gcam-usa/states_coordinates",
+                     "gcam-usa/dispatch/Respondent_IDs_fix_mismatch",
+                     "gcam-usa/dispatch/eia_operators_nerc_region_mapping",
+                     "gcam-usa/dispatch/FERC_hourly_gen") ->
+      L102.load_segments_gcamusa
 
-      L102.date_load_curve_mapping_S %>%
-        add_title("A state by state mapping from date+time to load segment") %>%
-        add_units("NA") %>%
-        add_comments("A state by state mapping from date+time to load segment") %>%
-        add_legacy_name("L102.date_load_curve_mapping_S") %>%
-        add_precursors("gcam-usa/states_subregions",
-                       "gcam-usa/states_coordinates") ->
-        L102.date_load_curve_mapping_S_gcamusa
+    L102.invest_segments %>%
+      add_title("Defines the relative shape of each investment segment by grid_region") %>%
+      add_units("hours / MW / MWh / %") %>%
+      add_comments("Defines the relative shape of each investment segment by grid_region") %>%
+      add_legacy_name("L102.invest_segments") %>%
+      same_precursors_as("L102.load_segments")->
+      L102.invest_segments_gcamusa
 
-      L102.load_segments %>%
-        add_title("Defines the relative shape of each load segment by grid_region") %>%
-        add_units("hours / % / rank") %>%
-        add_comments("Defines the relative shape of each load segment by grid_region") %>%
-        add_legacy_name("L102.load_segments") %>%
-        add_precursors("gcam-usa/states_subregions",
-                       "gcam-usa/states_coordinates",
-                       "gcam-usa/dispatch/Respondent_IDs_fix_mismatch",
-                       "gcam-usa/dispatch/eia_operators_nerc_region_mapping",
-                       "gcam-usa/dispatch/FERC_hourly_gen") ->
-        L102.load_segments_gcamusa
-
-      L102.invest_segments %>%
-        add_title("Defines the relative shape of each investment segment by grid_region") %>%
-        add_units("hours / MW / MWh / %") %>%
-        add_comments("Defines the relative shape of each investment segment by grid_region") %>%
-        add_legacy_name("L102.invest_segments") %>%
-        same_precursors_as("L102.load_segments")->
-        L102.invest_segments_gcamusa
-
-      verify_identical_prebuilt(L102.date_load_curve_mapping_S_gcamusa,
-                                L102.load_segments_gcamusa,
-                                L102.invest_segments_gcamusa)
+    verify_identical_prebuilt(L102.date_load_curve_mapping_S_gcamusa,
+                              L102.load_segments_gcamusa,
+                              L102.invest_segments_gcamusa)
     }
 
     return_data(L102.date_load_curve_mapping_S_gcamusa, L102.load_segments_gcamusa, L102.invest_segments_gcamusa)

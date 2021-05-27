@@ -8,9 +8,9 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L201.InterestRate_GCAMUSA}, \code{L201.Pop_GCAMUSA}, \code{L201.BaseGDP_GCAMUSA},
+#' the generated outputs: \code{L201.InterestRate_GCAMUSA}, \code{L201.Pop_GCAMUSA},\code{L201.Pop_GCAMUSA_SSP}, \code{L201.BaseGDP_GCAMUSA},
 #' \code{L201.LaborForceFillout_GCAMUSA}, \code{L201.LaborProductivity_GCAMUSA}, \code{L201.Pop_national_updated_USA},
-#' \code{L201.BaseGDP_national_updated_USA}, \code{L201.LaborProductivity_national_updated_USA}.
+#' \code{L201.Pop_national_updated_USA_SSP}, \code{L201.BaseGDP_national_updated_USA}, \code{L201.LaborProductivity_national_updated_USA}.
 #' The corresponding file in the original data system was \code{L201.socioeconomics_USA.R} (gcam-usa level2).
 #' @details Interest rate, population, and GDP for GCAM-USA.
 #' @importFrom assertthat assert_that
@@ -20,15 +20,24 @@ module_gcamusa_L201.socioeconomics_USA <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/states_subregions",
              "L100.Pop_thous_state",
-             "L100.GDP_mil90usd_state"))
+             "L100.Pop_thous_state_SSP",
+             "L100.GDP_mil90usd_state",
+             "L201.LaborProductivity_gSSP1",
+             "L201.LaborProductivity_gSSP2",
+             "L201.LaborProductivity_gSSP3",
+             "L201.LaborProductivity_gSSP4",
+             "L201.LaborProductivity_gSSP5"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L201.Pop_GCAMUSA",
+             "L201.Pop_GCAMUSA_SSP",
              "L201.BaseGDP_GCAMUSA",
              "L201.LaborForceFillout_GCAMUSA",
              "L201.LaborProductivity_GCAMUSA",
              "L201.Pop_national_updated_USA",
+             "L201.Pop_national_updated_USA_SSP",
              "L201.BaseGDP_national_updated_USA",
-             "L201.LaborProductivity_national_updated_USA"))
+             "L201.LaborProductivity_national_updated_USA",
+             "L201.LaborProductivity_gSSP_GCAMUSA"))
   } else if(command == driver.MAKE) {
 
     # silence package checks
@@ -40,13 +49,26 @@ module_gcamusa_L201.socioeconomics_USA <- function(command, ...) {
     # Load required inputs
     states_subregions <- get_data(all_data, "gcam-usa/states_subregions")
     L100.Pop_thous_state <- get_data(all_data, "L100.Pop_thous_state", strip_attributes = TRUE)
+    L100.Pop_thous_state_SSP <- get_data(all_data, "L100.Pop_thous_state_SSP", strip_attributes = TRUE)
     L100.GDP_mil90usd_state <- get_data(all_data, "L100.GDP_mil90usd_state", strip_attributes = TRUE)
+    L201.LaborProductivity_gSSP1 <- get_data(all_data, "L201.LaborProductivity_gSSP1", strip_attributes = TRUE)
+    L201.LaborProductivity_gSSP2 <- get_data(all_data, "L201.LaborProductivity_gSSP2", strip_attributes = TRUE)
+    L201.LaborProductivity_gSSP3 <- get_data(all_data, "L201.LaborProductivity_gSSP3", strip_attributes = TRUE)
+    L201.LaborProductivity_gSSP4 <- get_data(all_data, "L201.LaborProductivity_gSSP4", strip_attributes = TRUE)
+    L201.LaborProductivity_gSSP5 <- get_data(all_data,  "L201.LaborProductivity_gSSP5", strip_attributes = TRUE)
 
     # ===================================================
     # NOTE: Socioeconomics for grid regions are dealt with in module_gcamusa_L223.electricity_USA
 
     # L201.Pop_GCAMUSA: Population by region from the GCAM 3.0 core scenario
     L201.Pop_GCAMUSA <- L100.Pop_thous_state %>%
+      filter(year %in% MODEL_YEARS) %>%
+      rename(totalPop = value,
+             region = state) %>%
+      mutate(totalPop = round(totalPop, socioeconomics.POP_DIGITS))
+
+    # L201.Pop_GCAMUSA_SSP: Population by region from the GCAM 3.0 core scenario
+    L201.Pop_GCAMUSA_SSP <- L100.Pop_thous_state_SSP %>%
       filter(year %in% MODEL_YEARS) %>%
       rename(totalPop = value,
              region = state) %>%
@@ -97,6 +119,16 @@ module_gcamusa_L201.socioeconomics_USA <- function(command, ...) {
              region = gcam.USA_REGION) %>%
       select(region, year, totalPop) -> L201.Pop_national_updated_USA
 
+    # Add USA-region updates
+    # Updated USA-region population
+    L201.Pop_GCAMUSA_SSP %>%
+      group_by(year,SSP) %>%
+      summarise(totalPop = sum(totalPop)) %>%
+      ungroup() %>%
+      mutate(totalPop = round(totalPop, socioeconomics.POP_DIGITS),
+             region = gcam.USA_REGION) %>%
+      select(region, year, SSP, totalPop) -> L201.Pop_national_updated_USA_SSP
+
     # Updated USA-region base GDP
     L201.BaseGDP_GCAMUSA %>%
       summarise(baseGDP = sum(baseGDP)) %>%
@@ -129,6 +161,40 @@ module_gcamusa_L201.socioeconomics_USA <- function(command, ...) {
       select(region, year, laborproductivity) ->
       L201.LaborProductivity_national_updated_USA
 
+    L201.LaborProductivity_national_updated_USA %>%
+      filter(year>max(MODEL_BASE_YEARS), region=="USA") %>%
+      rename(base=laborproductivity) %>%
+      left_join_error_no_match(L201.LaborProductivity_gSSP1 %>%
+                                 filter(year>max(MODEL_BASE_YEARS), region=="USA") %>%
+                                 rename(ssp1=laborproductivity)) %>%
+      left_join_error_no_match(L201.LaborProductivity_gSSP2 %>%
+                                 filter(year>max(MODEL_BASE_YEARS), region=="USA") %>%
+                                 rename(ssp2=laborproductivity)) %>%
+      left_join_error_no_match(L201.LaborProductivity_gSSP3 %>%
+                                 filter(year>max(MODEL_BASE_YEARS), region=="USA") %>%
+                                 rename(ssp3=laborproductivity)) %>%
+      left_join_error_no_match(L201.LaborProductivity_gSSP4 %>%
+                                 filter(year>max(MODEL_BASE_YEARS), region=="USA") %>%
+                                 rename(ssp4=laborproductivity)) %>%
+      left_join_error_no_match(L201.LaborProductivity_gSSP5 %>%
+                                 filter(year>max(MODEL_BASE_YEARS), region=="USA") %>%
+                                 rename(ssp5=laborproductivity)) %>%
+      mutate(ratio_ssp1 = ssp1/base,
+             ratio_ssp2 = ssp2/base,
+             ratio_ssp3 = ssp3/base,
+             ratio_ssp4 = ssp4/base,
+             ratio_ssp5 = ssp5/base) %>%
+      select(year, ratio_ssp1,ratio_ssp2,ratio_ssp3,ratio_ssp4,ratio_ssp5) %>%
+      gather(key="ssp",value="ratio", -region, -year) %>%
+      mutate(ssp = gsub("ratio_","",ssp))->
+      laborproductivity_ssp_ratios
+
+    L201.LaborProductivity_GCAMUSA %>%
+      filter(year > max(MODEL_BASE_YEARS)) %>%
+      left_join(laborproductivity_ssp_ratios, by=c("year")) %>%
+      mutate(laborproductivity = laborproductivity * ratio) %>%
+      select(-ratio)->
+      L201.LaborProductivity_gSSP_GCAMUSA
 
     # ===================================================
 
@@ -140,6 +206,14 @@ module_gcamusa_L201.socioeconomics_USA <- function(command, ...) {
       add_legacy_name("L201.Pop_GCAMUSA") %>%
       add_precursors("L100.Pop_thous_state") ->
       L201.Pop_GCAMUSA
+
+    L201.Pop_GCAMUSA_SSP %>%
+      add_title("Population by state for all SSPs") %>%
+      add_units("thousand persons") %>%
+      add_comments("Data from L100.Pop_thous_state_SSP") %>%
+      add_legacy_name("L201.Pop_GCAMUSA") %>%
+      add_precursors("L100.Pop_thous_state_SSP") ->
+      L201.Pop_GCAMUSA_SSP
 
     L201.BaseGDP_GCAMUSA %>%
       add_title("Base year GDP by state") %>%
@@ -165,6 +239,18 @@ module_gcamusa_L201.socioeconomics_USA <- function(command, ...) {
       add_precursors("L100.GDP_mil90usd_state") ->
       L201.LaborProductivity_GCAMUSA
 
+    L201.LaborProductivity_gSSP_GCAMUSA %>%
+      add_title("Labor force productivity growth rate for GCAM-USA based on national trends") %>%
+      add_units("Unitless (annual rate of growth)") %>%
+      add_comments("Trends from L201.LaborProductivity_gSSP applied uniformly to each state") %>%
+      add_legacy_name("L201.LaborProductivity_gSSP_GCAMUSA") %>%
+      add_precursors("L201.LaborProductivity_gSSP1",
+                     "L201.LaborProductivity_gSSP2",
+                     "L201.LaborProductivity_gSSP3",
+                     "L201.LaborProductivity_gSSP4",
+                     "L201.LaborProductivity_gSSP5") ->
+      L201.LaborProductivity_gSSP_GCAMUSA
+
     L201.Pop_national_updated_USA %>%
       add_title("Updated population for USA region, consistent with sum-of-states") %>%
       add_units("thousand persons") %>%
@@ -172,6 +258,14 @@ module_gcamusa_L201.socioeconomics_USA <- function(command, ...) {
       add_legacy_name("L2011.Pop_updated_USA_national") %>%
       same_precursors_as("L201.Pop_GCAMUSA") ->
       L201.Pop_national_updated_USA
+
+    L201.Pop_national_updated_USA_SSP %>%
+      add_title("Updated population for USA region, consistent with sum-of-states for all SSPs") %>%
+      add_units("thousand persons") %>%
+      add_comments("Updates USA region population to match the 50 state + DC total") %>%
+      add_legacy_name("L2011.Pop_updated_USA_national") %>%
+      same_precursors_as("L201.Pop_GCAMUSA_SSP") ->
+      L201.Pop_national_updated_USA_SSP
 
     L201.BaseGDP_national_updated_USA %>%
       add_title("Updated base year GDP for USA region, consistent with sum-of-states") %>%
@@ -191,12 +285,15 @@ module_gcamusa_L201.socioeconomics_USA <- function(command, ...) {
 
 
     return_data(L201.Pop_GCAMUSA,
+                L201.Pop_GCAMUSA_SSP,
                 L201.BaseGDP_GCAMUSA,
                 L201.LaborForceFillout_GCAMUSA,
                 L201.LaborProductivity_GCAMUSA,
                 L201.Pop_national_updated_USA,
+                L201.Pop_national_updated_USA_SSP,
                 L201.BaseGDP_national_updated_USA,
-                L201.LaborProductivity_national_updated_USA)
+                L201.LaborProductivity_national_updated_USA,
+                L201.LaborProductivity_gSSP_GCAMUSA)
   } else {
     stop("Unknown command")
   }

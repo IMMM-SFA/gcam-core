@@ -1,0 +1,16 @@
+# File: A23.elecS_coal_emissions.csv
+# Title: 2015 emissions for convential pulverized coal power plants in the USA
+# Units: Tg and EJ
+# Comments: Generation and emissions to allow for emissions coefficient calculation in GCAM-USA
+# Column types: ccnn
+# ----------
+sector,Non.CO2,emissions,generation
+coal (conv pul),BC,4.82E-04,5.23834
+coal (conv pul),CH4,0.0284246,5.23834
+coal (conv pul),CO,0.435301,5.23834
+coal (conv pul),N2O,0.0357001,5.23834
+coal (conv pul),NH3,0,5.23834
+coal (conv pul),NMVOC,0.0315287,5.23834
+coal (conv pul),NOx,3.26713,5.23834
+coal (conv pul),OC,0.00336982,5.23834
+coal (conv pul),SO2_1,5.59264,5.23834

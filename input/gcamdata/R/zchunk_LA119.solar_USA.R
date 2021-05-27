@@ -1,6 +1,6 @@
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
-#' module_gcamusa_LA119.solar
+#' module_gcamusa_LA119.Solar
 #'
 #' Compute scalars by state to vary capacity factors by state.
 #'
@@ -99,8 +99,7 @@ module_gcamusa_LA119.solar <- function(command, ...) {
     PV_cf_raw %>%
       gather("hour", "capacity_factor", dplyr::matches("[0-9]+")) %>%
       mutate(hour = as.integer(hour)) %>%
-      mutate(date = as.POSIXct(paste0(MODEL_FINAL_BASE_YEAR, "-01-01 00:00:00"), tz="EST") + ((hour - 1) * 60 * 60)) %>%
-      rename(PV_class = `PV class`) ->
+      mutate(date = as.POSIXct(paste0(MODEL_FINAL_BASE_YEAR, "-01-01 00:00:00"), tz="EST") + ((hour - 1) * 60 * 60)) ->
       PV_cf
 
     ReEDS_region_mapping_raw %>%
@@ -116,31 +115,14 @@ module_gcamusa_LA119.solar <- function(command, ...) {
       left_join_error_no_match(L102.date_load_curve_mapping_S, by=c("state", "date")) ->
       PV_cf
 
-    # For each state, find the PV class that has the highest annual average capacity factor
-    # We'll use this class to calculate segment capacity factors, to be consistent with our
-    # approach in module_gcamusa_L2238.PV_reeds_USA and the annual capacity factors
-    # we use elsewhere in the model.  Note that with our new capacity factor -based resource curves,
-    # these segment capacity factors will be reduced over time as more capacity is deployed using
-    # lower quality resources.
     PV_cf %>%
-      group_by(state, PV_class) %>%
-      summarize(capacity.factor = mean(capacity_factor)) %>%
-      ungroup() %>%
-      group_by(state) %>%
-      filter(capacity.factor == max(capacity.factor)) ->
-      PV_cf_state_class_annual
-
-    PV_cf %>%
-      mutate(segment = if_else(is_super_peak, gcamusa.ELEC_SEGMENT_SUPERPEAK,
-                               paste(month, day_night, sep=gcamusa.SEGMENT_DELIM))) %>%
-      semi_join(PV_cf_state_class_annual, by = c("state", "PV_class")) %>%
+      mutate(segment = if_else(is_super_peak, gcamusa.ELEC_SEGMENT_SUPERPEAK, paste(month, day_night, sep=gcamusa.SEGMENT_DELIM))) %>%
       group_by(state, segment) %>%
       summarize(capacity.factor = mean(capacity_factor)) %>%
       ungroup() ->
       L119.CapacityFactor_PV_state_segment
 
     PV_cf %>%
-      semi_join(PV_cf_state_class_annual, by = c("state", "PV_class")) %>%
       group_by(state) %>%
       summarize(capacity.factor = mean(capacity_factor)) %>%
       ungroup() ->
@@ -182,24 +164,10 @@ module_gcamusa_LA119.solar <- function(command, ...) {
       ReEDS_timeslice_mapping
 
     CSP_cf_raw %>%
-      left_join(ReEDS_timeslice_mapping, by = c("timeslice")) ->
+      left_join(ReEDS_timeslice_mapping, by=c("timeslice")) ->
       CSP_cf
 
-    # For each state, find the CSP class that has the highest annual average capacity factor
-    # We'll use this class to calculate segment capacity factors, to be consistent with our
-    # approach in module_gcamusa_L2239.CSP_reeds_USA and the annual capacity factors
-    # we use elsewhere in the model.  Note that with our new capacity factor -based resource curves,
-    # these segment capacity factors will be reduced over time as more capacity is deployed using
-    # lower quality resources.
     CSP_cf %>%
-      group_by(class) %>%
-      summarize(CF = mean(CF)) %>%
-      ungroup() %>%
-      filter(CF == max(CF)) ->
-      CSP_cf_class_annual
-
-    CSP_cf %>%
-      semi_join(CSP_cf_class_annual, by = "class") %>%
       mutate(CF = CF * hours) %>%
       group_by() %>%
       summarize(CF = sum(CF), hours = sum(hours)) %>%
@@ -211,14 +179,10 @@ module_gcamusa_LA119.solar <- function(command, ...) {
       L119.CapacityFactor_CSP_state
 
     CSP_cf %>%
-      semi_join(CSP_cf_class_annual, by = "class") %>%
       group_by(segment) %>%
       summarize(capacity.factor = mean(CF)) %>%
       expand(., ., L119.CapFacScaler_CSP_state) %>%
-      mutate(capacity.factor = capacity.factor * scaler,
-             # application of scaler may lead to capacity factor > 1
-             # reset these capacity factors to 1
-             capacity.factor = if_else(capacity.factor > 1, 1, capacity.factor)) %>%
+      mutate(capacity.factor = capacity.factor * scaler) %>%
       select(state, segment, capacity.factor) ->
       L119.CapacityFactor_CSP_state_segment
 
