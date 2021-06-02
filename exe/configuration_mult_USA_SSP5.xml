@@ -63,6 +63,12 @@
 		<Value name = "nonco2_aglu">../input/gcamdata/xml/all_aglu_emissions_IRR_MGMT.xml</Value>
 		<Value name = "nonco2_aglu_prot">../input/gcamdata/xml/all_protected_unmgd_emissions.xml</Value>
 
+		<!-- Global nonCO2 GHG MAC files -->
+		<Value name = "nonco2_energy">../input/gcamdata/xml/all_energy_emissions_MAC.xml</Value>
+		<Value name = "nonco2_fgas">../input/gcamdata/xml/all_fgas_emissions_MAC.xml</Value>
+		<Value name = "nonco2_aglu">../input/gcamdata/xml/all_aglu_emissions_IRR_MGMT_MAC.xml</Value> 
+		<Value name = "nonco2_proc">../input/gcamdata/xml/ind_urb_processing_sectors_MAC.xml</Value>
+
 		<Value name = "unlim_supply_water">../input/gcamdata/xml/unlimited_water_supply.xml</Value>
 		<Value name = "water_supply">../input/gcamdata/xml/water_supply_constrained.xml</Value>
 		<Value name = "water_mapping">../input/gcamdata/xml/water_mapping.xml</Value>
@@ -98,7 +104,7 @@
 		<!-- NON-CO2 -->
 		<Value name="nonco2">../input/gcamdata/xml/delete_gdp_control.xml</Value>
 		<Value name="nonco2">../input/gcamdata/xml/ssp15_emissions_factors.xml</Value>
-		<Value name="nonco2">../input/gcamdata/xml/MACC_TC_SSP5.xml</Value>
+		<!-- <Value name="nonco2">../input/gcamdata/xml/MACC_TC_SSP5.xml</Value> -->
 		<!-- NEG EMISS BUDGET -->
 		<Value name = "bio_neg_emiss_budget">../input/gcamdata/xml/negative_emissions_budget_SSP5.xml</Value>
 
