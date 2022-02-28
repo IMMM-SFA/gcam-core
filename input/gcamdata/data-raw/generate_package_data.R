@@ -426,6 +426,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["StubTechNonCO2"]] <- c(level2_data_names[["StubTechYr"]], "Non.CO2")
   level2_data_names[["StubTechEmissUnits"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "emissions.unit")
   level2_data_names[["InputEmissCoeff"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "emiss.coef", "input.name")
+  level2_data_names[["OutputEmissCoeffDispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "Non.CO2", "emiss.coef")
   level2_data_names[["OutputEmissCoeff"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "emiss.coeff")
   level2_data_names[["InputEmissions"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "Non.CO2", "input.emissions", "input.name")
   level2_data_names[["OutputEmissCoeffDispatch"]] <- c("region", "dispatch.sector", "subsector", "capacity.technology", "year", "Non.CO2", "emiss.coef")
