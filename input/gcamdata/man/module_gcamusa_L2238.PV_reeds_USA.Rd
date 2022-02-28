@@ -31,4 +31,16 @@ Create state-level solar PV resource supply curves
 }
 \author{
 MTB September 2018 / AJS June 2019 / YO April 2020
+L223.StubTechMarket_Investment',
+L223.TechEff_Dispatch',
+L223.GlobalTechCapital_Investment',
+L223.GlobalIntTechCapital_elec',
+L223.GlobalIntTechOMfixed_elec'
+L223.GlobalTechCapital_Investment',
+L223.GlobalIntTechCapital_elec',
+L223.GlobalIntTechOMfixed_elec') ->
+L223.StubTechMarket_Investment',
+L223.GlobalTechCapital_Investment',
+L223.GlobalIntTechCapital_elec',
+L223.GlobalIntTechOMfixed_elec') ->
 }

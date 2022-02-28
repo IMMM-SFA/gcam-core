@@ -14,9 +14,9 @@ module_gcamusa_L201.socioeconomics_USA(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L201.InterestRate_GCAMUSA}, \code{L201.Pop_GCAMUSA}, \code{L201.BaseGDP_GCAMUSA},
+the generated outputs: \code{L201.InterestRate_GCAMUSA}, \code{L201.Pop_GCAMUSA},\code{L201.Pop_GCAMUSA_SSP}, \code{L201.BaseGDP_GCAMUSA},
 \code{L201.LaborForceFillout_GCAMUSA}, \code{L201.LaborProductivity_GCAMUSA}, \code{L201.Pop_national_updated_USA},
-\code{L201.BaseGDP_national_updated_USA}, \code{L201.LaborProductivity_national_updated_USA}.
+\code{L201.Pop_national_updated_USA_SSP}, \code{L201.BaseGDP_national_updated_USA}, \code{L201.LaborProductivity_national_updated_USA}.
 The corresponding file in the original data system was \code{L201.socioeconomics_USA.R} (gcam-usa level2).
 }
 \description{

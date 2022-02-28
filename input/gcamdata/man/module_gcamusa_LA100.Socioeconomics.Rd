@@ -14,7 +14,7 @@ module_gcamusa_LA100.Socioeconomics(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L100.pcGDP_thous90usd_state}, \code{L100.GDP_mil90usd_state}, \code{L100.Pop_thous_state}. The corresponding file in the
+the generated outputs: \code{L100.pcGDP_thous90usd_state}, \code{L100.pcGDP_thous90usd_state_SSP}, \code{L100.GDP_mil90usd_state}, \code{L100.Pop_thous_state}. The corresponding file in the
 original data system was \code{LA100.Socioeconomics.R} (gcam-usa level1).
 }
 \description{

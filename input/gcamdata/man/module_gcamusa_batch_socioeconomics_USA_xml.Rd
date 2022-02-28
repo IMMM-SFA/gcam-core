@@ -14,7 +14,9 @@ module_gcamusa_batch_socioeconomics_USA_xml(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{socioeconomics_USA.xml}. The corresponding file in the
+the generated outputs: \code{socioeconomics_USA.xml}, \code{socioeconomics_USA_SSP1.xml},
+\code{socioeconomics_USA_SSP2.xml}, \code{socioeconomics_USA_SSP3.xml},\code{socioeconomics_USA_SSP4.xml},
+\code{socioeconomics_USA_SSP5.xml}. The corresponding file in the
 original data system was \code{batch_socioeconomics_USA.xml} (gcamusa XML).
 }
 \description{

@@ -14,13 +14,12 @@ module_gcamusa_L210.resources_USA(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L210.DeleteRenewRsrc_USArsrc}, \code{L210.DeleteUnlimitRsrc_USArsrc},
-\code{L210.RenewRsrc_USA},\code{L210.UnlimitRsrc_USA}, \code{L210.UnlimitRsrcPrice_USA}, \code{L210.UnlimitRsrc_hydro_USA},
-\code{L210.UnlimitRsrcPrice_hydro_USA}, \code{L210.SmthRenewRsrcTechChange_USA}, \code{L210.SmthRenewRsrcCurves_wind_USA},
-\code{L210.SmthRenewRsrcCurves_offshore_wind_USA}, \code{L210.GrdRenewRsrcCurves_USA}, \code{L210.GrdRenewRsrcMax_USA},
+the generated outputs: \code{L210.DeleteRenewRsrc_USArsrc}, \code{L210.DeleteUnlimitRsrc_USArsrc}, \code{L210.RenewRsrc_USA},
+\code{L210.UnlimitRsrc_USA}, \code{L210.UnlimitRsrcPrice_USA}, \code{L210.SmthRenewRsrcTechChange_USA}, \code{L210.SmthRenewRsrcTechChange_offshore_wind_USA},
+\code{L210.SmthRenewRsrcCurves_wind_USA}, \code{L210.SmthRenewRsrcCurves_offshore_wind_USA}, \code{L210.GrdRenewRsrcCurves_geo_USA}, \code{L210.GrdRenewRsrcMax_geo_USA},
 \code{L210.SmthRenewRsrcCurvesGdpElast_roofPV_USA}, \code{L210.DeleteUnlimitRsrc_USAlimestone},
-\code{L210.UnlimitRsrc_limestone_USA}, \code{L210.UnlimitRsrcPrice_limestone_USA}, \code{L210.ResTechShrwt_USA}.
-The corresponding file in the original data system was \code{L210.resources_USA.R} (gcam-usa level2).
+\code{L210.UnlimitRsrc_limestone_USA}, \code{L210.UnlimitRsrcPrice_limestone_USA}, \code{L210.ResTechShrwt_USA}. The corresponding file in the
+original data system was \code{L210.resources_USA.R} (gcam-usa level2).
 }
 \description{
 GCAM-USA resource market information, prices, TechChange parameters, and supply curves.
@@ -30,4 +29,6 @@ GCAM-USA resource market information, prices, TechChange parameters, and supply 
 }
 \author{
 RLH November 2017
+L2237.StubTechCost_wind_reeds_USA',
+L2237.StubTechCost_wind_reeds_USA',
 }
