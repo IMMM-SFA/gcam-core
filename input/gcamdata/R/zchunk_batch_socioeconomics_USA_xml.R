@@ -9,7 +9,8 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{socioeconomics_USA.xml}, \code{socioeconomics_USA_SSP1.xml},
-#' \code{socioeconomics_USA_SSP2.xml}, \code{socioeconomics_USA_SSP3.xml},\code{socioeconomics_USA_SSP4.xml},
+#' \code{socioeconomics_USA_SSP2.xml}, \code{socioeconomics_USA_SSP3.xml},
+#' \code{socioeconomics_USA_SSP3_rcp85gdp.xml},\code{socioeconomics_USA_SSP4.xml},
 #' \code{socioeconomics_USA_SSP5.xml}. The corresponding file in the
 #' original data system was \code{batch_socioeconomics_USA.xml} (gcamusa XML).
 module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
@@ -30,6 +31,7 @@ module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
              XML = "socioeconomics_USA_SSP1.xml",
              XML = "socioeconomics_USA_SSP2.xml",
              XML = "socioeconomics_USA_SSP3.xml",
+             XML = "socioeconomics_USA_SSP3_rcp85gdp.xml",
              XML = "socioeconomics_USA_SSP4.xml",
              XML = "socioeconomics_USA_SSP5.xml"))
   } else if(command == driver.MAKE) {
@@ -121,6 +123,24 @@ module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
                      "L201.LaborProductivity_gSSP_GCAMUSA") ->
       socioeconomics_USA_SSP3.xml
 
+    # Produce outputs SSP3_rcp85gdp
+    create_xml("socioeconomics_USA_SSP3_rcp85gdp.xml") %>%
+      add_xml_data(L201.Pop_GCAMUSA_SSP %>%
+                     filter(SSP==3) %>%
+                     select(-SSP), "Pop") %>%
+      add_xml_data(L201.Pop_national_updated_USA_SSP %>%
+                     filter(SSP==3) %>%
+                     select(-SSP), "Pop")  %>%
+      add_xml_data(L201.LaborProductivity_gSSP_GCAMUSA %>%
+                     filter(ssp=="ssp3") %>%
+                     dplyr::mutate(laborproductivity = laborproductivity + 0.004) %>%
+                     select(-ssp), "LaborProductivity") %>%
+      add_precursors("L201.Pop_GCAMUSA_SSP",
+                     "L201.Pop_national_updated_USA_SSP",
+                     "L201.LaborProductivity_GCAMUSA",
+                     "L201.LaborProductivity_gSSP_GCAMUSA") ->
+      socioeconomics_USA_SSP3_rcp85gdp.xml
+
     # Produce outputs SSP4
     create_xml("socioeconomics_USA_SSP4.xml") %>%
       add_xml_data(L201.Pop_GCAMUSA_SSP %>%
@@ -160,6 +180,7 @@ module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
                 socioeconomics_USA_SSP1.xml,
                 socioeconomics_USA_SSP2.xml,
                 socioeconomics_USA_SSP3.xml,
+                socioeconomics_USA_SSP3_rcp85gdp.xml,
                 socioeconomics_USA_SSP4.xml,
                 socioeconomics_USA_SSP5.xml)
   } else {
