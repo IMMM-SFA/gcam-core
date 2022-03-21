@@ -123,10 +123,10 @@ module_socio_batch_SSP_xml <- function(command, ...) {
     # after 2010 in all regions above the original SSP3 growth rate, leading to a 42% larger global GDP in 2100.”
 
     L201.LaborProductivity_SSP3_rcp85gdp <- L201.LaborProductivity_SSP3 %>%
-      dplyr::mutate(laborproductivity = laborproductivity + 0.004)
+      dplyr::mutate(laborproductivity = laborproductivity + 0.005)
 
     L201.LaborProductivity_gSSP3_rcp85gdp <- L201.LaborProductivity_gSSP3 %>%
-      dplyr::mutate(laborproductivity = laborproductivity + 0.004)
+      dplyr::mutate(laborproductivity = laborproductivity + 0.005)
 
     # SSP3 Modified with rcp85 GDP
     create_xml("socioeconomics_SSP3_rcp85gdp.xml") %>%

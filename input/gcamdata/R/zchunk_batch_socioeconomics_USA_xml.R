@@ -133,7 +133,7 @@ module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
                      select(-SSP), "Pop")  %>%
       add_xml_data(L201.LaborProductivity_gSSP_GCAMUSA %>%
                      filter(ssp=="ssp3") %>%
-                     dplyr::mutate(laborproductivity = laborproductivity + 0.004) %>%
+                     dplyr::mutate(laborproductivity = laborproductivity + 0.005) %>%
                      select(-ssp), "LaborProductivity") %>%
       add_precursors("L201.Pop_GCAMUSA_SSP",
                      "L201.Pop_national_updated_USA_SSP",
