@@ -1,0 +1,2994 @@
+<?xml version="1.0" encoding="UTF-8"?><scenario>
+    <world>
+        <region name="AK">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+        <region name="AZ">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+        <region name="CA">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+        <region name="CO">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+        <region name="HI">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+        <region name="ID">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+        <region name="MT">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+        <region name="NM">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+        <region name="NV">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+        <region name="OR">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+        <region name="UT">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+        <region name="WA">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+        <region name="WY">
+            <dispatch-sector name="electricity">
+                <subsector name="geothermal">
+                    <capacity-technology name="geothermal (dry_hybrid)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                    <capacity-technology name="geothermal (recirculating)">
+                        <period year="1975">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="1990">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2005">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2020">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2025">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2030">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2035">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2040">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2045">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2050">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2055">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2060">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2065">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2070">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2075">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2080">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2085">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2090">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2095">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                        <period year="2100">
+                            <minicam-energy-input name="geothermal">
+                                <price-unit-conversion>0</price-unit-conversion>
+                            </minicam-energy-input>
+                        </period>
+                    </capacity-technology>
+                </subsector>
+            </dispatch-sector>
+        </region>
+    </world>
+</scenario>
