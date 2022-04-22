@@ -1,0 +1,2849 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario>
+    <world>
+        <region name="AK">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>AK</market>
+                <price year="1975">0.49</price>
+                <price year="1990">0.49</price>
+                <price year="2005">0.49</price>
+                <price year="2010">0.49</price>
+                <price year="2015">0.49</price>
+                <price year="2020">0.49</price>
+                <price year="2025">0.49</price>
+                <price year="2030">0.49</price>
+                <price year="2035">0.49</price>
+                <price year="2040">0.49</price>
+                <price year="2045">0.49</price>
+                <price year="2050">0.49</price>
+                <price year="2055">0.49</price>
+                <price year="2060">0.49</price>
+                <price year="2065">0.49</price>
+                <price year="2070">0.49</price>
+                <price year="2075">0.49</price>
+                <price year="2080">0.49</price>
+                <price year="2085">0.49</price>
+                <price year="2090">0.49</price>
+                <price year="2095">0.49</price>
+                <price year="2100">0.49</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>AK</market>
+                <price year="1975">0.89</price>
+                <price year="1990">0.89</price>
+                <price year="2005">0.89</price>
+                <price year="2010">0.89</price>
+                <price year="2015">0.89</price>
+                <price year="2020">0.89</price>
+                <price year="2025">0.89</price>
+                <price year="2030">0.89</price>
+                <price year="2035">0.89</price>
+                <price year="2040">0.89</price>
+                <price year="2045">0.89</price>
+                <price year="2050">0.89</price>
+                <price year="2055">0.89</price>
+                <price year="2060">0.89</price>
+                <price year="2065">0.89</price>
+                <price year="2070">0.89</price>
+                <price year="2075">0.89</price>
+                <price year="2080">0.89</price>
+                <price year="2085">0.89</price>
+                <price year="2090">0.89</price>
+                <price year="2095">0.89</price>
+                <price year="2100">0.89</price>
+            </unlimited-resource>
+        </region>
+        <region name="AL">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>AL</market>
+                <price year="1975">0.68</price>
+                <price year="1990">0.68</price>
+                <price year="2005">0.68</price>
+                <price year="2010">0.68</price>
+                <price year="2015">0.68</price>
+                <price year="2020">0.68</price>
+                <price year="2025">0.68</price>
+                <price year="2030">0.68</price>
+                <price year="2035">0.68</price>
+                <price year="2040">0.68</price>
+                <price year="2045">0.68</price>
+                <price year="2050">0.68</price>
+                <price year="2055">0.68</price>
+                <price year="2060">0.68</price>
+                <price year="2065">0.68</price>
+                <price year="2070">0.68</price>
+                <price year="2075">0.68</price>
+                <price year="2080">0.68</price>
+                <price year="2085">0.68</price>
+                <price year="2090">0.68</price>
+                <price year="2095">0.68</price>
+                <price year="2100">0.68</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>AL</market>
+                <price year="1975">0.78</price>
+                <price year="1990">0.78</price>
+                <price year="2005">0.78</price>
+                <price year="2010">0.78</price>
+                <price year="2015">0.78</price>
+                <price year="2020">0.78</price>
+                <price year="2025">0.78</price>
+                <price year="2030">0.78</price>
+                <price year="2035">0.78</price>
+                <price year="2040">0.78</price>
+                <price year="2045">0.78</price>
+                <price year="2050">0.78</price>
+                <price year="2055">0.78</price>
+                <price year="2060">0.78</price>
+                <price year="2065">0.78</price>
+                <price year="2070">0.78</price>
+                <price year="2075">0.78</price>
+                <price year="2080">0.78</price>
+                <price year="2085">0.78</price>
+                <price year="2090">0.78</price>
+                <price year="2095">0.78</price>
+                <price year="2100">0.78</price>
+            </unlimited-resource>
+        </region>
+        <region name="AR">
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>AR</market>
+                <price year="1975">0.8</price>
+                <price year="1990">0.8</price>
+                <price year="2005">0.8</price>
+                <price year="2010">0.8</price>
+                <price year="2015">0.8</price>
+                <price year="2020">0.8</price>
+                <price year="2025">0.8</price>
+                <price year="2030">0.8</price>
+                <price year="2035">0.8</price>
+                <price year="2040">0.8</price>
+                <price year="2045">0.8</price>
+                <price year="2050">0.8</price>
+                <price year="2055">0.8</price>
+                <price year="2060">0.8</price>
+                <price year="2065">0.8</price>
+                <price year="2070">0.8</price>
+                <price year="2075">0.8</price>
+                <price year="2080">0.8</price>
+                <price year="2085">0.8</price>
+                <price year="2090">0.8</price>
+                <price year="2095">0.8</price>
+                <price year="2100">0.8</price>
+            </unlimited-resource>
+        </region>
+        <region name="AZ">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>AZ</market>
+                <price year="1975">0.63</price>
+                <price year="1990">0.63</price>
+                <price year="2005">0.63</price>
+                <price year="2010">0.63</price>
+                <price year="2015">0.63</price>
+                <price year="2020">0.63</price>
+                <price year="2025">0.63</price>
+                <price year="2030">0.63</price>
+                <price year="2035">0.63</price>
+                <price year="2040">0.63</price>
+                <price year="2045">0.63</price>
+                <price year="2050">0.63</price>
+                <price year="2055">0.63</price>
+                <price year="2060">0.63</price>
+                <price year="2065">0.63</price>
+                <price year="2070">0.63</price>
+                <price year="2075">0.63</price>
+                <price year="2080">0.63</price>
+                <price year="2085">0.63</price>
+                <price year="2090">0.63</price>
+                <price year="2095">0.63</price>
+                <price year="2100">0.63</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>AZ</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+        </region>
+        <region name="CA">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>CA</market>
+                <price year="1975">0.62</price>
+                <price year="1990">0.62</price>
+                <price year="2005">0.62</price>
+                <price year="2010">0.62</price>
+                <price year="2015">0.62</price>
+                <price year="2020">0.62</price>
+                <price year="2025">0.62</price>
+                <price year="2030">0.62</price>
+                <price year="2035">0.62</price>
+                <price year="2040">0.62</price>
+                <price year="2045">0.62</price>
+                <price year="2050">0.62</price>
+                <price year="2055">0.62</price>
+                <price year="2060">0.62</price>
+                <price year="2065">0.62</price>
+                <price year="2070">0.62</price>
+                <price year="2075">0.62</price>
+                <price year="2080">0.62</price>
+                <price year="2085">0.62</price>
+                <price year="2090">0.62</price>
+                <price year="2095">0.62</price>
+                <price year="2100">0.62</price>
+            </unlimited-resource>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>CA</market>
+                <price year="1975">0.51</price>
+                <price year="1990">0.51</price>
+                <price year="2005">0.51</price>
+                <price year="2010">0.51</price>
+                <price year="2015">0.51</price>
+                <price year="2020">0.51</price>
+                <price year="2025">0.51</price>
+                <price year="2030">0.51</price>
+                <price year="2035">0.51</price>
+                <price year="2040">0.51</price>
+                <price year="2045">0.51</price>
+                <price year="2050">0.51</price>
+                <price year="2055">0.51</price>
+                <price year="2060">0.51</price>
+                <price year="2065">0.51</price>
+                <price year="2070">0.51</price>
+                <price year="2075">0.51</price>
+                <price year="2080">0.51</price>
+                <price year="2085">0.51</price>
+                <price year="2090">0.51</price>
+                <price year="2095">0.51</price>
+                <price year="2100">0.51</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>CA</market>
+                <price year="1975">0.71</price>
+                <price year="1990">0.71</price>
+                <price year="2005">0.71</price>
+                <price year="2010">0.71</price>
+                <price year="2015">0.71</price>
+                <price year="2020">0.71</price>
+                <price year="2025">0.71</price>
+                <price year="2030">0.71</price>
+                <price year="2035">0.71</price>
+                <price year="2040">0.71</price>
+                <price year="2045">0.71</price>
+                <price year="2050">0.71</price>
+                <price year="2055">0.71</price>
+                <price year="2060">0.71</price>
+                <price year="2065">0.71</price>
+                <price year="2070">0.71</price>
+                <price year="2075">0.71</price>
+                <price year="2080">0.71</price>
+                <price year="2085">0.71</price>
+                <price year="2090">0.71</price>
+                <price year="2095">0.71</price>
+                <price year="2100">0.71</price>
+            </unlimited-resource>
+        </region>
+        <region name="CO">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>CO</market>
+                <price year="1975">0.64</price>
+                <price year="1990">0.64</price>
+                <price year="2005">0.64</price>
+                <price year="2010">0.64</price>
+                <price year="2015">0.64</price>
+                <price year="2020">0.64</price>
+                <price year="2025">0.64</price>
+                <price year="2030">0.64</price>
+                <price year="2035">0.64</price>
+                <price year="2040">0.64</price>
+                <price year="2045">0.64</price>
+                <price year="2050">0.64</price>
+                <price year="2055">0.64</price>
+                <price year="2060">0.64</price>
+                <price year="2065">0.64</price>
+                <price year="2070">0.64</price>
+                <price year="2075">0.64</price>
+                <price year="2080">0.64</price>
+                <price year="2085">0.64</price>
+                <price year="2090">0.64</price>
+                <price year="2095">0.64</price>
+                <price year="2100">0.64</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>CO</market>
+                <price year="1975">0.72</price>
+                <price year="1990">0.72</price>
+                <price year="2005">0.72</price>
+                <price year="2010">0.72</price>
+                <price year="2015">0.72</price>
+                <price year="2020">0.72</price>
+                <price year="2025">0.72</price>
+                <price year="2030">0.72</price>
+                <price year="2035">0.72</price>
+                <price year="2040">0.72</price>
+                <price year="2045">0.72</price>
+                <price year="2050">0.72</price>
+                <price year="2055">0.72</price>
+                <price year="2060">0.72</price>
+                <price year="2065">0.72</price>
+                <price year="2070">0.72</price>
+                <price year="2075">0.72</price>
+                <price year="2080">0.72</price>
+                <price year="2085">0.72</price>
+                <price year="2090">0.72</price>
+                <price year="2095">0.72</price>
+                <price year="2100">0.72</price>
+            </unlimited-resource>
+        </region>
+        <region name="CT">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>CT</market>
+                <price year="1975">0.6</price>
+                <price year="1990">0.6</price>
+                <price year="2005">0.6</price>
+                <price year="2010">0.6</price>
+                <price year="2015">0.6</price>
+                <price year="2020">0.6</price>
+                <price year="2025">0.6</price>
+                <price year="2030">0.6</price>
+                <price year="2035">0.6</price>
+                <price year="2040">0.6</price>
+                <price year="2045">0.6</price>
+                <price year="2050">0.6</price>
+                <price year="2055">0.6</price>
+                <price year="2060">0.6</price>
+                <price year="2065">0.6</price>
+                <price year="2070">0.6</price>
+                <price year="2075">0.6</price>
+                <price year="2080">0.6</price>
+                <price year="2085">0.6</price>
+                <price year="2090">0.6</price>
+                <price year="2095">0.6</price>
+                <price year="2100">0.6</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>CT</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="DE">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>DE</market>
+                <price year="1975">0.58</price>
+                <price year="1990">0.58</price>
+                <price year="2005">0.58</price>
+                <price year="2010">0.58</price>
+                <price year="2015">0.58</price>
+                <price year="2020">0.58</price>
+                <price year="2025">0.58</price>
+                <price year="2030">0.58</price>
+                <price year="2035">0.58</price>
+                <price year="2040">0.58</price>
+                <price year="2045">0.58</price>
+                <price year="2050">0.58</price>
+                <price year="2055">0.58</price>
+                <price year="2060">0.58</price>
+                <price year="2065">0.58</price>
+                <price year="2070">0.58</price>
+                <price year="2075">0.58</price>
+                <price year="2080">0.58</price>
+                <price year="2085">0.58</price>
+                <price year="2090">0.58</price>
+                <price year="2095">0.58</price>
+                <price year="2100">0.58</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>DE</market>
+                <price year="1975">0.8</price>
+                <price year="1990">0.8</price>
+                <price year="2005">0.8</price>
+                <price year="2010">0.8</price>
+                <price year="2015">0.8</price>
+                <price year="2020">0.8</price>
+                <price year="2025">0.8</price>
+                <price year="2030">0.8</price>
+                <price year="2035">0.8</price>
+                <price year="2040">0.8</price>
+                <price year="2045">0.8</price>
+                <price year="2050">0.8</price>
+                <price year="2055">0.8</price>
+                <price year="2060">0.8</price>
+                <price year="2065">0.8</price>
+                <price year="2070">0.8</price>
+                <price year="2075">0.8</price>
+                <price year="2080">0.8</price>
+                <price year="2085">0.8</price>
+                <price year="2090">0.8</price>
+                <price year="2095">0.8</price>
+                <price year="2100">0.8</price>
+            </unlimited-resource>
+        </region>
+        <region name="FL">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>FL</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>FL</market>
+                <price year="1975">0.63</price>
+                <price year="1990">0.63</price>
+                <price year="2005">0.63</price>
+                <price year="2010">0.63</price>
+                <price year="2015">0.63</price>
+                <price year="2020">0.63</price>
+                <price year="2025">0.63</price>
+                <price year="2030">0.63</price>
+                <price year="2035">0.63</price>
+                <price year="2040">0.63</price>
+                <price year="2045">0.63</price>
+                <price year="2050">0.63</price>
+                <price year="2055">0.63</price>
+                <price year="2060">0.63</price>
+                <price year="2065">0.63</price>
+                <price year="2070">0.63</price>
+                <price year="2075">0.63</price>
+                <price year="2080">0.63</price>
+                <price year="2085">0.63</price>
+                <price year="2090">0.63</price>
+                <price year="2095">0.63</price>
+                <price year="2100">0.63</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>FL</market>
+                <price year="1975">0.78</price>
+                <price year="1990">0.78</price>
+                <price year="2005">0.78</price>
+                <price year="2010">0.78</price>
+                <price year="2015">0.78</price>
+                <price year="2020">0.78</price>
+                <price year="2025">0.78</price>
+                <price year="2030">0.78</price>
+                <price year="2035">0.78</price>
+                <price year="2040">0.78</price>
+                <price year="2045">0.78</price>
+                <price year="2050">0.78</price>
+                <price year="2055">0.78</price>
+                <price year="2060">0.78</price>
+                <price year="2065">0.78</price>
+                <price year="2070">0.78</price>
+                <price year="2075">0.78</price>
+                <price year="2080">0.78</price>
+                <price year="2085">0.78</price>
+                <price year="2090">0.78</price>
+                <price year="2095">0.78</price>
+                <price year="2100">0.78</price>
+            </unlimited-resource>
+        </region>
+        <region name="GA">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>GA</market>
+                <price year="1975">0.61</price>
+                <price year="1990">0.61</price>
+                <price year="2005">0.61</price>
+                <price year="2010">0.61</price>
+                <price year="2015">0.61</price>
+                <price year="2020">0.61</price>
+                <price year="2025">0.61</price>
+                <price year="2030">0.61</price>
+                <price year="2035">0.61</price>
+                <price year="2040">0.61</price>
+                <price year="2045">0.61</price>
+                <price year="2050">0.61</price>
+                <price year="2055">0.61</price>
+                <price year="2060">0.61</price>
+                <price year="2065">0.61</price>
+                <price year="2070">0.61</price>
+                <price year="2075">0.61</price>
+                <price year="2080">0.61</price>
+                <price year="2085">0.61</price>
+                <price year="2090">0.61</price>
+                <price year="2095">0.61</price>
+                <price year="2100">0.61</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>GA</market>
+                <price year="1975">0.79</price>
+                <price year="1990">0.79</price>
+                <price year="2005">0.79</price>
+                <price year="2010">0.79</price>
+                <price year="2015">0.79</price>
+                <price year="2020">0.79</price>
+                <price year="2025">0.79</price>
+                <price year="2030">0.79</price>
+                <price year="2035">0.79</price>
+                <price year="2040">0.79</price>
+                <price year="2045">0.79</price>
+                <price year="2050">0.79</price>
+                <price year="2055">0.79</price>
+                <price year="2060">0.79</price>
+                <price year="2065">0.79</price>
+                <price year="2070">0.79</price>
+                <price year="2075">0.79</price>
+                <price year="2080">0.79</price>
+                <price year="2085">0.79</price>
+                <price year="2090">0.79</price>
+                <price year="2095">0.79</price>
+                <price year="2100">0.79</price>
+            </unlimited-resource>
+        </region>
+        <region name="HI">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>HI</market>
+                <price year="1975">0.68</price>
+                <price year="1990">0.68</price>
+                <price year="2005">0.68</price>
+                <price year="2010">0.68</price>
+                <price year="2015">0.68</price>
+                <price year="2020">0.68</price>
+                <price year="2025">0.68</price>
+                <price year="2030">0.68</price>
+                <price year="2035">0.68</price>
+                <price year="2040">0.68</price>
+                <price year="2045">0.68</price>
+                <price year="2050">0.68</price>
+                <price year="2055">0.68</price>
+                <price year="2060">0.68</price>
+                <price year="2065">0.68</price>
+                <price year="2070">0.68</price>
+                <price year="2075">0.68</price>
+                <price year="2080">0.68</price>
+                <price year="2085">0.68</price>
+                <price year="2090">0.68</price>
+                <price year="2095">0.68</price>
+                <price year="2100">0.68</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>HI</market>
+                <price year="1975">0.79</price>
+                <price year="1990">0.79</price>
+                <price year="2005">0.79</price>
+                <price year="2010">0.79</price>
+                <price year="2015">0.79</price>
+                <price year="2020">0.79</price>
+                <price year="2025">0.79</price>
+                <price year="2030">0.79</price>
+                <price year="2035">0.79</price>
+                <price year="2040">0.79</price>
+                <price year="2045">0.79</price>
+                <price year="2050">0.79</price>
+                <price year="2055">0.79</price>
+                <price year="2060">0.79</price>
+                <price year="2065">0.79</price>
+                <price year="2070">0.79</price>
+                <price year="2075">0.79</price>
+                <price year="2080">0.79</price>
+                <price year="2085">0.79</price>
+                <price year="2090">0.79</price>
+                <price year="2095">0.79</price>
+                <price year="2100">0.79</price>
+            </unlimited-resource>
+        </region>
+        <region name="IA">
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>IA</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="ID">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>ID</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>ID</market>
+                <price year="1975">0.77</price>
+                <price year="1990">0.77</price>
+                <price year="2005">0.77</price>
+                <price year="2010">0.77</price>
+                <price year="2015">0.77</price>
+                <price year="2020">0.77</price>
+                <price year="2025">0.77</price>
+                <price year="2030">0.77</price>
+                <price year="2035">0.77</price>
+                <price year="2040">0.77</price>
+                <price year="2045">0.77</price>
+                <price year="2050">0.77</price>
+                <price year="2055">0.77</price>
+                <price year="2060">0.77</price>
+                <price year="2065">0.77</price>
+                <price year="2070">0.77</price>
+                <price year="2075">0.77</price>
+                <price year="2080">0.77</price>
+                <price year="2085">0.77</price>
+                <price year="2090">0.77</price>
+                <price year="2095">0.77</price>
+                <price year="2100">0.77</price>
+            </unlimited-resource>
+        </region>
+        <region name="IL">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>IL</market>
+                <price year="1975">0.57</price>
+                <price year="1990">0.57</price>
+                <price year="2005">0.57</price>
+                <price year="2010">0.57</price>
+                <price year="2015">0.57</price>
+                <price year="2020">0.57</price>
+                <price year="2025">0.57</price>
+                <price year="2030">0.57</price>
+                <price year="2035">0.57</price>
+                <price year="2040">0.57</price>
+                <price year="2045">0.57</price>
+                <price year="2050">0.57</price>
+                <price year="2055">0.57</price>
+                <price year="2060">0.57</price>
+                <price year="2065">0.57</price>
+                <price year="2070">0.57</price>
+                <price year="2075">0.57</price>
+                <price year="2080">0.57</price>
+                <price year="2085">0.57</price>
+                <price year="2090">0.57</price>
+                <price year="2095">0.57</price>
+                <price year="2100">0.57</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>IL</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="IN">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>IN</market>
+                <price year="1975">0.58</price>
+                <price year="1990">0.58</price>
+                <price year="2005">0.58</price>
+                <price year="2010">0.58</price>
+                <price year="2015">0.58</price>
+                <price year="2020">0.58</price>
+                <price year="2025">0.58</price>
+                <price year="2030">0.58</price>
+                <price year="2035">0.58</price>
+                <price year="2040">0.58</price>
+                <price year="2045">0.58</price>
+                <price year="2050">0.58</price>
+                <price year="2055">0.58</price>
+                <price year="2060">0.58</price>
+                <price year="2065">0.58</price>
+                <price year="2070">0.58</price>
+                <price year="2075">0.58</price>
+                <price year="2080">0.58</price>
+                <price year="2085">0.58</price>
+                <price year="2090">0.58</price>
+                <price year="2095">0.58</price>
+                <price year="2100">0.58</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>IN</market>
+                <price year="1975">0.82</price>
+                <price year="1990">0.82</price>
+                <price year="2005">0.82</price>
+                <price year="2010">0.82</price>
+                <price year="2015">0.82</price>
+                <price year="2020">0.82</price>
+                <price year="2025">0.82</price>
+                <price year="2030">0.82</price>
+                <price year="2035">0.82</price>
+                <price year="2040">0.82</price>
+                <price year="2045">0.82</price>
+                <price year="2050">0.82</price>
+                <price year="2055">0.82</price>
+                <price year="2060">0.82</price>
+                <price year="2065">0.82</price>
+                <price year="2070">0.82</price>
+                <price year="2075">0.82</price>
+                <price year="2080">0.82</price>
+                <price year="2085">0.82</price>
+                <price year="2090">0.82</price>
+                <price year="2095">0.82</price>
+                <price year="2100">0.82</price>
+            </unlimited-resource>
+        </region>
+        <region name="KS">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>KS</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>KS</market>
+                <price year="1975">0.75</price>
+                <price year="1990">0.75</price>
+                <price year="2005">0.75</price>
+                <price year="2010">0.75</price>
+                <price year="2015">0.75</price>
+                <price year="2020">0.75</price>
+                <price year="2025">0.75</price>
+                <price year="2030">0.75</price>
+                <price year="2035">0.75</price>
+                <price year="2040">0.75</price>
+                <price year="2045">0.75</price>
+                <price year="2050">0.75</price>
+                <price year="2055">0.75</price>
+                <price year="2060">0.75</price>
+                <price year="2065">0.75</price>
+                <price year="2070">0.75</price>
+                <price year="2075">0.75</price>
+                <price year="2080">0.75</price>
+                <price year="2085">0.75</price>
+                <price year="2090">0.75</price>
+                <price year="2095">0.75</price>
+                <price year="2100">0.75</price>
+            </unlimited-resource>
+        </region>
+        <region name="KY">
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>KY</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="LA">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>LA</market>
+                <price year="1975">0.62</price>
+                <price year="1990">0.62</price>
+                <price year="2005">0.62</price>
+                <price year="2010">0.62</price>
+                <price year="2015">0.62</price>
+                <price year="2020">0.62</price>
+                <price year="2025">0.62</price>
+                <price year="2030">0.62</price>
+                <price year="2035">0.62</price>
+                <price year="2040">0.62</price>
+                <price year="2045">0.62</price>
+                <price year="2050">0.62</price>
+                <price year="2055">0.62</price>
+                <price year="2060">0.62</price>
+                <price year="2065">0.62</price>
+                <price year="2070">0.62</price>
+                <price year="2075">0.62</price>
+                <price year="2080">0.62</price>
+                <price year="2085">0.62</price>
+                <price year="2090">0.62</price>
+                <price year="2095">0.62</price>
+                <price year="2100">0.62</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>LA</market>
+                <price year="1975">0.78</price>
+                <price year="1990">0.78</price>
+                <price year="2005">0.78</price>
+                <price year="2010">0.78</price>
+                <price year="2015">0.78</price>
+                <price year="2020">0.78</price>
+                <price year="2025">0.78</price>
+                <price year="2030">0.78</price>
+                <price year="2035">0.78</price>
+                <price year="2040">0.78</price>
+                <price year="2045">0.78</price>
+                <price year="2050">0.78</price>
+                <price year="2055">0.78</price>
+                <price year="2060">0.78</price>
+                <price year="2065">0.78</price>
+                <price year="2070">0.78</price>
+                <price year="2075">0.78</price>
+                <price year="2080">0.78</price>
+                <price year="2085">0.78</price>
+                <price year="2090">0.78</price>
+                <price year="2095">0.78</price>
+                <price year="2100">0.78</price>
+            </unlimited-resource>
+        </region>
+        <region name="MA">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MA</market>
+                <price year="1975">0.5</price>
+                <price year="1990">0.5</price>
+                <price year="2005">0.5</price>
+                <price year="2010">0.5</price>
+                <price year="2015">0.5</price>
+                <price year="2020">0.5</price>
+                <price year="2025">0.5</price>
+                <price year="2030">0.5</price>
+                <price year="2035">0.5</price>
+                <price year="2040">0.5</price>
+                <price year="2045">0.5</price>
+                <price year="2050">0.5</price>
+                <price year="2055">0.5</price>
+                <price year="2060">0.5</price>
+                <price year="2065">0.5</price>
+                <price year="2070">0.5</price>
+                <price year="2075">0.5</price>
+                <price year="2080">0.5</price>
+                <price year="2085">0.5</price>
+                <price year="2090">0.5</price>
+                <price year="2095">0.5</price>
+                <price year="2100">0.5</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MA</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="MD">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MD</market>
+                <price year="1975">0.58</price>
+                <price year="1990">0.58</price>
+                <price year="2005">0.58</price>
+                <price year="2010">0.58</price>
+                <price year="2015">0.58</price>
+                <price year="2020">0.58</price>
+                <price year="2025">0.58</price>
+                <price year="2030">0.58</price>
+                <price year="2035">0.58</price>
+                <price year="2040">0.58</price>
+                <price year="2045">0.58</price>
+                <price year="2050">0.58</price>
+                <price year="2055">0.58</price>
+                <price year="2060">0.58</price>
+                <price year="2065">0.58</price>
+                <price year="2070">0.58</price>
+                <price year="2075">0.58</price>
+                <price year="2080">0.58</price>
+                <price year="2085">0.58</price>
+                <price year="2090">0.58</price>
+                <price year="2095">0.58</price>
+                <price year="2100">0.58</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MD</market>
+                <price year="1975">0.8</price>
+                <price year="1990">0.8</price>
+                <price year="2005">0.8</price>
+                <price year="2010">0.8</price>
+                <price year="2015">0.8</price>
+                <price year="2020">0.8</price>
+                <price year="2025">0.8</price>
+                <price year="2030">0.8</price>
+                <price year="2035">0.8</price>
+                <price year="2040">0.8</price>
+                <price year="2045">0.8</price>
+                <price year="2050">0.8</price>
+                <price year="2055">0.8</price>
+                <price year="2060">0.8</price>
+                <price year="2065">0.8</price>
+                <price year="2070">0.8</price>
+                <price year="2075">0.8</price>
+                <price year="2080">0.8</price>
+                <price year="2085">0.8</price>
+                <price year="2090">0.8</price>
+                <price year="2095">0.8</price>
+                <price year="2100">0.8</price>
+            </unlimited-resource>
+        </region>
+        <region name="ME">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>ME</market>
+                <price year="1975">0.49</price>
+                <price year="1990">0.49</price>
+                <price year="2005">0.49</price>
+                <price year="2010">0.49</price>
+                <price year="2015">0.49</price>
+                <price year="2020">0.49</price>
+                <price year="2025">0.49</price>
+                <price year="2030">0.49</price>
+                <price year="2035">0.49</price>
+                <price year="2040">0.49</price>
+                <price year="2045">0.49</price>
+                <price year="2050">0.49</price>
+                <price year="2055">0.49</price>
+                <price year="2060">0.49</price>
+                <price year="2065">0.49</price>
+                <price year="2070">0.49</price>
+                <price year="2075">0.49</price>
+                <price year="2080">0.49</price>
+                <price year="2085">0.49</price>
+                <price year="2090">0.49</price>
+                <price year="2095">0.49</price>
+                <price year="2100">0.49</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>ME</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="MI">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MI</market>
+                <price year="1975">0.52</price>
+                <price year="1990">0.52</price>
+                <price year="2005">0.52</price>
+                <price year="2010">0.52</price>
+                <price year="2015">0.52</price>
+                <price year="2020">0.52</price>
+                <price year="2025">0.52</price>
+                <price year="2030">0.52</price>
+                <price year="2035">0.52</price>
+                <price year="2040">0.52</price>
+                <price year="2045">0.52</price>
+                <price year="2050">0.52</price>
+                <price year="2055">0.52</price>
+                <price year="2060">0.52</price>
+                <price year="2065">0.52</price>
+                <price year="2070">0.52</price>
+                <price year="2075">0.52</price>
+                <price year="2080">0.52</price>
+                <price year="2085">0.52</price>
+                <price year="2090">0.52</price>
+                <price year="2095">0.52</price>
+                <price year="2100">0.52</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MI</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="MN">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MN</market>
+                <price year="1975">0.6</price>
+                <price year="1990">0.6</price>
+                <price year="2005">0.6</price>
+                <price year="2010">0.6</price>
+                <price year="2015">0.6</price>
+                <price year="2020">0.6</price>
+                <price year="2025">0.6</price>
+                <price year="2030">0.6</price>
+                <price year="2035">0.6</price>
+                <price year="2040">0.6</price>
+                <price year="2045">0.6</price>
+                <price year="2050">0.6</price>
+                <price year="2055">0.6</price>
+                <price year="2060">0.6</price>
+                <price year="2065">0.6</price>
+                <price year="2070">0.6</price>
+                <price year="2075">0.6</price>
+                <price year="2080">0.6</price>
+                <price year="2085">0.6</price>
+                <price year="2090">0.6</price>
+                <price year="2095">0.6</price>
+                <price year="2100">0.6</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MN</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="MO">
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MO</market>
+                <price year="1975">0.8</price>
+                <price year="1990">0.8</price>
+                <price year="2005">0.8</price>
+                <price year="2010">0.8</price>
+                <price year="2015">0.8</price>
+                <price year="2020">0.8</price>
+                <price year="2025">0.8</price>
+                <price year="2030">0.8</price>
+                <price year="2035">0.8</price>
+                <price year="2040">0.8</price>
+                <price year="2045">0.8</price>
+                <price year="2050">0.8</price>
+                <price year="2055">0.8</price>
+                <price year="2060">0.8</price>
+                <price year="2065">0.8</price>
+                <price year="2070">0.8</price>
+                <price year="2075">0.8</price>
+                <price year="2080">0.8</price>
+                <price year="2085">0.8</price>
+                <price year="2090">0.8</price>
+                <price year="2095">0.8</price>
+                <price year="2100">0.8</price>
+            </unlimited-resource>
+        </region>
+        <region name="MS">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MS</market>
+                <price year="1975">0.67</price>
+                <price year="1990">0.67</price>
+                <price year="2005">0.67</price>
+                <price year="2010">0.67</price>
+                <price year="2015">0.67</price>
+                <price year="2020">0.67</price>
+                <price year="2025">0.67</price>
+                <price year="2030">0.67</price>
+                <price year="2035">0.67</price>
+                <price year="2040">0.67</price>
+                <price year="2045">0.67</price>
+                <price year="2050">0.67</price>
+                <price year="2055">0.67</price>
+                <price year="2060">0.67</price>
+                <price year="2065">0.67</price>
+                <price year="2070">0.67</price>
+                <price year="2075">0.67</price>
+                <price year="2080">0.67</price>
+                <price year="2085">0.67</price>
+                <price year="2090">0.67</price>
+                <price year="2095">0.67</price>
+                <price year="2100">0.67</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MS</market>
+                <price year="1975">0.8</price>
+                <price year="1990">0.8</price>
+                <price year="2005">0.8</price>
+                <price year="2010">0.8</price>
+                <price year="2015">0.8</price>
+                <price year="2020">0.8</price>
+                <price year="2025">0.8</price>
+                <price year="2030">0.8</price>
+                <price year="2035">0.8</price>
+                <price year="2040">0.8</price>
+                <price year="2045">0.8</price>
+                <price year="2050">0.8</price>
+                <price year="2055">0.8</price>
+                <price year="2060">0.8</price>
+                <price year="2065">0.8</price>
+                <price year="2070">0.8</price>
+                <price year="2075">0.8</price>
+                <price year="2080">0.8</price>
+                <price year="2085">0.8</price>
+                <price year="2090">0.8</price>
+                <price year="2095">0.8</price>
+                <price year="2100">0.8</price>
+            </unlimited-resource>
+        </region>
+        <region name="MT">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MT</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>MT</market>
+                <price year="1975">0.79</price>
+                <price year="1990">0.79</price>
+                <price year="2005">0.79</price>
+                <price year="2010">0.79</price>
+                <price year="2015">0.79</price>
+                <price year="2020">0.79</price>
+                <price year="2025">0.79</price>
+                <price year="2030">0.79</price>
+                <price year="2035">0.79</price>
+                <price year="2040">0.79</price>
+                <price year="2045">0.79</price>
+                <price year="2050">0.79</price>
+                <price year="2055">0.79</price>
+                <price year="2060">0.79</price>
+                <price year="2065">0.79</price>
+                <price year="2070">0.79</price>
+                <price year="2075">0.79</price>
+                <price year="2080">0.79</price>
+                <price year="2085">0.79</price>
+                <price year="2090">0.79</price>
+                <price year="2095">0.79</price>
+                <price year="2100">0.79</price>
+            </unlimited-resource>
+        </region>
+        <region name="NC">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NC</market>
+                <price year="1975">0.56</price>
+                <price year="1990">0.56</price>
+                <price year="2005">0.56</price>
+                <price year="2010">0.56</price>
+                <price year="2015">0.56</price>
+                <price year="2020">0.56</price>
+                <price year="2025">0.56</price>
+                <price year="2030">0.56</price>
+                <price year="2035">0.56</price>
+                <price year="2040">0.56</price>
+                <price year="2045">0.56</price>
+                <price year="2050">0.56</price>
+                <price year="2055">0.56</price>
+                <price year="2060">0.56</price>
+                <price year="2065">0.56</price>
+                <price year="2070">0.56</price>
+                <price year="2075">0.56</price>
+                <price year="2080">0.56</price>
+                <price year="2085">0.56</price>
+                <price year="2090">0.56</price>
+                <price year="2095">0.56</price>
+                <price year="2100">0.56</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NC</market>
+                <price year="1975">0.8</price>
+                <price year="1990">0.8</price>
+                <price year="2005">0.8</price>
+                <price year="2010">0.8</price>
+                <price year="2015">0.8</price>
+                <price year="2020">0.8</price>
+                <price year="2025">0.8</price>
+                <price year="2030">0.8</price>
+                <price year="2035">0.8</price>
+                <price year="2040">0.8</price>
+                <price year="2045">0.8</price>
+                <price year="2050">0.8</price>
+                <price year="2055">0.8</price>
+                <price year="2060">0.8</price>
+                <price year="2065">0.8</price>
+                <price year="2070">0.8</price>
+                <price year="2075">0.8</price>
+                <price year="2080">0.8</price>
+                <price year="2085">0.8</price>
+                <price year="2090">0.8</price>
+                <price year="2095">0.8</price>
+                <price year="2100">0.8</price>
+            </unlimited-resource>
+        </region>
+        <region name="ND">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>ND</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>ND</market>
+                <price year="1975">0.79</price>
+                <price year="1990">0.79</price>
+                <price year="2005">0.79</price>
+                <price year="2010">0.79</price>
+                <price year="2015">0.79</price>
+                <price year="2020">0.79</price>
+                <price year="2025">0.79</price>
+                <price year="2030">0.79</price>
+                <price year="2035">0.79</price>
+                <price year="2040">0.79</price>
+                <price year="2045">0.79</price>
+                <price year="2050">0.79</price>
+                <price year="2055">0.79</price>
+                <price year="2060">0.79</price>
+                <price year="2065">0.79</price>
+                <price year="2070">0.79</price>
+                <price year="2075">0.79</price>
+                <price year="2080">0.79</price>
+                <price year="2085">0.79</price>
+                <price year="2090">0.79</price>
+                <price year="2095">0.79</price>
+                <price year="2100">0.79</price>
+            </unlimited-resource>
+        </region>
+        <region name="NE">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NE</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NE</market>
+                <price year="1975">0.77</price>
+                <price year="1990">0.77</price>
+                <price year="2005">0.77</price>
+                <price year="2010">0.77</price>
+                <price year="2015">0.77</price>
+                <price year="2020">0.77</price>
+                <price year="2025">0.77</price>
+                <price year="2030">0.77</price>
+                <price year="2035">0.77</price>
+                <price year="2040">0.77</price>
+                <price year="2045">0.77</price>
+                <price year="2050">0.77</price>
+                <price year="2055">0.77</price>
+                <price year="2060">0.77</price>
+                <price year="2065">0.77</price>
+                <price year="2070">0.77</price>
+                <price year="2075">0.77</price>
+                <price year="2080">0.77</price>
+                <price year="2085">0.77</price>
+                <price year="2090">0.77</price>
+                <price year="2095">0.77</price>
+                <price year="2100">0.77</price>
+            </unlimited-resource>
+        </region>
+        <region name="NH">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NH</market>
+                <price year="1975">0.62</price>
+                <price year="1990">0.62</price>
+                <price year="2005">0.62</price>
+                <price year="2010">0.62</price>
+                <price year="2015">0.62</price>
+                <price year="2020">0.62</price>
+                <price year="2025">0.62</price>
+                <price year="2030">0.62</price>
+                <price year="2035">0.62</price>
+                <price year="2040">0.62</price>
+                <price year="2045">0.62</price>
+                <price year="2050">0.62</price>
+                <price year="2055">0.62</price>
+                <price year="2060">0.62</price>
+                <price year="2065">0.62</price>
+                <price year="2070">0.62</price>
+                <price year="2075">0.62</price>
+                <price year="2080">0.62</price>
+                <price year="2085">0.62</price>
+                <price year="2090">0.62</price>
+                <price year="2095">0.62</price>
+                <price year="2100">0.62</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NH</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="NJ">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NJ</market>
+                <price year="1975">0.49</price>
+                <price year="1990">0.49</price>
+                <price year="2005">0.49</price>
+                <price year="2010">0.49</price>
+                <price year="2015">0.49</price>
+                <price year="2020">0.49</price>
+                <price year="2025">0.49</price>
+                <price year="2030">0.49</price>
+                <price year="2035">0.49</price>
+                <price year="2040">0.49</price>
+                <price year="2045">0.49</price>
+                <price year="2050">0.49</price>
+                <price year="2055">0.49</price>
+                <price year="2060">0.49</price>
+                <price year="2065">0.49</price>
+                <price year="2070">0.49</price>
+                <price year="2075">0.49</price>
+                <price year="2080">0.49</price>
+                <price year="2085">0.49</price>
+                <price year="2090">0.49</price>
+                <price year="2095">0.49</price>
+                <price year="2100">0.49</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NJ</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="NM">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NM</market>
+                <price year="1975">0.64</price>
+                <price year="1990">0.64</price>
+                <price year="2005">0.64</price>
+                <price year="2010">0.64</price>
+                <price year="2015">0.64</price>
+                <price year="2020">0.64</price>
+                <price year="2025">0.64</price>
+                <price year="2030">0.64</price>
+                <price year="2035">0.64</price>
+                <price year="2040">0.64</price>
+                <price year="2045">0.64</price>
+                <price year="2050">0.64</price>
+                <price year="2055">0.64</price>
+                <price year="2060">0.64</price>
+                <price year="2065">0.64</price>
+                <price year="2070">0.64</price>
+                <price year="2075">0.64</price>
+                <price year="2080">0.64</price>
+                <price year="2085">0.64</price>
+                <price year="2090">0.64</price>
+                <price year="2095">0.64</price>
+                <price year="2100">0.64</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NM</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+        </region>
+        <region name="NV">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NV</market>
+                <price year="1975">0.62</price>
+                <price year="1990">0.62</price>
+                <price year="2005">0.62</price>
+                <price year="2010">0.62</price>
+                <price year="2015">0.62</price>
+                <price year="2020">0.62</price>
+                <price year="2025">0.62</price>
+                <price year="2030">0.62</price>
+                <price year="2035">0.62</price>
+                <price year="2040">0.62</price>
+                <price year="2045">0.62</price>
+                <price year="2050">0.62</price>
+                <price year="2055">0.62</price>
+                <price year="2060">0.62</price>
+                <price year="2065">0.62</price>
+                <price year="2070">0.62</price>
+                <price year="2075">0.62</price>
+                <price year="2080">0.62</price>
+                <price year="2085">0.62</price>
+                <price year="2090">0.62</price>
+                <price year="2095">0.62</price>
+                <price year="2100">0.62</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NV</market>
+                <price year="1975">0.72</price>
+                <price year="1990">0.72</price>
+                <price year="2005">0.72</price>
+                <price year="2010">0.72</price>
+                <price year="2015">0.72</price>
+                <price year="2020">0.72</price>
+                <price year="2025">0.72</price>
+                <price year="2030">0.72</price>
+                <price year="2035">0.72</price>
+                <price year="2040">0.72</price>
+                <price year="2045">0.72</price>
+                <price year="2050">0.72</price>
+                <price year="2055">0.72</price>
+                <price year="2060">0.72</price>
+                <price year="2065">0.72</price>
+                <price year="2070">0.72</price>
+                <price year="2075">0.72</price>
+                <price year="2080">0.72</price>
+                <price year="2085">0.72</price>
+                <price year="2090">0.72</price>
+                <price year="2095">0.72</price>
+                <price year="2100">0.72</price>
+            </unlimited-resource>
+        </region>
+        <region name="NY">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NY</market>
+                <price year="1975">0.5</price>
+                <price year="1990">0.5</price>
+                <price year="2005">0.5</price>
+                <price year="2010">0.5</price>
+                <price year="2015">0.5</price>
+                <price year="2020">0.5</price>
+                <price year="2025">0.5</price>
+                <price year="2030">0.5</price>
+                <price year="2035">0.5</price>
+                <price year="2040">0.5</price>
+                <price year="2045">0.5</price>
+                <price year="2050">0.5</price>
+                <price year="2055">0.5</price>
+                <price year="2060">0.5</price>
+                <price year="2065">0.5</price>
+                <price year="2070">0.5</price>
+                <price year="2075">0.5</price>
+                <price year="2080">0.5</price>
+                <price year="2085">0.5</price>
+                <price year="2090">0.5</price>
+                <price year="2095">0.5</price>
+                <price year="2100">0.5</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>NY</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="OH">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>OH</market>
+                <price year="1975">0.56</price>
+                <price year="1990">0.56</price>
+                <price year="2005">0.56</price>
+                <price year="2010">0.56</price>
+                <price year="2015">0.56</price>
+                <price year="2020">0.56</price>
+                <price year="2025">0.56</price>
+                <price year="2030">0.56</price>
+                <price year="2035">0.56</price>
+                <price year="2040">0.56</price>
+                <price year="2045">0.56</price>
+                <price year="2050">0.56</price>
+                <price year="2055">0.56</price>
+                <price year="2060">0.56</price>
+                <price year="2065">0.56</price>
+                <price year="2070">0.56</price>
+                <price year="2075">0.56</price>
+                <price year="2080">0.56</price>
+                <price year="2085">0.56</price>
+                <price year="2090">0.56</price>
+                <price year="2095">0.56</price>
+                <price year="2100">0.56</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>OH</market>
+                <price year="1975">0.82</price>
+                <price year="1990">0.82</price>
+                <price year="2005">0.82</price>
+                <price year="2010">0.82</price>
+                <price year="2015">0.82</price>
+                <price year="2020">0.82</price>
+                <price year="2025">0.82</price>
+                <price year="2030">0.82</price>
+                <price year="2035">0.82</price>
+                <price year="2040">0.82</price>
+                <price year="2045">0.82</price>
+                <price year="2050">0.82</price>
+                <price year="2055">0.82</price>
+                <price year="2060">0.82</price>
+                <price year="2065">0.82</price>
+                <price year="2070">0.82</price>
+                <price year="2075">0.82</price>
+                <price year="2080">0.82</price>
+                <price year="2085">0.82</price>
+                <price year="2090">0.82</price>
+                <price year="2095">0.82</price>
+                <price year="2100">0.82</price>
+            </unlimited-resource>
+        </region>
+        <region name="OK">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>OK</market>
+                <price year="1975">0.68</price>
+                <price year="1990">0.68</price>
+                <price year="2005">0.68</price>
+                <price year="2010">0.68</price>
+                <price year="2015">0.68</price>
+                <price year="2020">0.68</price>
+                <price year="2025">0.68</price>
+                <price year="2030">0.68</price>
+                <price year="2035">0.68</price>
+                <price year="2040">0.68</price>
+                <price year="2045">0.68</price>
+                <price year="2050">0.68</price>
+                <price year="2055">0.68</price>
+                <price year="2060">0.68</price>
+                <price year="2065">0.68</price>
+                <price year="2070">0.68</price>
+                <price year="2075">0.68</price>
+                <price year="2080">0.68</price>
+                <price year="2085">0.68</price>
+                <price year="2090">0.68</price>
+                <price year="2095">0.68</price>
+                <price year="2100">0.68</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>OK</market>
+                <price year="1975">0.75</price>
+                <price year="1990">0.75</price>
+                <price year="2005">0.75</price>
+                <price year="2010">0.75</price>
+                <price year="2015">0.75</price>
+                <price year="2020">0.75</price>
+                <price year="2025">0.75</price>
+                <price year="2030">0.75</price>
+                <price year="2035">0.75</price>
+                <price year="2040">0.75</price>
+                <price year="2045">0.75</price>
+                <price year="2050">0.75</price>
+                <price year="2055">0.75</price>
+                <price year="2060">0.75</price>
+                <price year="2065">0.75</price>
+                <price year="2070">0.75</price>
+                <price year="2075">0.75</price>
+                <price year="2080">0.75</price>
+                <price year="2085">0.75</price>
+                <price year="2090">0.75</price>
+                <price year="2095">0.75</price>
+                <price year="2100">0.75</price>
+            </unlimited-resource>
+        </region>
+        <region name="OR">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>OR</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>OR</market>
+                <price year="1975">0.49</price>
+                <price year="1990">0.49</price>
+                <price year="2005">0.49</price>
+                <price year="2010">0.49</price>
+                <price year="2015">0.49</price>
+                <price year="2020">0.49</price>
+                <price year="2025">0.49</price>
+                <price year="2030">0.49</price>
+                <price year="2035">0.49</price>
+                <price year="2040">0.49</price>
+                <price year="2045">0.49</price>
+                <price year="2050">0.49</price>
+                <price year="2055">0.49</price>
+                <price year="2060">0.49</price>
+                <price year="2065">0.49</price>
+                <price year="2070">0.49</price>
+                <price year="2075">0.49</price>
+                <price year="2080">0.49</price>
+                <price year="2085">0.49</price>
+                <price year="2090">0.49</price>
+                <price year="2095">0.49</price>
+                <price year="2100">0.49</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>OR</market>
+                <price year="1975">0.77</price>
+                <price year="1990">0.77</price>
+                <price year="2005">0.77</price>
+                <price year="2010">0.77</price>
+                <price year="2015">0.77</price>
+                <price year="2020">0.77</price>
+                <price year="2025">0.77</price>
+                <price year="2030">0.77</price>
+                <price year="2035">0.77</price>
+                <price year="2040">0.77</price>
+                <price year="2045">0.77</price>
+                <price year="2050">0.77</price>
+                <price year="2055">0.77</price>
+                <price year="2060">0.77</price>
+                <price year="2065">0.77</price>
+                <price year="2070">0.77</price>
+                <price year="2075">0.77</price>
+                <price year="2080">0.77</price>
+                <price year="2085">0.77</price>
+                <price year="2090">0.77</price>
+                <price year="2095">0.77</price>
+                <price year="2100">0.77</price>
+            </unlimited-resource>
+        </region>
+        <region name="PA">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>PA</market>
+                <price year="1975">0.57</price>
+                <price year="1990">0.57</price>
+                <price year="2005">0.57</price>
+                <price year="2010">0.57</price>
+                <price year="2015">0.57</price>
+                <price year="2020">0.57</price>
+                <price year="2025">0.57</price>
+                <price year="2030">0.57</price>
+                <price year="2035">0.57</price>
+                <price year="2040">0.57</price>
+                <price year="2045">0.57</price>
+                <price year="2050">0.57</price>
+                <price year="2055">0.57</price>
+                <price year="2060">0.57</price>
+                <price year="2065">0.57</price>
+                <price year="2070">0.57</price>
+                <price year="2075">0.57</price>
+                <price year="2080">0.57</price>
+                <price year="2085">0.57</price>
+                <price year="2090">0.57</price>
+                <price year="2095">0.57</price>
+                <price year="2100">0.57</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>PA</market>
+                <price year="1975">0.82</price>
+                <price year="1990">0.82</price>
+                <price year="2005">0.82</price>
+                <price year="2010">0.82</price>
+                <price year="2015">0.82</price>
+                <price year="2020">0.82</price>
+                <price year="2025">0.82</price>
+                <price year="2030">0.82</price>
+                <price year="2035">0.82</price>
+                <price year="2040">0.82</price>
+                <price year="2045">0.82</price>
+                <price year="2050">0.82</price>
+                <price year="2055">0.82</price>
+                <price year="2060">0.82</price>
+                <price year="2065">0.82</price>
+                <price year="2070">0.82</price>
+                <price year="2075">0.82</price>
+                <price year="2080">0.82</price>
+                <price year="2085">0.82</price>
+                <price year="2090">0.82</price>
+                <price year="2095">0.82</price>
+                <price year="2100">0.82</price>
+            </unlimited-resource>
+        </region>
+        <region name="RI">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>RI</market>
+                <price year="1975">0.51</price>
+                <price year="1990">0.51</price>
+                <price year="2005">0.51</price>
+                <price year="2010">0.51</price>
+                <price year="2015">0.51</price>
+                <price year="2020">0.51</price>
+                <price year="2025">0.51</price>
+                <price year="2030">0.51</price>
+                <price year="2035">0.51</price>
+                <price year="2040">0.51</price>
+                <price year="2045">0.51</price>
+                <price year="2050">0.51</price>
+                <price year="2055">0.51</price>
+                <price year="2060">0.51</price>
+                <price year="2065">0.51</price>
+                <price year="2070">0.51</price>
+                <price year="2075">0.51</price>
+                <price year="2080">0.51</price>
+                <price year="2085">0.51</price>
+                <price year="2090">0.51</price>
+                <price year="2095">0.51</price>
+                <price year="2100">0.51</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>RI</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="SC">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>SC</market>
+                <price year="1975">0.57</price>
+                <price year="1990">0.57</price>
+                <price year="2005">0.57</price>
+                <price year="2010">0.57</price>
+                <price year="2015">0.57</price>
+                <price year="2020">0.57</price>
+                <price year="2025">0.57</price>
+                <price year="2030">0.57</price>
+                <price year="2035">0.57</price>
+                <price year="2040">0.57</price>
+                <price year="2045">0.57</price>
+                <price year="2050">0.57</price>
+                <price year="2055">0.57</price>
+                <price year="2060">0.57</price>
+                <price year="2065">0.57</price>
+                <price year="2070">0.57</price>
+                <price year="2075">0.57</price>
+                <price year="2080">0.57</price>
+                <price year="2085">0.57</price>
+                <price year="2090">0.57</price>
+                <price year="2095">0.57</price>
+                <price year="2100">0.57</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>SC</market>
+                <price year="1975">0.78</price>
+                <price year="1990">0.78</price>
+                <price year="2005">0.78</price>
+                <price year="2010">0.78</price>
+                <price year="2015">0.78</price>
+                <price year="2020">0.78</price>
+                <price year="2025">0.78</price>
+                <price year="2030">0.78</price>
+                <price year="2035">0.78</price>
+                <price year="2040">0.78</price>
+                <price year="2045">0.78</price>
+                <price year="2050">0.78</price>
+                <price year="2055">0.78</price>
+                <price year="2060">0.78</price>
+                <price year="2065">0.78</price>
+                <price year="2070">0.78</price>
+                <price year="2075">0.78</price>
+                <price year="2080">0.78</price>
+                <price year="2085">0.78</price>
+                <price year="2090">0.78</price>
+                <price year="2095">0.78</price>
+                <price year="2100">0.78</price>
+            </unlimited-resource>
+        </region>
+        <region name="SD">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>SD</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>SD</market>
+                <price year="1975">0.77</price>
+                <price year="1990">0.77</price>
+                <price year="2005">0.77</price>
+                <price year="2010">0.77</price>
+                <price year="2015">0.77</price>
+                <price year="2020">0.77</price>
+                <price year="2025">0.77</price>
+                <price year="2030">0.77</price>
+                <price year="2035">0.77</price>
+                <price year="2040">0.77</price>
+                <price year="2045">0.77</price>
+                <price year="2050">0.77</price>
+                <price year="2055">0.77</price>
+                <price year="2060">0.77</price>
+                <price year="2065">0.77</price>
+                <price year="2070">0.77</price>
+                <price year="2075">0.77</price>
+                <price year="2080">0.77</price>
+                <price year="2085">0.77</price>
+                <price year="2090">0.77</price>
+                <price year="2095">0.77</price>
+                <price year="2100">0.77</price>
+            </unlimited-resource>
+        </region>
+        <region name="TN">
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>TN</market>
+                <price year="1975">0.8</price>
+                <price year="1990">0.8</price>
+                <price year="2005">0.8</price>
+                <price year="2010">0.8</price>
+                <price year="2015">0.8</price>
+                <price year="2020">0.8</price>
+                <price year="2025">0.8</price>
+                <price year="2030">0.8</price>
+                <price year="2035">0.8</price>
+                <price year="2040">0.8</price>
+                <price year="2045">0.8</price>
+                <price year="2050">0.8</price>
+                <price year="2055">0.8</price>
+                <price year="2060">0.8</price>
+                <price year="2065">0.8</price>
+                <price year="2070">0.8</price>
+                <price year="2075">0.8</price>
+                <price year="2080">0.8</price>
+                <price year="2085">0.8</price>
+                <price year="2090">0.8</price>
+                <price year="2095">0.8</price>
+                <price year="2100">0.8</price>
+            </unlimited-resource>
+        </region>
+        <region name="TX">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>TX</market>
+                <price year="1975">0.68</price>
+                <price year="1990">0.68</price>
+                <price year="2005">0.68</price>
+                <price year="2010">0.68</price>
+                <price year="2015">0.68</price>
+                <price year="2020">0.68</price>
+                <price year="2025">0.68</price>
+                <price year="2030">0.68</price>
+                <price year="2035">0.68</price>
+                <price year="2040">0.68</price>
+                <price year="2045">0.68</price>
+                <price year="2050">0.68</price>
+                <price year="2055">0.68</price>
+                <price year="2060">0.68</price>
+                <price year="2065">0.68</price>
+                <price year="2070">0.68</price>
+                <price year="2075">0.68</price>
+                <price year="2080">0.68</price>
+                <price year="2085">0.68</price>
+                <price year="2090">0.68</price>
+                <price year="2095">0.68</price>
+                <price year="2100">0.68</price>
+            </unlimited-resource>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>TX</market>
+                <price year="1975">0.49</price>
+                <price year="1990">0.49</price>
+                <price year="2005">0.49</price>
+                <price year="2010">0.49</price>
+                <price year="2015">0.49</price>
+                <price year="2020">0.49</price>
+                <price year="2025">0.49</price>
+                <price year="2030">0.49</price>
+                <price year="2035">0.49</price>
+                <price year="2040">0.49</price>
+                <price year="2045">0.49</price>
+                <price year="2050">0.49</price>
+                <price year="2055">0.49</price>
+                <price year="2060">0.49</price>
+                <price year="2065">0.49</price>
+                <price year="2070">0.49</price>
+                <price year="2075">0.49</price>
+                <price year="2080">0.49</price>
+                <price year="2085">0.49</price>
+                <price year="2090">0.49</price>
+                <price year="2095">0.49</price>
+                <price year="2100">0.49</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>TX</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+        </region>
+        <region name="UT">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>UT</market>
+                <price year="1975">0.64</price>
+                <price year="1990">0.64</price>
+                <price year="2005">0.64</price>
+                <price year="2010">0.64</price>
+                <price year="2015">0.64</price>
+                <price year="2020">0.64</price>
+                <price year="2025">0.64</price>
+                <price year="2030">0.64</price>
+                <price year="2035">0.64</price>
+                <price year="2040">0.64</price>
+                <price year="2045">0.64</price>
+                <price year="2050">0.64</price>
+                <price year="2055">0.64</price>
+                <price year="2060">0.64</price>
+                <price year="2065">0.64</price>
+                <price year="2070">0.64</price>
+                <price year="2075">0.64</price>
+                <price year="2080">0.64</price>
+                <price year="2085">0.64</price>
+                <price year="2090">0.64</price>
+                <price year="2095">0.64</price>
+                <price year="2100">0.64</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>UT</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+        </region>
+        <region name="VA">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>VA</market>
+                <price year="1975">0.56</price>
+                <price year="1990">0.56</price>
+                <price year="2005">0.56</price>
+                <price year="2010">0.56</price>
+                <price year="2015">0.56</price>
+                <price year="2020">0.56</price>
+                <price year="2025">0.56</price>
+                <price year="2030">0.56</price>
+                <price year="2035">0.56</price>
+                <price year="2040">0.56</price>
+                <price year="2045">0.56</price>
+                <price year="2050">0.56</price>
+                <price year="2055">0.56</price>
+                <price year="2060">0.56</price>
+                <price year="2065">0.56</price>
+                <price year="2070">0.56</price>
+                <price year="2075">0.56</price>
+                <price year="2080">0.56</price>
+                <price year="2085">0.56</price>
+                <price year="2090">0.56</price>
+                <price year="2095">0.56</price>
+                <price year="2100">0.56</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>VA</market>
+                <price year="1975">0.8</price>
+                <price year="1990">0.8</price>
+                <price year="2005">0.8</price>
+                <price year="2010">0.8</price>
+                <price year="2015">0.8</price>
+                <price year="2020">0.8</price>
+                <price year="2025">0.8</price>
+                <price year="2030">0.8</price>
+                <price year="2035">0.8</price>
+                <price year="2040">0.8</price>
+                <price year="2045">0.8</price>
+                <price year="2050">0.8</price>
+                <price year="2055">0.8</price>
+                <price year="2060">0.8</price>
+                <price year="2065">0.8</price>
+                <price year="2070">0.8</price>
+                <price year="2075">0.8</price>
+                <price year="2080">0.8</price>
+                <price year="2085">0.8</price>
+                <price year="2090">0.8</price>
+                <price year="2095">0.8</price>
+                <price year="2100">0.8</price>
+            </unlimited-resource>
+        </region>
+        <region name="VT">
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>VT</market>
+                <price year="1975">0.82</price>
+                <price year="1990">0.82</price>
+                <price year="2005">0.82</price>
+                <price year="2010">0.82</price>
+                <price year="2015">0.82</price>
+                <price year="2020">0.82</price>
+                <price year="2025">0.82</price>
+                <price year="2030">0.82</price>
+                <price year="2035">0.82</price>
+                <price year="2040">0.82</price>
+                <price year="2045">0.82</price>
+                <price year="2050">0.82</price>
+                <price year="2055">0.82</price>
+                <price year="2060">0.82</price>
+                <price year="2065">0.82</price>
+                <price year="2070">0.82</price>
+                <price year="2075">0.82</price>
+                <price year="2080">0.82</price>
+                <price year="2085">0.82</price>
+                <price year="2090">0.82</price>
+                <price year="2095">0.82</price>
+                <price year="2100">0.82</price>
+            </unlimited-resource>
+        </region>
+        <region name="WA">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>WA</market>
+                <price year="1975">0.73</price>
+                <price year="1990">0.73</price>
+                <price year="2005">0.73</price>
+                <price year="2010">0.73</price>
+                <price year="2015">0.73</price>
+                <price year="2020">0.73</price>
+                <price year="2025">0.73</price>
+                <price year="2030">0.73</price>
+                <price year="2035">0.73</price>
+                <price year="2040">0.73</price>
+                <price year="2045">0.73</price>
+                <price year="2050">0.73</price>
+                <price year="2055">0.73</price>
+                <price year="2060">0.73</price>
+                <price year="2065">0.73</price>
+                <price year="2070">0.73</price>
+                <price year="2075">0.73</price>
+                <price year="2080">0.73</price>
+                <price year="2085">0.73</price>
+                <price year="2090">0.73</price>
+                <price year="2095">0.73</price>
+                <price year="2100">0.73</price>
+            </unlimited-resource>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>WA</market>
+                <price year="1975">0.55</price>
+                <price year="1990">0.55</price>
+                <price year="2005">0.55</price>
+                <price year="2010">0.55</price>
+                <price year="2015">0.55</price>
+                <price year="2020">0.55</price>
+                <price year="2025">0.55</price>
+                <price year="2030">0.55</price>
+                <price year="2035">0.55</price>
+                <price year="2040">0.55</price>
+                <price year="2045">0.55</price>
+                <price year="2050">0.55</price>
+                <price year="2055">0.55</price>
+                <price year="2060">0.55</price>
+                <price year="2065">0.55</price>
+                <price year="2070">0.55</price>
+                <price year="2075">0.55</price>
+                <price year="2080">0.55</price>
+                <price year="2085">0.55</price>
+                <price year="2090">0.55</price>
+                <price year="2095">0.55</price>
+                <price year="2100">0.55</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>WA</market>
+                <price year="1975">0.79</price>
+                <price year="1990">0.79</price>
+                <price year="2005">0.79</price>
+                <price year="2010">0.79</price>
+                <price year="2015">0.79</price>
+                <price year="2020">0.79</price>
+                <price year="2025">0.79</price>
+                <price year="2030">0.79</price>
+                <price year="2035">0.79</price>
+                <price year="2040">0.79</price>
+                <price year="2045">0.79</price>
+                <price year="2050">0.79</price>
+                <price year="2055">0.79</price>
+                <price year="2060">0.79</price>
+                <price year="2065">0.79</price>
+                <price year="2070">0.79</price>
+                <price year="2075">0.79</price>
+                <price year="2080">0.79</price>
+                <price year="2085">0.79</price>
+                <price year="2090">0.79</price>
+                <price year="2095">0.79</price>
+                <price year="2100">0.79</price>
+            </unlimited-resource>
+        </region>
+        <region name="WI">
+            <renewresource delete="1" name="offshore wind resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="offshore wind resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>WI</market>
+                <price year="1975">0.55</price>
+                <price year="1990">0.55</price>
+                <price year="2005">0.55</price>
+                <price year="2010">0.55</price>
+                <price year="2015">0.55</price>
+                <price year="2020">0.55</price>
+                <price year="2025">0.55</price>
+                <price year="2030">0.55</price>
+                <price year="2035">0.55</price>
+                <price year="2040">0.55</price>
+                <price year="2045">0.55</price>
+                <price year="2050">0.55</price>
+                <price year="2055">0.55</price>
+                <price year="2060">0.55</price>
+                <price year="2065">0.55</price>
+                <price year="2070">0.55</price>
+                <price year="2075">0.55</price>
+                <price year="2080">0.55</price>
+                <price year="2085">0.55</price>
+                <price year="2090">0.55</price>
+                <price year="2095">0.55</price>
+                <price year="2100">0.55</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>WI</market>
+                <price year="1975">0.81</price>
+                <price year="1990">0.81</price>
+                <price year="2005">0.81</price>
+                <price year="2010">0.81</price>
+                <price year="2015">0.81</price>
+                <price year="2020">0.81</price>
+                <price year="2025">0.81</price>
+                <price year="2030">0.81</price>
+                <price year="2035">0.81</price>
+                <price year="2040">0.81</price>
+                <price year="2045">0.81</price>
+                <price year="2050">0.81</price>
+                <price year="2055">0.81</price>
+                <price year="2060">0.81</price>
+                <price year="2065">0.81</price>
+                <price year="2070">0.81</price>
+                <price year="2075">0.81</price>
+                <price year="2080">0.81</price>
+                <price year="2085">0.81</price>
+                <price year="2090">0.81</price>
+                <price year="2095">0.81</price>
+                <price year="2100">0.81</price>
+            </unlimited-resource>
+        </region>
+        <region name="WV">
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>WV</market>
+                <price year="1975">0.82</price>
+                <price year="1990">0.82</price>
+                <price year="2005">0.82</price>
+                <price year="2010">0.82</price>
+                <price year="2015">0.82</price>
+                <price year="2020">0.82</price>
+                <price year="2025">0.82</price>
+                <price year="2030">0.82</price>
+                <price year="2035">0.82</price>
+                <price year="2040">0.82</price>
+                <price year="2045">0.82</price>
+                <price year="2050">0.82</price>
+                <price year="2055">0.82</price>
+                <price year="2060">0.82</price>
+                <price year="2065">0.82</price>
+                <price year="2070">0.82</price>
+                <price year="2075">0.82</price>
+                <price year="2080">0.82</price>
+                <price year="2085">0.82</price>
+                <price year="2090">0.82</price>
+                <price year="2095">0.82</price>
+                <price year="2100">0.82</price>
+            </unlimited-resource>
+        </region>
+        <region name="WY">
+            <renewresource delete="1" name="CSP_resource"/>
+            <renewresource delete="1" name="PV_resource"/>
+            <unlimited-resource name="CSP_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>WY</market>
+                <price year="1975">0.68</price>
+                <price year="1990">0.68</price>
+                <price year="2005">0.68</price>
+                <price year="2010">0.68</price>
+                <price year="2015">0.68</price>
+                <price year="2020">0.68</price>
+                <price year="2025">0.68</price>
+                <price year="2030">0.68</price>
+                <price year="2035">0.68</price>
+                <price year="2040">0.68</price>
+                <price year="2045">0.68</price>
+                <price year="2050">0.68</price>
+                <price year="2055">0.68</price>
+                <price year="2060">0.68</price>
+                <price year="2065">0.68</price>
+                <price year="2070">0.68</price>
+                <price year="2075">0.68</price>
+                <price year="2080">0.68</price>
+                <price year="2085">0.68</price>
+                <price year="2090">0.68</price>
+                <price year="2095">0.68</price>
+                <price year="2100">0.68</price>
+            </unlimited-resource>
+            <unlimited-resource name="PV_resource">
+                <output-unit>EJ</output-unit>
+                <price-unit>1-CF</price-unit>
+                <market>WY</market>
+                <price year="1975">0.77</price>
+                <price year="1990">0.77</price>
+                <price year="2005">0.77</price>
+                <price year="2010">0.77</price>
+                <price year="2015">0.77</price>
+                <price year="2020">0.77</price>
+                <price year="2025">0.77</price>
+                <price year="2030">0.77</price>
+                <price year="2035">0.77</price>
+                <price year="2040">0.77</price>
+                <price year="2045">0.77</price>
+                <price year="2050">0.77</price>
+                <price year="2055">0.77</price>
+                <price year="2060">0.77</price>
+                <price year="2065">0.77</price>
+                <price year="2070">0.77</price>
+                <price year="2075">0.77</price>
+                <price year="2080">0.77</price>
+                <price year="2085">0.77</price>
+                <price year="2090">0.77</price>
+                <price year="2095">0.77</price>
+                <price year="2100">0.77</price>
+            </unlimited-resource>
+        </region>
+    </world>
+</scenario>
