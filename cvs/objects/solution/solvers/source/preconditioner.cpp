@@ -68,18 +68,29 @@ using namespace xercesc;
 Preconditioner::Preconditioner( Marketplace* marketplaceIn, World* worldIn, CalcCounter* calcCounterIn ) :
   SolverComponent( marketplaceIn, worldIn, calcCounterIn ),
   mItmax(2),
-  mPriceIncreaseFac(0.25),
-  mPriceDecreaseFac(0.1),
   mLargePrice(1.0e6),
-  mFTOL(util::getSmallNumber())
+  mFTOL(util::getSmallNumber()),
+  mSolutionInfoFilter(0)
 {
+}
+
+Preconditioner::Preconditioner() :
+  mItmax(2),
+  mLargePrice(1.0e6),
+  mFTOL(util::getSmallNumber()),
+  mSolutionInfoFilter(0)
+{
+}
+
+Preconditioner::~Preconditioner() {
+    delete mSolutionInfoFilter;
 }
 
 //! Init method.
 void Preconditioner::init() {
-    if( !mSolutionInfoFilter.get() ) {
+    if( !mSolutionInfoFilter ) {
         // note we are hard coding this as the default
-        mSolutionInfoFilter.reset( new SolvableSolutionInfoFilter() );
+        mSolutionInfoFilter = new SolvableSolutionInfoFilter();
     }
 }
 
@@ -97,26 +108,20 @@ const string& Preconditioner::getXMLName() const {
 bool Preconditioner::XMLParse( const DOMNode* aNode ) {
     // assume we were passed a valid node.
     assert( aNode );
-    
+
     // get the children of the node.
     DOMNodeList* nodeList = aNode->getChildNodes();
-    
+
     // loop through the children
     for ( unsigned int i = 0; i < nodeList->getLength(); ++i ){
         DOMNode* curr = nodeList->item( i );
         string nodeName = XMLHelper<string>::safeTranscode( curr->getNodeName() );
-        
+
         if( nodeName == "#text" ) {
             continue;
         }
         else if( nodeName == "max-iterations" || nodeName == "itmax") {
             mItmax = XMLHelper<unsigned int>::getValue( curr );
-        }
-        else if( nodeName == "price-increase-fac" ) {
-            mPriceIncreaseFac = XMLHelper<double>::getValue( curr );
-        }
-        else if( nodeName == "price-decrease-fac" ) {
-            mPriceDecreaseFac = XMLHelper<double>::getValue( curr );
         }
         else if( nodeName == "large-price-thresh") {
             mLargePrice = XMLHelper<double>::getValue(curr);
@@ -125,11 +130,13 @@ bool Preconditioner::XMLParse( const DOMNode* aNode ) {
             mFTOL = XMLHelper<double>::getValue(curr);
         }
         else if( nodeName == "solution-info-filter" ) {
-            mSolutionInfoFilter.reset(
-                SolutionInfoFilterFactory::createSolutionInfoFilterFromString( XMLHelper<string>::getValue( curr ) ) );
+            delete mSolutionInfoFilter;
+            mSolutionInfoFilter =
+                SolutionInfoFilterFactory::createSolutionInfoFilterFromString( XMLHelper<string>::getValue( curr ) );
         }
         else if( SolutionInfoFilterFactory::hasSolutionInfoFilter( nodeName ) ) {
-            mSolutionInfoFilter.reset( SolutionInfoFilterFactory::createAndParseSolutionInfoFilter( nodeName, curr ) );
+            delete mSolutionInfoFilter;
+            mSolutionInfoFilter = SolutionInfoFilterFactory::createAndParseSolutionInfoFilter( nodeName, curr );
         }
         else {
             ILogger& mainLog = ILogger::getLogger( "main_log" );
@@ -193,7 +200,7 @@ SolverComponent::ReturnCode Preconditioner::solve( SolutionInfoSet& aSolutionSet
     worstMarketLog << "Market Name, X, XL, XR, ED, EDL, EDR, RED, bracketed, supply, demand" << endl;
     solverLog << "Preconditioning routine starting" << endl; 
 
-    aSolutionSet.updateSolvable( mSolutionInfoFilter.get() );
+    aSolutionSet.updateSolvable( mSolutionInfoFilter );
     
     if( aSolutionSet.getNumSolvable() == 0 ) {
         solverLog << "Exiting Preconditioning early due to empty solvable set." << endl;
@@ -221,7 +228,7 @@ SolverComponent::ReturnCode Preconditioner::solve( SolutionInfoSet& aSolutionSet
             double newprice = oldprice;
             bool chg = false;
             double lb,ub;       // only used for normal markets, but need to be declared up here.
-            bool isSolved = solvable[i].getRelativeED() < mFTOL || fabs(solvable[i].getED()) < mFTOL;
+            bool isSolved = solvable[i].getRelativeED() < mFTOL || fabs(solvable[i].getED()) < mFTOL || solvable[i].isSolved();
             
             if(pass > 0) {
                 // If this market is close to solved update the "forecast" price and demand which
@@ -233,7 +240,12 @@ SolverComponent::ReturnCode Preconditioner::solve( SolutionInfoSet& aSolutionSet
                 // this but we can always update the normalization factors again later.
                 // Note we do not ever update the normalization factor for TAX and SUBSIDY markets
                 // because being constraints we already know what the scale should be.
-                if(isSolved && (solvable[i].getType() == IMarketType::PRICE || solvable[i].getType() == IMarketType::DEMAND || solvable[i].getType() == IMarketType::TRIAL_VALUE) ) {
+                /*if(fd == 2e-6 || (fd < 1e-3 && solvable[i].getType() == IMarketType::DEMAND)) {
+                    cout << "Here for " << solvable[i].getName() << endl;
+                    fd = 0.1;
+                    fp = 0.1;
+                }
+                else*/ if(isSolved && (solvable[i].getType() == IMarketType::PRICE || solvable[i].getType() == IMarketType::DEMAND || solvable[i].getType() == IMarketType::TRIAL_VALUE) ) {
                     // We should make the price and demand the same which if they are
                     // solved is probably close enough, except around zero.  So to take
                     // care of that case we will choose the larger of the two.
@@ -243,10 +255,14 @@ SolverComponent::ReturnCode Preconditioner::solve( SolutionInfoSet& aSolutionSet
                     fp = fd = newScale;
                 }
                 else if(isSolved && !(solvable[i].getType() == IMarketType::TAX || solvable[i].getType() == IMarketType::SUBSIDY)) {
+                    double solutionFloor = solvable[i].getSolutionFloor();
+                    // Check if the market is solved to the solution floor in which case don't let
+                    // NR make a big deal out of relative differences by reseting the demand scale to 1
+                    double demandScale = abs(olddmnd) < solutionFloor || abs(oldsply) < solutionFloor ? 1.0 : olddmnd;
                     solvable[i].setForecastPrice(oldprice);
-                    solvable[i].setForecastDemand(olddmnd);
+                    solvable[i].setForecastDemand(demandScale);
                     fp = oldprice;
-                    fd = olddmnd;
+                    fd = demandScale;
                 }
                 if(fd == 0.0) {
                     if(olddmnd > 0.0) {
@@ -344,7 +360,7 @@ SolverComponent::ReturnCode Preconditioner::solve( SolutionInfoSet& aSolutionSet
                     lb = solvable[i].getLowerBoundSupplyPrice();
                     ub = solvable[i].getUpperBoundSupplyPrice();
                     if(!isSolved && oldprice < lb) {
-                        newprice = 0.001;
+                        newprice = lb + 0.001;
                         solvable[i].setPrice(newprice);
                         chg = true;
                         ++nchg;

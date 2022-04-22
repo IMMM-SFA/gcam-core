@@ -45,6 +45,7 @@
 #include <xercesc/dom/DOMNodeList.hpp>
 
 #include "solution/solvers/include/user_configurable_solver.h"
+#include "containers/include/scenario.h"
 #include "containers/include/world.h"
 #include "marketplace/include/marketplace.h"
 #include "solution/solvers/include/solver_component.h"
@@ -60,6 +61,8 @@
 using namespace std;
 using namespace xercesc;
 
+extern Scenario* scenario;
+
 // typedefs
 typedef vector<SolverComponent*>::iterator SolverComponentIterator;
 typedef vector<SolverComponent*>::const_iterator CSolverComponentIterator;
@@ -67,6 +70,17 @@ typedef vector<SolverComponent*>::const_iterator CSolverComponentIterator;
 //! Constructor
 UserConfigurableSolver::UserConfigurableSolver( Marketplace* aMarketplace, World* aWorld ) :
     Solver( aMarketplace, aWorld ),
+    mDefaultSolutionTolerance( 0.001),
+    mDefaultSolutionFloor( 0.0001 ),
+    mCalibrationTolerance( 0.01 ),
+    mMaxModelCalcs( 2000 )
+{
+    // get the calc counter from the world
+    mCalcCounter = world->getCalcCounter();
+}
+
+UserConfigurableSolver::UserConfigurableSolver() :
+    Solver( scenario->getMarketplace(), scenario->getWorld() ),
     mDefaultSolutionTolerance( 0.001),
     mDefaultSolutionFloor( 0.0001 ),
     mCalibrationTolerance( 0.01 ),
@@ -89,18 +103,22 @@ const string& UserConfigurableSolver::getXMLNameStatic() {
     return SOLVER_NAME;
 }
 
+const string& UserConfigurableSolver::getXMLName() const {
+    return getXMLNameStatic();
+}
+
 bool UserConfigurableSolver::XMLParse( const DOMNode* aNode ) {
     // assume we were passed a valid node.
     assert( aNode );
-    
+
     // get the children of the node.
     DOMNodeList* nodeList = aNode->getChildNodes();
-    
+
     // loop through the children
     for ( unsigned int i = 0; i < nodeList->getLength(); ++i ){
         DOMNode* curr = nodeList->item( i );
         string nodeName = XMLHelper<string>::safeTranscode( curr->getNodeName() );
-        
+
         if( nodeName == "#text" ) {
             continue;
         }
@@ -122,7 +140,7 @@ bool UserConfigurableSolver::XMLParse( const DOMNode* aNode ) {
                                                                                                           world,
                                                                                                           mCalcCounter,
                                                                                                           curr );
-            
+
             // only add valid solver components
             if( tempSolverComponent ) {
                 mSolverComponents.push_back( tempSolverComponent );
@@ -135,7 +153,7 @@ bool UserConfigurableSolver::XMLParse( const DOMNode* aNode ) {
                 << getXMLNameStatic() << "." << endl;
         }
     }
-    
+
     return true;
 }
 
