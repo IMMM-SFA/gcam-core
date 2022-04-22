@@ -30,15 +30,15 @@ module_gcamusa_L2236.elecS_ghg_emissions_USA <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    A23.globaltech_input_driver <- get_data(all_data, "energy/A23.globaltech_input_driver")
-    L201.OutputEmissions_elec <- get_data(all_data, 'L201.OutputEmissions_elec')
-    L241.OutputEmissCoeff_elec <- get_data(all_data, 'L241.OutputEmissCoeff_elec')
+    A23.globaltech_input_driver <- get_data(all_data, "energy/A23.globaltech_input_driver", strip_attributes=TRUE)
+    L201.OutputEmissions_elec <- get_data(all_data, 'L201.OutputEmissions_elec', strip_attributes=TRUE)
+    L241.OutputEmissCoeff_elec <- get_data(all_data, 'L241.OutputEmissCoeff_elec', strip_attributes=TRUE)
 
-    A23.elec_tech_mapping_cool <- get_data(all_data, 'gcam-usa/A23.elec_tech_mapping_cool')
-    A23.elecS_coal_emissions <- get_data(all_data, "gcam-usa/A23.elecS_coal_emissions")
+    A23.elec_tech_mapping_cool <- get_data(all_data, 'gcam-usa/A23.elec_tech_mapping_cool', strip_attributes=TRUE)
+    A23.elecS_coal_emissions <- get_data(all_data, "gcam-usa/A23.elecS_coal_emissions", strip_attributes=TRUE)
     # ^^^ NOTE: this is a bit of a hack - we should calculate this within the chunk in the future
 
-    L223.Production_Dispatch <- get_data(all_data, 'L223.Production_Dispatch')
+    L223.Production_Dispatch <- get_data(all_data, 'L223.Production_Dispatch', strip_attributes=TRUE)
 
     # Silence package checks
     CH4 <- Electric.sector <- Electric.sector.technology <- N2O <- Non.CO2 <-

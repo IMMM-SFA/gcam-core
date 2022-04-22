@@ -26,10 +26,10 @@ module_gcamusa_L271.trn_nonco2_USA <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L201.en_pol_emissions <- get_data(all_data, "L201.en_pol_emissions")
-    L201.en_ghg_emissions <- get_data(all_data, "L201.en_ghg_emissions")
-    L201.en_bcoc_emissions <- get_data(all_data, "L201.en_bcoc_emissions")
-    L254.StubTranTechCalInput_USA     <- get_data(all_data, "L254.StubTranTechCalInput_USA")
+    L201.en_pol_emissions <- get_data(all_data, "L201.en_pol_emissions", strip_attributes=TRUE)
+    L201.en_ghg_emissions <- get_data(all_data, "L201.en_ghg_emissions", strip_attributes=TRUE)
+    L201.en_bcoc_emissions <- get_data(all_data, "L201.en_bcoc_emissions", strip_attributes=TRUE)
+    L254.StubTranTechCalInput_USA     <- get_data(all_data, "L254.StubTranTechCalInput_USA", strip_attributes=TRUE)
 
 
     # Silence pacakge checks
