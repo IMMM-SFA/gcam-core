@@ -40,13 +40,13 @@ module_gcamusa_L2244.nuclear_USA <- function(command, ...) {
       stub.technology <- NULL # silence package check notes
 
     # Load required inputs
-    nuc_gen2 <- get_data(all_data, "gcam-usa/nuc_gen2")
+    nuc_gen2 <- get_data(all_data, "gcam-usa/nuc_gen2", strip_attributes=TRUE)
     A23.elecS_tech_mapping <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping", strip_attributes = TRUE)
-    A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool")
-    A23.elecS_tech_availability <- get_data(all_data, "gcam-usa/A23.elecS_tech_availability")
-    usa_seawater_states_basins <- get_data(all_data, "gcam-usa/usa_seawater_states_basins")
+    A23.elecS_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elecS_tech_mapping_cool", strip_attributes=TRUE)
+    A23.elecS_tech_availability <- get_data(all_data, "gcam-usa/A23.elecS_tech_availability", strip_attributes=TRUE)
+    usa_seawater_states_basins <- get_data(all_data, "gcam-usa/usa_seawater_states_basins", strip_attributes=TRUE)
     L223.CapacityTech <- get_data(all_data, "L223.CapacityTech", strip_attributes = TRUE)
-    L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
+    L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch", strip_attributes=TRUE)
 
     # -----------------------------------------------------------------------------
 

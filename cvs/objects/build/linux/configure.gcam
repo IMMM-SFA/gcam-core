@@ -26,7 +26,7 @@ HAVE_JAVA = 1
 
 ## set this to a nonzero value to enable parallel execution (TBB required)
 ifndef USE_GCAM_PARALLEL
-  USE_GCAM_PARALLEL = 1
+  USE_GCAM_PARALLEL = 0
 endif
 
 ## Check to see if MKL is in use.  We infer this from the existence of

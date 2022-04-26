@@ -125,7 +125,7 @@
 #include <string>
 #include <sstream>
 
-#include <boost/math/tr1.hpp>
+#include <cmath>
 
 #include "reporting/include/xml_db_outputter.h"
 
@@ -668,7 +668,7 @@ void XMLDBOutputter::startVisitSector( const Sector* aSector, const int aPeriod 
     const Modeltime* modeltime = scenario->getModeltime();
     for( int i = 0; i < modeltime->getmaxper(); ++i ){
         double currCost = aSector->getPrice( mGDP, i );
-        if( !boost::math::isnan( currCost ) ) {
+        if( !std::isnan( currCost ) ) {
             writeItem( "cost", mCurrentPriceUnit, currCost, i );
         }
     }
@@ -735,7 +735,7 @@ void XMLDBOutputter::startVisitSubsector( const Subsector* aSubsector,
     }
     for( int i = 0; i < modeltime->getmaxper(); ++i ){
         double currValue = aSubsector->getPrice( mGDP, i );
-        if( !objects::isEqual<double>( currValue, 0.0 ) && !boost::math::isnan( currValue ) ) {
+        if( !objects::isEqual<double>( currValue, 0.0 ) && !std::isnan( currValue ) ) {
             writeItem( "cost", mCurrentPriceUnit, currValue, i );
         }
     }
@@ -854,7 +854,7 @@ void XMLDBOutputter::startVisitTechnology( const Technology* aTechnology, const 
         // "year" attribute in addition to the technology "year" attribute.
         if( mCurrentTechnology->mProductionState[ curr ] && mCurrentTechnology->mProductionState[ curr ]->isNewInvestment() ){
             double currValue = aTechnology->getCost( curr );
-            if( !objects::isEqual<double>( currValue, 0.0 ) && !boost::math::isnan( currValue ) ) {
+            if( !objects::isEqual<double>( currValue, 0.0 ) && !std::isnan( currValue ) ) {
                 writeItemToBuffer( aTechnology->getCost( curr ), "cost", 
                     *childBuffer, mTabs.get(), curr, mCurrentPriceUnit );
             }

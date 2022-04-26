@@ -68,15 +68,31 @@ BisectAll::BisectAll( Marketplace* marketplaceIn, World* worldIn, CalcCounter* c
 mMaxIterations( 30 ),
 mDefaultBracketInterval( 0.4 ),
 mBracketTolerance( 1.0e-8 ),
-mMaxBracketIterations( 40 )
+mMaxBracketIterations( 40 ),
+mUseSecantBrackets( false ),
+mSolutionInfoFilter(0)
 {
+}
+
+BisectAll::BisectAll():
+mMaxIterations( 30 ),
+mDefaultBracketInterval( 0.4 ),
+mBracketTolerance( 1.0e-8 ),
+mMaxBracketIterations( 40 ),
+mUseSecantBrackets( false ),
+mSolutionInfoFilter(0)
+{
+}
+
+BisectAll::~BisectAll() {
+    delete mSolutionInfoFilter;
 }
 
 //! Init method.
 void BisectAll::init() {
-    if( !mSolutionInfoFilter.get() ) {
+    if( !mSolutionInfoFilter ) {
         // note we are hard coding this as the default
-        mSolutionInfoFilter.reset( new SolvableSolutionInfoFilter() );
+        mSolutionInfoFilter = new SolvableSolutionInfoFilter();
     }
 }
 
@@ -94,15 +110,15 @@ const string& BisectAll::getXMLName() const {
 bool BisectAll::XMLParse( const DOMNode* aNode ) {
     // assume we were passed a valid node.
     assert( aNode );
-    
+
     // get the children of the node.
     DOMNodeList* nodeList = aNode->getChildNodes();
-    
+
     // loop through the children
     for ( unsigned int i = 0; i < nodeList->getLength(); ++i ){
         DOMNode* curr = nodeList->item( i );
         string nodeName = XMLHelper<string>::safeTranscode( curr->getNodeName() );
-        
+
         if( nodeName == "#text" ) {
             continue;
         }
@@ -119,11 +135,16 @@ bool BisectAll::XMLParse( const DOMNode* aNode ) {
             mMaxBracketIterations = XMLHelper<unsigned int>::getValue( curr );
         }
         else if( nodeName == "solution-info-filter" ) {
-            mSolutionInfoFilter.reset(
-                SolutionInfoFilterFactory::createSolutionInfoFilterFromString( XMLHelper<string>::getValue( curr ) ) );
+            delete mSolutionInfoFilter;
+            mSolutionInfoFilter = 
+                SolutionInfoFilterFactory::createSolutionInfoFilterFromString( XMLHelper<string>::getValue( curr ) );
         }
         else if( SolutionInfoFilterFactory::hasSolutionInfoFilter( nodeName ) ) {
-            mSolutionInfoFilter.reset( SolutionInfoFilterFactory::createAndParseSolutionInfoFilter( nodeName, curr ) );
+            delete mSolutionInfoFilter;
+            mSolutionInfoFilter = SolutionInfoFilterFactory::createAndParseSolutionInfoFilter( nodeName, curr );
+        }
+        else if( nodeName == "use-secant-brackets" ) {
+            mUseSecantBrackets = XMLHelper<bool>::getValue( curr );
         }
         else {
             ILogger& mainLog = ILogger::getLogger( "main_log" );
@@ -177,7 +198,7 @@ SolverComponent::ReturnCode BisectAll::solve( SolutionInfoSet& aSolutionSet, con
     solverLog << "Solution set before Bracket: " << endl << aSolutionSet << endl;
     // Currently attempts to bracket but does not necessarily bracket all markets.
     SolverLibrary::bracket( marketplace, world, mDefaultBracketInterval, mMaxBracketIterations,
-                            aSolutionSet, calcCounter, mSolutionInfoFilter.get(), aPeriod );
+                            aSolutionSet, calcCounter, mSolutionInfoFilter, mUseSecantBrackets, aPeriod );
     
     startMethod();
     ReturnCode code = ORIGINAL_STATE; // code that reports success 1 or failure 0
@@ -185,7 +206,7 @@ SolverComponent::ReturnCode BisectAll::solve( SolutionInfoSet& aSolutionSet, con
     worstMarketLog << "Policy All, X, XL, XR, ED, EDL, EDR, RED, bracketed, supply, demand" << endl;
     solverLog << "Bisection_all routine starting" << endl; 
 
-    aSolutionSet.updateSolvable( mSolutionInfoFilter.get() );
+    aSolutionSet.updateSolvable( mSolutionInfoFilter );
     
     if( aSolutionSet.getNumSolvable() == 0 ) {
         solverLog << "Exiting bisect all early due to empty solvable set." << endl;
@@ -197,6 +218,9 @@ SolverComponent::ReturnCode BisectAll::solve( SolutionInfoSet& aSolutionSet, con
     singleLog.setLevel( ILogger::DEBUG );
 
     unsigned int numIterations = 1; // number of iterations
+    
+    // ensure we do not waste iterations if none of the markets are bracketed
+    bool isAnyBracketed = false;
 
     do {
         solverLog.setLevel( ILogger::NOTICE );
@@ -206,12 +230,14 @@ SolverComponent::ReturnCode BisectAll::solve( SolutionInfoSet& aSolutionSet, con
         // Since bisection is called after bracketing, the current price and ED will be the
         // one of the brackets.
         // Start bisection with mid-point to improve efficiency.
+        isAnyBracketed = false;
         for ( unsigned int i = 0; i < aSolutionSet.getNumSolvable(); ++i ) {
             SolutionInfo& currSol = aSolutionSet.getSolvable( i );
             // Skip markets that were not bracketed
             if( !currSol.isBracketed() ) {
                 continue;
             }
+            isAnyBracketed = true;
             // If not solved.
             if ( !currSol.isWithinTolerance() ) {
                 // Set new trial value to center
@@ -231,7 +257,7 @@ SolverComponent::ReturnCode BisectAll::solve( SolutionInfoSet& aSolutionSet, con
 #else
         world->calc( aPeriod );
 #endif
-        aSolutionSet.updateSolvable( mSolutionInfoFilter.get() );
+        aSolutionSet.updateSolvable( mSolutionInfoFilter );
 
         // Print solution set information to solver log.
         solverLog << aSolutionSet << endl;
@@ -260,7 +286,8 @@ SolverComponent::ReturnCode BisectAll::solve( SolutionInfoSet& aSolutionSet, con
         }
     } // end do loop        
     while ( ++numIterations <= mMaxIterations 
-            && !aSolutionSet.isAllSolved() && !areAllBracketsEqual( aSolutionSet ) );
+            && !aSolutionSet.isAllSolved() && !areAllBracketsEqual( aSolutionSet )
+            && isAnyBracketed );
 
     // Set the return code. 
     code = ( aSolutionSet.isAllSolved() ? SUCCESS : FAILURE_ITER_MAX_REACHED ); // report success, or failure

@@ -47,8 +47,8 @@
 #include "util/logger/include/ilogger.h"
 
 // Solver subclasses
-#include "solution/solvers/include/bisection_nr_solver.h"
-#include "solution/solvers/include/bisect_policy_nr_solver.h"
+//#include "solution/solvers/include/bisection_nr_solver.h"
+//#include "solution/solvers/include/bisect_policy_nr_solver.h"
 #include "solution/solvers/include/user_configurable_solver.h"
 
 using namespace std;
@@ -63,9 +63,9 @@ using namespace xercesc;
  *       the ones found in createAndParseSolver.
  */
 bool SolverFactory::hasSolver( const string& aXMLName ) {
-    return BisectPolicyNRSolver::getXMLNameStatic() == aXMLName
+    return /*BisectPolicyNRSolver::getXMLNameStatic() == aXMLName
         || BisectionNRSolver::getXMLNameStatic() == aXMLName
-        || UserConfigurableSolver::getXMLNameStatic() == aXMLName;
+        ||*/ UserConfigurableSolver::getXMLNameStatic() == aXMLName;
 }
 
 /*!
@@ -92,13 +92,13 @@ Solver* SolverFactory::createAndParseSolver( const string& aXMLName, Marketplace
     
     // create the requested solver
     Solver* retSolver;
-    if( BisectPolicyNRSolver::getXMLNameStatic() == aXMLName ) {
+    /*if( BisectPolicyNRSolver::getXMLNameStatic() == aXMLName ) {
         retSolver = new BisectPolicyNRSolver( aMarketplace, aWorld );
     }
     else if( BisectionNRSolver::getXMLNameStatic() == aXMLName ) {
         retSolver = new BisectionNRSolver( aMarketplace, aWorld );
     }
-    else if( UserConfigurableSolver::getXMLNameStatic() == aXMLName ) {
+    else*/ if( UserConfigurableSolver::getXMLNameStatic() == aXMLName ) {
         retSolver = new UserConfigurableSolver( aMarketplace, aWorld );
     }
     else {

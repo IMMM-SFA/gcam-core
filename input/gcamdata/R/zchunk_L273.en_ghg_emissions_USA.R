@@ -101,37 +101,37 @@ module_gcamusa_L273.en_ghg_emissions_USA <- function(command, ...) {
       tax <- technology <- value <- value2 <- year <- NULL
 
     # Load required inputs
-    states_subregions <- get_data(all_data, "gcam-usa/states_subregions")
-    L123.in_EJ_R_elec_F_Yh <- get_data(all_data, "L123.in_EJ_R_elec_F_Yh")
-    L123.out_EJ_state_ownuse_elec <- get_data(all_data, "L123.out_EJ_state_ownuse_elec")
-    L1231.in_EJ_state_elec_F_tech <- get_data(all_data, "L1231.in_EJ_state_elec_F_tech")
-    L1322.in_EJ_state_Fert_Yh <- get_data(all_data, "L1322.in_EJ_state_Fert_Yh")
-    L201.en_ghg_emissions <- get_data(all_data, "L201.en_ghg_emissions")
-    L201.OutputEmissions_elec <- get_data(all_data, "L201.OutputEmissions_elec")
-    L201.ghg_res <- get_data(all_data, "L201.ghg_res")
-    L241.nonco2_tech_coeff <- get_data(all_data, "L241.nonco2_tech_coeff")
-    L241.OutputEmissCoeff_elec <- get_data(all_data, "L241.OutputEmissCoeff_elec")
-    L241.hfc_all <- get_data(all_data, "L241.hfc_all")
-    L241.pfc_all <- get_data(all_data, "L241.pfc_all")
-    L252.ResMAC_fos <- get_data(all_data, "L252.ResMAC_fos")
-    L252.MAC_higwp <- get_data(all_data, "L252.MAC_higwp")
-    L222.StubTech_en_USA <- get_data(all_data, "L222.StubTech_en_USA")
-    L223.StubTech_elec_USA <- get_data(all_data, "L223.StubTech_elec_USA")
-    L232.StubTechCalInput_indenergy_USA <- get_data(all_data, "L232.StubTechCalInput_indenergy_USA")
-    L244.StubTechCalInput_bld_gcamusa <- get_data(all_data, "L244.StubTechCalInput_bld_gcamusa")
-    L244.GlobalTechEff_bld <- get_data(all_data, "L244.GlobalTechEff_bld")
-    L2232.Production_elec_gen_FERC <- get_data(all_data, "L2232.Production_elec_gen_FERC")
+    states_subregions <- get_data(all_data, "gcam-usa/states_subregions", strip_attributes=TRUE)
+    L123.in_EJ_R_elec_F_Yh <- get_data(all_data, "L123.in_EJ_R_elec_F_Yh", strip_attributes=TRUE)
+    L123.out_EJ_state_ownuse_elec <- get_data(all_data, "L123.out_EJ_state_ownuse_elec", strip_attributes=TRUE)
+    L1231.in_EJ_state_elec_F_tech <- get_data(all_data, "L1231.in_EJ_state_elec_F_tech", strip_attributes=TRUE)
+    L1322.in_EJ_state_Fert_Yh <- get_data(all_data, "L1322.in_EJ_state_Fert_Yh", strip_attributes=TRUE)
+    L201.en_ghg_emissions <- get_data(all_data, "L201.en_ghg_emissions", strip_attributes=TRUE)
+    L201.OutputEmissions_elec <- get_data(all_data, "L201.OutputEmissions_elec", strip_attributes=TRUE)
+    L201.ghg_res <- get_data(all_data, "L201.ghg_res", strip_attributes=TRUE)
+    L241.nonco2_tech_coeff <- get_data(all_data, "L241.nonco2_tech_coeff", strip_attributes=TRUE)
+    L241.OutputEmissCoeff_elec <- get_data(all_data, "L241.OutputEmissCoeff_elec", strip_attributes=TRUE)
+    L241.hfc_all <- get_data(all_data, "L241.hfc_all", strip_attributes=TRUE)
+    L241.pfc_all <- get_data(all_data, "L241.pfc_all", strip_attributes=TRUE)
+    L252.ResMAC_fos <- get_data(all_data, "L252.ResMAC_fos", strip_attributes=TRUE)
+    L252.MAC_higwp <- get_data(all_data, "L252.MAC_higwp", strip_attributes=TRUE)
+    L222.StubTech_en_USA <- get_data(all_data, "L222.StubTech_en_USA", strip_attributes=TRUE)
+    L223.StubTech_elec_USA <- get_data(all_data, "L223.StubTech_elec_USA", strip_attributes=TRUE)
+    L232.StubTechCalInput_indenergy_USA <- get_data(all_data, "L232.StubTechCalInput_indenergy_USA", strip_attributes=TRUE)
+    L244.StubTechCalInput_bld_gcamusa <- get_data(all_data, "L244.StubTechCalInput_bld_gcamusa", strip_attributes=TRUE)
+    L244.GlobalTechEff_bld <- get_data(all_data, "L244.GlobalTechEff_bld", strip_attributes=TRUE)
+    L2232.Production_elec_gen_FERC <- get_data(all_data, "L2232.Production_elec_gen_FERC", strip_attributes=TRUE)
 
     if(gcamusa.USE_ELEC_DEMAND_SEGMENTS) {
-      L2441.StubTechCalInput_bld_gcamusa <- get_data(all_data, "L2441.StubTechCalInput_bld_gcamusa")
+      L2441.StubTechCalInput_bld_gcamusa <- get_data(all_data, "L2441.StubTechCalInput_bld_gcamusa", strip_attributes=TRUE)
     }
 
     # make a complete mapping to be able to look up with sector + subsector + tech the
     # input name to use for an input-driver
     bind_rows(
-      get_data(all_data, "energy/A22.globaltech_input_driver"),
-      get_data(all_data, "energy/A23.globaltech_input_driver"),
-      get_data(all_data, "energy/A25.globaltech_input_driver")
+      get_data(all_data, "energy/A22.globaltech_input_driver", strip_attributes=TRUE),
+      get_data(all_data, "energy/A23.globaltech_input_driver", strip_attributes=TRUE),
+      get_data(all_data, "energy/A25.globaltech_input_driver", strip_attributes=TRUE)
     ) %>%
       rename(stub.technology = technology) ->
       EnTechInputMap
@@ -140,8 +140,8 @@ module_gcamusa_L273.en_ghg_emissions_USA <- function(command, ...) {
     # input name to use for an input-driver. Filter for industrial sector as all others are
     # accounted for in previous EnTechInputMap
     bind_rows(
-      get_data(all_data, "energy/calibrated_techs") %>% select(supplysector, subsector, technology, minicam.energy.input),
-      get_data(all_data, "gcam-usa/calibrated_techs_bld_usa") %>% select(supplysector, subsector, technology, minicam.energy.input),
+      get_data(all_data, "energy/calibrated_techs", strip_attributes=TRUE) %>% select(supplysector, subsector, technology, minicam.energy.input),
+      get_data(all_data, "gcam-usa/calibrated_techs_bld_usa", strip_attributes=TRUE) %>% select(supplysector, subsector, technology, minicam.energy.input),
       get_data(all_data, UCD_tech_map_name) %>% select(supplysector, subsector = tranSubsector, technology = tranTechnology, minicam.energy.input)
     ) %>%
       rename(stub.technology = technology,

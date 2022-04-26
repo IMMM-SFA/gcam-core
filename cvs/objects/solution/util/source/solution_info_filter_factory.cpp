@@ -58,6 +58,7 @@
 #include "solution/util/include/solvable_nr_solution_info_filter.h"
 #include "solution/util/include/market_type_solution_info_filter.h"
 #include "solution/util/include/market_name_solution_info_filter.h"
+#include "solution/util/include/market_matches_solution_info_filter.h"
 #include "solution/util/include/has_market_flag_solution_info_filter.h"
 #include "solution/util/include/unsolved_solution_info_filter.h"
 #include "solution/util/include/price_greater_than_solution_info_filter.h"
@@ -83,6 +84,7 @@ bool SolutionInfoFilterFactory::hasSolutionInfoFilter( const string& aXMLName ) 
         || SolvableNRSolutionInfoFilter::getXMLNameStatic() == aXMLName
         || MarketTypeSolutionInfoFilter::getXMLNameStatic() == aXMLName
         || MarketNameSolutionInfoFilter::getXMLNameStatic() == aXMLName
+        || MarketMatchesSolutionInfoFilter::getXMLNameStatic() == aXMLName
         || HasMarketFlagSolutionInfoFilter::getXMLNameStatic() == aXMLName
         || UnsolvedSolutionInfoFilter::getXMLNameStatic() == aXMLName
         || PriceGreaterThanSolutionInfoFilter::getXMLNameStatic() == aXMLName
@@ -130,6 +132,9 @@ ISolutionInfoFilter* SolutionInfoFilterFactory::createAndParseSolutionInfoFilter
     }
     else if( MarketNameSolutionInfoFilter::getXMLNameStatic() == aXMLName ) {
         retFilter = new MarketNameSolutionInfoFilter();
+    }
+    else if( MarketMatchesSolutionInfoFilter::getXMLNameStatic() == aXMLName ) {
+        retFilter = new MarketMatchesSolutionInfoFilter();
     }
     else if( HasMarketFlagSolutionInfoFilter::getXMLNameStatic() == aXMLName ) {
         retFilter = new HasMarketFlagSolutionInfoFilter();

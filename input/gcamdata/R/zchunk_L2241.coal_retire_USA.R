@@ -72,28 +72,28 @@ module_gcamusa_L2241.coal_retire_USA <- function(command, ...) {
       efficiency_weighted <- OMV_weighted <- min.capacity.factor <- NULL
 
     # Load required inputs
-    calibrated_techs_dispatch_usa <- get_data(all_data, "gcam-usa/calibrated_techs_dispatch_usa")
-    A23.elec_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elec_tech_mapping_cool")
-    A23.dispatch_capacitytech_min_cap_fac <- get_data(all_data, "gcam-usa/A23.dispatch_capacitytech_min_cap_fac")
-    A23.elec_tech_coal_retire_SCurve_dispatch <- get_data(all_data, "gcam-usa/A23.elec_tech_coal_retire_SCurve_dispatch")
+    calibrated_techs_dispatch_usa <- get_data(all_data, "gcam-usa/calibrated_techs_dispatch_usa", strip_attributes=TRUE)
+    A23.elec_tech_mapping_cool <- get_data(all_data, "gcam-usa/A23.elec_tech_mapping_cool", strip_attributes=TRUE)
+    A23.dispatch_capacitytech_min_cap_fac <- get_data(all_data, "gcam-usa/A23.dispatch_capacitytech_min_cap_fac", strip_attributes=TRUE)
+    A23.elec_tech_coal_retire_SCurve_dispatch <- get_data(all_data, "gcam-usa/A23.elec_tech_coal_retire_SCurve_dispatch", strip_attributes=TRUE)
 
-    prime_mover_map <- get_data(all_data, "gcam-usa/prime_mover_map")
-    EIA_860_generators_existing_2018 <- get_data(all_data, "gcam-usa/EIA_860_generators_existing_2018")
-    EIA_860_generators_retired_2018 <- get_data(all_data, "gcam-usa/EIA_860_generators_retired_2018")
+    prime_mover_map <- get_data(all_data, "gcam-usa/prime_mover_map", strip_attributes=TRUE)
+    EIA_860_generators_existing_2018 <- get_data(all_data, "gcam-usa/EIA_860_generators_existing_2018", strip_attributes=TRUE)
+    EIA_860_generators_retired_2018 <- get_data(all_data, "gcam-usa/EIA_860_generators_retired_2018", strip_attributes=TRUE)
 
-    REEDS_Plantfile <- get_data(all_data, "gcam-usa/dispatch/AEO2019Plantfile")
-    ECP_mapping <- get_data(all_data, "gcam-usa/dispatch/ECP_mapping")
-    vintage_bins_mapping <- get_data(all_data, "gcam-usa/dispatch/coal_vintage_bins")
+    REEDS_Plantfile <- get_data(all_data, "gcam-usa/dispatch/AEO2019Plantfile", strip_attributes=TRUE)
+    ECP_mapping <- get_data(all_data, "gcam-usa/dispatch/ECP_mapping", strip_attributes=TRUE)
+    vintage_bins_mapping <- get_data(all_data, "gcam-usa/dispatch/coal_vintage_bins", strip_attributes=TRUE)
 
-    L105.eia_elec_data_water <- get_data(all_data, "L105.eia_elec_data_water")
-    L123.in_EJ_state_elec_F_tech <- get_data(all_data, "L123.in_EJ_state_elec_F_tech")
-    L223.CapacityTech <- get_data(all_data, "L223.CapacityTech")
-    L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch")
-    L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal")
-    L223.TechOMfixed_Dispatch <- get_data(all_data, "L223.TechOMfixed_Dispatch")
-    L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch")
-    L223.TechCapFac_Dispatch <- get_data(all_data, "L223.TechCapFac_Dispatch")
-    L223.TechCoef_Dispatch_cool <- get_data(all_data, "L223.TechCoef_Dispatch_cool")
+    L105.eia_elec_data_water <- get_data(all_data, "L105.eia_elec_data_water", strip_attributes=TRUE)
+    L123.in_EJ_state_elec_F_tech <- get_data(all_data, "L123.in_EJ_state_elec_F_tech", strip_attributes=TRUE)
+    L223.CapacityTech <- get_data(all_data, "L223.CapacityTech", strip_attributes=TRUE)
+    L223.Production_Dispatch <- get_data(all_data, "L223.Production_Dispatch", strip_attributes=TRUE)
+    L223.TechEff_Cal <- get_data(all_data, "L223.TechEff_Cal", strip_attributes=TRUE)
+    L223.TechOMfixed_Dispatch <- get_data(all_data, "L223.TechOMfixed_Dispatch", strip_attributes=TRUE)
+    L223.TechOMvar_Dispatch <- get_data(all_data, "L223.TechOMvar_Dispatch", strip_attributes=TRUE)
+    L223.TechCapFac_Dispatch <- get_data(all_data, "L223.TechCapFac_Dispatch", strip_attributes=TRUE)
+    L223.TechCoef_Dispatch_cool <- get_data(all_data, "L223.TechCoef_Dispatch_cool", strip_attributes=TRUE)
 
 
     # -----------------------------------------------------------------------------
