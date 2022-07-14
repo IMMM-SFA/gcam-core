@@ -240,12 +240,15 @@ SolverComponent::ReturnCode Preconditioner::solve( SolutionInfoSet& aSolutionSet
                 // this but we can always update the normalization factors again later.
                 // Note we do not ever update the normalization factor for TAX and SUBSIDY markets
                 // because being constraints we already know what the scale should be.
-                /*if(fd == 2e-6 || (fd < 1e-3 && solvable[i].getType() == IMarketType::DEMAND)) {
-                    cout << "Here for " << solvable[i].getName() << endl;
+                const std::string test = "electricityDemand_int";
+                //if(/*fd == 2e-6 || (fd < 1e-3 && solvable[i].getType() == IMarketType::DEMAND)*/solvable[i].getName().compare(solvable[i].getName().length() - test.length(), test.length(), "electricityDemand_int") == 0) {
+                if(solvable[i].getName().find(test) != string::npos) {
                     fd = 0.1;
                     fp = 0.1;
+                    solvable[i].setForecastPrice(fp);
+                    solvable[i].setForecastDemand(fd);
                 }
-                else*/ if(isSolved && (solvable[i].getType() == IMarketType::PRICE || solvable[i].getType() == IMarketType::DEMAND || solvable[i].getType() == IMarketType::TRIAL_VALUE) ) {
+                else if(isSolved && (solvable[i].getType() == IMarketType::PRICE || solvable[i].getType() == IMarketType::DEMAND || solvable[i].getType() == IMarketType::TRIAL_VALUE) ) {
                     // We should make the price and demand the same which if they are
                     // solved is probably close enough, except around zero.  So to take
                     // care of that case we will choose the larger of the two.
