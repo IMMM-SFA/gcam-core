@@ -702,6 +702,7 @@ void IntermittentCapacityTechnology::production(const string& aRegionName,
         1.0 - (*mResourceInput)->getPrice( aRegionName, aPeriod ) :
         // existing vintages will have saved it's capacity factor when invested
         mInvestCapacityFactor;
+    resourceCF = std::min(std::max(resourceCF, 0.0), 1.0);
     // Calculate input demand.
     mProductionFunction->calcDemand( mInputs, /*actualProduction*/ mCapacity * resourceCF, aRegionName, aSectorName,
                                     1, aPeriod, 0, mAlphaZero );
@@ -768,7 +769,7 @@ double IntermittentCapacityTechnology::tryDispatch( const string& aRegionName,
         1.0 - (*mResourceInput)->getPrice( aRegionName, aPeriod ) :
         // existing vintages will have saved it's capacity factor when invested
         mInvestCapacityFactor;
-    resourceCF = std::max(resourceCF, 0.0);
+    resourceCF = std::min(std::max(resourceCF, 0.0), 1.0);
     auto segCapFac = mSegCapFac.find( aDispatchSegment );
     if( segCapFac != mSegCapFac.end() ) {
         // we have a segment specific capacity factor, so we will
