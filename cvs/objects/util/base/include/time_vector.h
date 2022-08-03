@@ -581,6 +581,7 @@ namespace objects {
             return mData[ aIndex ];
         }
     
+    extern size_t sTechVintageVecKeyIndex;
     /*!
      * \brief Base class of vectors indexed by period that will automatically get resized
      *        to only include enough space for however many years an encolsing technology
@@ -738,7 +739,7 @@ namespace objects {
     {
         // WARNING: this could be very bad if someone tried to dereference this
         // we will stash a temporary look up ID in mData
-        mData = reinterpret_cast<T*>( this );
+        mData = reinterpret_cast<T*>( ++sTechVintageVecKeyIndex );
     }
     
     /*!
