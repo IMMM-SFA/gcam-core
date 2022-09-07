@@ -234,14 +234,21 @@ SolverComponent::ReturnCode LogBroyden::solve(SolutionInfoSet &solnset, int peri
     
     solverLog << "Initial market state:\nmkt    \tprice   \tsupply  \tdemand\n";
     std::vector<SolutionInfo> solvables = solnset.getSolvableSet();
+    bool isAllSolved = true;
     for(size_t i=0; i<solvables.size(); ++i) {
         allCols.push_back(i);
         solverLog << std::setw( 8 ) << i << "\t"
                   << std::setw( 8 ) << solvables[i].getPrice() << "\t"
                   << std::setw( 8 ) << solvables[i].getSupply() << "\t"
                   << std::setw( 8 ) << solvables[i].getDemand()
-                  << "\t\t" << solvables[i].getName() << "\n"; 
-    } 
+                  << "\t\t" << solvables[i].getName() << "\n";
+        isAllSolved &= solvables[i].isSolved();
+    }
+    
+    if( isAllSolved ){
+        solverLog << "All solvable markets are already solved.  Exiting." << std::endl;
+        return SUCCESS;
+    }
 
     Timer& solverTimer = TimerRegistry::getInstance().getTimer( TimerRegistry::SOLVER );
     solverTimer.start();

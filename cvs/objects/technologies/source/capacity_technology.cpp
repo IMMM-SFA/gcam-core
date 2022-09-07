@@ -308,9 +308,9 @@ double CapacityTechnology::tryDispatch( const string& aRegionName,
     // be the case if it has yet to dispatch in any of the lower segments and there
     // are not enough remaining hours to make it above the minimum value.
     // Note, this does not apply in calibration periods for simplicity.
-    if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && aPriorDispatch == 0.0 && aPercentRemainHours < ( mMinCapFac ) ) {
+    /*if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && aPriorDispatch == 0.0 && aPercentRemainHours < ( mMinCapFac ) ) {
         return 0.0;
-    }
+    }*/
     
     // Calculate the amount of energy this technology could produce.
     // Note retirement shotdown deciders may come into play here, however profit
@@ -743,9 +743,9 @@ double IntermittentCapacityTechnology::tryDispatch( const string& aRegionName,
     // be the case if it has yet to dispatch in any of the lower segments and there
     // are not enough remaining hours to make it above the minimum value.
     // Note, this does not apply in calibration periods for simplicity.
-    if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && aPriorDispatch == 0.0 && aPercentRemainHours < ( mMinCapFac ) ) {
+    /*if( aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod() && aPriorDispatch == 0.0 && aPercentRemainHours < ( mMinCapFac ) ) {
         return 0.0;
-    }
+    }*/
     
     // Calculate the amount of energy this technology could produce.
     // Note retirement shotdown deciders may come into play here, however profit
