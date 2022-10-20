@@ -41,7 +41,7 @@
         <solution-tolerance>0.002</solution-tolerance>
         <solution-floor>0.0001</solution-floor>
         <calibration-tolerance>0.01</calibration-tolerance>
-        <max-model-calcs>1000</max-model-calcs>
+        <max-model-calcs>1500</max-model-calcs>
 
         <preconditioner-solver-component>
             <solution-info-filter>solvable &amp;&amp; !(has-market-flag="fully-calibrated")</solution-info-filter>
@@ -50,7 +50,7 @@
         </preconditioner-solver-component>
 
         <bisect-all-solver-component>
-            <bracket-interval>0.5</bracket-interval>
+            <bracket-interval>0.1</bracket-interval>
             <max-bracket-iterations>20</max-bracket-iterations>
             <max-iterations>10</max-iterations>
             <use-secant-brackets>0</use-secant-brackets>
@@ -61,11 +61,11 @@
             <max-bracket-iterations>20</max-bracket-iterations>
             <max-iterations>10</max-iterations>
             <use-secant-brackets>1</use-secant-brackets>
-			<solution-info-filter>unsolved &amp;&amp; solvable &amp;&amp; market-matches="_water withdrawals"</solution-info-filter>
+			<solution-info-filter>unsolved &amp;&amp; solvable &amp;&amp; (market-matches="_water withdrawals" || market-matches="electricityDemand_int")</solution-info-filter>
         </bisect-all-solver-component>
 
         <broyden-solver-component>
-            <max-iterations>20</max-iterations>
+            <max-iterations>10</max-iterations>
             <ftol>5.0e-4</ftol>
             <linear-price/>
             <solution-info-filter>solvable-nr &amp;&amp; !(has-market-flag="fully-calibrated")</solution-info-filter>
@@ -75,7 +75,7 @@
         <solution-tolerance>0.001</solution-tolerance>
         <solution-floor>0.0001</solution-floor>
         <calibration-tolerance>0.01</calibration-tolerance>
-        <max-model-calcs>2500</max-model-calcs>
+        <max-model-calcs>3500</max-model-calcs>
 
         <preconditioner-solver-component>
             <solution-info-filter>solvable</solution-info-filter>
