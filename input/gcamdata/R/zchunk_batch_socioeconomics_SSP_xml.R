@@ -119,14 +119,16 @@ module_socio_batch_SSP_xml <- function(command, ...) {
     # Updating Laborproductivity based on discussion with Brian O'Neil
     # From paper: Renatal et al. 2016, Avoided economic impacts of climate change
     # on agriculture: integrating a land surface model (CLM) with a global economic model (iPETS), Climatic Change.
-    # From Brian's email: “The annual GDP growth rate was increased by 0.4 percentage points
+    # From Brian's email: “The annual GDP growth rate was increased by 0.5 percentage points
     # after 2010 in all regions above the original SSP3 growth rate, leading to a 42% larger global GDP in 2100.”
 
     L201.LaborProductivity_SSP3_rcp85gdp <- L201.LaborProductivity_SSP3 %>%
-      dplyr::mutate(laborproductivity = laborproductivity + 0.005)
+      dplyr::mutate(laborproductivity =
+                      dplyr::if_else(year > MODEL_FINAL_BASE_YEAR, laborproductivity + 0.005, laborproductivity))
 
     L201.LaborProductivity_gSSP3_rcp85gdp <- L201.LaborProductivity_gSSP3 %>%
-      dplyr::mutate(laborproductivity = laborproductivity + 0.005)
+      dplyr::mutate(laborproductivity =
+                      dplyr::if_else(year > MODEL_FINAL_BASE_YEAR, laborproductivity + 0.005, laborproductivity))
 
     # SSP3 Modified with rcp85 GDP
     create_xml("socioeconomics_SSP3_rcp85gdp.xml") %>%
