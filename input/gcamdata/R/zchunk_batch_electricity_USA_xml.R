@@ -384,8 +384,31 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
                      "L2232.Production_elec_gen_FERC") ->
       electricity_USA.xml
 
+
+    # Updates for IM3 Nuclear Scenarios (6 Apr 2023)
+    #...................................................
+    # -- Scenario 1: CURRENT (No nuclear in states with no nuclear in base year 2015) No modifications needed. This is the current IM3 GCAM-USA runs we have.
+    # -- Scenario 2: ALLOW_NEW_NUCLEAR (Allow new GENIII/SMR nuclear in all states that are suitable, even if they have no nuclear in the base year)
+    # -- Scenario 3: NUCLEAR_MORATORIUM (No nuclear in 12 states of the US and the unsuitable states, but allow nuclear in all other states, even if they have no nuclear in the base year.)
+    # Will modify L223.SubsectorInterpTo_Investment_Fuel & L223.StubTechShrwt_Investment_USA to update to 1's for all suitable states for scenario 2, 0's for unsuitable
+    # Will modify L223.SubsectorInterpTo_Investment_Fuel & L223.StubTechShrwt_Investment_USA to update to 1's for all suitable states for scenario 3, 0's for unsuitable + 12 states with declared moratorium
+
+    # Scenario 2
+    # electricity_USA_allow_new_nuc.xml
+    # Unsuitable States (From CERF/Kendall):
+
+
+    # Scenario 3
+    # electricity_USA_no_moratorium_nuc.xml
+    # Moratorium States: "CA", "CT", "HI", "IL", "ME", "MA", "MN", "NJ", "NY", "OR", "RI", "VT"
+    # Unsuitable States (From CERF/Kendall):
+
+    #..................................................
+
+
     return_data(electricity_USA.xml)
   } else {
     stop("Unknown command")
   }
 }
+
