@@ -8,7 +8,9 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{electricity_USA.xml}. The corresponding file in the
+#' the generated outputs: \code{electricity_USA.xml}, \code{electricity_USA_allow_new_nuc_ssp5.xml},
+#' \code{electricity_USA_allow_new_nuc_ssp3.xml}, \code{electricity_USA_no_moratorium_nuc_ssp5.xml},
+#' \code{electricity_USA_no_moratorium_nuc_ssp3.xml}. The corresponding file in the
 #' original data system was \code{batch_electricity_USA_xml.R} (gcamusa XML).
 module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
@@ -97,7 +99,11 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
              "L2232.Production_imports_FERC",
              "L2232.Production_elec_gen_FERC"))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c(XML = "electricity_USA.xml"))
+    return(c(XML = "electricity_USA.xml",
+             XML = "electricity_USA_allow_new_nuc_ssp5.xml",
+             XML = "electricity_USA_allow_new_nuc_ssp3.xml",
+             XML = "electricity_USA_no_moratorium_nuc_ssp5.xml",
+             XML = "electricity_USA_no_moratorium_nuc_ssp3.xml"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -393,20 +399,370 @@ module_gcamusa_batch_electricity_USA_xml <- function(command, ...) {
     # Will modify L223.SubsectorInterpTo_Investment_Fuel & L223.StubTechShrwt_Investment_USA to update to 1's for all suitable states for scenario 2, 0's for unsuitable
     # Will modify L223.SubsectorInterpTo_Investment_Fuel & L223.StubTechShrwt_Investment_USA to update to 1's for all suitable states for scenario 3, 0's for unsuitable + 12 states with declared moratorium
 
-    # Scenario 2
-    # electricity_USA_allow_new_nuc.xml
-    # Unsuitable States (From CERF/Kendall):
+    # Scenario 2 - ssp5
+    # electricity_USA_allow_new_nuc_ssp5.xml
+    # Unsuitable States for ssp5 (From CERF/Kendall):
+    pond_cool <- c("DC", "DE", "NJ", "NV", "RI")
+    recirc_cool <- c("DC", "DE", "RI")
+    seawater_cool <- c("AL", "AR", "AZ", "CA", "CO", "CT", "DC", "IA", "ID", "IL", "IN", "KS", "KY" ,"MD", "MI", "MN", "MO", "MS", "MT", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SD", "TN", "UT", "VT", "WA", "WI", "WV", "WY")
+    once_cool <- c("AZ", "CA", "CO", "DC", "DE", "MD", "MI", "NC", "NH", "NJ", "NM", "NV", "RI", "UT", "VA", "VT", "WY")
+
+    # Identify states that are unsuitable for any nuclear technologies
+    unsuitable_nuc <- Reduce(intersect, list(pond_cool, recirc_cool, seawater_cool, once_cool))
+
+    # Produce outputs
+    L223.SubsectorShrwt_Investment_Fuel_allow_new_nuc_ssp5 <- L223.SubsectorShrwt_Investment_Fuel
+    L223.SubsectorShrwt_Investment_allow_new_nuc_ssp5 <- L223.SubsectorShrwt_Investment
+    L223.StubTechShrwt_Investment_USA_allow_new_nuc_ssp5 <- L223.StubTechShrwt_Investment_USA
+    L223.TechShrwt_Dispatch_allow_new_nuc_ssp5 <- L223.TechShrwt_Dispatch
+
+    # Redefine the shareweight for nuclear subsector based on scenario 2 restrictions
+    L223.SubsectorShrwt_Investment_Fuel_allow_new_nuc_ssp5 <-
+      dplyr::mutate(
+        L223.SubsectorShrwt_Investment_Fuel_allow_new_nuc_ssp5,
+        share.weight = dplyr::case_when(
+          (subsector == "nuclear" & region %in% unsuitable_nuc) ~ 0,
+          (subsector == "nuclear" & !(region %in% unsuitable_nuc) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    # Redefine the share weight subsector technology (nuclear Gen III) based on scenario 2 restrictions
+    L223.SubsectorShrwt_Investment_allow_new_nuc_ssp5 <-
+      dplyr::mutate(
+        L223.SubsectorShrwt_Investment_allow_new_nuc_ssp5,
+        share.weight = dplyr::case_when(
+          (subsector0 == "nuclear" & region %in% unsuitable_nuc) ~ 0,
+          (subsector0 == "nuclear" & !(region %in% unsuitable_nuc) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    # Redefine the share weight subsector technology (nuclear Gen III cooling types) based on scenario 2 restrictions
+    L223.StubTechShrwt_Investment_USA_allow_new_nuc_ssp5 <-
+      dplyr::mutate(
+        L223.StubTechShrwt_Investment_USA_allow_new_nuc_ssp5,
+        share.weight = dplyr::case_when(
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (once through)" & region %in% once_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (once through)" & !(region %in% once_cool) & year > 2015) ~ 1,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (cooling pond)" & region %in% pond_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (cooling pond)" & !(region %in% pond_cool) & year > 2015) ~ 1,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (recirculating)" & region %in% recirc_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (recirculating)" & !(region %in% recirc_cool) & year > 2015) ~ 1,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (seawater)" & region %in% seawater_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (seawater)" & !(region %in% seawater_cool) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    # Redefine the share weight subsector technology (nuclear Gen II/III cooling types) based on scenario 2 restrictions
+    # Set Gen II share weights to zero
+    L223.TechShrwt_Dispatch_allow_new_nuc_ssp5 <-
+      dplyr::mutate(
+        L223.TechShrwt_Dispatch_allow_new_nuc_ssp5,
+        share.weight = dplyr::case_when(
+          (subsector == "nuclear" & grepl("Gen_II_LWR", technology)) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (once through)" & region %in% once_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (once through)" & !(region %in% once_cool) & year > 2015) ~ 1,
+          (subsector == "nuclear" & technology == "Gen_III (cooling pond)" & region %in% pond_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (cooling pond)" & !(region %in% pond_cool) & year > 2015) ~ 1,
+          (subsector == "nuclear" & technology == "Gen_III (recirculating)" & region %in% recirc_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (recirculating)" & !(region %in% recirc_cool) & year > 2015) ~ 1,
+          (subsector == "nuclear" & technology == "Gen_III (seawater)" & region %in% seawater_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (seawater)" & !(region %in% seawater_cool) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    create_xml("electricity_USA_allow_new_nuc_ssp5.xml") %>%
+      add_xml_data_generate_levels(L223.SubsectorShrwt_Investment_allow_new_nuc_ssp5, "SubsectorShrwt",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data_generate_levels(L223.StubTechShrwt_Investment_USA_allow_new_nuc_ssp5, "StubTechShrwt",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data(L223.SubsectorShrwt_Investment_Fuel_allow_new_nuc_ssp5, "SubsectorShrwt") %>%
+      add_xml_data(L223.TechShrwt_Dispatch_allow_new_nuc_ssp5, "TechShrwt")  %>%
+      add_precursors("L223.SubsectorShrwt_Investment_Fuel",
+                     "L223.SubsectorShrwt_Investment",
+                     "L223.StubTechShrwt_Investment_USA",
+                     "L223.TechShrwt_Dispatch") ->
+      electricity_USA_allow_new_nuc_ssp5.xml
 
 
-    # Scenario 3
-    # electricity_USA_no_moratorium_nuc.xml
+    # Scenario 3 - ssp 5
+    # electricity_USA_no_moratorium_nuc_ssp5.xml
     # Moratorium States: "CA", "CT", "HI", "IL", "ME", "MA", "MN", "NJ", "NY", "OR", "RI", "VT"
-    # Unsuitable States (From CERF/Kendall):
+    # Unsuitable States (From CERF/Kendall)
+
+    # Define moratorium states
+    moratorium <- c("CA", "CT", "HI", "IL", "ME", "MA", "MN", "NJ", "NY", "OR", "RI", "VT")
+
+    # Identify states that are unsuitable for any nuclear technologies including moratorium states
+    unsuitable_moratorium <- unique(c(unsuitable_nuc, moratorium))
+
+    # Produce outputs
+    L223.SubsectorShrwt_Investment_Fuel_no_moratorium_nuc_ssp5 <- L223.SubsectorShrwt_Investment_Fuel
+    L223.SubsectorShrwt_Investment_no_moratorium_nuc_ssp5 <- L223.SubsectorShrwt_Investment
+    L223.StubTechShrwt_Investment_USA_no_moratorium_nuc_ssp5 <- L223.StubTechShrwt_Investment_USA
+    L223.TechShrwt_Dispatch_no_moratorium_nuc_ssp5 <- L223.TechShrwt_Dispatch
+
+    # Redefine the shareweight for nuclear subsector based on scenario 3 restrictions
+    L223.SubsectorShrwt_Investment_Fuel_no_moratorium_nuc_ssp5 <-
+      dplyr::mutate(
+        L223.SubsectorShrwt_Investment_Fuel_no_moratorium_nuc_ssp5,
+        share.weight = dplyr::case_when(
+          (subsector == "nuclear" & region %in% unsuitable_moratorium) ~ 0,
+          (subsector == "nuclear" & !(region %in% unsuitable_moratorium) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    # Redefine the share weight subsector technology (nuclear Gen III) based on scenario 3 restrictions
+    L223.SubsectorShrwt_Investment_no_moratorium_nuc_ssp5 <-
+      dplyr::mutate(
+        L223.SubsectorShrwt_Investment_no_moratorium_nuc_ssp5,
+        share.weight = dplyr::case_when(
+          (subsector0 == "nuclear" & region %in% unsuitable_moratorium) ~ 0,
+          (subsector0 == "nuclear" & !(region %in% unsuitable_moratorium) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    # Redefine the share weight subsector technology (nuclear Gen III cooling types) based on scenario 3 restrictions
+    L223.StubTechShrwt_Investment_USA_no_moratorium_nuc_ssp5 <-
+      dplyr::mutate(
+        L223.StubTechShrwt_Investment_USA_no_moratorium_nuc_ssp5,
+        share.weight = dplyr::case_when(
+          (subsector0 == "nuclear" & subsector == "Gen_III" & region %in% moratorium) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (once through)" & region %in% once_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (once through)" & !(region %in% once_cool) & year > 2015) ~ 1,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (cooling pond)" & region %in% pond_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (cooling pond)" & !(region %in% pond_cool) & year > 2015) ~ 1,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (recirculating)" & region %in% recirc_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (recirculating)" & !(region %in% recirc_cool) & year > 2015) ~ 1,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (seawater)" & region %in% seawater_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (seawater)" & !(region %in% seawater_cool) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    # Redefine the share weight subsector technology (nuclear Gen II/III cooling types) based on scenario 3 restrictions
+    # Set Gen II share weights to zero
+    L223.TechShrwt_Dispatch_no_moratorium_nuc_ssp5 <-
+      dplyr::mutate(
+        L223.TechShrwt_Dispatch_no_moratorium_nuc_ssp5,
+        share.weight = dplyr::case_when(
+          (subsector == "nuclear" & grepl("Gen_II_LWR", technology)) ~ 0,
+          (subsector == "nuclear" & grepl("Gen_III", technology) & region %in% moratorium) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (once through)" & region %in% once_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (once through)" & !(region %in% once_cool) & year > 2015) ~ 1,
+          (subsector == "nuclear" & technology == "Gen_III (cooling pond)" & region %in% pond_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (cooling pond)" & !(region %in% pond_cool) & year > 2015) ~ 1,
+          (subsector == "nuclear" & technology == "Gen_III (recirculating)" & region %in% recirc_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (recirculating)" & !(region %in% recirc_cool) & year > 2015) ~ 1,
+          (subsector == "nuclear" & technology == "Gen_III (seawater)" & region %in% seawater_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (seawater)" & !(region %in% seawater_cool) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    create_xml("electricity_USA_no_moratorium_nuc_ssp5.xml") %>%
+      add_xml_data_generate_levels(L223.SubsectorShrwt_Investment_no_moratorium_nuc_ssp5, "SubsectorShrwt",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data_generate_levels(L223.StubTechShrwt_Investment_USA_no_moratorium_nuc_ssp5, "StubTechShrwt",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data(L223.SubsectorShrwt_Investment_Fuel_no_moratorium_nuc_ssp5, "SubsectorShrwt") %>%
+      add_xml_data(L223.TechShrwt_Dispatch_no_moratorium_nuc_ssp5, "TechShrwt")  %>%
+      add_precursors("L223.SubsectorShrwt_Investment_Fuel",
+                     "L223.SubsectorShrwt_Investment",
+                     "L223.StubTechShrwt_Investment_USA",
+                     "L223.TechShrwt_Dispatch") ->
+      electricity_USA_no_moratorium_nuc_ssp5.xml
+
+
+    # Scenario 2 - ssp3
+    # electricity_USA_allow_new_nuc_ssp3.xml
+    # Unsuitable States for ssp3 (From CERF/Kendall):
+    pond_cool <- c("DC", "DE", "NJ", "RI")
+    recirc_cool <- c("DC", "DE", "RI")
+    seawater_cool <- c("AL", "AR", "AZ", "CA", "CO", "CT", "DC", "IA", "ID", "IL", "IN", "KS", "KY", "MD", "MI", "MN", "MO", "MS", "MT", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SD", "TN", "UT", "VT", "WA", "WI", "WV", "WY")
+    once_cool <- c("AZ", "CO", "DC", "DE", "MI", "NC", "NH", "NJ", "NM", "RI", "UT", "VT", "WY")
+
+    # Identify states that are unsuitable for any nuclear technologies
+    unsuitable_nuc <- Reduce(intersect, list(pond_cool, recirc_cool, seawater_cool, once_cool))
+
+    # Produce outputs
+    L223.SubsectorShrwt_Investment_Fuel_allow_new_nuc_ssp3 <- L223.SubsectorShrwt_Investment_Fuel
+    L223.SubsectorShrwt_Investment_allow_new_nuc_ssp3 <- L223.SubsectorShrwt_Investment
+    L223.StubTechShrwt_Investment_USA_allow_new_nuc_ssp3 <- L223.StubTechShrwt_Investment_USA
+    L223.TechShrwt_Dispatch_allow_new_nuc_ssp3 <- L223.TechShrwt_Dispatch
+
+    # Redefine the shareweight for nuclear subsector based on scenario 2 restrictions
+    L223.SubsectorShrwt_Investment_Fuel_allow_new_nuc_ssp3 <-
+      dplyr::mutate(
+        L223.SubsectorShrwt_Investment_Fuel_allow_new_nuc_ssp3,
+        share.weight = dplyr::case_when(
+          (subsector == "nuclear" & region %in% unsuitable_nuc) ~ 0,
+          (subsector == "nuclear" & !(region %in% unsuitable_nuc) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    # Redefine the share weight subsector technology (nuclear Gen III) based on scenario 2 restrictions
+    L223.SubsectorShrwt_Investment_allow_new_nuc_ssp3 <-
+      dplyr::mutate(
+        L223.SubsectorShrwt_Investment_allow_new_nuc_ssp3,
+        share.weight = dplyr::case_when(
+          (subsector0 == "nuclear" & region %in% unsuitable_nuc) ~ 0,
+          (subsector0 == "nuclear" & !(region %in% unsuitable_nuc) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    # Redefine the share weight subsector technology (nuclear Gen III cooling types) based on scenario 2 restrictions
+    L223.StubTechShrwt_Investment_USA_allow_new_nuc_ssp3 <-
+      dplyr::mutate(
+        L223.StubTechShrwt_Investment_USA_allow_new_nuc_ssp3,
+        share.weight = dplyr::case_when(
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (once through)" & region %in% once_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (once through)" & !(region %in% once_cool) & year > 2015) ~ 1,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (cooling pond)" & region %in% pond_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (cooling pond)" & !(region %in% pond_cool) & year > 2015) ~ 1,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (recirculating)" & region %in% recirc_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (recirculating)" & !(region %in% recirc_cool) & year > 2015) ~ 1,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (seawater)" & region %in% seawater_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (seawater)" & !(region %in% seawater_cool) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    # Redefine the share weight subsector technology (nuclear Gen II/III cooling types) based on scenario 2 restrictions
+    # Set Gen II share weights to zero
+    L223.TechShrwt_Dispatch_allow_new_nuc_ssp3 <-
+      dplyr::mutate(
+        L223.TechShrwt_Dispatch_allow_new_nuc_ssp3,
+        share.weight = dplyr::case_when(
+          (subsector == "nuclear" & grepl("Gen_II_LWR", technology)) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (once through)" & region %in% once_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (once through)" & !(region %in% once_cool) & year > 2015) ~ 1,
+          (subsector == "nuclear" & technology == "Gen_III (cooling pond)" & region %in% pond_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (cooling pond)" & !(region %in% pond_cool) & year > 2015) ~ 1,
+          (subsector == "nuclear" & technology == "Gen_III (recirculating)" & region %in% recirc_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (recirculating)" & !(region %in% recirc_cool) & year > 2015) ~ 1,
+          (subsector == "nuclear" & technology == "Gen_III (seawater)" & region %in% seawater_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (seawater)" & !(region %in% seawater_cool) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    create_xml("electricity_USA_allow_new_nuc_ssp3.xml") %>%
+      add_xml_data_generate_levels(L223.SubsectorShrwt_Investment_allow_new_nuc_ssp3, "SubsectorShrwt",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data_generate_levels(L223.StubTechShrwt_Investment_USA_allow_new_nuc_ssp3, "StubTechShrwt",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data(L223.SubsectorShrwt_Investment_Fuel_allow_new_nuc_ssp3, "SubsectorShrwt") %>%
+      add_xml_data(L223.TechShrwt_Dispatch_allow_new_nuc_ssp3, "TechShrwt")  %>%
+      add_precursors("L223.SubsectorShrwt_Investment_Fuel",
+                     "L223.SubsectorShrwt_Investment",
+                     "L223.StubTechShrwt_Investment_USA",
+                     "L223.TechShrwt_Dispatch") ->
+      electricity_USA_allow_new_nuc_ssp3.xml
+
+
+    # Scenario 3 - ssp 3
+    # electricity_USA_no_moratorium_nuc_ssp3.xml
+    # Moratorium States: "CA", "CT", "HI", "IL", "ME", "MA", "MN", "NJ", "NY", "OR", "RI", "VT"
+    # Unsuitable States (From CERF/Kendall)
+
+    # Identify states that are unsuitable for any nuclear technologies including moratorium states
+    unsuitable_moratorium <- unique(c(unsuitable_nuc, moratorium))
+
+    # Produce outputs
+    L223.SubsectorShrwt_Investment_Fuel_no_moratorium_nuc_ssp3 <- L223.SubsectorShrwt_Investment_Fuel
+    L223.SubsectorShrwt_Investment_no_moratorium_nuc_ssp3 <- L223.SubsectorShrwt_Investment
+    L223.StubTechShrwt_Investment_USA_no_moratorium_nuc_ssp3 <- L223.StubTechShrwt_Investment_USA
+    L223.TechShrwt_Dispatch_no_moratorium_nuc_ssp3 <- L223.TechShrwt_Dispatch
+
+    # Redefine the shareweight for nuclear subsector based on scenario 3 restrictions
+    L223.SubsectorShrwt_Investment_Fuel_no_moratorium_nuc_ssp3 <-
+      dplyr::mutate(
+        L223.SubsectorShrwt_Investment_Fuel_no_moratorium_nuc_ssp3,
+        share.weight = dplyr::case_when(
+          (subsector == "nuclear" & region %in% unsuitable_moratorium) ~ 0,
+          (subsector == "nuclear" & !(region %in% unsuitable_moratorium) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    # Redefine the share weight subsector technology (nuclear Gen III) based on scenario 3 restrictions
+    L223.SubsectorShrwt_Investment_no_moratorium_nuc_ssp3 <-
+      dplyr::mutate(
+        L223.SubsectorShrwt_Investment_no_moratorium_nuc_ssp3,
+        share.weight = dplyr::case_when(
+          (subsector0 == "nuclear" & region %in% unsuitable_moratorium) ~ 0,
+          (subsector0 == "nuclear" & !(region %in% unsuitable_moratorium) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    # Redefine the share weight subsector technology (nuclear Gen III cooling types) based on scenario 3 restrictions
+    L223.StubTechShrwt_Investment_USA_no_moratorium_nuc_ssp3 <-
+      dplyr::mutate(
+        L223.StubTechShrwt_Investment_USA_no_moratorium_nuc_ssp3,
+        share.weight = dplyr::case_when(
+          (subsector0 == "nuclear" & subsector == "Gen_III" & region %in% moratorium) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (once through)" & region %in% once_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (once through)" & !(region %in% once_cool) & year > 2015) ~ 1,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (cooling pond)" & region %in% pond_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (cooling pond)" & !(region %in% pond_cool) & year > 2015) ~ 1,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (recirculating)" & region %in% recirc_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (recirculating)" & !(region %in% recirc_cool) & year > 2015) ~ 1,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (seawater)" & region %in% seawater_cool) ~ 0,
+          (subsector0 == "nuclear" & stub.technology == "Gen_III (seawater)" & !(region %in% seawater_cool) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    # Redefine the share weight subsector technology (nuclear Gen II/III cooling types) based on scenario 3 restrictions
+    # Set Gen II share weights to zero
+    L223.TechShrwt_Dispatch_no_moratorium_nuc_ssp3 <-
+      dplyr::mutate(
+        L223.TechShrwt_Dispatch_no_moratorium_nuc_ssp3,
+        share.weight = dplyr::case_when(
+          (subsector == "nuclear" & grepl("Gen_II_LWR", technology)) ~ 0,
+          (subsector == "nuclear" & grepl("Gen_III", technology) & region %in% moratorium) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (once through)" & region %in% once_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (once through)" & !(region %in% once_cool) & year > 2015) ~ 1,
+          (subsector == "nuclear" & technology == "Gen_III (cooling pond)" & region %in% pond_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (cooling pond)" & !(region %in% pond_cool) & year > 2015) ~ 1,
+          (subsector == "nuclear" & technology == "Gen_III (recirculating)" & region %in% recirc_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (recirculating)" & !(region %in% recirc_cool) & year > 2015) ~ 1,
+          (subsector == "nuclear" & technology == "Gen_III (seawater)" & region %in% seawater_cool) ~ 0,
+          (subsector == "nuclear" & technology == "Gen_III (seawater)" & !(region %in% seawater_cool) & year > 2015) ~ 1,
+          TRUE ~ share.weight
+        )
+      )
+
+    create_xml("electricity_USA_no_moratorium_nuc_ssp3.xml") %>%
+      add_xml_data_generate_levels(L223.SubsectorShrwt_Investment_no_moratorium_nuc_ssp3, "SubsectorShrwt",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data_generate_levels(L223.StubTechShrwt_Investment_USA_no_moratorium_nuc_ssp3, "StubTechShrwt",
+                                   "subsector", "nesting-subsector", 1, FALSE) %>%
+      add_xml_data(L223.SubsectorShrwt_Investment_Fuel_no_moratorium_nuc_ssp3, "SubsectorShrwt") %>%
+      add_xml_data(L223.TechShrwt_Dispatch_no_moratorium_nuc_ssp3, "TechShrwt")  %>%
+      add_precursors("L223.SubsectorShrwt_Investment_Fuel",
+                     "L223.SubsectorShrwt_Investment",
+                     "L223.StubTechShrwt_Investment_USA",
+                     "L223.TechShrwt_Dispatch") ->
+      electricity_USA_no_moratorium_nuc_ssp3.xml
 
     #..................................................
 
 
-    return_data(electricity_USA.xml)
+    return_data(electricity_USA.xml,
+                electricity_USA_allow_new_nuc_ssp5.xml,
+                electricity_USA_allow_new_nuc_ssp3.xml,
+                electricity_USA_no_moratorium_nuc_ssp5.xml,
+                electricity_USA_no_moratorium_nuc_ssp3.xml)
   } else {
     stop("Unknown command")
   }
