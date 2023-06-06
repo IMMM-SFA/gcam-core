@@ -6,11 +6,11 @@
 		<Value name="policy-target-file">../input/policy/forcing_target_4p5.xml</Value>
 		<Value name="GHGInputFileName">../input/magicc/inputs/input_gases.emk</Value>
 		<Value write-output="1" append-scenario-name="0" name="xmldb-location">../output/database_rcp85hotter_ssp3_rcp85gdp</Value>
-		<Value write-output="1" append-scenario-name="0" name="restart">./restart/restart</Value>
-		<Value write-output="1" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
-		<Value write-output="1" append-scenario-name="0" name="climatFileName">gas.emk</Value>
-		<Value write-output="1" append-scenario-name="1" name="costCurvesOutputFileName">cost_curves.xml</Value>
-		<Value write-output="1" append-scenario-name="0" name="batchCSVOutputFile">batch-csv-out.csv</Value>
+		<Value write-output="0" append-scenario-name="0" name="restart">./restart/restart</Value>
+		<Value write-output="0" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
+		<Value write-output="0" append-scenario-name="0" name="climatFileName">gas.emk</Value>
+		<Value write-output="0" append-scenario-name="1" name="costCurvesOutputFileName">cost_curves.xml</Value>
+		<Value write-output="0" append-scenario-name="0" name="batchCSVOutputFile">batch-csv-out.csv</Value>
 		<Value write-output="0" append-scenario-name="0" name="supplyDemandOutputFileName">SDCurves.csv</Value>
 		<Value write-output="0" append-scenario-name="0" name="flow-graph">gcam-flow-graph.dot</Value>
 		<Value write-output="0" append-scenario-name="0" name="dependencyGraphName">DependencyGraph.dot</Value>
@@ -130,6 +130,7 @@
 		<Value name = "prices_usa">../input/gcamdata/xml/en_prices_USA.xml</Value>
 		<Value name = "en_transform_usa">../input/gcamdata/xml/en_transformation_USA.xml</Value>
 		<Value name = "elec_usa">../input/gcamdata/xml/electricity_USA.xml</Value>
+		<Value name = "elec_usa_nuc_moratorium">../input/gcamdata/xml/electricity_USA_no_moratorium_nuc_ssp3.xml</Value>
 		<Value name = "h2_usa">../input/gcamdata/xml/hydrogen_USA.xml</Value>
 		<Value name = "elect_td_usa">../input/gcamdata/xml/electd_USA.xml</Value>
 		<Value name = "trn_usa">../input/gcamdata/xml/transportation_USA.xml</Value>

@@ -5,7 +5,7 @@
 		<Value name="BatchFileName">batch_ag.xml</Value>
 		<Value name="policy-target-file">../input/policy/forcing_target_4p5.xml</Value>
 		<Value name="GHGInputFileName">../input/magicc/inputs/input_gases.emk</Value>
-		<Value write-output="1" append-scenario-name="0" name="xmldb-location">../output/database_rcp85cooler_ssp5_runoff</Value>
+		<Value write-output="1" append-scenario-name="0" name="xmldb-location">../output/database_rcp45hotter_ssp3_base_nuc_only</Value>
 		<Value write-output="0" append-scenario-name="0" name="restart">./restart/restart</Value>
 		<Value write-output="0" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
 		<Value write-output="0" append-scenario-name="0" name="climatFileName">gas.emk</Value>
@@ -67,7 +67,8 @@
 		<Value name = "nonco2_energy">../input/gcamdata/xml/all_energy_emissions_MAC.xml</Value>
 		<Value name = "nonco2_fgas">../input/gcamdata/xml/all_fgas_emissions_MAC.xml</Value>
 		<Value name = "nonco2_aglu">../input/gcamdata/xml/all_aglu_emissions_IRR_MGMT_MAC.xml</Value> 
-		<Value name = "nonco2_proc">../input/gcamdata/xml/ind_urb_processing_sectors_MAC.xml</Value>
+		<Value name = "nonco2_proc">../input/gcamdata/xml/ind_urb_processing_sectors_MAC.xml</Value> 
+
 
 		<Value name = "unlim_supply_water">../input/gcamdata/xml/unlimited_water_supply.xml</Value>
 		<Value name = "water_supply">../input/gcamdata/xml/water_supply_constrained.xml</Value>
@@ -85,37 +86,52 @@
 		<Value name = "bio_neg_emiss_budget">../input/gcamdata/xml/negative_emissions_budget_gSSP2.xml</Value>
         <Value name = "wind_update">../input/gcamdata/xml/onshore_wind.xml</Value>
 		
-		<!-- SSP5 Global Assumptions-->
+		<!-- SSP3 Global Assumptions-->
 		<!-- SOCIOECONOMICS -->
-		<Value name="socioeconomics">../input/gcamdata/xml/socioeconomics_SSP5.xml</Value>
+		<Value name="socioeconomics">../input/gcamdata/xml/socioeconomics_SSP3.xml</Value>
 		<!-- INDUSTRY -->
-		<Value name="ind">../input/gcamdata/xml/industry_incelas_ssp5.xml</Value>
-		<Value name="cement">../input/gcamdata/xml/cement_incelas_ssp5.xml</Value>
+		<Value name="ind">../input/gcamdata/xml/industry_incelas_ssp3.xml</Value>
+		<Value name="cement">../input/gcamdata/xml/cement_incelas_ssp3.xml</Value>
 		<!-- TRANSPORTATION -->
-	   <Value name="trn">../input/gcamdata/xml/transportation_UCD_SSP5.xml</Value>
+		<Value name="trn">../input/gcamdata/xml/transportation_UCD_SSP3.xml</Value> -->
 		<!-- BUILDINGS -->
-		<Value name="bld">../input/gcamdata/xml/building_SSP5.xml</Value>
+		<Value name="bld">../input/gcamdata/xml/building_SSP3.xml</Value> -->
 		<!-- AGLU -->
-		<Value name="aglu">../input/gcamdata/xml/ag_prodchange_ssp5_IRR_MGMT.xml</Value>
-		<!-- CCS -->
-		<Value name="ccs_supply">../input/gcamdata/xml/ccs_supply_high.xml</Value>
+		<Value name="aglu">../input/gcamdata/xml/ag_prodchange_ssp3_IRR_MGMT.xml</Value>
+<!--		<Value name="aglu">../input/gcamdata/xml/pasture_ssp34.xml</Value> -->
+		<!-- WIND -->
+		<Value name="wind">../input/gcamdata/xml/wind_low.xml</Value>
+		<!-- SOLAR -->
+		<Value name="solar">../input/gcamdata/xml/solar_low.xml</Value>
+		<!-- GEOTHERMAL -->
+		<Value name="geothermal">../input/gcamdata/xml/geo_low.xml</Value>
+		<!-- NUCLEAR -->
+		<Value name="nuclear">../input/gcamdata/xml/nuclear_low.xml</Value>
+		<!-- BIO TRANSFORMATION -->
+		<Value name="bio">../input/gcamdata/xml/en_transformation_low.xml</Value>
+		<Value name="bio">../input/gcamdata/xml/elec_bio_low.xml</Value>
 		<!-- FOSSIL -->
-		<Value name="resource_extraction">../input/gcamdata/xml/resources_SSP5.xml</Value>
+		<Value name="resource_extraction">../input/gcamdata/xml/resources_SSP3.xml</Value>
+		<!-- TRADE -->
+		<Value name="bio_trade">../input/gcamdata/xml/ssp3_bio_trade.xml</Value>
+		<!-- CCS -->
+		<Value name="ccs">../input/gcamdata/xml/ccs_supply_low.xml</Value>
+		<!--<Value name="ccs">../input/gcamdata/xml/no_offshore_ccs.xml</Value>-->
+		<Value name = "high_cost_offshore_carbon">../input/im3scenarios/high_cost_offshore_carbon.xml</Value>
+
 		<!-- NON-CO2 -->
 		<Value name="nonco2">../input/gcamdata/xml/delete_gdp_control.xml</Value>
-		<Value name="nonco2">../input/gcamdata/xml/ssp15_emissions_factors.xml</Value>
-		<!-- <Value name="nonco2">../input/gcamdata/xml/MACC_TC_SSP5.xml</Value> -->
+		<Value name="nonco2">../input/gcamdata/xml/ssp34_emissions_factors.xml</Value>
 		<!-- NEG EMISS BUDGET -->
-		<Value name = "bio_neg_emiss_budget">../input/gcamdata/xml/negative_emissions_budget_SSP5.xml</Value>
+		<Value name = "bio_neg_emiss_budget">../input/gcamdata/xml/negative_emissions_budget_SSP3.xml</Value>
 
-		<!-- GCAM USA Files-->
+        <!-- GCAM USA -->
 		<Value name = "socio_usa">../input/gcamdata/xml/socioeconomics_USA.xml</Value>
 		<Value name = "resource_usa">../input/gcamdata/xml/resources_USA.xml</Value>
 		<Value name = "Cstorage_usa">../input/gcamdata/xml/Cstorage_USA.xml</Value>
 		<Value name = "prices_usa">../input/gcamdata/xml/en_prices_USA.xml</Value>
 		<Value name = "en_transform_usa">../input/gcamdata/xml/en_transformation_USA.xml</Value>
 		<Value name = "elec_usa">../input/gcamdata/xml/electricity_USA.xml</Value>
-		<Value name = "elec_usa_nuc_moratorium">../input/gcamdata/xml/electricity_USA_no_moratorium_nuc_ssp5.xml</Value>
 		<Value name = "h2_usa">../input/gcamdata/xml/hydrogen_USA.xml</Value>
 		<Value name = "elect_td_usa">../input/gcamdata/xml/electd_USA.xml</Value>
 		<Value name = "trn_usa">../input/gcamdata/xml/transportation_USA.xml</Value>
@@ -142,29 +158,43 @@
 		<Value name = "nonco2_usa">../input/gcamdata/xml/transport_emissions_USA.xml</Value>
 		<Value name = "nonco2_usa">../input/gcamdata/xml/industry_process_USA.xml</Value>
 
-		<!-- SSP5 USA Assumptions-->
+		
+		<!-- SSP3 USA Assumptions-->
 		<!-- SOCIOECONOMICS -->
-		<Value name="socioeconomics">../input/gcamdata/xml/socioeconomics_USA_SSP5.xml</Value>
+		<Value name="socioeconomics">../input/gcamdata/xml/socioeconomics_USA_SSP3.xml</Value>
 		<!-- INDUSTRY -->
-		<Value name="ind">../input/gcamdata/xml/industry_incelas_USA_ssp5.xml</Value>
-		<Value name="cement">../input/gcamdata/xml/cement_incelas_USA_ssp5.xml</Value>
+		<Value name="ind">../input/gcamdata/xml/industry_incelas_USA_ssp3.xml</Value>
+		<Value name="cement">../input/gcamdata/xml/cement_incelas_USA_ssp3.xml</Value>
+		<!-- TRANSPORTATION -->
+<!--		<Value name="trn">../input/gcamdata/xml/transportation_USA_SSP3.xml</Value> -->
 		<!-- BUILDINGS -->
-<!--           <Value name="bld">../input/gcamdata/xml/building_USA_SSP5.xml</Value> -->
+<!--	<Value name="bld">../input/gcamdata/xml/building_USA_SSP3.xml</Value> -->
+		<!-- FOSSIL -->
 		<!-- CCS -->
-		<Value name="ccs_supply">../input/gcamdata/xml/ccs_supply_high_USA.xml</Value>
-
+		<Value name="ccs">../input/gcamdata/xml/ccs_supply_low_USA.xml</Value>
+		
 		<!-- Climate Impacts-->
-		<!-- Climate Impacts - Runoff-->
-		<Value name="ccs_supply">../input/im3scenarios/rcp85_runoff/Basin_runoff_km3peryear_comb_ssp585_rcp85_noresm_1979_2100_cooler_window5trail_delta_applied2015.xml</Value>
+		<!-- HDDCDD -->
+		<Value name = "bld_usa">../input/im3scenarios/rcp45_hdcd/combined_outputs_hdcd_rcp45hotter_ssp3.xml</Value>
+		<!-- Runoff -->
+		<Value name="ccs_supply">../input/im3scenarios/rcp45_runoff/Basin_runoff_km3peryear_comb_rcp45_rcp45_noresm_1979_2100_hotter_window5trail_delta_applied2015.xml</Value>
+		<!-- Ag Yields -->
+		<Value name = "ag_yield">../input/im3scenarios/rcp45_agyields/ag_prodchange_rcp4p5_ssp3_CanESM5_LPJmL.xml</Value>
+		<Value name = "ag_yield">../input/im3scenarios/rcp45_agyields/ag_prodchange_rcp4p5_hot_ssp3_WRF_LPJmL.xml</Value>
+
+		<!--POLICY ADD ONS-->
+		<Value name = "global_CO2_constraint">../input/im3scenarios/rcp45_emissions_pathway/global_CO2_constraint_rcp45.xml</Value>
+		<Value name = "global_CO2_constraint">../input/im3scenarios/rcp45_emissions_pathway/global_CO2_link.xml</Value>
 
 		<!-- Fixes-->
 		<Value name="fix_geo_pmult">../input/fixes/L223.CapacityTechInputPMult_geo.xml</Value>
 		<Value name="fix_PV_CSP_offwind_fixedCF">../input/fixes/replace_PV_CSP_offwind_fixedCF.xml</Value>
+
 		<Value name = "solver">../input/solution/cal_broyden_config.xml</Value>
 
 	</ScenarioComponents>
 	<Strings>
-		<Value name="scenarioName">rcp85cooler_ssp5_runoff</Value>
+		<Value name="scenarioName">rcp45hotter_ssp3_base_nuc_only</Value>
 		<Value name="debug-region">Texas grid</Value>
 		<Value name="MAGICC-input-dir">../input/magicc/inputs</Value>
 		<Value name="MAGICC-output-dir">../output</Value>

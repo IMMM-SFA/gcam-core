@@ -5,7 +5,7 @@
 		<Value name="BatchFileName">batch_ag.xml</Value>
 		<Value name="policy-target-file">../input/policy/forcing_target_4p5.xml</Value>
 		<Value name="GHGInputFileName">../input/magicc/inputs/input_gases.emk</Value>
-		<Value write-output="1" append-scenario-name="0" name="xmldb-location">../output/database_rcp85cooler_ssp5_runoff</Value>
+		<Value write-output="1" append-scenario-name="0" name="xmldb-location">../output/database_rcp85hotter_ssp5_allow_new_nuc</Value>
 		<Value write-output="0" append-scenario-name="0" name="restart">./restart/restart</Value>
 		<Value write-output="0" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
 		<Value write-output="0" append-scenario-name="0" name="climatFileName">gas.emk</Value>
@@ -67,7 +67,7 @@
 		<Value name = "nonco2_energy">../input/gcamdata/xml/all_energy_emissions_MAC.xml</Value>
 		<Value name = "nonco2_fgas">../input/gcamdata/xml/all_fgas_emissions_MAC.xml</Value>
 		<Value name = "nonco2_aglu">../input/gcamdata/xml/all_aglu_emissions_IRR_MGMT_MAC.xml</Value> 
-		<Value name = "nonco2_proc">../input/gcamdata/xml/ind_urb_processing_sectors_MAC.xml</Value>
+		<Value name = "nonco2_proc">../input/gcamdata/xml/ind_urb_processing_sectors_MAC.xml</Value> 
 
 		<Value name = "unlim_supply_water">../input/gcamdata/xml/unlimited_water_supply.xml</Value>
 		<Value name = "water_supply">../input/gcamdata/xml/water_supply_constrained.xml</Value>
@@ -115,7 +115,7 @@
 		<Value name = "prices_usa">../input/gcamdata/xml/en_prices_USA.xml</Value>
 		<Value name = "en_transform_usa">../input/gcamdata/xml/en_transformation_USA.xml</Value>
 		<Value name = "elec_usa">../input/gcamdata/xml/electricity_USA.xml</Value>
-		<Value name = "elec_usa_nuc_moratorium">../input/gcamdata/xml/electricity_USA_no_moratorium_nuc_ssp5.xml</Value>
+		<Value name = "elec_usa_allow_nuc">../input/gcamdata/xml/electricity_USA_allow_new_nuc_ssp5.xml</Value>
 		<Value name = "h2_usa">../input/gcamdata/xml/hydrogen_USA.xml</Value>
 		<Value name = "elect_td_usa">../input/gcamdata/xml/electd_USA.xml</Value>
 		<Value name = "trn_usa">../input/gcamdata/xml/transportation_USA.xml</Value>
@@ -154,17 +154,23 @@
 		<Value name="ccs_supply">../input/gcamdata/xml/ccs_supply_high_USA.xml</Value>
 
 		<!-- Climate Impacts-->
-		<!-- Climate Impacts - Runoff-->
-		<Value name="ccs_supply">../input/im3scenarios/rcp85_runoff/Basin_runoff_km3peryear_comb_ssp585_rcp85_noresm_1979_2100_cooler_window5trail_delta_applied2015.xml</Value>
-
+		<!-- HDDCDD -->
+		<Value name = "bld_usa">../input/im3scenarios/rcp85_hdcd/combined_outputs_hdcd_rcp85hotter_ssp5.xml</Value>
+		<!-- Runoff -->
+		<Value name="ccs_supply">../input/im3scenarios/rcp85_runoff/Basin_runoff_km3peryear_comb_ssp585_rcp85_noresm_1979_2100_hotter_window5trail_delta_applied2015.xml</Value>
+		<!-- Ag Yields -->
+		<Value name = "ag_yield">../input/im3scenarios/rcp85_agyields/ag_prodchange_rcp8p5_ssp5_CanESM5_LPJmL.xml</Value>
+		<Value name = "ag_yield">../input/im3scenarios/rcp85_agyields/ag_prodchange_rcp8p5_hot_ssp5_WRF_LPJmL.xml</Value>
+	
 		<!-- Fixes-->
 		<Value name="fix_geo_pmult">../input/fixes/L223.CapacityTechInputPMult_geo.xml</Value>
 		<Value name="fix_PV_CSP_offwind_fixedCF">../input/fixes/replace_PV_CSP_offwind_fixedCF.xml</Value>
+
 		<Value name = "solver">../input/solution/cal_broyden_config.xml</Value>
 
 	</ScenarioComponents>
 	<Strings>
-		<Value name="scenarioName">rcp85cooler_ssp5_runoff</Value>
+		<Value name="scenarioName">rcp85hotter_ssp5_allow_new_nuc</Value>
 		<Value name="debug-region">Texas grid</Value>
 		<Value name="MAGICC-input-dir">../input/magicc/inputs</Value>
 		<Value name="MAGICC-output-dir">../output</Value>
