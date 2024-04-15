@@ -141,78 +141,20 @@ module_gcamusa_LA100.Socioeconomics <- function(command, ...) {
                                  select(state, state_name),
                                by = c("state_name")) %>%
       select(-state_name, -State_FIPS) %>%
-      gather_years("pop") %>%
+      gather_years("value") %>%
       # converting people to thousands of people
-      mutate(pop = pop * CONV_ONES_THOUS) %>%
-      group_by(state,SSP) %>%
-      complete(nesting(state, SSP), year = c(FUTURE_YEARS)) %>%
-      mutate(pop = approx_fun(year, pop),
-             growth_rate_SSP = (pop / lag(pop)) ^ (1 / (year - lag(year))) - 1) %>%
-      ungroup() %>%
-      filter(year >= gcamusa.SE_NEAR_TERM_YEAR) -> L100.Pop_GR_SSP
+      mutate(value = value * CONV_ONES_THOUS) ->
+      L100.Pop_SSP_temp
 
-    L100.Pop_thous_state_SSP <- tibble()
+    MIN_SSP_YEAR <- min(L100.Pop_SSP_temp$year)
+    POP_SSP_AVAIL <- unique(L100.Pop_SSP_temp$SSP)
 
-    for(ssp_i in unique(L100.Pop_GR_SSP$SSP)){
-
-      L100.Pop_GR_SSP %>%
-        filter(SSP==ssp_i) %>%
-        select(-SSP)-> L100.Pop_GR_SSPi
-
-    # Interpolate between historical 2010-2018 growth rates to NCAR 2030 growth rates
-    L100.Pop_future_temp %>%
-      # left_join_error_no_match thorws error because of NAs in new columns
-      # this is becuase some years are (intentionally) missing from RHS
-      # thus we use left_join instead
-      left_join(L100.Pop_GR_SSPi %>%
-                  select(-pop),
-                by = c("state", "year")) %>%
-      group_by(state) %>%
-      mutate(growth_rate = if_else(is.na(growth_rate_hist), growth_rate_SSP, growth_rate_hist),
-             growth_rate = approx_fun(year, growth_rate)) %>%
-      ungroup() %>%
-      select(-growth_rate_hist, -growth_rate_SSP) -> L100.Pop_GRi
-
-    L100.Pop_GRi %>%
-      distinct(year) %>%
-      filter(year != min(year)) -> L100.Pop_GR_yearsi
-    pop_yearsi <- unique(L100.Pop_GR_yearsi$year)
-
-    for (y in pop_yearsi) {
-      # Calculate revised population
-      L100.Pop_GRi %>%
-        group_by(state) %>%
-        mutate(time = year - lag(year, n = 1L),
-               lag_pop = lag(pop, n = 1L)) %>%
-        ungroup() %>%
-        filter(year == y) %>%
-        mutate(pop = lag_pop * ((1 + growth_rate) ^ time)) -> L100.Pop_GR_tempi
-
-      # Add back into table
-      L100.Pop_GRi %>%
-        filter(year != y) %>%
-        bind_rows(L100.Pop_GR_tempi %>%
-                    select(-time, -lag_pop)) %>%
-        mutate(year = as.numeric(year)) %>%
-        arrange(state, year) -> L100.Pop_GRi
-
-    }
-
-    L100.Pop_USA %>%
-      bind_rows(L100.Pop_GRi %>%
-                  filter(!(year %in% L100.Pop_USA$year)) %>%
-                  select(-growth_rate)) %>%
-      mutate(pop = round(pop, socioeconomics.POP_DIGITS)) %>%
-      rename(value = pop) %>%
-      arrange(state, year) -> L100.Pop_thous_statei
-
-    L100.Pop_thous_state_SSP <-
-      L100.Pop_thous_state_SSP %>%
-      bind_rows(L100.Pop_thous_statei %>%
-                  mutate(SSP=ssp_i))
-    }
-
-
+    L100.Pop_thous_state %>%
+      filter(year < MIN_SSP_YEAR) %>%
+      repeat_add_columns(tibble(SSP = POP_SSP_AVAIL)) %>%
+      bind_rows(L100.Pop_SSP_temp) ->
+      L100.Pop_thous_state_SSP
+     
     # Historical per-capita GDP time series
     BEA_GDP_87_96_97USD_state %>%
       select(-Fips) %>%

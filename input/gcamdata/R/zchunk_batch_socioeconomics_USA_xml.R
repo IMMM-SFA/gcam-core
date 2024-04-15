@@ -21,7 +21,7 @@ module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
              "L201.BaseGDP_GCAMUSA",
              "L201.LaborForceFillout_GCAMUSA",
              "L201.LaborProductivity_GCAMUSA",
-             "L201.LaborProductivity_gSSP_GCAMUSA",
+             "L201.LaborProductivity_SSP_GCAMUSA",
              "L201.Pop_national_updated_USA",
              "L201.Pop_national_updated_USA_SSP",
              "L201.BaseGDP_national_updated_USA",
@@ -48,7 +48,7 @@ module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
     L201.Pop_national_updated_USA_SSP <- get_data(all_data, "L201.Pop_national_updated_USA_SSP")
     L201.BaseGDP_national_updated_USA <- get_data(all_data, "L201.BaseGDP_national_updated_USA")
     L201.LaborProductivity_national_updated_USA <- get_data(all_data, "L201.LaborProductivity_national_updated_USA")
-    L201.LaborProductivity_gSSP_GCAMUSA <- get_data(all_data,"L201.LaborProductivity_gSSP_GCAMUSA")
+    L201.LaborProductivity_SSP_GCAMUSA <- get_data(all_data,"L201.LaborProductivity_SSP_GCAMUSA")
 
     # ===================================================
 
@@ -80,13 +80,13 @@ module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
       add_xml_data(L201.Pop_national_updated_USA_SSP %>%
                      filter(SSP==1) %>%
                      select(-SSP), "Pop") %>%
-      add_xml_data(L201.LaborProductivity_gSSP_GCAMUSA %>%
+      add_xml_data(L201.LaborProductivity_SSP_GCAMUSA %>%
                      filter(ssp=="ssp1") %>%
                      select(-ssp), "LaborProductivity") %>%
       add_precursors("L201.Pop_GCAMUSA_SSP",
                      "L201.Pop_national_updated_USA_SSP",
                      "L201.LaborProductivity_GCAMUSA",
-                     "L201.LaborProductivity_gSSP_GCAMUSA") ->
+                     "L201.LaborProductivity_SSP_GCAMUSA") ->
       socioeconomics_USA_SSP1.xml
 
     # Produce outputs SSP2
@@ -97,13 +97,13 @@ module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
       add_xml_data(L201.Pop_national_updated_USA_SSP %>%
                      filter(SSP==2) %>%
                      select(-SSP), "Pop")  %>%
-      add_xml_data(L201.LaborProductivity_gSSP_GCAMUSA %>%
+      add_xml_data(L201.LaborProductivity_SSP_GCAMUSA %>%
                      filter(ssp=="ssp2") %>%
                      select(-ssp), "LaborProductivity") %>%
       add_precursors("L201.Pop_GCAMUSA_SSP",
                      "L201.Pop_national_updated_USA_SSP",
                      "L201.LaborProductivity_GCAMUSA",
-                     "L201.LaborProductivity_gSSP_GCAMUSA") ->
+                     "L201.LaborProductivity_SSP_GCAMUSA") ->
       socioeconomics_USA_SSP2.xml
 
     # Produce outputs SSP3
@@ -114,13 +114,13 @@ module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
       add_xml_data(L201.Pop_national_updated_USA_SSP %>%
                      filter(SSP==3) %>%
                      select(-SSP), "Pop")  %>%
-      add_xml_data(L201.LaborProductivity_gSSP_GCAMUSA %>%
+      add_xml_data(L201.LaborProductivity_SSP_GCAMUSA %>%
                      filter(ssp=="ssp3") %>%
                      select(-ssp), "LaborProductivity") %>%
       add_precursors("L201.Pop_GCAMUSA_SSP",
                      "L201.Pop_national_updated_USA_SSP",
                      "L201.LaborProductivity_GCAMUSA",
-                     "L201.LaborProductivity_gSSP_GCAMUSA") ->
+                     "L201.LaborProductivity_SSP_GCAMUSA") ->
       socioeconomics_USA_SSP3.xml
 
     # Produce outputs SSP3_rcp85gdp
@@ -131,14 +131,14 @@ module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
       add_xml_data(L201.Pop_national_updated_USA_SSP %>%
                      filter(SSP==3) %>%
                      select(-SSP), "Pop")  %>%
-      add_xml_data(L201.LaborProductivity_gSSP_GCAMUSA %>%
+      add_xml_data(L201.LaborProductivity_SSP_GCAMUSA %>%
                      filter(ssp=="ssp3") %>%
                      dplyr::mutate(laborproductivity = laborproductivity + 0.005) %>%
                      select(-ssp), "LaborProductivity") %>%
       add_precursors("L201.Pop_GCAMUSA_SSP",
                      "L201.Pop_national_updated_USA_SSP",
                      "L201.LaborProductivity_GCAMUSA",
-                     "L201.LaborProductivity_gSSP_GCAMUSA") ->
+                     "L201.LaborProductivity_SSP_GCAMUSA") ->
       socioeconomics_USA_SSP3_rcp85gdp.xml
 
     # Produce outputs SSP4
@@ -149,13 +149,13 @@ module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
       add_xml_data(L201.Pop_national_updated_USA_SSP %>%
                      filter(SSP==4) %>%
                      select(-SSP), "Pop")  %>%
-      add_xml_data(L201.LaborProductivity_gSSP_GCAMUSA %>%
+      add_xml_data(L201.LaborProductivity_SSP_GCAMUSA %>%
                      filter(ssp=="ssp4") %>%
                      select(-ssp), "LaborProductivity") %>%
       add_precursors("L201.Pop_GCAMUSA_SSP",
                      "L201.Pop_national_updated_USA_SSP",
                      "L201.LaborProductivity_GCAMUSA",
-                     "L201.LaborProductivity_gSSP_GCAMUSA") ->
+                     "L201.LaborProductivity_SSP_GCAMUSA") ->
       socioeconomics_USA_SSP4.xml
 
     # Produce outputs SSP5
@@ -164,15 +164,15 @@ module_gcamusa_batch_socioeconomics_USA_xml <- function(command, ...) {
                      filter(SSP==5) %>%
                      select(-SSP), "Pop") %>%
       add_xml_data(L201.Pop_national_updated_USA_SSP %>%
-                     filter(SSP==4) %>%
+                     filter(SSP==5) %>%
                      select(-SSP), "Pop")  %>%
-      add_xml_data(L201.LaborProductivity_gSSP_GCAMUSA %>%
+      add_xml_data(L201.LaborProductivity_SSP_GCAMUSA %>%
                      filter(ssp=="ssp5") %>%
                      select(-ssp), "LaborProductivity") %>%
       add_precursors("L201.Pop_GCAMUSA_SSP",
                      "L201.Pop_national_updated_USA_SSP",
                      "L201.LaborProductivity_GCAMUSA",
-                     "L201.LaborProductivity_gSSP_GCAMUSA") ->
+                     "L201.LaborProductivity_SSP_GCAMUSA") ->
       socioeconomics_USA_SSP5.xml
 
 
