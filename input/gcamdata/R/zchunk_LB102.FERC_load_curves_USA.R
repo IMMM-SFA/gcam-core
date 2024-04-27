@@ -38,11 +38,11 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    states_subregions <- get_data(all_data, "gcam-usa/states_subregions")
-    states_coordinates <- get_data(all_data, "gcam-usa/states_coordinates")
-    ferc_resp_eia_code <- get_data(all_data, "gcam-usa/dispatch/Respondent_IDs_fix_mismatch")
-    eia_operators_nerc_region_mapping <- get_data(all_data, "gcam-usa/dispatch/eia_operators_nerc_region_mapping")
-    FERC_hourly_gen_raw <- get_data(all_data, "gcam-usa/dispatch/FERC_hourly_gen")
+    states_subregions <- get_data(all_data, "gcam-usa/states_subregions", strip_attributes = TRUE)
+    states_coordinates <- get_data(all_data, "gcam-usa/states_coordinates", strip_attributes = TRUE)
+    ferc_resp_eia_code <- get_data(all_data, "gcam-usa/dispatch/Respondent_IDs_fix_mismatch", strip_attributes = TRUE)
+    eia_operators_nerc_region_mapping <- get_data(all_data, "gcam-usa/dispatch/eia_operators_nerc_region_mapping", strip_attributes = TRUE)
+    FERC_hourly_gen_raw <- get_data(all_data, "gcam-usa/dispatch/FERC_hourly_gen", strip_attributes = TRUE)
 
     # If the large raw FERC datasets are available, go through the full computations below
     # If not, use the pre-built outputs
@@ -98,7 +98,7 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
       # other date/hours are relative to that.
       NERC_hourly_gen %>%
         group_by(NERC.Region) %>%
-        mutate(rel_gen = percent_rank(generation)) %>%
+        mutate(rel_gen = dplyr::percent_rank(generation)) %>%
         ungroup() ->
         NERC_hourly_rel_gen
 
@@ -169,7 +169,7 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
         left_join_error_no_match(NERC_hourly_rel_gen, by = c("NERC.Region", "date")) %>%
         group_by(NERC.Region) %>%
         arrange(desc(rel_gen)) %>%
-        mutate(is_super_peak = rel_gen >= nth(rel_gen, gcamusa.ELEC_SUPERPEAK_HRS)) ->
+        mutate(is_super_peak = rel_gen >= dplyr::nth(rel_gen, gcamusa.ELEC_SUPERPEAK_HRS)) ->
         find_super_peak
 
       # aggregate hourly data into montly day/night keeping the number of hours in the
@@ -177,7 +177,7 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
       find_super_peak %>%
         mutate(segment = if_else(is_super_peak, gcamusa.ELEC_SEGMENT_SUPERPEAK, paste(month, day_night, sep=gcamusa.SEGMENT_DELIM))) %>%
         group_by(NERC.Region, segment) %>%
-        summarize(hours = n(), generation = sum(generation)) %>%
+        summarize(hours = dplyr::n(), generation = sum(generation)) %>%
         # Note still group_by NERC.Region at this point
         mutate(generation.fraction = generation / sum(generation)) %>%
         mutate(generation = generation / hours) %>%
@@ -210,9 +210,9 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
       # which is in each bin.
       find_super_peak %>% mutate(invest_segment = cut(rel_gen, breaks=gcamusa.ELEC_INV_SHAPE)) %>%
         group_by(NERC.Region, invest_segment) %>%
-        summarize(hours=n(), generation=mean(generation)) %>%
+        summarize(hours=dplyr::n(), generation=mean(generation)) %>%
         # Note still grouped by NERC.Region
-        arrange(desc(invest_segment)) %>%
+        arrange(dplyr::desc(invest_segment)) %>%
         mutate(hours=cumsum(hours)) %>%
         mutate(area=generation * hours) %>%
         mutate(generation.fraction = area / sum(area)) %>%
@@ -227,7 +227,7 @@ module_gcamusa_LB102.FERC_load_curves_USA <- function(command, ...) {
         unique() ->
         names(elec_inv_names_recode)
       L102.invest_segments_NERC %>%
-        mutate(invest_segment = recode(invest_segment, !!! elec_inv_names_recode)) ->
+        mutate(invest_segment = dplyr::recode(invest_segment, !!! elec_inv_names_recode)) ->
         L102.invest_segments_NERC
 
       # Again NERC regions are coarser than our grid regions so we will copy the
