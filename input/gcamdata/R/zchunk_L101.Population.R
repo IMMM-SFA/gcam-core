@@ -20,6 +20,7 @@ module_socioeconomics_L101.Population <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/iso_GCAM_regID",
              FILE = "socioeconomics/GCAM3_population",
+             FILE = "gcam-usa/NCAR_SSP_pop_state",
              "L100.Pop_thous_ctry_Yh",
              "L100.Pop_thous_SSP_ctry_Yfut"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -42,6 +43,7 @@ module_socioeconomics_L101.Population <- function(command, ...) {
       GCAM3_population
     L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh")
     L100.Pop_thous_SSP_ctry_Yfut <- get_data(all_data, "L100.Pop_thous_SSP_ctry_Yfut")
+    NCAR_SSP_pop_state <- get_data(all_data, "gcam-usa/NCAR_SSP_pop_state", strip_attributes = TRUE)
 
     # Historical population by region
     L100.Pop_thous_ctry_Yh %>%
@@ -76,6 +78,32 @@ module_socioeconomics_L101.Population <- function(command, ...) {
       mutate(scenario = paste0("g", substr(scenario, 1, 4))) %>%
       bind_rows(L101.Pop_thous_SSP_R_Yfut) ->
       L101.Pop_thous_Scen_R_Yfut
+
+    # Calculate USA SSP state-level population, we will replace USA
+    # SSP (not gSSP) values to be consistent with GCAM-USA
+    NCAR_SSP_pop_state %>%
+      select(-State, -State_FIPS) %>%
+      gather_years("value") %>%
+      group_by(SSP, year) %>%
+      summarize(value = sum(value)) %>%
+      group_by(SSP) %>%
+      complete(nesting(SSP), year = c(FUTURE_YEARS)) %>%
+      mutate(value = approx_fun(year, value),
+             # converting people to thousands of people
+             value = value * CONV_ONES_THOUS) %>%
+      ungroup() %>%
+      filter(year %in% FUTURE_YEARS) %>%
+      mutate(scenario = paste0("SSP", SSP),
+             GCAM_region_ID = gcam.USA_CODE,
+             year = as.numeric(year)) %>%
+      select(names(L101.Pop_thous_Scen_R_Yfut)) ->
+      USA_SSP_Pop
+
+      L101.Pop_thous_Scen_R_Yfut %>%
+        anti_join(USA_SSP_Pop, by=c("scenario", "GCAM_region_ID", "year")) %>%
+        bind_rows(USA_SSP_Pop) ->
+        L101.Pop_thous_Scen_R_Yfut
+
 
     # Downscale GCAM 3.0 population to country on the basis of UN historical data and base SSP in future years
     # This is done according to actual shares in the historical periods, and SSPbase in the future periods
@@ -165,7 +193,8 @@ module_socioeconomics_L101.Population <- function(command, ...) {
       add_comments("Population by region and gSSP SSP in future periods") %>%
       add_legacy_name("L101.Pop_thous_Scen_R_Yfut") %>%
       add_precursors("common/iso_GCAM_regID", "socioeconomics/GCAM3_population",
-                     "L100.Pop_thous_ctry_Yh", "L100.Pop_thous_SSP_ctry_Yfut") ->
+                     "L100.Pop_thous_ctry_Yh", "L100.Pop_thous_SSP_ctry_Yfut",
+                     "gcam-usa/NCAR_SSP_pop_state") ->
       L101.Pop_thous_Scen_R_Yfut
 
     L101.Pop_thous_GCAM3_R_Y %>%
