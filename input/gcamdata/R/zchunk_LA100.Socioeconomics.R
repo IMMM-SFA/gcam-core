@@ -141,15 +141,20 @@ module_gcamusa_LA100.Socioeconomics <- function(command, ...) {
                                  select(state, state_name),
                                by = c("state_name")) %>%
       select(-state_name, -State_FIPS) %>%
-      gather_years("value") %>%
+      gather_years("value") ->
+      L100.Pop_SSP_temp
+
+    MIN_SSP_YEAR <- min(L100.Pop_SSP_temp$year)
+    SSP_HIST_YEARS <- MODEL_BASE_YEARS[MODEL_BASE_YEARS >= MIN_SSP_YEAR]
+
+    L100.Pop_SSP_temp %>%
       group_by(state, SSP) %>%
-      complete(nesting(state), year = c(FUTURE_YEARS)) %>%
+      complete(nesting(state), year = c(SSP_HIST_YEARS, FUTURE_YEARS)) %>%
       mutate(value = approx_fun(year, value),
              # converting people to thousands of people
              value = value * CONV_ONES_THOUS) ->
       L100.Pop_SSP_temp
 
-    MIN_SSP_YEAR <- min(L100.Pop_SSP_temp$year)
     POP_SSP_AVAIL <- unique(L100.Pop_SSP_temp$SSP)
 
     L100.Pop_thous_state %>%
