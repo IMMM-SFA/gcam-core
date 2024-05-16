@@ -55,6 +55,7 @@ module_gcamusa_L244.building_USA <- function(command, ...) {
              "L144.in_EJ_state_res_F_U_Y",
              "L143.HDDCDD_scen_state",
              "L100.Pop_thous_state",
+             "L100.Pop_thous_state_SSP",
              "L100.pcGDP_thous90usd_state"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L244.DeleteConsumer_USAbld",
@@ -66,6 +67,12 @@ module_gcamusa_L244.building_USA <- function(command, ...) {
              "L244.DemandFunction_flsp_gcamusa",
              "L244.Satiation_flsp_gcamusa",
              "L244.SatiationAdder_gcamusa",
+             "L244.Satiation_flsp_SSP2_gcamusa",
+             "L244.SatiationAdder_SSP2_gcamusa",
+             "L244.Satiation_flsp_SSP3_gcamusa",
+             "L244.SatiationAdder_SSP3_gcamusa",
+             "L244.Satiation_flsp_SSP5_gcamusa",
+             "L244.SatiationAdder_SSP5_gcamusa",
              "L244.ThermalBaseService_gcamusa",
              "L244.GenericBaseService_gcamusa",
              "L244.ThermalServiceSatiation_gcamusa",
@@ -139,6 +146,7 @@ module_gcamusa_L244.building_USA <- function(command, ...) {
     L144.in_EJ_state_res_F_U_Y <- get_data(all_data, "L144.in_EJ_state_res_F_U_Y", strip_attributes = TRUE)
     L143.HDDCDD_scen_state <- get_data(all_data, "L143.HDDCDD_scen_state", strip_attributes = TRUE)
     L100.Pop_thous_state <- get_data(all_data, "L100.Pop_thous_state", strip_attributes = TRUE)
+    L100.Pop_thous_state_SSP <- get_data(all_data, "L100.Pop_thous_state_SSP", strip_attributes = TRUE)
     L100.pcGDP_thous90usd_state <- get_data(all_data, "L100.pcGDP_thous90usd_state", strip_attributes = TRUE)
 
     # ===================================================
@@ -216,6 +224,25 @@ module_gcamusa_L244.building_USA <- function(command, ...) {
       left_join_error_no_match(A44.gcam_consumer, by = c("gcam.consumer", "nodeInput", "building.node.input")) %>%
       select(LEVEL2_DATA_NAMES[["BldNodes"]], "satiation.level")
 
+    for(ssp in unique(L100.Pop_thous_state_SSP$SSP)) {
+        satiation_temp <- A44.satiation_flsp %>%
+          gather(gcam.consumer, value, resid, comm) %>%
+          rename(region = state) %>%
+          # Need to make sure that the satiation level is greater than the floorspace in the final base year
+          left_join_error_no_match(L244.Floorspace_gcamusa %>%
+                                     filter(year == max(MODEL_BASE_YEARS)), by = c("region", "gcam.consumer")) %>%
+          left_join_error_no_match(L100.Pop_thous_state_SSP %>% filter(SSP == ssp) %>% rename(pop = value), by = c("region" = "state", "year")) %>%
+          mutate(year = as.integer(year),
+                 # value.y = population
+                 pcflsp_mm2cap = base.building.size / pop,
+                 # Satiation level = must be greater than the observed value in the final calibration year, so if observed value is
+                 # greater than calculated, multiply observed by 1.001
+                 satiation.level = round(pmax(value * CONV_THOUS_BIL, pcflsp_mm2cap * 1.001), energy.DIGITS_SATIATION_ADDER)) %>%
+          left_join_error_no_match(A44.gcam_consumer, by = c("gcam.consumer", "nodeInput", "building.node.input")) %>%
+          select(LEVEL2_DATA_NAMES[["BldNodes"]], "satiation.level")
+          assign(paste0("L244.Satiation_flsp_SSP",ssp,"_gcamusa"), satiation_temp)
+    }
+
     # L244.SatiationAdder_gcamusa: Satiation adders in floorspace demand function
     # Required for shaping the future floorspace growth trajectories in each region
     # Match in the per-capita GDP, total floorspace, and population (for calculating per-capita floorspace)
@@ -243,6 +270,30 @@ module_gcamusa_L244.building_USA <- function(command, ...) {
              # The satiation adder (million square meters of floorspace per person) needs to be less than the per-capita demand in the final calibration year
              satiation.adder = if_else(satiation.adder > pcFlsp_mm2, pcFlsp_mm2 * 0.999, satiation.adder)) %>%
       select(LEVEL2_DATA_NAMES[["SatiationAdder"]])
+
+    for(ssp in unique(L100.Pop_thous_state_SSP$SSP)) {
+        satiation_temp = get(paste0("L244.Satiation_flsp_SSP",ssp,"_gcamusa"))
+        adder_temp <- satiation_temp %>%
+          # Add per capita GDP
+          left_join_error_no_match(L100.pcGDP_thous90usd_state %>%
+                                     filter(year == energy.SATIATION_YEAR), by = c("region" = "state")) %>%
+          rename(pcGDP = value) %>%
+          # Add floorspace
+          left_join_error_no_match(L244.Floorspace_full, by = c("region", "gcam.consumer", "year", "nodeInput", "building.node.input")) %>%
+          # Add population
+          left_join_error_no_match(L100.Pop_thous_state_SSP %>% filter(SSP == ssp), by = c("region" = "state", "year")) %>%
+          rename(pop = value) %>%
+          # Calculate per capita floorspace
+          mutate(pcFlsp_mm2 = base.building.size / pop,
+                 # Calculate the satiation adders
+                 satiation.adder = round(satiation.level - (
+                   exp(log(2) * pcGDP / energy.GDP_MID_SATIATION) * (satiation.level - pcFlsp_mm2)),
+                   energy.DIGITS_SATIATION_ADDER),
+                 # The satiation adder (million square meters of floorspace per person) needs to be less than the per-capita demand in the final calibration year
+                 satiation.adder = if_else(satiation.adder > pcFlsp_mm2, pcFlsp_mm2 * 0.999, satiation.adder)) %>%
+          select(LEVEL2_DATA_NAMES[["SatiationAdder"]])
+        assign(paste0("L244.SatiationAdder_SSP",ssp,"_gcamusa"), adder_temp)
+    }
 
     # Heating and cooling degree days (thermal services only)
     # First, separate the thermal from the generic services. Generic services will be assumed to produce
@@ -663,6 +714,57 @@ module_gcamusa_L244.building_USA <- function(command, ...) {
                      "L144.flsp_bm2_state_res", "L144.flsp_bm2_state_comm", "L100.pcGDP_thous90usd_state") ->
       L244.SatiationAdder_gcamusa
 
+    L244.Satiation_flsp_SSP2_gcamusa %>%
+      add_title("Satiation levels assumed for floorspace for SSP2") %>%
+      add_units("million m2 / person") %>%
+      add_comments("Values from A44.satiation_flsp or L244.Floorspace_gcamusa/L100.Pop_thous_state") %>%
+      add_comments("Whichever is larger") %>%
+      add_precursors("gcam-usa/A44.satiation_flsp", "gcam-usa/A44.gcam_consumer", "L100.Pop_thous_state_SSP",
+                     "L144.flsp_bm2_state_res", "L144.flsp_bm2_state_comm") ->
+      L244.Satiation_flsp_SSP2_gcamusa
+
+    L244.SatiationAdder_SSP2_gcamusa %>%
+      add_title("Satiation adders in floorspace demand function for SSP2") %>%
+      add_units("million m2 / person") %>%
+      add_comments("Calculated with function dependent on satiation level; per capita floorspace; and per capita GDP") %>%
+      add_precursors("gcam-usa/A44.satiation_flsp", "gcam-usa/A44.gcam_consumer", "L100.Pop_thous_state_SSP",
+                     "L144.flsp_bm2_state_res", "L144.flsp_bm2_state_comm", "L100.pcGDP_thous90usd_state") ->
+      L244.SatiationAdder_SSP2_gcamusa
+
+    L244.Satiation_flsp_SSP3_gcamusa %>%
+      add_title("Satiation levels assumed for floorspace for SSP3") %>%
+      add_units("million m2 / person") %>%
+      add_comments("Values from A44.satiation_flsp or L244.Floorspace_gcamusa/L100.Pop_thous_state") %>%
+      add_comments("Whichever is larger") %>%
+      add_precursors("gcam-usa/A44.satiation_flsp", "gcam-usa/A44.gcam_consumer", "L100.Pop_thous_state_SSP",
+                     "L144.flsp_bm2_state_res", "L144.flsp_bm2_state_comm") ->
+      L244.Satiation_flsp_SSP3_gcamusa
+
+    L244.SatiationAdder_SSP3_gcamusa %>%
+      add_title("Satiation adders in floorspace demand function for SSP3") %>%
+      add_units("million m2 / person") %>%
+      add_comments("Calculated with function dependent on satiation level; per capita floorspace; and per capita GDP") %>%
+      add_precursors("gcam-usa/A44.satiation_flsp", "gcam-usa/A44.gcam_consumer", "L100.Pop_thous_state_SSP",
+                     "L144.flsp_bm2_state_res", "L144.flsp_bm2_state_comm", "L100.pcGDP_thous90usd_state") ->
+      L244.SatiationAdder_SSP3_gcamusa
+
+    L244.Satiation_flsp_SSP5_gcamusa %>%
+      add_title("Satiation levels assumed for floorspace for SSP5") %>%
+      add_units("million m2 / person") %>%
+      add_comments("Values from A44.satiation_flsp or L244.Floorspace_gcamusa/L100.Pop_thous_state") %>%
+      add_comments("Whichever is larger") %>%
+      add_precursors("gcam-usa/A44.satiation_flsp", "gcam-usa/A44.gcam_consumer", "L100.Pop_thous_state_SSP",
+                     "L144.flsp_bm2_state_res", "L144.flsp_bm2_state_comm") ->
+      L244.Satiation_flsp_SSP5_gcamusa
+
+    L244.SatiationAdder_SSP5_gcamusa %>%
+      add_title("Satiation adders in floorspace demand function for SSP5") %>%
+      add_units("million m2 / person") %>%
+      add_comments("Calculated with function dependent on satiation level; per capita floorspace; and per capita GDP") %>%
+      add_precursors("gcam-usa/A44.satiation_flsp", "gcam-usa/A44.gcam_consumer", "L100.Pop_thous_state_SSP",
+                     "L144.flsp_bm2_state_res", "L144.flsp_bm2_state_comm", "L100.pcGDP_thous90usd_state") ->
+      L244.SatiationAdder_SSP5_gcamusa
+
     L244.HDDCDD_A2_GFDL_USA %>%
       add_title("Heating and Cooling Degree Days by State for GFDL A2") %>%
       add_units("Fahrenheit Degree Days") %>%
@@ -914,6 +1016,12 @@ module_gcamusa_L244.building_USA <- function(command, ...) {
                 L244.DemandFunction_flsp_gcamusa,
                 L244.Satiation_flsp_gcamusa,
                 L244.SatiationAdder_gcamusa,
+                L244.Satiation_flsp_SSP2_gcamusa,
+                L244.SatiationAdder_SSP2_gcamusa,
+                L244.Satiation_flsp_SSP3_gcamusa,
+                L244.SatiationAdder_SSP3_gcamusa,
+                L244.Satiation_flsp_SSP5_gcamusa,
+                L244.SatiationAdder_SSP5_gcamusa,
                 L244.ThermalBaseService_gcamusa,
                 L244.GenericBaseService_gcamusa,
                 L244.ThermalServiceSatiation_gcamusa,
