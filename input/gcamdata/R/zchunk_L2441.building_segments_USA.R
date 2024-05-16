@@ -290,6 +290,7 @@ module_gcamusa_L2441.building_segments_USA <- function(command, ...) {
           mutate(coefficient = (base.service / base.building.size) / (DD * shell.conductance * floor.to.surface.ratio * 0.8)) %>%
           select(region, thermal.building.service.input, coefficient) ->
           L2441.DefaultCoef
+          readr::write_csv(L2441.DefaultCoef, "L2441.DefaultCoef.csv")
 
         # Use the default coefficient for any state + service + segment that would have been
         # zero otherwise

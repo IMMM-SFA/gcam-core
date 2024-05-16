@@ -21,6 +21,12 @@ module_gcamusa_batch_building_USA_xml <- function(command, ...) {
              "L244.DemandFunction_flsp_gcamusa",
              "L244.Satiation_flsp_gcamusa",
              "L244.SatiationAdder_gcamusa",
+             "L244.Satiation_flsp_SSP2_gcamusa",
+             "L244.SatiationAdder_SSP2_gcamusa",
+             "L244.Satiation_flsp_SSP3_gcamusa",
+             "L244.SatiationAdder_SSP3_gcamusa",
+             "L244.Satiation_flsp_SSP5_gcamusa",
+             "L244.SatiationAdder_SSP5_gcamusa",
              "L244.ThermalBaseService_gcamusa",
              "L244.GenericBaseService_gcamusa",
              "L244.ThermalServiceSatiation_gcamusa",
@@ -43,7 +49,10 @@ module_gcamusa_batch_building_USA_xml <- function(command, ...) {
              "L244.GlobalTechCost_bld_gcamusa",
              "L244.GlobalTechSCurve_bld"))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c(XML = "building_USA.xml"))
+    return(c(XML = "building_USA.xml",
+             XML = "building_flsp_satiation_ssp2.xml",
+             XML = "building_flsp_satiation_ssp3.xml",
+             XML = "building_flsp_satiation_ssp5.xml"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -58,6 +67,12 @@ module_gcamusa_batch_building_USA_xml <- function(command, ...) {
     L244.DemandFunction_flsp <- get_data(all_data, "L244.DemandFunction_flsp_gcamusa")
     L244.Satiation_flsp <- get_data(all_data, "L244.Satiation_flsp_gcamusa")
     L244.SatiationAdder <- get_data(all_data, "L244.SatiationAdder_gcamusa")
+    L244.Satiation_flsp_SSP2 <- get_data(all_data, "L244.Satiation_flsp_SSP2_gcamusa")
+    L244.SatiationAdder_SSP2 <- get_data(all_data, "L244.SatiationAdder_SSP2_gcamusa")
+    L244.Satiation_flsp_SSP3 <- get_data(all_data, "L244.Satiation_flsp_SSP3_gcamusa")
+    L244.SatiationAdder_SSP3 <- get_data(all_data, "L244.SatiationAdder_SSP3_gcamusa")
+    L244.Satiation_flsp_SSP5 <- get_data(all_data, "L244.Satiation_flsp_SSP5_gcamusa")
+    L244.SatiationAdder_SSP5 <- get_data(all_data, "L244.SatiationAdder_SSP5_gcamusa")
     L244.ThermalBaseService <- get_data(all_data, "L244.ThermalBaseService_gcamusa")
     L244.GenericBaseService <- get_data(all_data, "L244.GenericBaseService_gcamusa")
     L244.ThermalServiceSatiation <- get_data(all_data, "L244.ThermalServiceSatiation_gcamusa")
@@ -154,7 +169,26 @@ module_gcamusa_batch_building_USA_xml <- function(command, ...) {
 
       }
 
-    return_data(building_USA.xml)
+    create_xml("building_flsp_satiation_ssp2.xml") %>%
+      add_xml_data(L244.Satiation_flsp_SSP2, "Satiation_flsp") %>%
+      add_xml_data(L244.SatiationAdder_SSP2, "SatiationAdder") %>%
+      add_precursors("L244.Satiation_flsp_SSP2_gcamusa", "L244.SatiationAdder_SSP2") ->
+      building_flsp_satiation_ssp2.xml
+    create_xml("building_flsp_satiation_ssp3.xml") %>%
+      add_xml_data(L244.Satiation_flsp_SSP3, "Satiation_flsp") %>%
+      add_xml_data(L244.SatiationAdder_SSP3, "SatiationAdder") %>%
+      add_precursors("L244.Satiation_flsp_SSP3_gcamusa", "L244.SatiationAdder_SSP3") ->
+      building_flsp_satiation_ssp3.xml
+    create_xml("building_flsp_satiation_ssp5.xml") %>%
+      add_xml_data(L244.Satiation_flsp_SSP5, "Satiation_flsp") %>%
+      add_xml_data(L244.SatiationAdder_SSP5, "SatiationAdder") %>%
+      add_precursors("L244.Satiation_flsp_SSP5_gcamusa", "L244.SatiationAdder_SSP5") ->
+      building_flsp_satiation_ssp5.xml
+
+    return_data(building_USA.xml,
+                building_flsp_satiation_ssp2.xml,
+                building_flsp_satiation_ssp3.xml,
+                building_flsp_satiation_ssp5.xml)
   } else {
     stop("Unknown command")
   }
