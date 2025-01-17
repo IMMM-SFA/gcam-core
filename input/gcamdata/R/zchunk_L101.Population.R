@@ -94,7 +94,7 @@ module_socioeconomics_L101.Population <- function(command, ...) {
 
     L101.Pop_USA_SSP_temp %>%
       group_by(SSP) %>%
-      complete(nesting(SSP), year = c(SSP_HIST_YEARS, FUTURE_YEARS)) %>%
+      complete(year = c(SSP_HIST_YEARS, FUTURE_YEARS)) %>%
       mutate(value = approx_fun(year, value),
              # converting people to thousands of people
              value = value * CONV_ONES_THOUS) %>%
