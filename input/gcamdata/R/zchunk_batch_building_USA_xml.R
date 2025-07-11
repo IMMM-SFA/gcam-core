@@ -172,17 +172,17 @@ module_gcamusa_batch_building_USA_xml <- function(command, ...) {
     create_xml("building_flsp_satiation_ssp2.xml") %>%
       add_xml_data(L244.Satiation_flsp_SSP2, "Satiation_flsp") %>%
       add_xml_data(L244.SatiationAdder_SSP2, "SatiationAdder") %>%
-      add_precursors("L244.Satiation_flsp_SSP2_gcamusa", "L244.SatiationAdder_SSP2") ->
+      add_precursors("L244.Satiation_flsp_SSP2_gcamusa", "L244.SatiationAdder_SSP2_gcamusa") ->
       building_flsp_satiation_ssp2.xml
     create_xml("building_flsp_satiation_ssp3.xml") %>%
       add_xml_data(L244.Satiation_flsp_SSP3, "Satiation_flsp") %>%
       add_xml_data(L244.SatiationAdder_SSP3, "SatiationAdder") %>%
-      add_precursors("L244.Satiation_flsp_SSP3_gcamusa", "L244.SatiationAdder_SSP3") ->
+      add_precursors("L244.Satiation_flsp_SSP3_gcamusa", "L244.SatiationAdder_SSP3_gcamusa") ->
       building_flsp_satiation_ssp3.xml
     create_xml("building_flsp_satiation_ssp5.xml") %>%
       add_xml_data(L244.Satiation_flsp_SSP5, "Satiation_flsp") %>%
       add_xml_data(L244.SatiationAdder_SSP5, "SatiationAdder") %>%
-      add_precursors("L244.Satiation_flsp_SSP5_gcamusa", "L244.SatiationAdder_SSP5") ->
+      add_precursors("L244.Satiation_flsp_SSP5_gcamusa", "L244.SatiationAdder_SSP5_gcamusa") ->
       building_flsp_satiation_ssp5.xml
 
     return_data(building_USA.xml,
