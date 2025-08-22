@@ -70,7 +70,7 @@
 
 
 		<Value name="unlim_supply_water">../input/gcamdata/xml/unlimited_water_supply.xml</Value>
-		<Value name="water_supply">../input/gcamdata/xml/water_supply_constrained_gleeson_5pct.xml</Value>
+		<Value name="water_supply">../input/im3scenarios/water_supply_constrained_gleeson_5pct.xml</Value>
 		<Value name="water_mapping">../input/gcamdata/xml/water_mapping.xml</Value>
 		<Value name="water_mapping_usa">../input/gcamdata/xml/water_mapping_USA.xml</Value>
 		<Value name="ag_water">../input/gcamdata/xml/ag_water_input_IRR_MGMT.xml</Value>
